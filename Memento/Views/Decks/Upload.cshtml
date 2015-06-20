@@ -1,0 +1,16 @@
+﻿@model Memento.Models.Deck
+
+@{
+    ViewBag.Title = "Upload";
+}
+
+<h2>DeckUpload</h2>
+
+@using (Html.BeginForm("Upload", "Deck", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.ID);
+    
+    <input type="file" name="file" accept=".txt" />
+    <br />
+    <input type="submit" value="OK" />
+}

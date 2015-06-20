@@ -1,0 +1,46 @@
+﻿@model Memento.Models.Card
+
+@using Memento.Controllers
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>@Html.DisplayFor(model => model.Deck.Title)</h4>
+    <hr />
+
+    @if (String.IsNullOrEmpty(Model.Text))
+    {
+        <text>No cards!</text>
+    }
+    else if (ViewBag.State == States.Input)
+    {
+        @Html.DisplayFor(model => model.Text)
+        @Html.TextBoxFor(model => model.Answer)
+
+        <input type="submit" value="Save" class="btn btn-default" />
+    }
+    else if (ViewBag.State == States.Right)
+    {
+        <div>You are right!</div>
+    }
+    else if (ViewBag.State == States.Wrong)
+    {
+        <div>You are wrong!</div>
+    }
+    else if (ViewBag.State == States.Typo)
+    {
+        <div>There is a typo!</div>
+    }
+    else if (ViewBag.State == States.Correction)
+    {
+        <div>Let's correct it!</div>
+    }
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
