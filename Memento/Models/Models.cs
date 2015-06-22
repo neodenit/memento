@@ -19,8 +19,8 @@ namespace Memento.Models
 
     public enum DelayModes
     {
-        Sharp,
         Smooth,
+        Sharp,
         Combined,
     }
 
@@ -35,9 +35,9 @@ namespace Memento.Models
 
         public virtual ICollection<Card> Cards { get; set; }
 
-        public ControlModes Mode { get; set; }
+        public ControlModes ControlMode { get; set; }
 
-        public DelayModes AutoMode { get; set; }
+        public DelayModes DelayMode { get; set; }
 
         public bool CorrectDelays { get; set; }
 

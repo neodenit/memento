@@ -18,7 +18,10 @@
             Cards
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Mode)
+            @Html.DisplayNameFor(model => model.ControlMode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DelayMode)
         </th>
         <th></th>
     </tr>
@@ -33,7 +36,10 @@
                 @(item.Cards.Count)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Mode)
+                @Html.DisplayFor(modelItem => item.ControlMode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DelayMode)
             </td>
             <td>
                 @Html.ActionLink("Options", "Edit", new { id = item.ID }) |

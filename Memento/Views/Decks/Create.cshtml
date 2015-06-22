@@ -23,12 +23,37 @@
             </div>
         </div>
 
-        <div class="col-md-offset-2" id="Mode">
+        <div class="col-md-offset-2" id="ControlMode">
             <div>
-                @Html.RadioButtonFor(model => model.Mode, "Automatic")<span>Automatic</span>
+                <div class="radio">
+                    <label>
+                        @Html.RadioButtonFor(model => model.ControlMode, "Automatic", new { id = "AutoMode" }) Automatic
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        @Html.RadioButtonFor(model => model.ControlMode, "Manual", new { id = "ManualMode" }) Manual
+                    </label>
+                </div>
             </div>
-            <div>
-                @Html.RadioButtonFor(model => model.Mode, "Manual")<span>Manual</span>
+        </div>
+        <hr />
+
+        <div class="col-md-offset-2" id="DelayMode">
+            <div class="radio">
+                <label>
+                    @Html.RadioButtonFor(model => model.DelayMode, "Smooth", new { id = "SmoothMode" }) Smooth
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    @Html.RadioButtonFor(model => model.DelayMode, "Sharp", new { id = "SharpMode" }) Sharp
+                </label>
+            </div>
+            <div id="Combined" class="radio disabled">
+                <label>
+                    @Html.RadioButtonFor(model => model.DelayMode, "Combined", new { id = "CombinedMode", disabled = "disabled" }) Combined
+                </label>
             </div>
         </div>
 

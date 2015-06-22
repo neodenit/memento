@@ -81,10 +81,15 @@ namespace Memento.Controllers
         // POST: Decks/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Title,Type,StartDelay,Coeff")] Deck deck)
+        public async Task<ActionResult> Create([Bind(Include = "Title,ControlMode,DelayMode,StartDelay,Coeff")] Deck deck)
         {
-            if (ModelState.IsValid)
+            if (deck.ControlMode == ControlModes.Automatic && deck.DelayMode == DelayModes.Combined)
             {
+                throw new Exception();
+            }
+            else if (ModelState.IsValid)
+            {
+
                 deck.OwnerID = User.Identity.GetUserId();
 
                 db.Decks.Add(deck);
