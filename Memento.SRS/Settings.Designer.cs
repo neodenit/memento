@@ -23,27 +23,21 @@ namespace Memento.SRS {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("2")]
         public double Coeff {
             get {
                 return ((double)(this["Coeff"]));
             }
-            set {
-                this["Coeff"] = value;
-            }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("8")]
         public int StartDelay {
             get {
                 return ((int)(this["StartDelay"]));
-            }
-            set {
-                this["StartDelay"] = value;
             }
         }
     }
