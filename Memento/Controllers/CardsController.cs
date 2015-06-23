@@ -84,7 +84,26 @@ namespace Memento.Controllers
         // GET: Cards/Create
         public ActionResult Create()
         {
-            return View();
+            ViewBag.DeckID = new SelectList(db.GetUserDecks(User), "ID", "Title");
+
+            var card = new Card();
+
+            return View(card);
+        }
+
+        // GET: Cards/Create/5
+        public ActionResult Create(int? DeckID)
+        {
+            if (DeckID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            else
+            {
+                var card = new Card { DeckID = DeckID.Value };
+
+                return View(card);
+            }
         }
 
         // POST: Cards/Create
@@ -98,7 +117,7 @@ namespace Memento.Controllers
 
                 await db.SaveChangesAsync();
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Deck", new { id = card.DeckID });
             }
             else
             {
@@ -133,15 +152,24 @@ namespace Memento.Controllers
         // POST: Cards/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,DeckID,Text")] Card card)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,Text")] Card card)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(card).State = EntityState.Modified;
+                var dbCard = await db.Cards.FindAsync(card.ID);
 
-                await db.SaveChangesAsync();
+                if (!dbCard.IsAuthorized(User))
+                {
+                    return new HttpUnauthorizedResult();
+                }
+                else
+                {
+                    dbCard.Text = card.Text;
 
-                return RedirectToAction("Index");
+                    await db.SaveChangesAsync();
+
+                    return RedirectToAction("Details", "Decks", new { id = dbCard.DeckID });
+                }
             }
             else
             {
@@ -189,7 +217,7 @@ namespace Memento.Controllers
 
             await db.SaveChangesAsync();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "Deck", new { id = card.DeckID });
         }
 
         protected override void Dispose(bool disposing)
