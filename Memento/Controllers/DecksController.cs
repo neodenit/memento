@@ -57,16 +57,36 @@ namespace Memento.Controllers
             {
                 return new HttpUnauthorizedResult();
             }
-
-            if (deck.Cards.Any())
+            else
             {
-                var card = deck.Cards.GetMinElement(item => item.Clozes.Min(c => c.Position));
+                return View(deck);
+            }
+        }
+
+        // POST: Decks/Details
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Details([Bind(Include = "ID")]Deck deck)
+        {
+            var dbDeck = await db.Decks.FindAsync(deck.ID);
+
+            if (dbDeck == null)
+            {
+                return HttpNotFound();
+            }
+            else if (!dbDeck.IsAuthorized(User))
+            {
+                return new HttpUnauthorizedResult();
+            }
+            else if (dbDeck.Cards.Any())
+            {
+                var card = dbDeck.Cards.GetMinElement(item => item.Clozes.Min(c => c.Position));
 
                 return RedirectToAction("Details", "Cards", new { id = card.ID });
             }
             else
             {
-                return RedirectToAction("Details", "Cards", new { DeckID = id.Value });
+                return RedirectToAction("Details", "Cards", new { DeckID = dbDeck.ID });
             }
         }
 
@@ -247,11 +267,7 @@ namespace Memento.Controllers
 
                     foreach (var clozeName in clozeNames)
                     {
-                        var newCloze = new Cloze
-                        {
-                            Label = clozeName,
-                            CardID = newCard.ID,
-                        };
+                        var newCloze = new Cloze(newCard.ID, clozeName);
 
                         Scheduler.PrepareForAdding(deck, db.Clozes, newCloze);
 

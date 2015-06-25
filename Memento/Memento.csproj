@@ -233,7 +233,9 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -271,6 +273,7 @@
     <Content Include="Views\Decks\Edit.cshtml" />
     <Content Include="Views\Decks\Index.cshtml" />
     <Content Include="Views\Decks\Upload.cshtml" />
+    <Content Include="Views\Decks\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
