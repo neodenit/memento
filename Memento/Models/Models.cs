@@ -83,6 +83,12 @@ namespace Memento.Models
 
     public class Cloze : ICard
     {
+        public Cloze(int cardID, string label)
+        {
+            CardID = CardID;
+            Label = label;
+        }
+
         public int ID { get; set; }
 
         public int CardID { get; set; }

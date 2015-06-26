@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using Memento;
 using Memento.Models;
+using Memento.SRS;
 
 namespace Memento.Controllers
 {
@@ -80,23 +81,17 @@ namespace Memento.Controllers
                 }
             }
         }
-
+        
         // GET: Cards/Create
-        public ActionResult Create()
-        {
-            ViewBag.DeckID = new SelectList(db.GetUserDecks(User), "ID", "Title");
-
-            var card = new Card();
-
-            return View(card);
-        }
-
-        // GET: Cards/Create/5
         public ActionResult Create(int? DeckID)
         {
             if (DeckID == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ViewBag.DeckID = new SelectList(db.GetUserDecks(User), "ID", "Title");
+
+                var card = new Card();
+
+                return View(card);
             }
             else
             {
@@ -113,7 +108,22 @@ namespace Memento.Controllers
         {
             if (ModelState.IsValid)
             {
+                var deck = await db.Decks.FindAsync(card.DeckID);
+
                 db.Cards.Add(card);
+
+                await db.SaveChangesAsync();
+
+                var clozeNames = DeckConverter.GetClozeNames(card.Text);
+                
+                foreach (var clozeName in clozeNames)
+                {
+                    var cloze = new Cloze(card.ID, clozeName);
+
+                    Scheduler.PrepareForAdding(deck, db.Clozes, cloze);
+
+                    db.Clozes.Add(cloze);
+                }
 
                 await db.SaveChangesAsync();
 

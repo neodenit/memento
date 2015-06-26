@@ -47,14 +47,8 @@ namespace Memento.SRS
         public static void PrepareForAdding(IDeck deck, IEnumerable<ICard> cards, ICard card)
         {
             var maxNewPosition = GetMaxNewPosition(cards);
-
-            var newPosition = Math.Min(deck.StartDelay, maxNewPosition);
-            var newDelay = Math.Max(newPosition, deck.StartDelay);
-
-            ReservePosition(cards, newPosition, deck.CorrectDelays);
-
-            card.Position = newPosition;
-            card.LastDelay = newDelay;
+            
+            card.Position = maxNewPosition;
 
             card.IsNew = true;
         }
