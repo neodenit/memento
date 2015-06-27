@@ -6,8 +6,9 @@
 
 <h2>DeckUpload</h2>
 
-@using (Html.BeginForm("Upload", "Deck", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Upload", "Decks", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
+    @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.ID);
     
     <input type="file" name="file" accept=".txt" />

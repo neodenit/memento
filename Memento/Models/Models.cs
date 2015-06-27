@@ -47,6 +47,11 @@ namespace Memento.Models
 
         public double Coeff { get; set; }
 
+        public IEnumerable<Cloze> GetClozes()
+        {
+            return Cards.SelectMany(card => card.Clozes ?? Enumerable.Empty<Cloze>());
+        }
+
         public bool IsAuthorized(IPrincipal user)
         {
             var userID = user.Identity.GetUserId();
@@ -83,9 +88,13 @@ namespace Memento.Models
 
     public class Cloze : ICard
     {
+        public Cloze()
+        {
+        }
+
         public Cloze(int cardID, string label)
         {
-            CardID = CardID;
+            CardID = cardID;
             Label = label;
         }
 

@@ -50,6 +50,8 @@ namespace Memento.SRS
             
             card.Position = maxNewPosition;
 
+            card.LastDelay = deck.StartDelay;
+
             card.IsNew = true;
         }
 
@@ -116,9 +118,16 @@ namespace Memento.SRS
 
         private static int GetMaxNewPosition(IEnumerable<ICard> cards)
         {
-            var max = cards.Max(item => item.Position);
-            var nextToMax = max + 1;
-            return nextToMax;
+            if (cards.Any())
+            {
+                var max = cards.Max(item => item.Position);
+                var nextToMax = max + 1;
+                return nextToMax;
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         private static ICard GetFirstCard(IEnumerable<ICard> cards)

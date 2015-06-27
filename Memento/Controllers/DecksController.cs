@@ -230,6 +230,7 @@ namespace Memento.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Upload(Deck deckWithID, HttpPostedFileBase file)
         {
             var deck = await db.Decks.FindAsync(deckWithID.ID);
@@ -248,9 +249,7 @@ namespace Memento.Controllers
                 var text = new StreamReader(file.InputStream).ReadToEnd();
 
                 var cards = DeckConverter.GetCardsFromDeck(text);
-
-                db.Cards.Where(item => item.DeckID == deck.ID).ToList().ForEach(item => db.Cards.Remove(item));
-
+                
                 foreach (var card in cards)
                 {
                     var newCard = new Card
@@ -260,21 +259,21 @@ namespace Memento.Controllers
                     };
 
                     db.Cards.Add(newCard);
-
-                    await db.SaveChangesAsync();
-
+                    
                     var clozeNames = DeckConverter.GetClozeNames(card);
 
                     foreach (var clozeName in clozeNames)
                     {
                         var newCloze = new Cloze(newCard.ID, clozeName);
 
-                        Scheduler.PrepareForAdding(deck, db.Clozes, newCloze);
+                        var deckClozes = deck.GetClozes();
+
+                        Scheduler.PrepareForAdding(deck, deckClozes, newCloze);
 
                         db.Clozes.Add(newCloze);
-
-                        await db.SaveChangesAsync();
                     }
+
+                    await db.SaveChangesAsync();
                 }
             }
 
