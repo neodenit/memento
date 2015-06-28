@@ -80,7 +80,7 @@ namespace Memento.Controllers
             }
             else if (dbDeck.Cards.Any())
             {
-                var card = dbDeck.Cards.GetMinElement(item => item.Clozes.Min(c => c.Position));
+                var card = dbDeck.GetNextCard();
 
                 return RedirectToAction("Details", "Cards", new { id = card.ID });
             }
@@ -222,7 +222,7 @@ namespace Memento.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Upload(int DeckID)
+        public ActionResult Import(int DeckID)
         {
             var deckWithID = new Deck { ID = DeckID };
 
@@ -231,7 +231,7 @@ namespace Memento.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Upload(Deck deckWithID, HttpPostedFileBase file)
+        public async Task<ActionResult> Import(Deck deckWithID, HttpPostedFileBase file)
         {
             var deck = await db.Decks.FindAsync(deckWithID.ID);
 
@@ -246,21 +246,23 @@ namespace Memento.Controllers
 
             if (file != null && file.ContentLength > 0)
             {
-                var text = new StreamReader(file.InputStream).ReadToEnd();
+                var text = await new StreamReader(file.InputStream).ReadToEndAsync();
 
-                var cards = DeckConverter.GetCardsFromDeck(text);
+                var cards = DeckConverter.GetCardsFromDeck(text, true);
                 
                 foreach (var card in cards)
                 {
+                    var cardText = HttpUtility.HtmlDecode(card);
+
                     var newCard = new Card
                     {
                         DeckID = deckWithID.ID,
-                        Text = card,
+                        Text = cardText,
                     };
 
                     db.Cards.Add(newCard);
-                    
-                    var clozeNames = DeckConverter.GetClozeNames(card);
+
+                    var clozeNames = DeckConverter.GetClozeNames(cardText);
 
                     foreach (var clozeName in clozeNames)
                     {

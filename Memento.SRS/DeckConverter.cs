@@ -14,12 +14,8 @@ namespace Memento.SRS
         public static IEnumerable<string> GetCardsFromDeck(string deckText, bool justClozes = false)
         {
             var cards = deckText.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-
-            var cleanCards = cards.Select(item => DeckConverter.StripTags2(item));
-
-            var clozeCards = justClozes ?
-                cleanCards.Where(item => IsClozeCard(item)).Select(item => GetFirstField(item)) :
-                cleanCards.Select(item => DeckConverter.ConvertToCloze(item));
+            
+            var clozeCards = cards.Select(item => DeckConverter.ConvertToCloze(item, justClozes));
 
             var notEmptyClozeCards = clozeCards.Where(item => !string.IsNullOrEmpty(item));
 
@@ -33,16 +29,38 @@ namespace Memento.SRS
             return cs;
         }
 
-        public static string GetClozeByName(string card, string clozeName)
+        public static string GetQuestion(string card, string clozeName)
         {
             var first = GetFirstField(card);
 
-            var result = GetClozeFromField(first, clozeName);
+            var result = GetQuestionFromField(first, clozeName);
 
             return result;
         }
 
-        private static string ConvertToCloze(string card)
+        public static string GetAnswerValue(string field, string clozeName)
+        {
+            var currentPattern = GetCurrentClozePattern(clozeName);
+
+            if (Regex.IsMatch(field, currentPattern))
+            {
+                var result = Regex.Match(field, currentPattern).Groups[2].Value;
+
+                return result;
+            }
+            else
+            {
+                throw new Exception("Cloze doesn't found.");
+            }
+        }
+
+        public static string GetAnswer(string field, string clozeName)
+        {
+            var result = GetAnswerFromField(field, clozeName);
+            return result;
+        }
+        
+        private static string ConvertToCloze(string card, bool justClozes)
         {
             var isCloze = IsClozeCard(card);
 
@@ -50,7 +68,7 @@ namespace Memento.SRS
             {
                 return GetFirstField(card);
             }
-            else
+            else if (!justClozes)
             {
                 var fields = GetFields(card);
 
@@ -70,6 +88,10 @@ namespace Memento.SRS
                     return string.Empty;
                 }
             }
+            else
+            {
+                return string.Empty;
+            }
         }
 
         private static string GetFirstField(string card)
@@ -79,14 +101,16 @@ namespace Memento.SRS
             return firstField;
         }
 
+        [Obsolete]
         private static string StripTags(string text)
         {
             var result1 = Regex.Replace(text, "<br />", Environment.NewLine);
-            var result2 = Regex.Replace(text, "<div>(.+?)</div>", "$1\r\n");
+            var result2 = Regex.Replace(result1, "<div>(.+?)</div>", "$1\r\n");
 
             return result2;
         }
 
+        [Obsolete]
         private static string StripTags2(string text)
         {
             var result1 = Regex.Replace(text, "<br />", Environment.NewLine);
@@ -144,25 +168,69 @@ namespace Memento.SRS
 
             foreach (var c in cs)
             {
-                var cloze = GetClozeFromField(field, c);
+                var cloze = GetQuestionFromField(field, c);
 
                 yield return cloze;
             }
         }
 
-        private static string GetClozeFromField(string field, string clozeName)
+        private static string GetQuestionFromField(string field, string clozeName)
+        {
+            var cloze1 = ReplaceCloze(field, clozeName);
+
+            var cloze2 = StripClozes(cloze1);
+
+            return cloze2;
+        }
+
+        private static string StripClozes(string field)
+        {
+            var result = Regex.Replace(field, ClozePattern, "$2");
+            return result;
+        }
+
+        private static string GetCurrentClozePattern(string clozeName)
         {
             var currentPattern = "{{(" + clozeName + ")::(.+?)(::(.+?))?}}";
+            return currentPattern;
+        }
 
-            var escapedPattern = @"{ {cloze: :(.+?)} }";
+        private static string ReplaceCloze(string field, string clozeName)
+        {
+            var hintPattern = "{{(" + clozeName + ")::(.+?)::(.+?)}}";
+            var simplePattern = "{{(" + clozeName + ")::(.+?)}}";
 
-            var cloze1 = Regex.Replace(field, currentPattern, @"{ {cloze: :$2} }");
+            if (Regex.IsMatch(field, hintPattern))
+            {
+                var hint = Regex.Match(field, hintPattern).Groups[3];
 
-            var cloze2 = Regex.Replace(cloze1, ClozePattern, "$2");
+                var result = Regex.Replace(field, hintPattern, string.Format("[{0}]", hint));
 
-            var cloze3 = Regex.Replace(cloze2, escapedPattern, "{{cloze::$1}}");
+                return result;
+            }
+            else if (Regex.IsMatch(field, simplePattern))
+            {
+                var hint = Regex.Match(field, simplePattern).Groups[3];
 
-            return cloze3;
+                var result = Regex.Replace(field, simplePattern, "[...]");
+
+                return result;
+            }
+            else
+            {
+                return field;
+            }
+        }
+
+        private static string GetAnswerFromField(string field, string clozeName)
+        {
+            var currentPattern = GetCurrentClozePattern(clozeName);
+
+            var cloze1 = Regex.Replace(field, currentPattern, "[$2]");
+
+            var cloze2 = StripClozes(cloze1);
+
+            return cloze2;
         }
     }
 }

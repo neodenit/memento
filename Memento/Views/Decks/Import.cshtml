@@ -1,12 +1,12 @@
 ﻿@model Memento.Models.Deck
 
 @{
-    ViewBag.Title = "Upload";
+    ViewBag.Title = "Import";
 }
 
-<h2>DeckUpload</h2>
+<h2>Import</h2>
 
-@using (Html.BeginForm("Upload", "Decks", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Import", "Decks", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.ID);

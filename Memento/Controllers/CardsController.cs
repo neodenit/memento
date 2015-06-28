@@ -77,11 +77,52 @@ namespace Memento.Controllers
                 }
                 else
                 {
+                    var cloze = card.GetNextCloze();
+
+                    card.Text = DeckConverter.GetQuestion(card.Text, cloze.Label);
+
                     return View(card);
                 }
             }
         }
         
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Details([Bind(Include = "ID, Answer")]Card card, string NextButton, string AltButton)
+        {
+            var dbCard = await db.Cards.FindAsync(card.ID);
+
+            if (!dbCard.IsAuthorized(User))
+            {
+                return new HttpUnauthorizedResult();
+            }
+            else
+            {
+                var cloze = dbCard.GetNextCloze();
+
+                var answer = DeckConverter.GetAnswerValue(dbCard.Text, cloze.Label);
+
+                if (card.Answer == answer)
+                {
+                    ViewBag.State = States.Right;
+
+                    dbCard.Text = DeckConverter.GetAnswer(dbCard.Text, cloze.Label);
+
+                    return View(dbCard);
+                }
+                else
+                {
+                    ViewBag.State = States.Wrong;
+
+                    ViewBag.Answer = card.Answer;
+
+                    dbCard.Text = DeckConverter.GetAnswer(dbCard.Text, cloze.Label);
+
+                    return View(dbCard);
+                }
+            }
+        }
+
         // GET: Cards/Create
         public ActionResult Create(int? DeckID)
         {

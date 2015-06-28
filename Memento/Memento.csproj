@@ -272,7 +272,7 @@
     <Content Include="Views\Cards\Index.cshtml" />
     <Content Include="Views\Decks\Edit.cshtml" />
     <Content Include="Views\Decks\Index.cshtml" />
-    <Content Include="Views\Decks\Upload.cshtml" />
+    <Content Include="Views\Decks\Import.cshtml" />
     <Content Include="Views\Decks\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>

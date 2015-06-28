@@ -24,37 +24,54 @@
     }
     else
     {
-        <p>
+        using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
             <div class="topactions">
-                <a href="#" id="ScrollDown">Scroll down</a> |
-                @Html.ActionLink("Add card", "Create", new { DeckID = Model.DeckID }) |
-                @Html.ActionLink("Delete card", "Delete", new { id = Model.ID }) |
                 @Html.ActionLink("Edit card", "Edit", new { id = Model.ID }) |
-                @Html.ActionLink("Index", "Index", new { DeckID = Model.DeckID }) |
+                @Html.ActionLink("Delete card", "Delete", new { id = Model.ID })
             </div>
-        </p>
-        if (ViewBag.State == States.Input)
-        {
-            @Html.DisplayFor(model => model.Text)
-            @Html.TextBoxFor(model => model.Answer)
 
-            <input type="submit" value="Save" class="btn btn-default" />
-        }
-        else if (ViewBag.State == States.Right)
-        {
-            <div>You are right!</div>
-        }
-        else if (ViewBag.State == States.Wrong)
-        {
-            <div>You are wrong!</div>
-        }
-        else if (ViewBag.State == States.Typo)
-        {
-            <div>There is a typo!</div>
-        }
-        else if (ViewBag.State == States.Correction)
-        {
-            <div>Let's correct it!</div>
+            if (ViewBag.State == States.Input)
+            {
+                @Html.DisplayFor(model => model.Text)
+
+                <br />
+
+                @Html.TextBoxFor(model => model.Answer)
+
+                <input type="submit" value="Answer" class="btn btn-default" />
+            }
+            else if (ViewBag.State == States.Right)
+            {
+                @Html.DisplayFor(model => model.Text)
+
+                <div>You are right!</div>
+
+                <input type="submit" value="Next" class="btn btn-default" />
+            }
+            else if (ViewBag.State == States.Wrong)
+            {
+                @Html.DisplayFor(model => model.Text)
+                <p>
+                    Your answer:
+                    <text>@ViewBag.Answer</text>
+                </p>
+                <div>You are wrong!</div>
+
+                <input type="submit" name="NextButton" value="Next" class="btn btn-default" />
+                <hr />
+                <p>Is it an alternative answer?</p>
+                <input type="submit" name="AltButton" value="Add it" class="btn btn-default" />
+            }
+            else if (ViewBag.State == States.Typo)
+            {
+                <div>There is a typo!</div>
+            }
+            else if (ViewBag.State == States.Correction)
+            {
+                <div>Let's correct it!</div>
+            }
         }
     }
 </div>

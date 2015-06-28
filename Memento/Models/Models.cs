@@ -52,6 +52,13 @@ namespace Memento.Models
             return Cards.SelectMany(card => card.Clozes ?? Enumerable.Empty<Cloze>());
         }
 
+        public Card GetNextCard()
+        {
+            var card = Cards.GetMinElement(item => item.Clozes.Min(c => c.Position));
+
+            return card;
+        }
+
         public bool IsAuthorized(IPrincipal user)
         {
             var userID = user.Identity.GetUserId();
@@ -77,6 +84,13 @@ namespace Memento.Models
         public virtual ICollection<Cloze> Clozes { get; set; }
 
         public bool IsValid { get; set; }
+        
+        public Cloze GetNextCloze()
+        {
+            var cloze = Clozes.GetMinElement(item => item.Position);
+
+            return cloze;
+        }
 
         public bool IsAuthorized(IPrincipal user)
         {
