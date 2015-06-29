@@ -22,6 +22,7 @@
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -274,6 +275,11 @@
     <Content Include="Views\Decks\Index.cshtml" />
     <Content Include="Views\Decks\Import.cshtml" />
     <Content Include="Views\Decks\Details.cshtml" />
+    <Content Include="Views\Cards\Right.cshtml" />
+    <Content Include="Views\Cards\Wrong.cshtml" />
+    <Content Include="Views\Cards\Typo.cshtml" />
+    <Content Include="Views\Cards\Correction.cshtml" />
+    <Content Include="Views\Cards\Question.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

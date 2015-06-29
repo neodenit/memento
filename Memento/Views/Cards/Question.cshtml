@@ -1,0 +1,30 @@
+﻿@model Memento.Models.Card
+
+@using Memento.Controllers
+
+@{
+    ViewBag.Title = "Question";
+}
+
+<h2>Question</h2>
+
+<div>
+    <h4>@Html.DisplayFor(model => model.Deck.Title)</h4>
+    <hr />
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="topactions">
+            @Html.ActionLink("Edit card", "Edit", new { id = Model.ID }) |
+            @Html.ActionLink("Delete card", "Delete", new { id = Model.ID })
+        </div>
+
+        @Html.DisplayFor(model => model.Text)
+        <br />
+        @Html.TextBoxFor(model => model.Answer)
+
+        <input type="submit" value="Answer" class="btn btn-default" />
+    }
+</div>

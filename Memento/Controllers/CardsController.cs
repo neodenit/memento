@@ -13,15 +13,6 @@ using Memento.SRS;
 
 namespace Memento.Controllers
 {
-    public enum States
-    {
-        Input,
-        Right,
-        Wrong,
-        Typo,
-        Correction,
-    }
-
     public class CardsController : Controller
     {
         private MementoContext db = new MementoContext();
@@ -48,47 +39,43 @@ namespace Memento.Controllers
             }
         }
 
-        public async Task<ActionResult> Details(int? id, int? DeckID)
+        public ActionResult Details(int? DeckID)
         {
-            ViewBag.State = States.Input;
-
-            if (id == null)
+            if (DeckID == null)
             {
-                if (DeckID == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                }
-                else
-                {
-                    return View(new Card { DeckID = DeckID.Value, ID = -1 });
-                }
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             else
             {
-                var card = await db.Cards.FindAsync(id);
-
-                if (card == null)
-                {
-                    return HttpNotFound();
-                }
-                else if (!card.IsAuthorized(User))
-                {
-                    return new HttpUnauthorizedResult();
-                }
-                else
-                {
-                    var cloze = card.GetNextCloze();
-
-                    card.Text = DeckConverter.GetQuestion(card.Text, cloze.Label);
-
-                    return View(card);
-                }
+                return View(new Card { DeckID = DeckID.Value, ID = -1 });
             }
         }
-        
+
+        public async Task<ActionResult> Question(int? id)
+        {
+            var card = await db.Cards.FindAsync(id);
+
+            if (card == null)
+            {
+                return HttpNotFound();
+            }
+            else if (!card.IsAuthorized(User))
+            {
+                return new HttpUnauthorizedResult();
+            }
+            else
+            {
+                var cloze = card.GetNextCloze();
+
+                card.Text = DeckConverter.GetQuestion(card.Text, cloze.Label);
+
+                return View(card);
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Details([Bind(Include = "ID, Answer")]Card card, string NextButton, string AltButton)
+        public async Task<ActionResult> Question([Bind(Include = "ID, Answer")]Card card, string NextButton, string AltButton)
         {
             var dbCard = await db.Cards.FindAsync(card.ID);
 
@@ -104,21 +91,17 @@ namespace Memento.Controllers
 
                 if (card.Answer == answer)
                 {
-                    ViewBag.State = States.Right;
-
                     dbCard.Text = DeckConverter.GetAnswer(dbCard.Text, cloze.Label);
 
-                    return View(dbCard);
+                    return View("Right", dbCard);
                 }
                 else
                 {
-                    ViewBag.State = States.Wrong;
-
                     ViewBag.Answer = card.Answer;
 
                     dbCard.Text = DeckConverter.GetAnswer(dbCard.Text, cloze.Label);
 
-                    return View(dbCard);
+                    return View("Wrong", dbCard);
                 }
             }
         }
@@ -156,7 +139,7 @@ namespace Memento.Controllers
                 await db.SaveChangesAsync();
 
                 var clozeNames = DeckConverter.GetClozeNames(card.Text);
-                
+
                 foreach (var clozeName in clozeNames)
                 {
                     var cloze = new Cloze(card.ID, clozeName);

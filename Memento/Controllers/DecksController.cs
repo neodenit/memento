@@ -82,7 +82,7 @@ namespace Memento.Controllers
             {
                 var card = dbDeck.GetNextCard();
 
-                return RedirectToAction("Details", "Cards", new { id = card.ID });
+                return RedirectToAction("Question", "Cards", new { id = card.ID });
             }
             else
             {

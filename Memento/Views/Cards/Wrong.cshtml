@@ -1,0 +1,39 @@
+﻿@model Memento.Models.Card
+
+@using Memento.Controllers
+
+@{
+    ViewBag.Title = "Wrong";
+}
+
+<h2>Wrong</h2>
+
+<div>
+    <h4>@Html.DisplayFor(model => model.Deck.Title)</h4>
+    <hr />
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="topactions">
+            @Html.ActionLink("Edit card", "Edit", new { id = Model.ID }) |
+            @Html.ActionLink("Delete card", "Delete", new { id = Model.ID })
+        </div>
+
+        @Html.DisplayFor(model => model.Text)
+
+        <p>
+            Your answer:
+            <text>@ViewBag.Answer</text>
+        </p>
+
+        <div>You are wrong!</div>
+        <input type="submit" name="NextButton" value="Next" class="btn btn-default" />
+
+        <hr />
+
+        <p>Is it an alternative answer?</p>
+        <input type="submit" name="AltButton" value="Add it" class="btn btn-default" />
+    }
+</div>
