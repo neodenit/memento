@@ -75,7 +75,7 @@ namespace Memento.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Question([Bind(Include = "ID, Answer")]Card card, string NextButton, string AltButton)
+        public async Task<ActionResult> Question([Bind(Include = "ID, Answer")]Card card)
         {
             var dbCard = await db.Cards.FindAsync(card.ID);
 
@@ -105,6 +105,65 @@ namespace Memento.Controllers
                 }
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Right([Bind(Include = "ID")]Card card)
+        {
+            var dbCard = await db.Cards.FindAsync(card.ID);
+
+            if (!dbCard.IsAuthorized(User))
+            {
+                return new HttpUnauthorizedResult();
+            }
+            else
+            {
+                var deck = dbCard.Deck;
+                var clozes = deck.GetClozes();
+
+                Scheduler.PromoteCard(deck, clozes, Scheduler.Delays.Next);
+
+                await db.SaveChangesAsync();
+
+                var nextCard = deck.GetNextCard();
+
+                return RedirectToAction("Question", new { id = nextCard.ID });
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Wrong([Bind(Include = "ID")]Card card, string NextButton, string AltButton)
+        {
+            var dbCard = await db.Cards.FindAsync(card.ID);
+
+            if (!dbCard.IsAuthorized(User))
+            {
+                return new HttpUnauthorizedResult();
+            }
+            else if (NextButton != null)
+            {
+                var deck = dbCard.Deck;
+                var clozes = deck.GetClozes();
+
+                Scheduler.PromoteCard(deck, clozes, Scheduler.Delays.Previous);
+
+                await db.SaveChangesAsync();
+
+                var nextCard = deck.GetNextCard();
+
+                return RedirectToAction("Question", new { id = nextCard.ID });
+            }
+            else if (AltButton != null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+        }
+
 
         // GET: Cards/Create
         public ActionResult Create(int? DeckID)

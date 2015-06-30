@@ -1,7 +1,5 @@
 ﻿@model Memento.Models.Card
 
-@using Memento.Controllers
-
 @{
     ViewBag.Title = "Wrong";
 }
@@ -12,9 +10,11 @@
     <h4>@Html.DisplayFor(model => model.Deck.Title)</h4>
     <hr />
 
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Wrong", "Cards"))
     {
         @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(model => model.ID)
 
         <div class="topactions">
             @Html.ActionLink("Edit card", "Edit", new { id = Model.ID }) |
