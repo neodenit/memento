@@ -14,10 +14,12 @@ namespace Memento.SRS
         public static IEnumerable<string> GetCardsFromDeck(string deckText, bool justClozes = false)
         {
             var cards = deckText.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-            
-            var clozeCards = cards.Select(item => DeckConverter.ConvertToCloze(item, justClozes));
 
-            var notEmptyClozeCards = clozeCards.Where(item => !string.IsNullOrEmpty(item));
+            var cardsWithoutTags = from card in cards select StripTagsAlt(card);
+            
+            var clozeCards = from card in cardsWithoutTags select ConvertToCloze(card, justClozes);
+
+            var notEmptyClozeCards = from card in clozeCards where !string.IsNullOrEmpty(card) select card;
 
             return notEmptyClozeCards;
         }
@@ -101,7 +103,6 @@ namespace Memento.SRS
             return firstField;
         }
 
-        [Obsolete]
         private static string StripTags(string text)
         {
             var result1 = Regex.Replace(text, "<br />", Environment.NewLine);
@@ -110,8 +111,7 @@ namespace Memento.SRS
             return result2;
         }
 
-        [Obsolete]
-        private static string StripTags2(string text)
+        private static string StripTagsAlt(string text)
         {
             var result1 = Regex.Replace(text, "<br />", Environment.NewLine);
             var result2 = Regex.Replace(result1, "<div>", string.Empty);
