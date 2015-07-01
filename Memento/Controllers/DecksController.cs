@@ -253,26 +253,41 @@ namespace Memento.Controllers
                 foreach (var card in cards)
                 {
                     var cardText = HttpUtility.HtmlDecode(card);
-
-                    var newCard = new Card
-                    {
-                        DeckID = deckWithID.ID,
-                        Text = cardText,
-                    };
-
-                    db.Cards.Add(newCard);
-
+                    
                     var clozeNames = DeckConverter.GetClozeNames(cardText);
 
-                    foreach (var clozeName in clozeNames)
+                    if (!clozeNames.All(clozeName => DeckConverter.Validate(cardText, clozeName)))
                     {
-                        var newCloze = new Cloze(newCard.ID, clozeName);
+                        var newCard = new Card
+                        {
+                            DeckID = deckWithID.ID,
+                            Text = cardText,
+                            IsValid = false,
+                        };
 
-                        var deckClozes = deck.GetClozes();
+                        db.Cards.Add(newCard);
+                    }
+                    else
+                    {
+                        var newCard = new Card
+                        {
+                            DeckID = deckWithID.ID,
+                            Text = cardText,
+                            IsValid = true,
+                        };
 
-                        Scheduler.PrepareForAdding(deck, deckClozes, newCloze);
+                        db.Cards.Add(newCard);
 
-                        db.Clozes.Add(newCloze);
+                        foreach (var clozeName in clozeNames)
+                        {
+                            var newCloze = new Cloze(newCard.ID, clozeName);
+
+                            var deckClozes = deck.GetClozes();
+
+                            Scheduler.PrepareForAdding(deck, deckClozes, newCloze);
+
+                            db.Clozes.Add(newCloze);
+                        }
                     }
 
                     await db.SaveChangesAsync();

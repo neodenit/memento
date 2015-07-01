@@ -54,9 +54,16 @@ namespace Memento.Models
 
         public Card GetNextCard()
         {
-            var card = Cards.GetMinElement(item => item.Clozes.Min(c => c.Position));
+            var validCards = GetValidCards();
 
-            return card;
+            var nextCard = validCards.GetMinElement(item => item.Clozes.Min(c => c.Position));
+
+            return nextCard;
+        }
+
+        public IEnumerable<Card> GetValidCards()
+        {
+            return Cards.Where(card => card.IsValid);
         }
 
         public bool IsAuthorized(IPrincipal user)

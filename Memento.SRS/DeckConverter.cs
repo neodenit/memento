@@ -26,9 +26,33 @@ namespace Memento.SRS
 
         public static IEnumerable<string> GetClozeNames(string field)
         {
-            var cs = (from Match m in Regex.Matches(field, ClozePattern) select m.Groups[1].Value).Distinct();
+            var clozes = from Match m in Regex.Matches(field, ClozePattern) select m.Groups[1].Value;
 
-            return cs;
+            var result = clozes.Distinct();
+
+            return result;
+        }
+
+        public static IEnumerable<string> GetClozeValues(string field, string clozeName)
+        {
+            var currentPattern = GetCurrentClozePattern(clozeName);
+
+            var result = from Match m in Regex.Matches(field, currentPattern) select m.Groups[2].Value;
+
+            return result;
+        }
+
+        public static bool Validate(string field, string clozeName)
+        {
+            var currentPattern = GetCurrentClozePattern(clozeName);
+
+            var firstValue = Regex.Match(field, currentPattern).Groups[2].Value;
+
+            var values = from Match m in Regex.Matches(field, currentPattern) select m.Groups[2].Value;
+
+            var result = values.All(item => item == firstValue || item == "*");
+
+            return result;
         }
 
         public static string GetQuestion(string card, string clozeName)
@@ -59,6 +83,7 @@ namespace Memento.SRS
         public static string GetAnswer(string field, string clozeName)
         {
             var result = GetAnswerFromField(field, clozeName);
+
             return result;
         }
         

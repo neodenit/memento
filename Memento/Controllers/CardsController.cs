@@ -192,25 +192,35 @@ namespace Memento.Controllers
             if (ModelState.IsValid)
             {
                 var deck = await db.Decks.FindAsync(card.DeckID);
+                
+                var text = card.Text;
 
-                db.Cards.Add(card);
+                var clozeNames = DeckConverter.GetClozeNames(text);
 
-                await db.SaveChangesAsync();
-
-                var clozeNames = DeckConverter.GetClozeNames(card.Text);
-
-                foreach (var clozeName in clozeNames)
+                if (!clozeNames.Any() || !clozeNames.All(clozeName => DeckConverter.Validate(text, clozeName)))
                 {
-                    var cloze = new Cloze(card.ID, clozeName);
-
-                    Scheduler.PrepareForAdding(deck, db.Clozes, cloze);
-
-                    db.Clozes.Add(cloze);
+                    return View(card);
                 }
+                else
+                {
+                    db.Cards.Add(card);
 
-                await db.SaveChangesAsync();
+                    await db.SaveChangesAsync();
 
-                return RedirectToAction("Details", "Deck", new { id = card.DeckID });
+                    foreach (var clozeName in clozeNames)
+                    {
+
+                        var cloze = new Cloze(card.ID, clozeName);
+
+                        Scheduler.PrepareForAdding(deck, db.Clozes, cloze);
+
+                        db.Clozes.Add(cloze);
+                    }
+
+                    await db.SaveChangesAsync();
+
+                    return RedirectToAction("Details", "Deck", new { id = card.DeckID });
+                }
             }
             else
             {
