@@ -18,6 +18,9 @@
             Cards
         </th>
         <th>
+            Valid Cards
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.ControlMode)
         </th>
         <th>
@@ -34,6 +37,9 @@
             </td>
             <td>
                 @(item.Cards.Count)
+            </td>
+            <td>
+                @(item.GetValidCards().Count())
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ControlMode)

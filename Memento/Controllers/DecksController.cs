@@ -256,7 +256,7 @@ namespace Memento.Controllers
                     
                     var clozeNames = DeckConverter.GetClozeNames(cardText);
 
-                    if (!clozeNames.All(clozeName => DeckConverter.Validate(cardText, clozeName)))
+                    if (!clozeNames.All(clozeName => Validator.ValidateFull(cardText, clozeName)))
                     {
                         var newCard = new Card
                         {

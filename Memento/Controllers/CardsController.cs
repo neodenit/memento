@@ -197,7 +197,7 @@ namespace Memento.Controllers
 
                 var clozeNames = DeckConverter.GetClozeNames(text);
 
-                if (!clozeNames.Any() || !clozeNames.All(clozeName => DeckConverter.Validate(text, clozeName)))
+                if (!clozeNames.Any() || !clozeNames.All(clozeName => Validator.ValidateFull(text, clozeName)))
                 {
                     return View(card);
                 }

@@ -16,7 +16,7 @@ namespace Memento.SRS
             var cards = deckText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
 
             var cardsWithoutTags = from card in cards select StripTagsAlt(card);
-            
+
             var clozeCards = from card in cardsWithoutTags select ConvertToCloze(card, justClozes);
 
             var notEmptyClozeCards = from card in clozeCards where !string.IsNullOrEmpty(card) select card;
@@ -38,19 +38,6 @@ namespace Memento.SRS
             var currentPattern = GetCurrentClozePattern(clozeName);
 
             var result = from Match m in Regex.Matches(field, currentPattern) select m.Groups[2].Value;
-
-            return result;
-        }
-
-        public static bool Validate(string field, string clozeName)
-        {
-            var currentPattern = GetCurrentClozePattern(clozeName);
-
-            var firstValue = Regex.Match(field, currentPattern).Groups[2].Value;
-
-            var values = from Match m in Regex.Matches(field, currentPattern) select m.Groups[2].Value;
-
-            var result = values.All(item => item == firstValue || item == "*");
 
             return result;
         }
@@ -86,7 +73,13 @@ namespace Memento.SRS
 
             return result;
         }
-        
+
+        public static string GetCurrentClozePattern(string clozeName)
+        {
+            var currentPattern = "{{(" + clozeName + ")::(.+?)(::(.+?))?}}";
+            return currentPattern;
+        }
+
         private static string ConvertToCloze(string card, bool justClozes)
         {
             var isCloze = IsClozeCard(card);
@@ -212,12 +205,6 @@ namespace Memento.SRS
         {
             var result = Regex.Replace(field, ClozePattern, "$2");
             return result;
-        }
-
-        private static string GetCurrentClozePattern(string clozeName)
-        {
-            var currentPattern = "{{(" + clozeName + ")::(.+?)(::(.+?))?}}";
-            return currentPattern;
         }
 
         private static string ReplaceCloze(string field, string clozeName)
