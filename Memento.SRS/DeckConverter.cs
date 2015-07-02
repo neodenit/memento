@@ -13,7 +13,7 @@ namespace Memento.SRS
 
         public static IEnumerable<string> GetCardsFromDeck(string deckText, bool justClozes = false)
         {
-            var cards = deckText.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            var cards = deckText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
 
             var cardsWithoutTags = from card in cards select StripTagsAlt(card);
             
