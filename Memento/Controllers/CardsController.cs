@@ -67,7 +67,7 @@ namespace Memento.Controllers
             {
                 var cloze = card.GetNextCloze();
 
-                card.Text = DeckConverter.GetQuestion(card.Text, cloze.Label);
+                card.Text = Converter.GetQuestion(card.Text, cloze.Label);
 
                 return View(card);
             }
@@ -87,11 +87,11 @@ namespace Memento.Controllers
             {
                 var cloze = dbCard.GetNextCloze();
 
-                var answer = DeckConverter.GetAnswerValue(dbCard.Text, cloze.Label);
+                var answer = Converter.GetAnswerValue(dbCard.Text, cloze.Label);
 
                 if (card.Answer == answer)
                 {
-                    dbCard.Text = DeckConverter.GetAnswer(dbCard.Text, cloze.Label);
+                    dbCard.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);
 
                     return View("Right", dbCard);
                 }
@@ -99,7 +99,7 @@ namespace Memento.Controllers
                 {
                     ViewBag.Answer = card.Answer;
 
-                    dbCard.Text = DeckConverter.GetAnswer(dbCard.Text, cloze.Label);
+                    dbCard.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);
 
                     return View("Wrong", dbCard);
                 }
@@ -195,7 +195,7 @@ namespace Memento.Controllers
                 
                 var text = card.Text;
 
-                var clozeNames = DeckConverter.GetClozeNames(text);
+                var clozeNames = Converter.GetClozeNames(text);
 
                 if (!clozeNames.Any() || !clozeNames.All(clozeName => Validator.ValidateFull(text, clozeName)))
                 {

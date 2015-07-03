@@ -16,7 +16,7 @@ namespace Memento.SRS
 
         public static bool ValidateBase(string field, string clozeName)
         {
-            var currentPattern = DeckConverter.GetCurrentClozePattern(clozeName);
+            var currentPattern = Converter.GetCurrentClozePattern(clozeName);
 
             var firstValue = Regex.Match(field, currentPattern).Groups[2].Value;
 
@@ -29,7 +29,7 @@ namespace Memento.SRS
 
         public static bool ValidateLength(string field, string clozeName, int maxLength = 3)
         {
-            var value = DeckConverter.GetAnswerValue(field, clozeName);
+            var value = Converter.GetAnswerValue(field, clozeName);
 
             var words = Regex.Split(value, @"\W");
 

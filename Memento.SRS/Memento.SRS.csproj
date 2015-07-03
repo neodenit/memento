@@ -49,7 +49,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="DeckConverter.cs" />
+    <Compile Include="Converter.cs" />
     <Compile Include="Extension.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="Scheduler.cs" />

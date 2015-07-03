@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Memento.SRS
 {
-    public static class DeckConverter
+    public static class Converter
     {
         private const string ClozePattern = @"{{(\w+)::(.+?)(::(.+?))?}}";
 

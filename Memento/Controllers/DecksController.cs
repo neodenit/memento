@@ -248,13 +248,13 @@ namespace Memento.Controllers
             {
                 var text = await new StreamReader(file.InputStream).ReadToEndAsync();
 
-                var cards = DeckConverter.GetCardsFromDeck(text, true);
+                var cards = Converter.GetCardsFromDeck(text, true);
                 
                 foreach (var card in cards)
                 {
                     var cardText = HttpUtility.HtmlDecode(card);
                     
-                    var clozeNames = DeckConverter.GetClozeNames(cardText);
+                    var clozeNames = Converter.GetClozeNames(cardText);
 
                     if (!clozeNames.All(clozeName => Validator.ValidateFull(cardText, clozeName)))
                     {
