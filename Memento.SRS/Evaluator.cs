@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MinimumEditDistance;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace Memento.SRS
     public static class Evaluator
     {
         public static bool IsCorrect(string correctAnswer, string answer)
+        public static bool IsCorrect(string correctAnswer, string answer, double permissibleError)
         {
             var correctAnswerVariants = correctAnswer.Split('|');
 
@@ -17,7 +19,7 @@ namespace Memento.SRS
 
             var answerWords = GetWords(answer);
 
-            var result = correctVariantsWords.Any(item => Compare(item, answerWords));
+            var result = correctVariantsWords.Any(item => Compare(item, answerWords, permissibleError));
 
             return result;
         }
@@ -29,7 +31,7 @@ namespace Memento.SRS
             return words;
         }
 
-        private static bool Compare(IEnumerable<string> correctWords, IEnumerable<string> answerWords)
+        private static bool Compare(IEnumerable<string> correctWords, IEnumerable<string> answerWords, double permissibleError)
         {
             if (correctWords.Count() != answerWords.Count())
             {
@@ -39,15 +41,17 @@ namespace Memento.SRS
             {
                 var zip = Enumerable.Zip(correctWords, answerWords, (x, y) => new { correctAnswer = x, answer = y });
 
-                var result = zip.All(item => Compare(item.correctAnswer, item.answer));
+                var result = zip.All(item => Compare(item.correctAnswer, item.answer, permissibleError));
 
                 return result;
             }
         }
 
-        private static bool Compare(string correctAnswer, string answer)
+        private static bool Compare(string correctAnswer, string answer, double permissibleError)
         {
-            if (correctAnswer.Length == 1)
+            var correctLength = correctAnswer.Length;
+
+            if (correctLength <= 1)
             {
                 var result = correctAnswer == answer;
 
@@ -55,9 +59,13 @@ namespace Memento.SRS
             }
             else
             {
-                var distance = MinimumEditDistance.Levenshtein.CalculateDistance(correctAnswer, answer, 1);
+                var distance = Levenshtein.CalculateDistance(correctAnswer, answer, 1);
 
-                var result = distance <= 1;
+                var minDistance = correctLength * permissibleError;
+
+                var correctedMinDistance = Math.Max(minDistance, 1);
+
+                var result = distance <= correctedMinDistance;
 
                 return result;
             }
