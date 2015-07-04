@@ -10,8 +10,14 @@ namespace Memento.SRS
 {
     public static class Evaluator
     {
-        public static bool IsCorrect(string correctAnswer, string answer)
-        public static bool IsCorrect(string correctAnswer, string answer, double permissibleError)
+        public enum Mark
+        {
+            Correct,
+            Incorrect,
+            Typo,
+        }
+
+        public static Mark Evaluate(string correctAnswer, string answer, double permissibleError)
         {
             var correctAnswerVariants = correctAnswer.Split('|');
 
@@ -19,9 +25,20 @@ namespace Memento.SRS
 
             var answerWords = GetWords(answer);
 
-            var result = correctVariantsWords.Any(item => Compare(item, answerWords, permissibleError));
+            var marks = from item in correctVariantsWords select Check(item, answerWords, permissibleError);
 
-            return result;
+            if (marks.Any(mark => mark == Mark.Correct))
+            {
+                return Mark.Correct;
+            }
+            else if (marks.Any(mark => mark == Mark.Typo))
+            {
+                return Mark.Typo;
+            }
+            else
+            {
+                return Mark.Incorrect;
+            }
         }
 
         private static IEnumerable<string> GetWords(string correctAnswer)
@@ -31,43 +48,59 @@ namespace Memento.SRS
             return words;
         }
 
-        private static bool Compare(IEnumerable<string> correctWords, IEnumerable<string> answerWords, double permissibleError)
+        private static Mark Check(IEnumerable<string> correctWords, IEnumerable<string> answerWords, double permissibleError)
         {
             if (correctWords.Count() != answerWords.Count())
             {
-                return false;
+                return Mark.Incorrect;
             }
             else
             {
                 var zip = Enumerable.Zip(correctWords, answerWords, (x, y) => new { correctAnswer = x, answer = y });
 
-                var result = zip.All(item => Compare(item.correctAnswer, item.answer, permissibleError));
+                var marks = from item in zip select Check(item.correctAnswer, item.answer, permissibleError);
 
-                return result;
+                if (marks.Any(mark => mark == Mark.Incorrect))
+                {
+                    return Mark.Incorrect;
+                }
+                else if (marks.Any(mark => mark == Mark.Typo))
+                {
+                    return Mark.Typo;
+                }
+                else
+                {
+                    return Mark.Correct;
+                }
             }
         }
 
-        private static bool Compare(string correctAnswer, string answer, double permissibleError)
+        private static Mark Check(string correctAnswer, string answer, double permissibleError)
         {
-            var correctLength = correctAnswer.Length;
-
-            if (correctLength <= 1)
+            if (correctAnswer == answer)
             {
-                var result = correctAnswer == answer;
-
-                return result;
+                return Mark.Correct;
+            }
+            else if (correctAnswer.Length <= 1)
+            {
+                return Mark.Incorrect;
             }
             else
             {
                 var distance = Levenshtein.CalculateDistance(correctAnswer, answer, 1);
 
-                var minDistance = correctLength * permissibleError;
+                var minDistance = correctAnswer.Length * permissibleError;
 
-                var correctedMinDistance = Math.Max(minDistance, 1);
+                var minNonzeroDistance = Math.Max(minDistance, 1);
 
-                var result = distance <= correctedMinDistance;
-
-                return result;
+                if (distance <= minNonzeroDistance)
+                {
+                    return Mark.Typo;
+                }
+                else
+                {
+                    return Mark.Incorrect;
+                }
             }
         }
     }
