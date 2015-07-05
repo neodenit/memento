@@ -38,9 +38,7 @@ namespace Memento.Models
         public ControlModes ControlMode { get; set; }
 
         public DelayModes DelayMode { get; set; }
-
-        public bool CorrectDelays { get; set; }
-
+        
         public bool AllowSmallDelays { get; set; }
 
         public int StartDelay { get; set; }

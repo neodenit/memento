@@ -11,9 +11,7 @@ namespace Memento.SRS
         int StartDelay { get; set; }
 
         double Coeff { get; set; }
-
-        bool CorrectDelays { get; set; }
-
+        
         bool AllowSmallDelays { get; set; }
     }
 

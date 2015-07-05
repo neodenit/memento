@@ -32,7 +32,7 @@ namespace Memento.SRS
 
             var newDelay = deck.AllowSmallDelays ? newPosition : Math.Max(newPosition, deck.StartDelay);
 
-            ChangeFirstCardPosition(cards, deck.CorrectDelays, card, newPosition, newDelay);
+            MoveCard(cards, card.Position, newPosition, newDelay, false, true);
 
             card.IsNew = false;
         }
@@ -47,7 +47,7 @@ namespace Memento.SRS
         public static void PrepareForAdding(IDeck deck, IEnumerable<ICard> cards, ICard card)
         {
             var maxNewPosition = GetMaxNewPosition(cards);
-            
+
             card.Position = maxNewPosition;
 
             card.LastDelay = deck.StartDelay;
@@ -62,6 +62,46 @@ namespace Memento.SRS
             ShuffleCards(newCards);
         }
 
+        public static void MoveCard(IEnumerable<ICard> cards, int oldPosition, int newPosition, int newDelay, bool correctMovedCardsDelays, bool correctRestCardsDelays)
+        {
+            var movedCard = cards.Single(item => item.Position == oldPosition);
+
+            if (oldPosition > newPosition)
+            {
+                var movedCards = GetRange(cards, newPosition, oldPosition - 1);
+
+                IncreasePosition(movedCards);
+
+                if (correctMovedCardsDelays)
+                {
+                    IncreaseDelays(movedCards);
+                }
+            }
+            else
+            {
+
+                var movedCards = GetRange(cards, oldPosition + 1, newPosition);
+
+                DecreasePosition(movedCards);
+
+                if (correctMovedCardsDelays)
+                {
+                    DecreaseDelays(movedCards);
+                }
+                else if (correctRestCardsDelays)
+                {
+                    var maxPosition = Math.Max(oldPosition, newPosition);
+
+                    IEnumerable<ICard> restCards = GetRestCards(cards, maxPosition);
+
+                    IncreaseDelays(restCards);
+                }
+            }
+
+            movedCard.Position = newPosition;
+            movedCard.LastDelay = newDelay;
+        }
+
         private static void ShuffleCards(IEnumerable<ICard> cards)
         {
             var positions = from item in cards select item.Position;
@@ -73,46 +113,57 @@ namespace Memento.SRS
             zip.ToList().ForEach(item => item.card.Position = item.newPos);
         }
 
-        private static void ChangeFirstCardPosition(IEnumerable<ICard> cards, bool correctDelays, ICard card, int newPosition, int newDelay)
+        private static IEnumerable<ICard> GetRestCards(IEnumerable<ICard> cards, int position)
         {
-            DecreasePositions(cards, newPosition);
+            var result = from item in cards where item.Position >= position select item;
 
-            if (correctDelays)
-            {
-                CorrectDelays(cards, newPosition);
-            }
-
-            card.Position = newPosition;
-            card.LastDelay = newDelay;
+            return result;
         }
 
-        private static void IncreasePositions(IEnumerable<ICard> cards, int position)
+        private static IEnumerable<ICard> GetRange(IEnumerable<ICard> cards, int minPosition, int maxPosition)
         {
-            var more = from item in cards where item.Position >= position select item;
+            var result = from card in cards
+                         where card.Position >= minPosition && card.Position <= maxPosition
+                         select card;
 
-            foreach (var item in more)
+            return result;
+        }
+
+        private static void IncreasePosition(IEnumerable<ICard> cards)
+        {
+            foreach (var item in cards)
             {
                 item.Position++;
             }
         }
 
-        private static void DecreasePositions(IEnumerable<ICard> cards, int position)
+        private static void DecreasePosition(IEnumerable<ICard> cards)
         {
-            var less = from item in cards where item.Position <= position select item;
-
-            foreach (var item in less)
+            foreach (var item in cards)
             {
                 item.Position--;
             }
         }
 
-        private static void CorrectDelays(IEnumerable<ICard> cards, int newPosition)
+        private static void IncreaseDelays(IEnumerable<ICard> cards)
         {
-            var more = from item in cards where item.Position > newPosition && !item.IsNew select item;
-
-            foreach (var item in more)
+            foreach (var card in cards)
             {
-                item.LastDelay++;
+                if (!card.IsNew)
+                {
+                    card.LastDelay++;
+                }
+            }
+        }
+
+        private static void DecreaseDelays(IEnumerable<ICard> cards)
+        {
+            foreach (var card in cards)
+            {
+                if (!card.IsNew)
+                {
+                    card.LastDelay--;
+                }
             }
         }
 
@@ -133,16 +184,20 @@ namespace Memento.SRS
         private static ICard GetFirstCard(IEnumerable<ICard> cards)
         {
             var card = cards.GetMinElement(item => item.Position);
+
             return card;
         }
 
+        [Obsolete]
         private static void ReservePosition(IEnumerable<ICard> cards, int position, bool correctDelays)
         {
-            IncreasePositions(cards, position);
+            var movedCards = from item in cards where item.Position >= position select item;
+
+            IncreasePosition(movedCards);
 
             if (correctDelays)
             {
-                CorrectDelays(cards, position);
+                IncreaseDelays(movedCards);
             }
         }
 
