@@ -81,12 +81,12 @@ namespace Memento.Controllers
             else if (dbDeck.Cards.Any())
             {
                 var card = dbDeck.GetNextCard();
-
-                return RedirectToAction("Question", "Cards", new { id = card.ID });
+                
+                return RedirectToAction("Details", "Cards", new { id = card.ID });
             }
             else
             {
-                return RedirectToAction("Details", "Cards", new { DeckID = dbDeck.ID });
+                return RedirectToAction("DetailsEmpty", "Cards", new { DeckID = dbDeck.ID });
             }
         }
 

@@ -39,7 +39,7 @@ namespace Memento.Controllers
             }
         }
 
-        public ActionResult Details(int? DeckID)
+        public ActionResult DetailsEmpty(int? DeckID)
         {
             if (DeckID == null)
             {
@@ -47,10 +47,127 @@ namespace Memento.Controllers
             }
             else
             {
-                return View(new Card { DeckID = DeckID.Value, ID = -1 });
+                return View("Details", new Card { DeckID = DeckID.Value, ID = -1 });
             }
         }
 
+        public async Task<ActionResult> Details(int id)
+        {
+            var card = await db.Cards.FindAsync(id);
+
+            if (card == null)
+            {
+                return HttpNotFound();
+            }
+            else if (!card.IsAuthorized(User))
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var cloze = card.GetNextCloze();
+
+            if (cloze.IsNew)
+            {
+                return RedirectToAction("PreviewClosed", new { id = card.ID });
+            }
+            else
+            {
+                return RedirectToAction("Question", new { id = card.ID });
+            }
+        }
+
+        public async Task<ActionResult> PreviewClosed(int id)
+        {
+            var card = await db.Cards.FindAsync(id);
+
+            if (card == null)
+            {
+                return HttpNotFound();
+            }
+            else if (!card.IsAuthorized(User))
+            {
+                return new HttpUnauthorizedResult();
+            }
+            
+            var cloze = card.GetNextCloze();
+
+            var question = Converter.GetQuestion(card.Text, cloze.Label);
+
+            card.Text = question;
+
+            return View(card);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> PreviewClozed([Bind(Include = "ID")]Card card)
+        {
+            var dbCard = await db.Cards.FindAsync(card.ID);
+
+            if (dbCard == null)
+            {
+                return HttpNotFound();
+            }
+            else if (!dbCard.IsAuthorized(User))
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            return RedirectToAction("PreviewOpened", new { id = dbCard.ID });
+        }
+
+        public async Task<ActionResult> PreviewOpened(int id)
+        {
+            var card = await db.Cards.FindAsync(id);
+
+            if (card == null)
+            {
+                return HttpNotFound();
+            }
+            else if (!card.IsAuthorized(User))
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var cloze = card.GetNextCloze();
+
+            var question = Converter.GetAnswer(card.Text, cloze.Label);
+
+            card.Text = question;
+
+            return View(card);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> PreviewOpened([Bind(Include = "ID")]Card card)
+        {
+            var dbCard = await db.Cards.FindAsync(card.ID);
+
+            if (dbCard == null)
+            {
+                return HttpNotFound();
+            }
+            else if (!dbCard.IsAuthorized(User))
+            {
+                return new HttpUnauthorizedResult();
+            }
+            else
+            {
+                var deck = dbCard.Deck;
+
+                var clozes = deck.GetClozes();
+
+                Scheduler.PromoteCard(deck, clozes, Scheduler.Delays.Same);
+
+                await db.SaveChangesAsync();
+
+                var nextCard = deck.GetNextCard();
+
+                return RedirectToAction("Details", "Cards", new { id = nextCard.ID });
+            }
+        }
+        
         public async Task<ActionResult> Question(int? id)
         {
             var card = await db.Cards.FindAsync(id);

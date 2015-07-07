@@ -1,0 +1,30 @@
+﻿@model Memento.Models.Card
+
+@{
+    ViewBag.Title = "Preview";
+}
+
+<h2>Preview</h2>
+
+<div>
+    <h4>@Html.DisplayFor(model => model.Deck.Title)</h4>
+    <hr />
+
+    @using (Html.BeginForm("PreviewClozed", "Cards"))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(model => model.ID)
+
+        <div class="topactions">
+            @Html.ActionLink("Edit card", "Edit", new { id = Model.ID }) |
+            @Html.ActionLink("Delete card", "Delete", new { id = Model.ID })
+        </div>
+
+        @Html.DisplayFor(model => model.Text)
+
+        <br />
+
+        <input type="submit" value="Show" class="btn btn-default" />
+    }
+</div>
