@@ -278,6 +278,8 @@ namespace Memento.Controllers
 
                         db.Cards.Add(newCard);
 
+                        await db.SaveChangesAsync();
+
                         foreach (var clozeName in clozeNames)
                         {
                             var newCloze = new Cloze(newCard.ID, clozeName);
