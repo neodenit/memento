@@ -22,7 +22,7 @@ namespace Memento.SRS
         {
             var card = GetFirstCard(cards);
 
-            var maxNewPosition = GetMaxNewPosition(cards);
+            var maxNewPosition = GetMaxPosition(cards);
 
             var step = GetStep(deck, delay, card.LastDelay);
 
@@ -30,7 +30,7 @@ namespace Memento.SRS
 
             var newPosition = Math.Min(step, maxNewPosition);
 
-            var newDelay = deck.AllowSmallDelays ? newPosition : Math.Max(newPosition, deck.StartDelay);
+            var newDelay = newPosition > deck.StartDelay || deck.AllowSmallDelays ? newPosition : deck.StartDelay;
 
             MoveCard(cards, card.Position, newPosition, newDelay, false, true);
 
@@ -79,7 +79,6 @@ namespace Memento.SRS
             }
             else
             {
-
                 var movedCards = GetRange(cards, oldPosition + 1, newPosition);
 
                 DecreasePosition(movedCards);
@@ -165,6 +164,11 @@ namespace Memento.SRS
                     card.LastDelay--;
                 }
             }
+        }
+
+        private static int GetMaxPosition(IEnumerable<ICard> cards)
+        {
+            return cards.Any() ? cards.Max(item => item.Position) : 0;
         }
 
         private static int GetMaxNewPosition(IEnumerable<ICard> cards)
