@@ -43,7 +43,7 @@ namespace Memento.SRS
 
         private static IEnumerable<string> GetWords(string correctAnswer)
         {
-            var words = from Match match in Regex.Split(correctAnswer, @"\W") select match.Value.ToUpper();
+            var words = from word in Regex.Split(correctAnswer, @"\W") select word.ToUpper();
 
             return words;
         }

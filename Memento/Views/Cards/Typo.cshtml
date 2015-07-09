@@ -10,15 +10,26 @@
     <h4>@Html.DisplayFor(model => model.Deck.Title)</h4>
     <hr />
 
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Typo", "Cards"))
     {
         @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(model => model.ID)
 
         <div class="topactions">
             @Html.ActionLink("Edit card", "Edit", new { id = Model.ID }) |
             @Html.ActionLink("Delete card", "Delete", new { id = Model.ID })
         </div>
 
-        <div>Typo!</div>
+        @Html.DisplayFor(model => model.Text)
+
+        <p>
+            Your answer: <text>@ViewBag.Answer</text>
+        </p>
+
+        <div>Your answer looks like a typo!</div>
+        <input type="submit" name="TypoButton" value="It's a typo!" class="btn btn-default" />
+        <input type="submit" name="WrongButton" value="It's a wrong answer!" class="btn btn-default" />
+        <input type="submit" name="AltButton" value="It's an alternative answer!" class="btn btn-default" />
     }
 </div>

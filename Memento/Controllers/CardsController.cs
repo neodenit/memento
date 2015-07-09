@@ -206,19 +206,28 @@ namespace Memento.Controllers
 
                 var answer = Converter.GetAnswerValue(dbCard.Text, cloze.Label);
 
-                if (card.Answer == answer)
+                var result = Evaluator.Evaluate(card.Answer, answer, 0.2);
+
+                switch (result)
                 {
-                    dbCard.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);
+                    case Evaluator.Mark.Correct:
+                        dbCard.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);
 
-                    return View("Right", dbCard);
-                }
-                else
-                {
-                    ViewBag.Answer = card.Answer;
+                        return View("Right", dbCard);
+                    case Evaluator.Mark.Incorrect:
+                        ViewBag.Answer = card.Answer;
 
-                    dbCard.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);
+                        dbCard.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);
 
-                    return View("Wrong", dbCard);
+                        return View("Wrong", dbCard);
+                    case Evaluator.Mark.Typo:
+                        ViewBag.Answer = card.Answer;
+
+                        dbCard.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);
+
+                        return View("Typo", dbCard);
+                    default:
+                        throw new Exception();
                 }
             }
         }
@@ -281,6 +290,34 @@ namespace Memento.Controllers
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Typo([Bind(Include = "ID")]Card card, string TypoButton, string WrongButton, string AltButton)
+        {
+            var dbCard = await db.Cards.FindAsync(card.ID);
+
+            if (!dbCard.IsAuthorized(User))
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            if (TypoButton != null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            else if (WrongButton != null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            else if (AltButton != null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+        }
 
         // GET: Cards/Create
         public ActionResult Create(int? DeckID)
