@@ -206,7 +206,7 @@ namespace Memento.Controllers
 
                 var answer = Converter.GetAnswerValue(dbCard.Text, cloze.Label);
 
-                var result = Evaluator.Evaluate(card.Answer, answer, 0.2);
+                var result = Evaluator.Evaluate(answer, card.Answer, 0.2);
 
                 switch (result)
                 {
