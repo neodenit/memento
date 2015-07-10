@@ -15,6 +15,7 @@
         @Html.AntiForgeryToken()
 
         @Html.HiddenFor(model => model.ID)
+        @Html.HiddenFor(model => model.Answer)
 
         <div class="topactions">
             @Html.ActionLink("Edit card", "Edit", new { id = Model.ID }) |

@@ -259,7 +259,7 @@ namespace Memento.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Wrong([Bind(Include = "ID")]Card card, string NextButton, string AltButton)
+        public async Task<ActionResult> Wrong([Bind(Include = "ID, Answer")]Card card, string NextButton, string AltButton)
         {
             var dbCard = await db.Cards.FindAsync(card.ID);
 
@@ -267,7 +267,8 @@ namespace Memento.Controllers
             {
                 return new HttpUnauthorizedResult();
             }
-            else if (NextButton != null)
+
+            if (NextButton != null)
             {
                 var deck = dbCard.Deck;
                 var clozes = deck.GetClozes();
@@ -282,7 +283,19 @@ namespace Memento.Controllers
             }
             else if (AltButton != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var cloze = dbCard.GetNextCloze();
+
+                var oldAnswers = Converter.GetAnswerValue(dbCard.Text, cloze.Label);
+
+                var newAnswers = string.Format("{0}|{1}", oldAnswers, card.Answer);
+
+                var newText = Converter.Replace(dbCard.Text, cloze.Label, newAnswers);
+
+                dbCard.Text = newText;
+
+                await db.SaveChangesAsync();
+
+                return RedirectToAction("Question", new { id = card.ID });
             }
             else
             {
@@ -292,7 +305,7 @@ namespace Memento.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Typo([Bind(Include = "ID")]Card card, string TypoButton, string WrongButton, string AltButton)
+        public async Task<ActionResult> Typo([Bind(Include = "ID, Answer")]Card card, string TypoButton, string WrongButton, string AltButton)
         {
             var dbCard = await db.Cards.FindAsync(card.ID);
 
@@ -320,7 +333,19 @@ namespace Memento.Controllers
             }
             else if (AltButton != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var cloze = dbCard.GetNextCloze();
+
+                var oldAnswers = Converter.GetAnswerValue(dbCard.Text, cloze.Label);
+
+                var newAnswers = string.Format("{0}|{1}", oldAnswers, card.Answer);
+
+                var newText = Converter.Replace(dbCard.Text, cloze.Label, newAnswers);
+
+                dbCard.Text = newText;
+
+                await db.SaveChangesAsync();
+
+                return RedirectToAction("Question", new { id = card.ID });
             }
             else
             {

@@ -80,6 +80,15 @@ namespace Memento.SRS
             return currentPattern;
         }
 
+        public static string Replace(string text, string label, string newAnswers)
+        {
+            var currentPattern = GetCurrentClozePattern(label);
+
+            var newPattern = "{{" + label + "::" + newAnswers + "$3}}";
+
+            return Regex.Replace(text, currentPattern, newPattern);
+        }
+
         private static string ConvertToCloze(string card, bool justClozes)
         {
             var isCloze = IsClozeCard(card);
