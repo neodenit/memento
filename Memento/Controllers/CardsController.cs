@@ -315,7 +315,7 @@ namespace Memento.Controllers
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Question", new { id = card.ID });
             }
         }
 
