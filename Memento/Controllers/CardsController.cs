@@ -307,7 +307,16 @@ namespace Memento.Controllers
             }
             else if (WrongButton != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var deck = dbCard.Deck;
+                var clozes = deck.GetClozes();
+
+                Scheduler.PromoteCard(deck, clozes, Scheduler.Delays.Previous);
+
+                await db.SaveChangesAsync();
+
+                var nextCard = deck.GetNextCard();
+
+                return RedirectToAction("Question", new { id = card.ID });
             }
             else if (AltButton != null)
             {
