@@ -316,7 +316,7 @@ namespace Memento.Controllers
 
             if (TypoButton != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Question", new { id = card.ID });
             }
             else if (WrongButton != null)
             {
@@ -349,7 +349,7 @@ namespace Memento.Controllers
             }
             else
             {
-                return RedirectToAction("Question", new { id = card.ID });
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
         }
 
