@@ -9,7 +9,7 @@ namespace Memento.SRS
 {
     public static class Converter
     {
-        private const string ClozePattern = @"{{(\w+)::(.+?)(::(.+?))?}}";
+        private const string ClozePattern = @"{{(\w+)::((?:(?!}}).)+?)(::((?:(?!}}).)+?))?}}";
 
         public static IEnumerable<string> GetCardsFromDeck(string deckText, bool justClozes = false)
         {
@@ -76,7 +76,7 @@ namespace Memento.SRS
 
         public static string GetCurrentClozePattern(string clozeName)
         {
-            var currentPattern = "{{(" + clozeName + ")::(.+?)(::(.+?))?}}";
+            var currentPattern = "{{(" + clozeName + ")::((?:(?!}}).)+?)(::((?:(?!}}).)+?))?}}";
             return currentPattern;
         }
 
@@ -218,22 +218,21 @@ namespace Memento.SRS
 
         private static string ReplaceCloze(string field, string clozeName)
         {
-            var hintPattern = "{{(" + clozeName + ")::(.+?)::(.+?)}}";
-            var simplePattern = "{{(" + clozeName + ")::(.+?)}}";
+            var clozePattern = GetCurrentClozePattern(clozeName);
 
-            if (Regex.IsMatch(field, hintPattern))
+            var match = Regex.Match(field, clozePattern);
+
+            if (!string.IsNullOrEmpty(match.Groups[4].Value))
             {
-                var hint = Regex.Match(field, hintPattern).Groups[3];
+                var hint = match.Groups[4];
 
-                var result = Regex.Replace(field, hintPattern, string.Format("[{0}]", hint));
+                var result = Regex.Replace(field, clozePattern, string.Format("[{0}]", hint));
 
                 return result;
             }
-            else if (Regex.IsMatch(field, simplePattern))
+            else if (!string.IsNullOrEmpty(match.Groups[2].Value))
             {
-                var hint = Regex.Match(field, simplePattern).Groups[3];
-
-                var result = Regex.Replace(field, simplePattern, "[...]");
+                var result = Regex.Replace(field, clozePattern, "[...]");
 
                 return result;
             }

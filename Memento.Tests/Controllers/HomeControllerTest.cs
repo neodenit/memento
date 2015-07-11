@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using Memento;
 using Memento.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using System.Security.Principal;
 
 namespace Memento.Tests.Controllers
 {
@@ -16,10 +18,12 @@ namespace Memento.Tests.Controllers
         public void Index()
         {
             // Arrange
-            HomeController controller = new HomeController();
+            var controllerMock = new Mock<ControllerContext>();
+            controllerMock.Setup(item => item.HttpContext.User.Identity.IsAuthenticated).Returns(true);
+            var controller = new HomeController { ControllerContext = controllerMock.Object };
 
             // Act
-            ViewResult result = controller.Index() as ViewResult;
+            var result = controller.Index() as RedirectToRouteResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -35,7 +39,7 @@ namespace Memento.Tests.Controllers
             ViewResult result = controller.About() as ViewResult;
 
             // Assert
-            Assert.AreEqual("Your application description page.", result.ViewBag.Message);
+            Assert.AreEqual("Memento", result.ViewBag.Message);
         }
 
         [TestMethod]

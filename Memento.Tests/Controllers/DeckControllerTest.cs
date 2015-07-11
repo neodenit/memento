@@ -15,16 +15,6 @@ namespace Memento.Tests.Controllers
     public class DeckControllerTest
     {
         [TestMethod]
-        public void Index()
-        {
-            var controller = new DecksController();
-
-            var result = controller.Index().Result as ViewResult;
-
-            Assert.IsNotNull(result);
-        }
-
-        [TestMethod]
         public void Create()
         {
             var controller = new DecksController();
@@ -32,13 +22,9 @@ namespace Memento.Tests.Controllers
             var result = controller.Create() as ViewResult;
 
             Assert.IsNotNull(result);
-
             var model = result.Model as Deck;
-
             Assert.IsNotNull(model);
-
             Assert.AreEqual(Settings.Default.StartDelay, model.StartDelay);
-
             Assert.AreEqual(Settings.Default.Coeff, model.Coeff, double.Epsilon);
         }
     }

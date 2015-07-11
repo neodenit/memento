@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
-using Memento;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Memento.SRS;
 using Memento.Models;
@@ -11,7 +10,7 @@ using Memento.Models;
 namespace Memento.Tests
 {
     [TestClass]
-    public class Test
+    public class SchedulerTest
     {
         private static bool CheckPositions(IEnumerable<ICard> cards)
         {
