@@ -11,6 +11,9 @@ using Memento.Models;
 namespace Memento.Controllers
 {
     [Authorize]
+#if !DEBUG
+    [RequireHttps]
+#endif
     public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;

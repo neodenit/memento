@@ -13,6 +13,10 @@ using Memento.SRS;
 
 namespace Memento.Controllers
 {
+    [Authorize]
+#if !DEBUG
+    [RequireHttps]
+#endif
     public class CardsController : Controller
     {
         private MementoContext db = new MementoContext();

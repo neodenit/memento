@@ -18,7 +18,7 @@ namespace Memento.Controllers
 {
     [Authorize]
 #if !DEBUG
-[RequireHttps]
+    [RequireHttps]
 #endif
     public class DecksController : Controller
     {

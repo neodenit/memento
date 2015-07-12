@@ -6,6 +6,9 @@ using System.Web.Mvc;
 
 namespace Memento.Controllers
 {
+#if !DEBUG
+    [RequireHttps]
+#endif
     public class HomeController : Controller
     {
         public ActionResult Index()
@@ -18,7 +21,7 @@ namespace Memento.Controllers
             }
             else
             {
-                return View();
+                return RedirectToAction("Login", "Account");
             }
         }
 
