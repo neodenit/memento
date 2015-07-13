@@ -131,6 +131,8 @@ namespace Memento.Models
         public bool IsNew { get; set; }
 
         public int LastDelay { get; set; }
+
+        public int TopicID { get { return Card.ID; } }
     }
 
     public class Repetition
