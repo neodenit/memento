@@ -92,7 +92,7 @@ namespace Memento.Controllers
             {
                 return new HttpUnauthorizedResult();
             }
-            
+
             var cloze = card.GetNextCloze();
 
             var question = Converter.GetQuestion(card.Text, cloze.Label);
@@ -171,7 +171,7 @@ namespace Memento.Controllers
                 return RedirectToAction("Details", "Cards", new { id = nextCard.ID });
             }
         }
-        
+
         public async Task<ActionResult> Question(int? id)
         {
             var card = await db.Cards.FindAsync(id);
@@ -257,7 +257,7 @@ namespace Memento.Controllers
 
                 var nextCard = deck.GetNextCard();
 
-                return RedirectToAction("Question", new { id = nextCard.ID });
+                return RedirectToAction("Details", new { id = nextCard.ID });
             }
         }
 
@@ -283,7 +283,7 @@ namespace Memento.Controllers
 
                 var nextCard = deck.GetNextCard();
 
-                return RedirectToAction("Question", new { id = nextCard.ID });
+                return RedirectToAction("Details", new { id = nextCard.ID });
             }
             else if (AltButton != null)
             {
@@ -299,7 +299,7 @@ namespace Memento.Controllers
 
                 await db.SaveChangesAsync();
 
-                return RedirectToAction("Question", new { id = card.ID });
+                return RedirectToAction("Details", new { id = card.ID });
             }
             else
             {
@@ -320,7 +320,7 @@ namespace Memento.Controllers
 
             if (TypoButton != null)
             {
-                return RedirectToAction("Question", new { id = card.ID });
+                return RedirectToAction("Details", new { id = card.ID });
             }
             else if (WrongButton != null)
             {
@@ -333,7 +333,7 @@ namespace Memento.Controllers
 
                 var nextCard = deck.GetNextCard();
 
-                return RedirectToAction("Question", new { id = card.ID });
+                return RedirectToAction("Details", new { id = card.ID });
             }
             else if (AltButton != null)
             {
@@ -349,7 +349,7 @@ namespace Memento.Controllers
 
                 await db.SaveChangesAsync();
 
-                return RedirectToAction("Question", new { id = card.ID });
+                return RedirectToAction("Details", new { id = card.ID });
             }
             else
             {
@@ -384,7 +384,7 @@ namespace Memento.Controllers
             if (ModelState.IsValid)
             {
                 var deck = await db.Decks.FindAsync(card.DeckID);
-                
+
                 var text = card.Text;
 
                 var clozeNames = Converter.GetClozeNames(text);
