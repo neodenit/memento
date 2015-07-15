@@ -79,7 +79,7 @@ namespace Memento.Controllers
                 return RedirectToAction("Question", new { id = card.ID });
             }
         }
-
+        
         public async Task<ActionResult> PreviewClosed(int id)
         {
             var card = await db.Cards.FindAsync(id);
@@ -158,17 +158,7 @@ namespace Memento.Controllers
             }
             else
             {
-                var deck = dbCard.Deck;
-
-                var clozes = deck.GetClozes();
-
-                Scheduler.PromoteCard(deck, clozes, Scheduler.Delays.Same);
-
-                await db.SaveChangesAsync();
-
-                var nextCard = deck.GetNextCard();
-
-                return RedirectToAction("Details", "Cards", new { id = nextCard.ID });
+                return await PromoteAndRedirect(dbCard, Scheduler.Delays.Same);
             }
         }
 
@@ -248,16 +238,7 @@ namespace Memento.Controllers
             }
             else
             {
-                var deck = dbCard.Deck;
-                var clozes = deck.GetClozes();
-
-                Scheduler.PromoteCard(deck, clozes, Scheduler.Delays.Next);
-
-                await db.SaveChangesAsync();
-
-                var nextCard = deck.GetNextCard();
-
-                return RedirectToAction("Details", new { id = nextCard.ID });
+                return await PromoteAndRedirect(dbCard, Scheduler.Delays.Next);
             }
         }
 
@@ -274,16 +255,7 @@ namespace Memento.Controllers
 
             if (NextButton != null)
             {
-                var deck = dbCard.Deck;
-                var clozes = deck.GetClozes();
-
-                Scheduler.PromoteCard(deck, clozes, Scheduler.Delays.Previous);
-
-                await db.SaveChangesAsync();
-
-                var nextCard = deck.GetNextCard();
-
-                return RedirectToAction("Details", new { id = nextCard.ID });
+                return await PromoteAndRedirect(dbCard, Scheduler.Delays.Previous);
             }
             else if (AltButton != null)
             {
@@ -324,16 +296,7 @@ namespace Memento.Controllers
             }
             else if (WrongButton != null)
             {
-                var deck = dbCard.Deck;
-                var clozes = deck.GetClozes();
-
-                Scheduler.PromoteCard(deck, clozes, Scheduler.Delays.Previous);
-
-                await db.SaveChangesAsync();
-
-                var nextCard = deck.GetNextCard();
-
-                return RedirectToAction("Details", new { id = card.ID });
+                return await PromoteAndRedirect(dbCard, Scheduler.Delays.Previous);
             }
             else if (AltButton != null)
             {
@@ -523,6 +486,24 @@ namespace Memento.Controllers
             }
 
             base.Dispose(disposing);
+        }
+
+        private async Task<ActionResult> PromoteAndRedirect(Card card, Scheduler.Delays delay)
+        {
+            var deck = card.Deck;
+            var clozes = deck.GetClozes();
+
+            SiblingsManager.RearrangeSiblings(deck, clozes);
+
+            NewCardsManager.RearrangeNewCards(deck, clozes);
+
+            Scheduler.PromoteCard(deck, clozes, delay);
+
+            await db.SaveChangesAsync();
+
+            var nextCard = deck.GetNextCard();
+
+            return RedirectToAction("Details", new { id = nextCard.ID });
         }
     }
 }
