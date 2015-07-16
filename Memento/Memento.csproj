@@ -218,6 +218,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\App\CardCreate.js" />
     <Content Include="Scripts\App\Common.js">
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Content>

@@ -7,6 +7,11 @@
 }
 
 <h2>@Html.DisplayFor(model => model.Title)</h2>
+
+<p>
+    @Html.ActionLink("Create New Card", "Create", "Cards")
+</p>
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()

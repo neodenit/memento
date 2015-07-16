@@ -82,6 +82,7 @@ namespace Memento.Models
         public virtual Deck Deck { get; set; }
 
         [Required]
+        [DataType(DataType.MultilineText)]
         public string Text { get; set; }
 
         public string Answer { get; set; }
