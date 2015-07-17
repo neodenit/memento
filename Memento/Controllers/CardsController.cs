@@ -362,15 +362,7 @@ namespace Memento.Controllers
 
                     await db.SaveChangesAsync();
 
-                    foreach (var clozeName in clozeNames)
-                    {
-
-                        var cloze = new Cloze(card.ID, clozeName);
-
-                        Scheduler.PrepareForAdding(deck, db.Clozes, cloze);
-
-                        db.Clozes.Add(cloze);
-                    }
+                    AddClozes(card, clozeNames);
 
                     await db.SaveChangesAsync();
 
@@ -382,7 +374,7 @@ namespace Memento.Controllers
                 return View(card);
             }
         }
-
+        
         // GET: Cards/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
@@ -424,6 +416,15 @@ namespace Memento.Controllers
                 {
                     dbCard.Text = card.Text;
 
+                    var oldClozes = from cloze in dbCard.Clozes select cloze.Label;
+                    var newClozes = Converter.GetClozeNames(dbCard.Text);
+
+                    var deletedClozes = oldClozes.Except(newClozes).ToList();
+                    var addedClozes = newClozes.Except(oldClozes).ToList();
+
+                    RemoveClozes(dbCard, deletedClozes);
+                    AddClozes(dbCard, addedClozes);
+
                     await db.SaveChangesAsync();
 
                     return RedirectToAction("Details", "Decks", new { id = dbCard.DeckID });
@@ -434,7 +435,7 @@ namespace Memento.Controllers
                 return View(card);
             }
         }
-
+        
         // GET: Cards/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
@@ -486,6 +487,30 @@ namespace Memento.Controllers
             }
 
             base.Dispose(disposing);
+        }
+
+        private void AddClozes(Card card, IEnumerable<string> clozeNames)
+        {
+            foreach (var clozeName in clozeNames)
+            {
+                var cloze = new Cloze(card.ID, clozeName);
+
+                Scheduler.PrepareForAdding(card.Deck, card.Clozes, cloze);
+
+                db.Clozes.Add(cloze);
+            }
+        }
+
+        private static void RemoveClozes(Card card, IEnumerable<string> clozeNames)
+        {
+            foreach (var clozeName in clozeNames)
+            {
+                var cloze = card.Clozes.Single(item => item.Label == clozeName);
+
+                Scheduler.PrepareForRemoving(card.Deck, card.Clozes, cloze);
+
+                card.Clozes.Remove(cloze);
+            }
         }
 
         private async Task<ActionResult> PromoteAndRedirect(Card card, Scheduler.Delays delay)

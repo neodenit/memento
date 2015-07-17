@@ -55,6 +55,17 @@ namespace Memento.SRS
             card.IsNew = true;
         }
 
+        public static void PrepareForRemoving(IDeck deck, IEnumerable<ICard> cards, ICard card)
+        {
+            var position = card.Position;
+
+            var movedCards = GetRestCards(cards, position);
+
+            DecreasePosition(movedCards);
+
+            DecreaseDelays(movedCards);
+        }
+
         public static void ShuffleNewCards(IEnumerable<ICard> cards)
         {
             var newCards = from item in cards where item.IsNew select item;
