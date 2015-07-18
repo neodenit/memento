@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Memento.Models.Card>
+﻿@model IEnumerable<Memento.Models.Cloze>
 
 @{
     ViewBag.Title = "Index";
@@ -6,32 +6,47 @@
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Deck.Title)
+            @Html.DisplayNameFor(model => model.ID)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Text)
+            @Html.DisplayNameFor(model => model.Label)
         </th>
-        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.Position)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastDelay)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CardID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsNew)
+        </th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Deck.Title)
+            @Html.DisplayFor(modelItem => item.ID)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Text)
+            @Html.DisplayFor(modelItem => item.Label)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @Html.DisplayFor(modelItem => item.Position)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastDelay)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CardID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsNew)
         </td>
     </tr>
 }

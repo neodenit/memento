@@ -38,7 +38,9 @@ namespace Memento.Controllers
                 }
                 else
                 {
-                    return View(deck.Cards.ToList());
+                    var clozes = deck.GetClozes();
+
+                    return View(clozes);
                 }
             }
         }
