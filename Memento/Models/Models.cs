@@ -38,7 +38,7 @@ namespace Memento.Models
         public ControlModes ControlMode { get; set; }
 
         public DelayModes DelayMode { get; set; }
-        
+
         public bool AllowSmallDelays { get; set; }
 
         public int StartDelay { get; set; }
@@ -90,7 +90,7 @@ namespace Memento.Models
         public virtual ICollection<Cloze> Clozes { get; set; }
 
         public bool IsValid { get; set; }
-        
+
         public Cloze GetNextCloze()
         {
             var cloze = Clozes.GetMinElement(item => item.Position);
@@ -136,23 +136,23 @@ namespace Memento.Models
         public int TopicID { get { return Card.ID; } }
     }
 
-    public class Repetition
+    public class Answer
     {
         public int ID { get; set; }
 
         public DateTime Time { get; set; }
 
-        public int OwnerID { get; set; }
+        public string OwnerID { get; set; }
 
-        public string Answer { get; set; }
+        public bool IsCorrect { get; set; }
 
-        public bool WasNew { get; set; }
+        public int ClozeID { get; set; }
 
-        public int ClozeIDCache { get; set; }
+        public int CardID { get; set; }
 
-        public int CardIDCache { get; set; }
+        public int DeckID { get; set; }
 
-        public int DeckIDCache { get; set; }
+        public int CardsInRepetition { get; set; }
     }
 
     public class DailyRepetitionStat

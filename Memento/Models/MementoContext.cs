@@ -22,6 +22,8 @@ namespace Memento.Models
 
         public DbSet<Cloze> Clozes { get; set; }
 
+        public DbSet<Answer> Answers { get; set; }
+
         public void DeleteUserDecks(IPrincipal user)
         {
             var items = GetUserDecks(user);

@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using Memento;
 using Memento.Models;
 using Memento.SRS;
+using Microsoft.AspNet.Identity;
 
 namespace Memento.Controllers
 {
@@ -240,9 +241,14 @@ namespace Memento.Controllers
             }
             else
             {
+                AddAnswer(dbCard, true);
+
+                await db.SaveChangesAsync();
+
                 return await PromoteAndRedirect(dbCard, Scheduler.Delays.Next);
             }
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -257,6 +263,10 @@ namespace Memento.Controllers
 
             if (NextButton != null)
             {
+                AddAnswer(dbCard, false);
+
+                await db.SaveChangesAsync();
+
                 return await PromoteAndRedirect(dbCard, Scheduler.Delays.Previous);
             }
             else if (AltButton != null)
@@ -513,6 +523,22 @@ namespace Memento.Controllers
 
                 card.Clozes.Remove(cloze);
             }
+        }
+
+        private void AddAnswer(Card dbCard, bool isCorrect)
+        {
+            var answer = new Answer
+            {
+                Time = DateTime.Now,
+                OwnerID = User.Identity.GetUserId(),
+                ClozeID = dbCard.GetNextCloze().ID,
+                CardID = dbCard.ID,
+                DeckID = dbCard.DeckID,
+                IsCorrect = isCorrect,
+                CardsInRepetition = dbCard.Deck.GetClozes().Count(cloze => !cloze.IsNew)
+            };
+
+            db.Answers.Add(answer);
         }
 
         private async Task<ActionResult> PromoteAndRedirect(Card card, Scheduler.Delays delay)
