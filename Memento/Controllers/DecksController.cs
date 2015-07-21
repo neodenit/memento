@@ -12,7 +12,6 @@ using Ionic.Zip;
 using Memento;
 using Memento.Models;
 using Memento.SRS;
-using Microsoft.AspNet.Identity;
 
 namespace Memento.Controllers
 {
@@ -110,7 +109,7 @@ namespace Memento.Controllers
             else if (ModelState.IsValid)
             {
 
-                deck.OwnerID = User.Identity.GetUserId();
+                deck.Owner = User.Identity.Name;
 
                 db.Decks.Add(deck);
 

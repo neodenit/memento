@@ -5,7 +5,6 @@ using System.Linq;
 using System.Security.Principal;
 using System.Web;
 using Memento.Models;
-using Microsoft.AspNet.Identity;
 
 namespace Memento.Models
 {
@@ -47,24 +46,24 @@ namespace Memento.Models
 
         public IQueryable<Deck> GetUserDecks(IPrincipal user)
         {
-            var userID = user.Identity.GetUserId();
-            var items = Decks.Where(item => item.OwnerID == userID);
+            var userName = user.Identity.Name;
+            var items = Decks.Where(item => item.Owner == userName);
 
             return items;
         }
 
         public IQueryable<Card> GetUserCards(IPrincipal user)
         {
-            var userID = user.Identity.GetUserId();
-            var items = Cards.Where(item => item.Deck.OwnerID == userID);
+            var userName = user.Identity.Name;
+            var items = Cards.Where(item => item.Deck.Owner == userName);
 
             return items;
         }
 
         public IQueryable<Cloze> GetUserClozes(IPrincipal user)
         {
-            var userID = user.Identity.GetUserId();
-            var items = Clozes.Where(item => item.Card.Deck.OwnerID == userID);
+            var userName = user.Identity.Name;
+            var items = Clozes.Where(item => item.Card.Deck.Owner == userName);
 
             return items;
         }

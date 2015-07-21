@@ -10,7 +10,6 @@ using System.Web.Mvc;
 using Memento;
 using Memento.Models;
 using Memento.SRS;
-using Microsoft.AspNet.Identity;
 
 namespace Memento.Controllers
 {
@@ -530,7 +529,7 @@ namespace Memento.Controllers
             var answer = new Answer
             {
                 Time = DateTime.Now,
-                OwnerID = User.Identity.GetUserId(),
+                Owner = User.Identity.Name,
                 ClozeID = dbCard.GetNextCloze().ID,
                 CardID = dbCard.ID,
                 DeckID = dbCard.DeckID,

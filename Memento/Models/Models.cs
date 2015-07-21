@@ -7,7 +7,6 @@ using System.Web;
 using System.Web.Script.Serialization;
 using Memento;
 using Memento.SRS;
-using Microsoft.AspNet.Identity;
 
 namespace Memento.Models
 {
@@ -31,7 +30,7 @@ namespace Memento.Models
         [Required]
         public string Title { get; set; }
 
-        public string OwnerID { get; set; }
+        public string Owner { get; set; }
 
         public virtual ICollection<Card> Cards { get; set; }
 
@@ -66,9 +65,9 @@ namespace Memento.Models
 
         public bool IsAuthorized(IPrincipal user)
         {
-            var userID = user.Identity.GetUserId();
+            var userName = user.Identity.Name;
 
-            return OwnerID == userID;
+            return Owner == userName;
         }
     }
 
@@ -100,9 +99,9 @@ namespace Memento.Models
 
         public bool IsAuthorized(IPrincipal user)
         {
-            var userID = user.Identity.GetUserId();
+            var userName = user.Identity.Name;
 
-            return Deck.OwnerID == userID;
+            return Deck.Owner == userName;
         }
     }
 
@@ -142,7 +141,7 @@ namespace Memento.Models
 
         public DateTime Time { get; set; }
 
-        public string OwnerID { get; set; }
+        public string Owner { get; set; }
 
         public bool IsCorrect { get; set; }
 
