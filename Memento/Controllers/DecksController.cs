@@ -12,6 +12,7 @@ using Ionic.Zip;
 using Memento;
 using Memento.Models;
 using Memento.SRS;
+using Memento.DomainModel;
 
 namespace Memento.Controllers
 {

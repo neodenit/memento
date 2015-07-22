@@ -5,7 +5,7 @@ using System.Text;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Memento.SRS;
-using Memento.Models;
+using Memento.DomainModel;
 
 namespace Memento.Tests
 {

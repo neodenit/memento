@@ -8,6 +8,7 @@ using Memento.Controllers;
 using Memento.Models;
 using Memento.SRS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Memento.DomainModel;
 
 namespace Memento.Tests.Controllers
 {

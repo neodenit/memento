@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using Memento;
 using Memento.Models;
 using Memento.SRS;
+using Memento.DomainModel;
 
 namespace Memento.Controllers
 {

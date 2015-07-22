@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Principal;
-using System.Web;
-using System.Web.Script.Serialization;
-using Memento;
 using Memento.SRS;
 
-namespace Memento.Models
+namespace Memento.DomainModel
 {
     public enum ControlModes
     {
@@ -77,7 +74,6 @@ namespace Memento.Models
 
         public int DeckID { get; set; }
 
-        [ScriptIgnore(ApplyToOverrides = true)]
         public virtual Deck Deck { get; set; }
 
         [Required]
@@ -121,7 +117,6 @@ namespace Memento.Models
 
         public int CardID { get; set; }
 
-        [ScriptIgnore(ApplyToOverrides = true)]
         public virtual Card Card { get; set; }
 
         public string Label { get; set; }

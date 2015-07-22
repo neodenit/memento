@@ -206,8 +206,6 @@
     <Compile Include="Models\ManageViewModels.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="Models\Models.cs" />
-    <Compile Include="Models\MementoContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -243,6 +241,7 @@
     </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -309,6 +308,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Memento.DomainModel\Memento.DomainModel.csproj">
+      <Project>{4ccb3552-1782-4ca3-806e-fe846ca2f6cf}</Project>
+      <Name>Memento.DomainModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Memento.SRS\Memento.SRS.csproj">
       <Project>{2f5faa65-d83a-47d4-abea-f2693dae25a3}</Project>
       <Name>Memento.SRS</Name>

@@ -114,6 +114,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Memento.DomainModel\Memento.DomainModel.csproj">
+      <Project>{4ccb3552-1782-4ca3-806e-fe846ca2f6cf}</Project>
+      <Name>Memento.DomainModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Memento.SRS\Memento.SRS.csproj">
       <Project>{2f5faa65-d83a-47d4-abea-f2693dae25a3}</Project>
       <Name>Memento.SRS</Name>

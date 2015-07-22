@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Security.Principal;
-using System.Web;
-using Memento.Models;
 
-namespace Memento.Models
+namespace Memento.DomainModel
 {
     public class MementoContext : DbContext
     {
