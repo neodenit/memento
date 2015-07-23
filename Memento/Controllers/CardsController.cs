@@ -11,6 +11,7 @@ using Memento;
 using Memento.Models;
 using Memento.SRS;
 using Memento.DomainModel;
+using Memento.DomainModel.Repository;
 
 namespace Memento.Controllers
 {
@@ -20,7 +21,17 @@ namespace Memento.Controllers
 #endif
     public class CardsController : Controller
     {
-        private MementoContext db = new MementoContext();
+        private readonly IMementoRepository repository;
+
+        public CardsController()
+        {
+            repository = new EFMementoRepository();
+        }
+
+        public CardsController(IMementoRepository repository)
+        {
+            this.repository = repository;
+        }
 
         // GET: Cards
         public async Task<ActionResult> Index(int? DeckID)
@@ -31,7 +42,7 @@ namespace Memento.Controllers
             }
             else
             {
-                var deck = await db.Decks.FindAsync(DeckID);
+                var deck = await repository.FindDeckAsync(DeckID);
 
                 if (!deck.IsAuthorized(User))
                 {
@@ -60,7 +71,7 @@ namespace Memento.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-            var card = await db.Cards.FindAsync(id);
+            var card = await repository.FindCardAsync(id);
 
             if (card == null)
             {
@@ -85,7 +96,7 @@ namespace Memento.Controllers
         
         public async Task<ActionResult> PreviewClosed(int id)
         {
-            var card = await db.Cards.FindAsync(id);
+            var card = await repository.FindCardAsync(id);
 
             if (card == null)
             {
@@ -109,7 +120,7 @@ namespace Memento.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> PreviewClozed([Bind(Include = "ID")]Card card)
         {
-            var dbCard = await db.Cards.FindAsync(card.ID);
+            var dbCard = await repository.FindCardAsync(card.ID);
 
             if (dbCard == null)
             {
@@ -125,7 +136,7 @@ namespace Memento.Controllers
 
         public async Task<ActionResult> PreviewOpened(int id)
         {
-            var card = await db.Cards.FindAsync(id);
+            var card = await repository.FindCardAsync(id);
 
             if (card == null)
             {
@@ -149,7 +160,7 @@ namespace Memento.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> PreviewOpened([Bind(Include = "ID")]Card card)
         {
-            var dbCard = await db.Cards.FindAsync(card.ID);
+            var dbCard = await repository.FindCardAsync(card.ID);
 
             if (dbCard == null)
             {
@@ -161,13 +172,13 @@ namespace Memento.Controllers
             }
             else
             {
-                return await PromoteAndRedirect(dbCard, Scheduler.Delays.Same);
+                return await PromoteAndRedirect(dbCard.Deck, Scheduler.Delays.Same);
             }
         }
 
         public async Task<ActionResult> Question(int? id)
         {
-            var card = await db.Cards.FindAsync(id);
+            var card = await repository.FindCardAsync(id);
 
             if (card == null)
             {
@@ -191,7 +202,7 @@ namespace Memento.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Question([Bind(Include = "ID, Answer")]Card card)
         {
-            var dbCard = await db.Cards.FindAsync(card.ID);
+            var dbCard = await repository.FindCardAsync(card.ID);
 
             if (!dbCard.IsAuthorized(User))
             {
@@ -233,7 +244,7 @@ namespace Memento.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Right([Bind(Include = "ID")]Card card)
         {
-            var dbCard = await db.Cards.FindAsync(card.ID);
+            var dbCard = await repository.FindCardAsync(card.ID);
 
             if (!dbCard.IsAuthorized(User))
             {
@@ -241,11 +252,13 @@ namespace Memento.Controllers
             }
             else
             {
-                AddAnswer(dbCard, true);
+                var cloze = dbCard.GetNextCloze();
 
-                await db.SaveChangesAsync();
+                repository.AddAnswer(cloze, true);
 
-                return await PromoteAndRedirect(dbCard, Scheduler.Delays.Next);
+                await repository.SaveChangesAsync();
+
+                return await PromoteAndRedirect(dbCard.Deck, Scheduler.Delays.Next);
             }
         }
 
@@ -254,7 +267,7 @@ namespace Memento.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Wrong([Bind(Include = "ID, Answer")]Card card, string NextButton, string AltButton)
         {
-            var dbCard = await db.Cards.FindAsync(card.ID);
+            var dbCard = await repository.FindCardAsync(card.ID);
 
             if (!dbCard.IsAuthorized(User))
             {
@@ -263,11 +276,13 @@ namespace Memento.Controllers
 
             if (NextButton != null)
             {
-                AddAnswer(dbCard, false);
+                var cloze = dbCard.GetNextCloze();
 
-                await db.SaveChangesAsync();
+                repository.AddAnswer(cloze, false);
 
-                return await PromoteAndRedirect(dbCard, Scheduler.Delays.Previous);
+                await repository.SaveChangesAsync();
+
+                return await PromoteAndRedirect(dbCard.Deck, Scheduler.Delays.Previous);
             }
             else if (AltButton != null)
             {
@@ -281,7 +296,7 @@ namespace Memento.Controllers
 
                 dbCard.Text = newText;
 
-                await db.SaveChangesAsync();
+                await repository.SaveChangesAsync();
 
                 return RedirectToAction("Details", new { id = card.ID });
             }
@@ -295,7 +310,7 @@ namespace Memento.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Typo([Bind(Include = "ID, Answer")]Card card, string TypoButton, string WrongButton, string AltButton)
         {
-            var dbCard = await db.Cards.FindAsync(card.ID);
+            var dbCard = await repository.FindCardAsync(card.ID);
 
             if (!dbCard.IsAuthorized(User))
             {
@@ -308,7 +323,7 @@ namespace Memento.Controllers
             }
             else if (WrongButton != null)
             {
-                return await PromoteAndRedirect(dbCard, Scheduler.Delays.Previous);
+                return await PromoteAndRedirect(dbCard.Deck, Scheduler.Delays.Previous);
             }
             else if (AltButton != null)
             {
@@ -322,7 +337,7 @@ namespace Memento.Controllers
 
                 dbCard.Text = newText;
 
-                await db.SaveChangesAsync();
+                await repository.SaveChangesAsync();
 
                 return RedirectToAction("Details", new { id = card.ID });
             }
@@ -337,7 +352,7 @@ namespace Memento.Controllers
         {
             if (DeckID == null)
             {
-                ViewBag.DeckID = new SelectList(db.GetUserDecks(User), "ID", "Title");
+                ViewBag.DeckID = new SelectList(repository.GetUserDecks(User.Identity.Name), "ID", "Title");
 
                 var card = new Card();
 
@@ -358,7 +373,7 @@ namespace Memento.Controllers
         {
             if (ModelState.IsValid)
             {
-                var deck = await db.Decks.FindAsync(card.DeckID);
+                var deck = await repository.FindDeckAsync(card.DeckID);
 
                 var text = card.Text;
 
@@ -370,13 +385,13 @@ namespace Memento.Controllers
                 }
                 else
                 {
-                    db.Cards.Add(card);
+                    repository.AddCard(card);
 
-                    await db.SaveChangesAsync();
+                    await repository.SaveChangesAsync();
 
-                    AddClozes(card, clozeNames);
+                    repository.AddClozes(card, clozeNames);
 
-                    await db.SaveChangesAsync();
+                    await repository.SaveChangesAsync();
 
                     return RedirectToAction("Details", "Deck", new { id = card.DeckID });
                 }
@@ -395,7 +410,7 @@ namespace Memento.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var card = await db.Cards.FindAsync(id);
+            var card = await repository.FindCardAsync(id);
 
             if (card == null)
             {
@@ -418,7 +433,7 @@ namespace Memento.Controllers
         {
             if (ModelState.IsValid)
             {
-                var dbCard = await db.Cards.FindAsync(card.ID);
+                var dbCard = await repository.FindCardAsync(card.ID);
 
                 if (!dbCard.IsAuthorized(User))
                 {
@@ -434,10 +449,10 @@ namespace Memento.Controllers
                     var deletedClozes = oldClozes.Except(newClozes).ToList();
                     var addedClozes = newClozes.Except(oldClozes).ToList();
 
-                    RemoveClozes(dbCard, deletedClozes);
-                    AddClozes(dbCard, addedClozes);
+                    repository.RemoveClozes(dbCard, deletedClozes);
+                    repository.AddClozes(dbCard, addedClozes);
 
-                    await db.SaveChangesAsync();
+                    await repository.SaveChangesAsync();
 
                     return RedirectToAction("Details", "Decks", new { id = dbCard.DeckID });
                 }
@@ -456,7 +471,7 @@ namespace Memento.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var card = await db.Cards.FindAsync(id);
+            var card = await repository.FindCardAsync(id);
 
             if (card == null)
             {
@@ -477,86 +492,39 @@ namespace Memento.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            var card = await db.Cards.FindAsync(id);
+            var card = await repository.FindCardAsync(id);
 
             if (!card.IsAuthorized(User))
             {
                 return new HttpUnauthorizedResult();
             }
 
-            db.Cards.Remove(card);
+            repository.RemoveCard(card);
 
-            await db.SaveChangesAsync();
+            await repository.SaveChangesAsync();
 
             return RedirectToAction("Details", "Deck", new { id = card.DeckID });
+        }
+
+        private async Task<ActionResult> PromoteAndRedirect(Deck deck, Scheduler.Delays delay)
+        {
+            repository.PromoteCard(deck, delay);
+
+            await repository.SaveChangesAsync();
+
+            var nextCard = deck.GetNextCard();
+
+            return RedirectToAction("Details", new { id = nextCard.ID });
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                repository.Dispose();
             }
 
             base.Dispose(disposing);
-        }
-
-        private void AddClozes(Card card, IEnumerable<string> clozeNames)
-        {
-            foreach (var clozeName in clozeNames)
-            {
-                var cloze = new Cloze(card.ID, clozeName);
-
-                Scheduler.PrepareForAdding(card.Deck, card.Clozes, cloze);
-
-                db.Clozes.Add(cloze);
-            }
-        }
-
-        private static void RemoveClozes(Card card, IEnumerable<string> clozeNames)
-        {
-            foreach (var clozeName in clozeNames)
-            {
-                var cloze = card.Clozes.Single(item => item.Label == clozeName);
-
-                Scheduler.PrepareForRemoving(card.Deck, card.Clozes, cloze);
-
-                card.Clozes.Remove(cloze);
-            }
-        }
-
-        private void AddAnswer(Card dbCard, bool isCorrect)
-        {
-            var answer = new Answer
-            {
-                Time = DateTime.Now,
-                Owner = User.Identity.Name,
-                ClozeID = dbCard.GetNextCloze().ID,
-                CardID = dbCard.ID,
-                DeckID = dbCard.DeckID,
-                IsCorrect = isCorrect,
-                CardsInRepetition = dbCard.Deck.GetClozes().Count(cloze => !cloze.IsNew)
-            };
-
-            db.Answers.Add(answer);
-        }
-
-        private async Task<ActionResult> PromoteAndRedirect(Card card, Scheduler.Delays delay)
-        {
-            var deck = card.Deck;
-            var clozes = deck.GetClozes();
-
-            SiblingsManager.RearrangeSiblings(deck, clozes);
-
-            NewCardsManager.RearrangeNewCards(deck, clozes);
-
-            Scheduler.PromoteCard(deck, clozes, delay);
-
-            await db.SaveChangesAsync();
-
-            var nextCard = deck.GetNextCard();
-
-            return RedirectToAction("Details", new { id = nextCard.ID });
         }
     }
 }

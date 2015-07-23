@@ -13,6 +13,7 @@ using Memento;
 using Memento.Models;
 using Memento.SRS;
 using Memento.DomainModel;
+using Memento.DomainModel.Repository;
 
 namespace Memento.Controllers
 {
@@ -22,19 +23,29 @@ namespace Memento.Controllers
 #endif
     public class DecksController : Controller
     {
-        private MementoContext db = new MementoContext();
+        private readonly IMementoRepository repository;
+
+        public DecksController()
+        {
+            repository = new EFMementoRepository();
+        }
+
+        public DecksController(IMementoRepository repository)
+        {
+            this.repository = repository;
+        }
 
         // GET: Decks
         public async Task<ActionResult> Index()
         {
-            var items = db.GetUserDecks(User);
+            var items = repository.GetUserDecks(User.Identity.Name);
 
             return View(await items.ToListAsync());
         }
 
         public ActionResult Export()
         {
-            var decks = db.GetUserDecks(User);
+            var decks = repository.GetUserDecks(User.Identity.Name);
 
             return new JsonResult { Data = decks, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -47,7 +58,7 @@ namespace Memento.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var deck = await db.Decks.FindAsync(id);
+            var deck = await repository.FindDeckAsync(id);
 
             if (deck == null)
             {
@@ -68,7 +79,7 @@ namespace Memento.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Details([Bind(Include = "ID")]Deck deck)
         {
-            var dbDeck = await db.Decks.FindAsync(deck.ID);
+            var dbDeck = await repository.FindDeckAsync(deck.ID);
 
             if (dbDeck == null)
             {
@@ -112,9 +123,9 @@ namespace Memento.Controllers
 
                 deck.Owner = User.Identity.Name;
 
-                db.Decks.Add(deck);
+                repository.AddDeck(deck);
 
-                await db.SaveChangesAsync();
+                await repository.SaveChangesAsync();
 
                 return RedirectToAction("Index");
             }
@@ -132,7 +143,7 @@ namespace Memento.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var deck = await db.Decks.FindAsync(id);
+            var deck = await repository.FindDeckAsync(id);
 
             if (deck == null)
             {
@@ -155,7 +166,7 @@ namespace Memento.Controllers
         {
             if (ModelState.IsValid)
             {
-                var dbDeck = await db.Decks.FindAsync(deck.ID);
+                var dbDeck = await repository.FindDeckAsync(deck.ID);
 
                 if (deck == null)
                 {
@@ -170,7 +181,7 @@ namespace Memento.Controllers
                 dbDeck.StartDelay = deck.StartDelay;
                 dbDeck.Coeff = deck.Coeff;
 
-                await db.SaveChangesAsync();
+                await repository.SaveChangesAsync();
 
                 return RedirectToAction("Index");
             }
@@ -187,7 +198,7 @@ namespace Memento.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var deck = await db.Decks.FindAsync(id);
+            var deck = await repository.FindDeckAsync(id);
 
             if (deck == null)
             {
@@ -208,16 +219,16 @@ namespace Memento.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            var deck = await db.Decks.FindAsync(id);
+            var deck = await repository.FindDeckAsync(id);
 
             if (!deck.IsAuthorized(User))
             {
                 return new HttpUnauthorizedResult();
             }
 
-            db.Decks.Remove(deck);
+            repository.RemoveDeck(deck);
 
-            await db.SaveChangesAsync();
+            await repository.SaveChangesAsync();
 
             return RedirectToAction("Index");
         }
@@ -233,7 +244,7 @@ namespace Memento.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Import(Deck deckWithID, HttpPostedFileBase file)
         {
-            var deck = await db.Decks.FindAsync(deckWithID.ID);
+            var deck = await repository.FindDeckAsync(deckWithID.ID);
 
             if (deck == null)
             {
@@ -265,7 +276,7 @@ namespace Memento.Controllers
                             IsValid = false,
                         };
 
-                        db.Cards.Add(newCard);
+                        repository.AddCard(newCard);
                     }
                     else
                     {
@@ -276,9 +287,9 @@ namespace Memento.Controllers
                             IsValid = true,
                         };
 
-                        db.Cards.Add(newCard);
+                        repository.AddCard(newCard);
 
-                        await db.SaveChangesAsync();
+                        await repository.SaveChangesAsync();
 
                         foreach (var clozeName in clozeNames)
                         {
@@ -288,11 +299,11 @@ namespace Memento.Controllers
 
                             Scheduler.PrepareForAdding(deck, deckClozes, newCloze);
 
-                            db.Clozes.Add(newCloze);
+                            repository.AddCloze(newCloze);
                         }
                     }
 
-                    await db.SaveChangesAsync();
+                    await repository.SaveChangesAsync();
                 }
             }
 
@@ -303,7 +314,7 @@ namespace Memento.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                repository.Dispose();
             }
 
             base.Dispose(disposing);
