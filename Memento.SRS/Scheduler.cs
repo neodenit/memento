@@ -77,9 +77,16 @@ namespace Memento.SRS
         {
             var movedCard = cards.Single(item => item.Position == oldPosition);
 
+            movedCard.Position = -1;
+
+            var newLimitedPosition =
+                oldPosition > newPosition ?
+                Math.Max(newPosition, 0) :
+                Math.Min(newPosition, GetMaxPosition(cards));
+
             if (oldPosition > newPosition)
             {
-                var movedCards = GetRange(cards, newPosition, oldPosition - 1);
+                var movedCards = GetRange(cards, newLimitedPosition, oldPosition - 1);
 
                 IncreasePosition(movedCards);
 
@@ -90,7 +97,7 @@ namespace Memento.SRS
             }
             else
             {
-                var movedCards = GetRange(cards, oldPosition + 1, newPosition);
+                var movedCards = GetRange(cards, oldPosition + 1, newLimitedPosition);
 
                 DecreasePosition(movedCards);
 
@@ -98,17 +105,16 @@ namespace Memento.SRS
                 {
                     DecreaseDelays(movedCards);
                 }
-                else if (correctRestCardsDelays)
-                {
-                    var maxPosition = Math.Max(oldPosition, newPosition);
 
-                    IEnumerable<ICard> restCards = GetRestCards(cards, maxPosition);
+                if (correctRestCardsDelays)
+                {
+                    var restCards = GetRestCards(cards, newLimitedPosition);
 
                     IncreaseDelays(restCards);
                 }
             }
 
-            movedCard.Position = newPosition;
+            movedCard.Position = newLimitedPosition;
             movedCard.LastDelay = newDelay;
         }
 
