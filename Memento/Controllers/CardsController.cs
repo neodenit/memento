@@ -292,7 +292,7 @@ namespace Memento.Controllers
 
                 var newAnswers = string.Format("{0}|{1}", oldAnswers, card.Answer);
 
-                var newText = Converter.Replace(dbCard.Text, cloze.Label, newAnswers);
+                var newText = Converter.ReplaceAnswer(dbCard.Text, cloze.Label, newAnswers);
 
                 dbCard.Text = newText;
 
@@ -333,7 +333,7 @@ namespace Memento.Controllers
 
                 var newAnswers = string.Format("{0}|{1}", oldAnswers, card.Answer);
 
-                var newText = Converter.Replace(dbCard.Text, cloze.Label, newAnswers);
+                var newText = Converter.ReplaceAnswer(dbCard.Text, cloze.Label, newAnswers);
 
                 dbCard.Text = newText;
 

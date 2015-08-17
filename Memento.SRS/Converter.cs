@@ -80,7 +80,7 @@ namespace Memento.SRS
             return currentPattern;
         }
 
-        public static string Replace(string text, string label, string newAnswers)
+        public static string ReplaceAnswer(string text, string label, string newAnswers)
         {
             var currentPattern = GetCurrentClozePattern(label);
 
@@ -88,6 +88,27 @@ namespace Memento.SRS
 
             return Regex.Replace(text, currentPattern, newPattern);
         }
+
+        public static string ReplaceWithWildcards(string text, string label)
+        {
+            var currentPattern = GetCurrentClozePattern(label);
+
+            var newPattern = "{{" + label + "::*}}";
+            
+            var regex = new Regex(currentPattern);
+
+            var firstMatch = regex.Match(text);
+
+            if (firstMatch.Success)
+            {
+                return regex.Replace(text, newPattern, -1, firstMatch.Index + firstMatch.Length);
+            }
+            else
+            {
+                return text;
+            }
+        }
+
 
         private static string ConvertToCloze(string card, bool justClozes)
         {

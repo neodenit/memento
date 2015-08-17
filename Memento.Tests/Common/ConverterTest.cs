@@ -14,7 +14,7 @@ namespace Memento.Tests
         [TestMethod]
         public void TestReplace()
         {
-            var result = Converter.Replace("Test text with {{c1::cloze}}.", "c1", "cloze|alt");
+            var result = Converter.ReplaceAnswer("Test text with {{c1::cloze}}.", "c1", "cloze|alt");
 
             Assert.AreEqual("Test text with {{c1::cloze|alt}}.", result);
         }
@@ -22,9 +22,25 @@ namespace Memento.Tests
         [TestMethod]
         public void TestReplaceWithHint()
         {
-            var result = Converter.Replace("Test text with {{c1::cloze::hint}}.", "c1", "cloze|alt");
+            var result = Converter.ReplaceAnswer("Test text with {{c1::cloze::hint}}.", "c1", "cloze|alt");
 
             Assert.AreEqual("Test text with {{c1::cloze|alt::hint}}.", result);
+        }
+
+        [TestMethod]
+        public void TestReplaceWithWildcard2()
+        {
+            var result = Converter.ReplaceWithWildcards("Test text with {{c1::cloze}} and another {{c1::cloze}}.", "c1");
+
+            Assert.AreEqual("Test text with {{c1::cloze}} and another {{c1::*}}.", result);
+        }
+
+        [TestMethod]
+        public void TestReplaceWithWildcard3()
+        {
+            var result = Converter.ReplaceWithWildcards("Test text with {{c1::cloze}}, another {{c1::cloze}} and another {{c1::cloze}}.", "c1");
+
+            Assert.AreEqual("Test text with {{c1::cloze}}, another {{c1::*}} and another {{c1::*}}.", result);
         }
     }
 }
