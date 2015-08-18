@@ -267,12 +267,14 @@ namespace Memento.Controllers
                     
                     var clozeNames = Converter.GetClozeNames(cardText);
 
+                    var updatedText = Converter.ReplaceAllWithWildCards(cardText, clozeNames);
+
                     if (!clozeNames.All(clozeName => Validator.ValidateFull(cardText, clozeName)))
                     {
                         var newCard = new Card
                         {
                             DeckID = deckWithID.ID,
-                            Text = cardText,
+                            Text = updatedText,
                             IsValid = false,
                         };
 
@@ -283,7 +285,7 @@ namespace Memento.Controllers
                         var newCard = new Card
                         {
                             DeckID = deckWithID.ID,
-                            Text = cardText,
+                            Text = updatedText,
                             IsValid = true,
                         };
 

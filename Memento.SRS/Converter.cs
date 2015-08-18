@@ -109,6 +109,19 @@ namespace Memento.SRS
             }
         }
 
+        public static string ReplaceAllWithWildCards(string text, IEnumerable<string> labels)
+        {
+            if (labels.Any())
+            {
+                var newText = ReplaceWithWildcards(text, labels.First());
+                
+                return ReplaceAllWithWildCards(newText, labels.Skip(1));
+            }
+            else
+            {
+                return text;
+            }
+        }
 
         private static string ConvertToCloze(string card, bool justClozes)
         {
