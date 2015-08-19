@@ -12,32 +12,49 @@
         var middlePart = text.substring(start, end);
         var endPart = text.substring(end, text.length);
 
-        var label = GetNextLabel(text);
+        var label = getNextLabel(text, middlePart);
 
         if (label) {
             var newText = startPart + '{{' + label + '::' + middlePart + '}}' + endPart;
 
             element.val(newText);
         }
+
+        return false;
     });
 
-    var GetCurrentClozePattern = function (clozeName) {
-        var currentPattern = "{{" + clozeName + "::((?:(?!}}).)+?)}}";
+    var getCurrentClozePattern = function (clozeName) {
+        var currentPattern = '{{' + clozeName + '::((?:(?!}}).)+?)}}';
         return currentPattern;
-    }
+    };
 
     var maxClozeNum = 100;
 
-    var GetNextLabel = function (text) {
-        for (var i = 1; i <= maxClozeNum; i++) {
-            var label = 'c' + i;
+    var getNextLabel = function (text, answer) {
+        var existingLabel = getExistingLabel(text, answer);
 
-            var regexText = GetCurrentClozePattern(label);
+        if (existingLabel) {
+            return existingLabel;
+        } else {
+            for (var i = 1; i <= maxClozeNum; i++) {
+                var label = 'c' + i;
 
-            if (!text.match(regexText))
-            {
-                return label;
+                var regexText = getCurrentClozePattern(label);
+
+                if (!text.match(regexText)) {
+                    return label;
+                }
             }
         }
-    }
+    };
+
+    var getExistingLabel = function (text, answer) {
+        var pattern = '{{((?:(?!}}).)+?)::' + answer + '}}';
+
+        var regex = new RegExp(pattern);
+
+        var match = regex.exec(text);
+
+        return match ? match[1] : null;
+    };
 });
