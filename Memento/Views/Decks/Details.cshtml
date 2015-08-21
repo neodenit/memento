@@ -1,12 +1,24 @@
 ﻿@model Memento.DomainModel.Deck
 
-@using Memento.Controllers
-
 @{
     ViewBag.Title = "Details";
 }
 
 <h2>@Html.DisplayFor(model => model.Title)</h2>
+
+@section Scripts {
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+
+    <script>
+        var chartData = {
+            answers: @Html.Raw(Json.Encode(ViewBag.Answers)),
+            correctAnswers: [],
+            cards: [],
+        }
+    </script>
+
+    <script src="~/Scripts/App/Charts.js"></script>
+}
 
 <p>
     @Html.ActionLink("Create New Card", "Create", "Cards")

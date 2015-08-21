@@ -70,6 +70,8 @@ namespace Memento.Controllers
             }
             else
             {
+                ViewBag.Answers = new { labels = Enumerable.Range(1, 10), values = Enumerable.Range(10, 10) };
+
                 return View(deck);
             }
         }
