@@ -160,5 +160,10 @@ namespace Memento.DomainModel.Repository
             db.Clozes.RemoveRange(items);
             db.SaveChanges();
         }
+
+        public IQueryable<Answer> GetAnswersForDeck(int deckID)
+        {
+            return from answer in db.Answers where answer.DeckID == deckID select answer;
+        }
     }
 }

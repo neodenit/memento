@@ -70,7 +70,19 @@ namespace Memento.Controllers
             }
             else
             {
-                ViewBag.Answers = new { labels = Enumerable.Range(1, 10), values = Enumerable.Range(10, 10) };
+                var startTime = DateTime.Now.AddDays(-10);
+
+                var answers = repository
+                    .GetAnswersForDeck(deck.ID)
+                    .Where(answer => answer.Time >= startTime)
+                    .ToList();
+
+                var groupedAnswers = from answer in  answers group answer by answer.Time.Date;
+
+                var answerLabels = from item in groupedAnswers select item.Key.ToShortDateString();
+                var answerValues = from item in groupedAnswers select item.Count();
+
+                ViewBag.Answers = new { labels = answerLabels, values = answerValues };
 
                 return View(deck);
             }

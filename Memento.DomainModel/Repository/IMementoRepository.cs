@@ -11,6 +11,7 @@ namespace Memento.DomainModel.Repository
     public interface IMementoRepository
     {
         IQueryable<Deck> GetUserDecks(string userName);
+        IQueryable<Answer> GetAnswersForDeck(int deckID);
         Task<Deck> FindDeckAsync(int? id);
         Task<Card> FindCardAsync(int? id);
         Task<Cloze> FindClozeAsync(int? id);
