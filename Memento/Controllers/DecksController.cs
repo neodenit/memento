@@ -77,12 +77,22 @@ namespace Memento.Controllers
                     .Where(answer => answer.Time >= startTime)
                     .ToList();
 
-                var groupedAnswers = from answer in  answers group answer by answer.Time.Date;
+                var groupedAnswers = from answer in answers group answer by answer.Time.Date;
 
                 var answerLabels = from item in groupedAnswers select item.Key.ToShortDateString();
                 var answerValues = from item in groupedAnswers select item.Count();
 
+                var groupedCorrectAnswers = from answer in answers where answer.IsCorrect group answer by answer.Time.Date;
+
+                var correctAnswerLabels = from item in groupedCorrectAnswers select item.Key.ToShortDateString();
+                var correctAnswerValues = from item in groupedCorrectAnswers select item.Count();
+
+                var cardsLabels = answerLabels;
+                var cardsValues = from item in groupedAnswers select item.GetMaxElement(x => x.Time).CardsInRepetition;
+
                 ViewBag.Answers = new { labels = answerLabels, values = answerValues };
+                ViewBag.CorrectAnswers = new { labels = correctAnswerLabels, values = correctAnswerValues };
+                ViewBag.Cards = new { labels = cardsLabels, values = cardsValues };
 
                 return View(deck);
             }
@@ -106,7 +116,7 @@ namespace Memento.Controllers
             else if (dbDeck.Cards.Any())
             {
                 var card = dbDeck.GetNextCard();
-                
+
                 return RedirectToAction("Details", "Cards", new { id = card.ID });
             }
             else
@@ -274,11 +284,11 @@ namespace Memento.Controllers
                 var text = await new StreamReader(file.InputStream).ReadToEndAsync();
 
                 var cards = Converter.GetCardsFromDeck(text, true);
-                
+
                 foreach (var card in cards)
                 {
                     var cardText = HttpUtility.HtmlDecode(card);
-                    
+
                     var clozeNames = Converter.GetClozeNames(cardText);
 
                     var updatedText = Converter.ReplaceAllWithWildCards(cardText, clozeNames);

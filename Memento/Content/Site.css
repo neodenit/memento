@@ -22,3 +22,8 @@ select,
 textarea {
     max-width: 600px;
 }
+
+.chart {
+    width: 300px;
+    height: 150px;
+}

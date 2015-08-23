@@ -12,8 +12,8 @@
     <script>
         var chartData = {
             answers: @Html.Raw(Json.Encode(ViewBag.Answers)),
-            correctAnswers: [],
-            cards: [],
+            correctAnswers: @Html.Raw(Json.Encode(ViewBag.CorrectAnswers)),
+            cards: @Html.Raw(Json.Encode(ViewBag.Cards)),
         }
     </script>
 
@@ -31,12 +31,9 @@
     @Html.ActionLink("Index", "Index", "Cards", new { DeckID = Model.ID }, null)
 
     <div class="col-md-offset-2 col-md-10">
-        <h4>Answers:</h4>
-        <div id="answersPlaceholder"></div>
-        <h4>Correct answers:</h4>
-        <div id="correctAnswersPlaceholder"></div>
-        <h4>Cards in repetition:</h4>
-        <div id="cardsNumberPlaceholder"></div>
+        <div id="answersPlaceholder" class="chart"></div>
+        <div id="correctAnswersPlaceholder" class="chart"></div>
+        <div id="cardsNumberPlaceholder" class="chart"></div>
     </div>
 
     <div class="form-group">
