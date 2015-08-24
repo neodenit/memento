@@ -222,6 +222,7 @@
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Content>
     <Content Include="Scripts\App\DeckCreate.js" />
+    <Content Include="Scripts\App\CorrectSelection.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Properties\PublishProfiles\reading-list.pubxml" />
