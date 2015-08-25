@@ -10,7 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Memento.Models;
 
-namespace Memento.Controllers
+namespace Memento.Web.Controllers
 {
     [Authorize]
 #if !DEBUG

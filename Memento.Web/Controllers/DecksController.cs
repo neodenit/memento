@@ -9,13 +9,11 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Ionic.Zip;
-using Memento;
-using Memento.Models;
 using Memento.SRS;
 using Memento.DomainModel;
 using Memento.DomainModel.Repository;
 
-namespace Memento.Controllers
+namespace Memento.Web.Controllers
 {
     [Authorize]
 #if !DEBUG

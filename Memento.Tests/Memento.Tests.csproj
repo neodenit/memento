@@ -122,9 +122,9 @@
       <Project>{2f5faa65-d83a-47d4-abea-f2693dae25a3}</Project>
       <Name>Memento.SRS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Memento\Memento.csproj">
-      <Project>{1C82468E-77F8-44FA-BE30-DC56BE50B3CF}</Project>
-      <Name>Memento</Name>
+    <ProjectReference Include="..\Memento.Web\Memento.Web.csproj">
+      <Project>{1c82468e-77f8-44fa-be30-dc56be50b3cf}</Project>
+      <Name>Memento.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
