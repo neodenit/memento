@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Principal;
-using Memento.SRS;
+using Memento.Core;
 
 namespace Memento.DomainModel
 {

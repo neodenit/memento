@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Memento.SRS
+namespace Memento.Core
 {
     public static class Extension
     {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Ionic.Zip;
-using Memento.SRS;
+using Memento.Core;
 using Memento.DomainModel;
 using Memento.DomainModel.Repository;
 

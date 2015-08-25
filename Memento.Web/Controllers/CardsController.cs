@@ -7,7 +7,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Memento.SRS;
+using Memento.Core;
 using Memento.DomainModel;
 using Memento.DomainModel.Repository;
 

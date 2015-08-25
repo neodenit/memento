@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using Memento.Web.Controllers;
-using Memento.SRS;
+using Memento.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Memento.DomainModel;
 

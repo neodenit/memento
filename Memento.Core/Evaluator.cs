@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Memento.SRS
+namespace Memento.Core
 {
     public static class Evaluator
     {

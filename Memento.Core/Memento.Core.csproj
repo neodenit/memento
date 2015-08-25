@@ -7,8 +7,8 @@
     <ProjectGuid>{2F5FAA65-D83A-47D4-ABEA-F2693DAE25A3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Memento.SRS</RootNamespace>
-    <AssemblyName>Memento.SRS</AssemblyName>
+    <RootNamespace>Memento.Core</RootNamespace>
+    <AssemblyName>Memento.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
