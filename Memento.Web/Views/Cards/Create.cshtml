@@ -42,7 +42,14 @@
 }
 
 <div>
-    @Html.ActionLink("Back", "Details", "Decks", new { id = Model.DeckID }, null)
+    @if (Model.DeckID == -1)
+    {
+        @Html.ActionLink("Index", "Index", "Decks");
+    }
+    else
+    {
+        @Html.ActionLink("Back", "Details", "Decks", new { id = Model.DeckID }, null);
+    }
 </div>
 
 @section Scripts {

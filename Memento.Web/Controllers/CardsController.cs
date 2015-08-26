@@ -352,7 +352,7 @@ namespace Memento.Web.Controllers
             {
                 ViewBag.DeckID = new SelectList(repository.GetUserDecks(User.Identity.Name), "ID", "Title");
 
-                var card = new Card();
+                var card = new Card { DeckID = -1 };
 
                 return View(card);
             }

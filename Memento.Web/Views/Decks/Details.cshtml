@@ -21,7 +21,7 @@
 }
 
 <p>
-    @Html.ActionLink("Create New Card", "Create", "Cards")
+    @Html.ActionLink("Create New Card", "Create", "Cards", new { DeckID = Model.ID }, null)
 </p>
 
 @using (Html.BeginForm())
