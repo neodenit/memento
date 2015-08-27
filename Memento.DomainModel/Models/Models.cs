@@ -80,6 +80,7 @@ namespace Memento.DomainModel
         [DataType(DataType.MultilineText)]
         public string Text { get; set; }
 
+        [Required]
         public string Answer { get; set; }
 
         public virtual ICollection<Cloze> Clozes { get; set; }

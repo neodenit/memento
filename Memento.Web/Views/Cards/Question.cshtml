@@ -21,8 +21,16 @@
 
         @Html.DisplayFor(model => model.Text)
         <br />
-        @Html.TextBoxFor(model => model.Answer)
+        @Html.EditorFor(model => model.Answer)
 
         <input type="submit" value="Answer" class="btn btn-default" />
+
+        <div>
+            @Html.ValidationMessageFor(model => model.Answer, "", new { @class = "text-danger" })
+        </div>
     }
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
