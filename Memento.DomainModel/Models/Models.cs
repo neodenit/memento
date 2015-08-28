@@ -31,14 +31,19 @@ namespace Memento.DomainModel
 
         public virtual ICollection<Card> Cards { get; set; }
 
+        [Display(Name = "Control Mode")]
         public ControlModes ControlMode { get; set; }
 
+        [Display(Name = "Delay Mode")]
         public DelayModes DelayMode { get; set; }
 
+        [Display(Name = "Allow Small Delays")]
         public bool AllowSmallDelays { get; set; }
 
+        [Display(Name = "Start Delay")]
         public int StartDelay { get; set; }
 
+        [Display(Name = "Coefficient")]
         public double Coeff { get; set; }
 
         public IEnumerable<Cloze> GetClozes()
