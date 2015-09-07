@@ -6,6 +6,11 @@
 
 <h2>Index</h2>
 
+@if (Model.Any(item => item.IsNew))
+{
+    @Html.ActionLink("Shuffle new", "ShuffleNew", new { DeckID = Model.First().Card.DeckID })
+}
+
 <table class="table">
     <tr>
         <th>

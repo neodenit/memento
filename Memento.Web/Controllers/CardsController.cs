@@ -464,7 +464,29 @@ namespace Memento.Web.Controllers
                 return View(card);
             }
         }
-        
+
+        public async Task<ActionResult> ShuffleNew(int deckID)
+        {
+            var deck = await repository.FindDeckAsync(deckID);
+
+            if (deck == null)
+            {
+                return HttpNotFound();
+            }
+            else if (!deck.IsAuthorized(User))
+            {
+                return new HttpUnauthorizedResult();
+            }
+            
+            var clozes = deck.GetClozes();
+
+            Scheduler.ShuffleNewCards(clozes);
+
+            await repository.SaveChangesAsync();
+
+            return View("Index", clozes);
+        }
+
         // GET: Cards/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
