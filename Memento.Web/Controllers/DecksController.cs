@@ -36,9 +36,11 @@ namespace Memento.Web.Controllers
         // GET: Decks
         public async Task<ActionResult> Index()
         {
-            var items = repository.GetUserDecks(User.Identity.Name);
+            var decks = repository.GetUserDecks(User.Identity.Name);
 
-            return View(await items.ToListAsync());
+            var orderedDecks = decks.OrderBy(deck => deck.Title);
+
+            return View(await orderedDecks.ToListAsync());
         }
 
         public ActionResult Export()
