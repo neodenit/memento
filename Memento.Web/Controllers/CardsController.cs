@@ -191,6 +191,7 @@ namespace Memento.Web.Controllers
                 var cloze = card.GetNextCloze();
 
                 card.Text = Converter.GetQuestion(card.Text, cloze.Label);
+                card.Answer = string.Empty;
 
                 return View(card);
             }

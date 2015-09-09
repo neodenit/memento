@@ -300,6 +300,7 @@ namespace Memento.Web.Controllers
                             DeckID = deckWithID.ID,
                             Text = updatedText,
                             IsValid = false,
+                            Answer = updatedText,
                         };
 
                         repository.AddCard(newCard);
@@ -311,6 +312,7 @@ namespace Memento.Web.Controllers
                             DeckID = deckWithID.ID,
                             Text = updatedText,
                             IsValid = true,
+                            Answer = updatedText,
                         };
 
                         repository.AddCard(newCard);
