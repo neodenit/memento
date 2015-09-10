@@ -42,9 +42,11 @@ namespace Memento.Core
             return result;
         }
 
-        public static string GetQuestion(string card, string clozeName)
+        public static string GetQuestion(string card, string clozeName, bool stripWildCards = true)
         {
-            var first = GetFirstField(card);
+            var text = stripWildCards ? ReplaceAllWildCardsWithText(card) : card;
+
+            var first = GetFirstField(text);
 
             var result = GetQuestionFromField(first, clozeName);
 
@@ -67,9 +69,11 @@ namespace Memento.Core
             }
         }
 
-        public static string GetAnswer(string field, string clozeName)
+        public static string GetAnswer(string card, string clozeName, bool stripWildCards = true)
         {
-            var result = GetAnswerFromField(field, clozeName);
+            var text = stripWildCards ? ReplaceAllWildCardsWithText(card) : card;
+
+            var result = GetAnswerFromField(text, clozeName);
 
             return result;
         }
@@ -89,7 +93,7 @@ namespace Memento.Core
             return Regex.Replace(text, currentPattern, newPattern);
         }
 
-        public static string ReplaceWithWildcards(string text, string label)
+        public static string ReplaceTextWithWildcards(string text, string label)
         {
             var currentPattern = GetCurrentClozePattern(label);
 
@@ -109,18 +113,52 @@ namespace Memento.Core
             }
         }
 
-        public static string ReplaceAllWithWildCards(string text, IEnumerable<string> labels)
+        public static string ReplaceTextWithWildcards(string text, IEnumerable<string> labels)
         {
             if (labels.Any())
             {
-                var newText = ReplaceWithWildcards(text, labels.First());
+                var newText = ReplaceTextWithWildcards(text, labels.First());
                 
-                return ReplaceAllWithWildCards(newText, labels.Skip(1));
+                return ReplaceTextWithWildcards(newText, labels.Skip(1));
             }
             else
             {
                 return text;
             }
+        }
+
+        public static string ReplaceAllWildCardsWithText(string text)
+        {
+            var labels = GetClozeNames(text);
+
+            return ReplaceAllWildCardsWithText(text, labels);
+        }
+
+        public static string ReplaceAllWildCardsWithText(string text, IEnumerable<string> labels)
+        {
+            if (labels.Any())
+            {
+                var newText = ReplaceWildCardsWithText(text, labels.First());
+
+                return ReplaceAllWildCardsWithText(newText, labels.Skip(1));
+            }
+            else
+            {
+                return text;
+            }
+        }
+
+        public static string ReplaceWildCardsWithText(string text, string label)
+        {
+            var currentPattern = GetCurrentClozePattern(label);
+
+            var regex = new Regex(currentPattern);
+
+            var firstMatch = regex.Match(text);
+
+            var result = regex.Replace(text, firstMatch.Value);
+
+            return result;
         }
 
         private static string ConvertToCloze(string card, bool justClozes)
@@ -237,7 +275,7 @@ namespace Memento.Core
 
         private static string GetQuestionFromField(string field, string clozeName)
         {
-            var cloze1 = ReplaceCloze(field, clozeName);
+            var cloze1 = ReplaceClozeWithSquareBrackets(field, clozeName);
 
             var cloze2 = StripClozes(cloze1);
 
@@ -250,7 +288,7 @@ namespace Memento.Core
             return result;
         }
 
-        private static string ReplaceCloze(string field, string clozeName)
+        private static string ReplaceClozeWithSquareBrackets(string field, string clozeName)
         {
             var clozePattern = GetCurrentClozePattern(clozeName);
 

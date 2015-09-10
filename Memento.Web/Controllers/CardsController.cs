@@ -384,7 +384,7 @@ namespace Memento.Web.Controllers
                 }
                 else
                 {
-                    card.Text = Converter.ReplaceAllWithWildCards(card.Text, clozeNames);
+                    card.Text = Converter.ReplaceTextWithWildcards(card.Text, clozeNames);
 
                     repository.AddCard(card);
 
@@ -444,7 +444,7 @@ namespace Memento.Web.Controllers
                 {
                     var clozes = Converter.GetClozeNames(dbCard.Text);
 
-                    dbCard.Text = Converter.ReplaceAllWithWildCards(card.Text, clozes);
+                    dbCard.Text = Converter.ReplaceTextWithWildcards(card.Text, clozes);
 
                     var oldClozes = from cloze in dbCard.Clozes select cloze.Label;
                     var newClozes = clozes;

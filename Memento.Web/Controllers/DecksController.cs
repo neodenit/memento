@@ -291,7 +291,7 @@ namespace Memento.Web.Controllers
 
                     var clozeNames = Converter.GetClozeNames(cardText);
 
-                    var updatedText = Converter.ReplaceAllWithWildCards(cardText, clozeNames);
+                    var updatedText = Converter.ReplaceTextWithWildcards(cardText, clozeNames);
 
                     if (!clozeNames.All(clozeName => Validator.ValidateFull(cardText, clozeName)))
                     {

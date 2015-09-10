@@ -30,7 +30,7 @@ namespace Memento.Tests
         [TestMethod]
         public void TestReplaceWithWildcard2()
         {
-            var result = Converter.ReplaceWithWildcards("Test text with {{c1::cloze}} and another {{c1::cloze}}.", "c1");
+            var result = Converter.ReplaceTextWithWildcards("Test text with {{c1::cloze}} and another {{c1::cloze}}.", "c1");
 
             Assert.AreEqual("Test text with {{c1::cloze}} and another {{c1::*}}.", result);
         }
@@ -38,7 +38,7 @@ namespace Memento.Tests
         [TestMethod]
         public void TestReplaceWithWildcard3()
         {
-            var result = Converter.ReplaceWithWildcards("Test text with {{c1::cloze}}, another {{c1::cloze}} and another {{c1::cloze}}.", "c1");
+            var result = Converter.ReplaceTextWithWildcards("Test text with {{c1::cloze}}, another {{c1::cloze}} and another {{c1::cloze}}.", "c1");
 
             Assert.AreEqual("Test text with {{c1::cloze}}, another {{c1::*}} and another {{c1::*}}.", result);
         }
