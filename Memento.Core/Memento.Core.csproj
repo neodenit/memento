@@ -55,7 +55,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Evaluator.cs" />
+    <Compile Include="Evaluators\BaseEvaluator.cs" />
+    <Compile Include="Evaluators\PhraseEvaluator.cs" />
+    <Compile Include="Evaluators\WordsEvaluator.cs" />
     <Compile Include="NewCardsManager.cs" />
     <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>

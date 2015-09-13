@@ -213,21 +213,21 @@ namespace Memento.Web.Controllers
 
                 var answer = Converter.GetAnswerValue(dbCard.Text, cloze.Label);
 
-                var result = Evaluator.Evaluate(answer, card.Answer, 0.2);
+                var result = new PhraseEvaluator(0.2).Evaluate(answer, card.Answer);
 
                 switch (result)
                 {
-                    case Evaluator.Mark.Correct:
+                    case Mark.Correct:
                         dbCard.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);
 
                         return View("Right", dbCard);
-                    case Evaluator.Mark.Incorrect:
+                    case Mark.Incorrect:
                         ViewBag.Answer = card.Answer;
 
                         dbCard.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);
 
                         return View("Wrong", dbCard);
-                    case Evaluator.Mark.Typo:
+                    case Mark.Typo:
                         ViewBag.Answer = card.Answer;
 
                         dbCard.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);

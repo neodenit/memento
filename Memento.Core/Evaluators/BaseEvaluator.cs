@@ -6,49 +6,46 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Memento.Core
+namespace Memento.Core.Evaluators
 {
-    public static class Evaluator
+    public enum Mark
     {
-        public enum Mark
+        Correct,
+        Incorrect,
+        Typo,
+    }
+
+    public abstract class BaseEvaluator
+    {
+        protected double permissibleError;
+
+        public BaseEvaluator(double permissibleError)
         {
-            Correct,
-            Incorrect,
-            Typo,
+            this.permissibleError = permissibleError;
         }
 
-        public static Mark Evaluate(string correctAnswer, string answer, double permissibleError)
+        public abstract Mark Evaluate(string correctAnswer, string answer);
+
+        protected string Normalize(string answer)
         {
-            var correctAnswerVariants = correctAnswer.Split('|');
+            var words = GetWords(answer);
 
-            var correctVariantsWords = from item in correctAnswerVariants select GetWords(item);
-
-            var answerWords = GetWords(answer);
-
-            var marks = from item in correctVariantsWords select Check(item, answerWords, permissibleError);
-
-            if (marks.Any(mark => mark == Mark.Correct))
-            {
-                return Mark.Correct;
-            }
-            else if (marks.Any(mark => mark == Mark.Typo))
-            {
-                return Mark.Typo;
-            }
-            else
-            {
-                return Mark.Incorrect;
-            }
+            return String.Join(" ", words);
         }
 
-        private static IEnumerable<string> GetWords(string correctAnswer)
+        protected IEnumerable<string> GetVariants(string correctAnswer)
+        {
+            return correctAnswer.Split('|');
+        }
+
+        protected IEnumerable<string> GetWords(string correctAnswer)
         {
             var words = from word in Regex.Split(correctAnswer, @"\W") select word.ToUpper();
 
             return words;
         }
 
-        private static Mark Check(IEnumerable<string> correctWords, IEnumerable<string> answerWords, double permissibleError)
+        protected Mark Check(IEnumerable<string> correctWords, IEnumerable<string> answerWords)
         {
             if (correctWords.Count() != answerWords.Count())
             {
@@ -58,7 +55,7 @@ namespace Memento.Core
             {
                 var zip = Enumerable.Zip(correctWords, answerWords, (x, y) => new { correctAnswer = x, answer = y });
 
-                var marks = from item in zip select Check(item.correctAnswer, item.answer, permissibleError);
+                var marks = from item in zip select Check(item.correctAnswer, item.answer);
 
                 if (marks.Any(mark => mark == Mark.Incorrect))
                 {
@@ -75,7 +72,7 @@ namespace Memento.Core
             }
         }
 
-        private static Mark Check(string correctAnswer, string answer, double permissibleError)
+        protected Mark Check(string correctAnswer, string answer)
         {
             if (correctAnswer == answer)
             {
@@ -101,6 +98,22 @@ namespace Memento.Core
                 {
                     return Mark.Incorrect;
                 }
+            }
+        }
+
+        protected Mark GetBestMark(IEnumerable<Mark> marks)
+        {
+            if (marks.Any(mark => mark == Mark.Correct))
+            {
+                return Mark.Correct;
+            }
+            else if (marks.Any(mark => mark == Mark.Typo))
+            {
+                return Mark.Typo;
+            }
+            else
+            {
+                return Mark.Incorrect;
             }
         }
     }
