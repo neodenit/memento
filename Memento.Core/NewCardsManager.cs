@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,8 @@ namespace Memento.Core
 
                 Scheduler.MoveCard(cards, newCard.Position, deck.StartDelay, newCard.LastDelay, true, false);
             }
+
+            Debug.Assert(Helpers.CheckPositions(cards));
         }
     }
 }

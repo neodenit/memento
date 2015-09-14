@@ -12,14 +12,6 @@ namespace Memento.Tests
     [TestClass]
     public class SchedulerTest
     {
-        private static bool CheckPositions(IEnumerable<ICard> cards)
-        {
-            var n = cards.Count();
-            var result = Enumerable.Range(0, n).All(i => cards.Any(card => card.Position == i));
-
-            return result;
-        }
-
         [TestMethod]
         public void TestAddNewCardToEmptyDeck()
         {
@@ -33,7 +25,7 @@ namespace Memento.Tests
             Assert.IsTrue(card.IsNew);
             Assert.AreEqual(0, card.Position);
             Assert.AreEqual(delay, card.LastDelay);
-            Assert.IsTrue(CheckPositions(cards));
+            Assert.IsTrue(Helpers.CheckPositions(cards));
         }
 
         [TestMethod]
@@ -50,7 +42,7 @@ namespace Memento.Tests
             Assert.IsTrue(card.IsNew);
             Assert.AreEqual(n, card.Position);
             Assert.AreEqual(delay, card.LastDelay);
-            Assert.IsTrue(CheckPositions(cards));
+            Assert.IsTrue(Helpers.CheckPositions(cards));
         }
 
         [TestMethod]
@@ -68,7 +60,7 @@ namespace Memento.Tests
             var cardOnNewPosition = cards.Single(item => item.Position == newPosition);
             Assert.AreEqual(cardID, cardOnNewPosition.ID);
             Assert.AreEqual(newPosition, card.Position);
-            Assert.IsTrue(CheckPositions(cards));
+            Assert.IsTrue(Helpers.CheckPositions(cards));
         }
 
         [TestMethod]
@@ -86,7 +78,7 @@ namespace Memento.Tests
             var cardOnNewPosition = cards.Single(item => item.Position == newPosition);
             Assert.AreEqual(cardID, cardOnNewPosition.ID);
             Assert.AreEqual(newPosition, card.Position);
-            Assert.IsTrue(CheckPositions(cards));
+            Assert.IsTrue(Helpers.CheckPositions(cards));
         }
     }
 }
