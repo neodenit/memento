@@ -113,7 +113,7 @@ namespace Memento.Web.Controllers
             {
                 return new HttpUnauthorizedResult();
             }
-            else if (dbDeck.Cards.Any())
+            else if (dbDeck.GetValidCards().Any())
             {
                 var card = dbDeck.GetNextCard();
 

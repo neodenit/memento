@@ -29,7 +29,7 @@ namespace Memento.DomainModel
 
         public string Owner { get; set; }
 
-        public virtual ICollection<Card> Cards { get; set; }
+        protected internal virtual ICollection<Card> Cards { get; set; }
 
         [Display(Name = "Control Mode")]
         public ControlModes ControlMode { get; set; }
@@ -48,7 +48,8 @@ namespace Memento.DomainModel
 
         public IEnumerable<Cloze> GetClozes()
         {
-            return Cards.SelectMany(card => card.Clozes ?? Enumerable.Empty<Cloze>());
+            var validCards = GetValidCards();
+            return validCards.SelectMany(card => card.Clozes ?? Enumerable.Empty<Cloze>());
         }
 
         public Card GetNextCard()
@@ -58,6 +59,11 @@ namespace Memento.DomainModel
             var nextCard = validCards.GetMinElement(item => item.Clozes.Min(c => c.Position));
 
             return nextCard;
+        }
+
+        public ICollection<Card> GetAllCards()
+        {
+            return Cards;
         }
 
         public IEnumerable<Card> GetValidCards()
