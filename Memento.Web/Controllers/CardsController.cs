@@ -378,7 +378,7 @@ namespace Memento.Web.Controllers
 
                 var clozeNames = Converter.GetClozeNames(text);
 
-                if (!clozeNames.Any() || !clozeNames.All(clozeName => Validator.ValidateFull(text, clozeName)))
+                if (!clozeNames.Any() || !clozeNames.All(clozeName => Validator.ValidateBase(text, clozeName)))
                 {
                     return View(card);
                 }
