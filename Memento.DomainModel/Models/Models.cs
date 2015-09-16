@@ -61,14 +61,14 @@ namespace Memento.DomainModel
             return nextCard;
         }
 
-        public ICollection<Card> GetAllCards()
+        public IEnumerable<Card> GetAllCards()
         {
-            return Cards;
+            return Cards ?? Enumerable.Empty<Card>();
         }
 
         public IEnumerable<Card> GetValidCards()
         {
-            return Cards.Where(card => card.IsValid);
+            return Cards == null ? Enumerable.Empty<Card>() : Cards.Where(card => card.IsValid);
         }
 
         public bool IsAuthorized(IPrincipal user)
