@@ -29,7 +29,7 @@ namespace Memento.DomainModel
 
         public string Owner { get; set; }
 
-        protected internal virtual ICollection<Card> Cards { get; set; }
+        public virtual ICollection<Card> Cards { get; set; }
 
         [Display(Name = "Control Mode")]
         public ControlModes ControlMode { get; set; }
@@ -63,12 +63,12 @@ namespace Memento.DomainModel
 
         public IEnumerable<Card> GetAllCards()
         {
-            return Cards ?? Enumerable.Empty<Card>();
+            return Cards;
         }
 
         public IEnumerable<Card> GetValidCards()
         {
-            return Cards == null ? Enumerable.Empty<Card>() : Cards.Where(card => card.IsValid);
+            return Cards.Where(card => card.IsValid);
         }
 
         public bool IsAuthorized(IPrincipal user)
