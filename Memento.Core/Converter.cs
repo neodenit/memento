@@ -167,20 +167,31 @@ namespace Memento.Core
 
             if (isCloze)
             {
-                return GetFirstField(card);
+                var cloze = GetFirstField(card);
+                var comment = GetSecondField(card);
+
+                var result = string.IsNullOrWhiteSpace(comment) ?
+                    cloze.Trim() :
+                    string.Format("{0}{1}{1}{2}{1}{1}{3}", cloze.Trim(), Environment.NewLine, "---", comment.Trim());
+
+                return result;
             }
             else if (!justClozes)
             {
-                var fields = GetFields(card);
+                var fieldsCount = CountFields(card);
 
-                if (fields.Count() >= 2)
+                if (fieldsCount >= 2)
                 {
-                    var question = fields.First();
-                    var answer = fields.Skip(1).First();
+                    var question = GetFirstField(card);
+                    var answer = GetSecondField(card);
+                    var comment = GetThirdField(card);
 
                     var clozedAnswer = "{{c1::" + answer + "}}";
 
-                    var result = string.Format("{0}{1}{1}{2}", question, Environment.NewLine, clozedAnswer);
+                    var result =
+                        string.IsNullOrWhiteSpace(comment) ?
+                        string.Format("{0}{1}{1}{2}", question.Trim(), Environment.NewLine, clozedAnswer.Trim()) :
+                        string.Format("{0}{1}{1}{2}{1}{1}{3}{1}{1}{4}", question.Trim(), Environment.NewLine, clozedAnswer.Trim(), "---", comment.Trim());
 
                     return result;
                 }
@@ -197,9 +208,23 @@ namespace Memento.Core
 
         private static string GetFirstField(string card)
         {
-            var firstField = GetFields(card).First();
+            var field = GetFields(card).ElementAt(0);
 
-            return firstField;
+            return field;
+        }
+
+        private static string GetSecondField(string card)
+        {
+            var field = GetFields(card).ElementAt(1);
+
+            return field;
+        }
+
+        private static string GetThirdField(string card)
+        {
+            var field = GetFields(card).ElementAt(2);
+
+            return field;
         }
 
         private static string StripTags(string text)
@@ -216,9 +241,7 @@ namespace Memento.Core
             var result2 = Regex.Replace(result1, "<div>", string.Empty);
             var result3 = Regex.Replace(result2, "</div>", Environment.NewLine);
 
-            var trimmed = result3.Trim();
-
-            return trimmed;
+            return result3;
         }
 
         private static bool IsClozeCard(string card)
@@ -259,6 +282,13 @@ namespace Memento.Core
             var fields = card.Split('\t');
 
             return fields;
+        }
+
+        private static int CountFields(string card)
+        {
+            var fields = GetFields(card);
+
+            return fields.Count();
         }
 
         private static IEnumerable<string> GetClozePartsFromField(string field)
