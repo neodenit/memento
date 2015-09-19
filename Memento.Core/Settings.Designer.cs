@@ -40,5 +40,14 @@ namespace Memento.Core {
                 return ((int)(this["StartDelay"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("---")]
+        public string CommentDelimeter {
+            get {
+                return ((string)(this["CommentDelimeter"]));
+            }
+        }
     }
 }

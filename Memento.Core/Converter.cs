@@ -46,11 +46,11 @@ namespace Memento.Core
         {
             var text = stripWildCards ? ReplaceAllWildCardsWithText(card) : card;
 
-            var first = GetFirstField(text);
+            var questionPart = GetQuestionPart(text);
 
-            var result = GetQuestionFromField(first, clozeName);
+            var question = GetQuestionFromField(questionPart, clozeName);
 
-            return result;
+            return question;
         }
 
         public static string GetAnswerValue(string field, string clozeName)
@@ -172,7 +172,7 @@ namespace Memento.Core
 
                 var result = string.IsNullOrWhiteSpace(comment) ?
                     cloze.Trim() :
-                    string.Format("{0}{1}{1}{2}{1}{1}{3}", cloze.Trim(), Environment.NewLine, "---", comment.Trim());
+                    string.Format("{0}{1}{1}{2}{1}{1}{3}", cloze.Trim(), Environment.NewLine, Settings.Default.CommentDelimeter, comment.Trim());
 
                 return result;
             }
@@ -191,7 +191,7 @@ namespace Memento.Core
                     var result =
                         string.IsNullOrWhiteSpace(comment) ?
                         string.Format("{0}{1}{1}{2}", question.Trim(), Environment.NewLine, clozedAnswer.Trim()) :
-                        string.Format("{0}{1}{1}{2}{1}{1}{3}{1}{1}{4}", question.Trim(), Environment.NewLine, clozedAnswer.Trim(), "---", comment.Trim());
+                        string.Format("{0}{1}{1}{2}{1}{1}{3}{1}{1}{4}", question.Trim(), Environment.NewLine, clozedAnswer.Trim(), Settings.Default.CommentDelimeter, comment.Trim());
 
                     return result;
                 }
@@ -204,6 +204,20 @@ namespace Memento.Core
             {
                 return string.Empty;
             }
+        }
+
+        private static string GetQuestionPart(string card)
+        {
+            var part = GetParts(card).ElementAt(0).Trim();
+
+            return part;
+        }
+
+        private static string GetCommentPart(string card)
+        {
+            var part = GetParts(card).ElementAt(1).Trim();
+
+            return part;
         }
 
         private static string GetFirstField(string card)
@@ -275,6 +289,15 @@ namespace Memento.Core
                     yield return cloze;
                 }
             }
+        }
+
+        private static string[] GetParts(string card)
+        {
+            var delimeter = Environment.NewLine + Settings.Default.CommentDelimeter + Environment.NewLine;
+
+            var parts = card.Split(new string[] { delimeter }, StringSplitOptions.None);
+
+            return parts;
         }
 
         private static string[] GetFields(string card)
