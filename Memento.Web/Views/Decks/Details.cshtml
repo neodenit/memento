@@ -20,8 +20,6 @@
     <script src="~/Scripts/App/Charts.js"></script>
 }
 
-@Html.AntiForgeryToken()
-
 <div>
     @Html.ActionLink("Create New Card", "Create", "Cards", new { DeckID = Model.ID }, null) |
     @Html.ActionLink("Index", "Index", "Cards", new { DeckID = Model.ID }, null) |
@@ -36,6 +34,8 @@
 
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
+
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" value="Start" class="btn btn-default" />
