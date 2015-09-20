@@ -22,7 +22,9 @@
             @Html.ActionLink("Delete card", "Delete", new { id = Model.ID })
         </div>
 
-        @Html.DisplayFor(model => model.Text)
+        <div>
+            @Html.Raw(Model.Text)
+        </div>
 
         <p>
             Your answer:

@@ -21,9 +21,9 @@
             @Html.ActionLink("Delete card", "Delete", new { id = Model.ID })
         </div>
 
-        @Html.DisplayFor(model => model.Text)
-
-        <br />
+        <div>
+            @Html.Raw(Model.Text)
+        </div>
 
         <input type="submit" value="Next" class="btn btn-default" />
     }

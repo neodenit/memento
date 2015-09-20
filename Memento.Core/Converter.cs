@@ -15,7 +15,7 @@ namespace Memento.Core
         {
             var cards = deckText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
 
-            var cardsWithoutTags = from card in cards select StripTagsAlt(card);
+            var cardsWithoutTags = from card in cards select TagsToLineBreaksAlt(card);
 
             var clozeCards = from card in cardsWithoutTags select ConvertToCloze(card, justClozes);
 
@@ -73,11 +73,13 @@ namespace Memento.Core
         {
             var text = stripWildCards ? ReplaceAllWildCardsWithText(card) : card;
 
-            var result = GetAnswerFromField(text, clozeName);
+            var answer = GetAnswerFromField(text, clozeName);
+
+            var result = LineBreaksToTags(answer);
 
             return result;
         }
-
+        
         public static string GetCurrentClozePattern(string clozeName)
         {
             var currentPattern = "{{(" + clozeName + ")::((?:(?!}}).)+?)(::((?:(?!}}).)+?))?}}";
@@ -241,7 +243,7 @@ namespace Memento.Core
             return field;
         }
 
-        private static string StripTags(string text)
+        private static string TagsToLineBreaks(string text)
         {
             var result1 = Regex.Replace(text, "<br />", Environment.NewLine);
             var result2 = Regex.Replace(result1, "<div>(.+?)</div>", "$1\r\n");
@@ -249,13 +251,18 @@ namespace Memento.Core
             return result2;
         }
 
-        private static string StripTagsAlt(string text)
+        private static string TagsToLineBreaksAlt(string text)
         {
             var result1 = Regex.Replace(text, "<br />", Environment.NewLine);
             var result2 = Regex.Replace(result1, "<div>", string.Empty);
             var result3 = Regex.Replace(result2, "</div>", Environment.NewLine);
 
             return result3;
+        }
+
+        private static string LineBreaksToTags(string text)
+        {
+            return Regex.Replace(text, Environment.NewLine, "<br />");
         }
 
         private static bool IsClozeCard(string card)
