@@ -21,16 +21,16 @@
             @Html.ActionLink("Edit card", "Edit", new { id = Model.ID }) |
             @Html.ActionLink("Delete card", "Delete", new { id = Model.ID })
         </div>
-
+        <hr />
         <div>
             @Html.Raw(Model.Text)
         </div>
-
+        <hr />
         <p>
             Your answer:
             <text>@ViewBag.Answer</text>
         </p>
-
+        <hr />
         <div>You are wrong!</div>
         <input type="submit" name="NextButton" value="Next" class="btn btn-default" />
 
