@@ -75,11 +75,11 @@ namespace Memento.Core
 
             var answer = GetAnswerFromField(text, clozeName);
 
-            var result = LineBreaksToTags(answer);
+            var result = ParseDelimiter(answer);
 
             return result;
         }
-        
+
         public static string GetCurrentClozePattern(string clozeName)
         {
             var currentPattern = "{{(" + clozeName + ")::((?:(?!}}).)+?)(::((?:(?!}}).)+?))?}}";
@@ -100,7 +100,7 @@ namespace Memento.Core
             var currentPattern = GetCurrentClozePattern(label);
 
             var newPattern = "{{" + label + "::*}}";
-            
+
             var regex = new Regex(currentPattern);
 
             var firstMatch = regex.Match(text);
@@ -120,7 +120,7 @@ namespace Memento.Core
             if (labels.Any())
             {
                 var newText = ReplaceTextWithWildcards(text, labels.First());
-                
+
                 return ReplaceTextWithWildcards(newText, labels.Skip(1));
             }
             else
@@ -174,7 +174,7 @@ namespace Memento.Core
 
                 var result = string.IsNullOrWhiteSpace(comment) ?
                     cloze.Trim() :
-                    string.Format("{0}{1}{1}{2}{1}{1}{3}", cloze.Trim(), Environment.NewLine, Settings.Default.CommentDelimeter, comment.Trim());
+                    string.Format("{0}{1}{1}{2}{1}{1}{3}", cloze.Trim(), Environment.NewLine, Settings.Default.CommentDelimiter, comment.Trim());
 
                 return result;
             }
@@ -193,7 +193,7 @@ namespace Memento.Core
                     var result =
                         string.IsNullOrWhiteSpace(comment) ?
                         string.Format("{0}{1}{1}{2}", question.Trim(), Environment.NewLine, clozedAnswer.Trim()) :
-                        string.Format("{0}{1}{1}{2}{1}{1}{3}{1}{1}{4}", question.Trim(), Environment.NewLine, clozedAnswer.Trim(), Settings.Default.CommentDelimeter, comment.Trim());
+                        string.Format("{0}{1}{1}{2}{1}{1}{3}{1}{1}{4}", question.Trim(), Environment.NewLine, clozedAnswer.Trim(), Settings.Default.CommentDelimiter, comment.Trim());
 
                     return result;
                 }
@@ -265,6 +265,12 @@ namespace Memento.Core
             return Regex.Replace(text, Environment.NewLine, "<br />");
         }
 
+        private static string ParseDelimiter(string text)
+        {
+            var delimiter = Environment.NewLine + Settings.Default.CommentDelimiter + Environment.NewLine;
+            return Regex.Replace(text, delimiter, "<hr />");
+        }
+
         private static bool IsClozeCard(string card)
         {
             var first = GetFirstField(card);
@@ -300,9 +306,9 @@ namespace Memento.Core
 
         private static string[] GetParts(string card)
         {
-            var delimeter = Environment.NewLine + Settings.Default.CommentDelimeter + Environment.NewLine;
+            var delimiter = Environment.NewLine + Settings.Default.CommentDelimiter + Environment.NewLine;
 
-            var parts = card.Split(new string[] { delimeter }, StringSplitOptions.None);
+            var parts = card.Split(new string[] { delimiter }, StringSplitOptions.None);
 
             return parts;
         }
