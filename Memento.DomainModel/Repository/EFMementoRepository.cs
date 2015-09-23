@@ -108,9 +108,15 @@ namespace Memento.DomainModel.Repository
         {
             var clozes = deck.GetClozes();
 
-            SiblingsManager.RearrangeSiblings(deck, clozes);
+            if (Settings.Default.EnableSiblingsHandling)
+            {
+                SiblingsManager.RearrangeSiblings(deck, clozes);
+            }
 
-            NewCardsManager.RearrangeNewCards(deck, clozes);
+            if (Settings.Default.EnableNewCardsHandling)
+            {
+                NewCardsManager.RearrangeNewCards(deck, clozes);
+            }
 
             Scheduler.PromoteCard(deck, clozes, delay);
         }

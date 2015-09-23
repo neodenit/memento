@@ -49,5 +49,23 @@ namespace Memento.Core {
                 return ((string)(this["CommentDelimiter"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableNewCardsHandling {
+            get {
+                return ((bool)(this["EnableNewCardsHandling"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableSiblingsHandling {
+            get {
+                return ((bool)(this["EnableSiblingsHandling"]));
+            }
+        }
     }
 }
