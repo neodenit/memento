@@ -23,7 +23,8 @@
 <div>
     @Html.ActionLink("Create New Card", "Create", "Cards", new { DeckID = Model.ID }, null) |
     @Html.ActionLink("Index", "Index", "Cards", new { DeckID = Model.ID }, null) |
-    @Html.ActionLink("Import", "Import", new { DeckID = Model.ID })
+    @Html.ActionLink("Import", "Import", new { DeckID = Model.ID }) |
+    @Html.ActionLink("Export", "Export", new { DeckID = Model.ID })
 </div>
 
 <div class="col-md-offset-2 col-md-10">

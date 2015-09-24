@@ -12,6 +12,8 @@ using Ionic.Zip;
 using Memento.Core;
 using Memento.DomainModel;
 using Memento.DomainModel.Repository;
+using System.Text;
+using System.Net.Mime;
 
 namespace Memento.Web.Controllers
 {
@@ -41,13 +43,6 @@ namespace Memento.Web.Controllers
             var orderedDecks = decks.OrderBy(deck => deck.Title);
 
             return View(await orderedDecks.ToListAsync());
-        }
-
-        public ActionResult Export()
-        {
-            var decks = repository.GetUserDecks(User.Identity.Name);
-
-            return new JsonResult { Data = decks, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         // GET: Decks/Details/5
@@ -121,7 +116,7 @@ namespace Memento.Web.Controllers
             }
             else
             {
-                return RedirectToAction("DetailsEmpty", "Cards", new { DeckID = dbDeck.ID });
+                return RedirectToAction("DetailsEmpty", "Cards", new { deckID = dbDeck.ID });
             }
         }
 
@@ -257,9 +252,9 @@ namespace Memento.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Import(int DeckID)
+        public ActionResult Import(int deckID)
         {
-            var deckWithID = new Deck { ID = DeckID };
+            var deckWithID = new Deck { ID = deckID };
 
             return View(deckWithID);
         }
@@ -293,14 +288,16 @@ namespace Memento.Web.Controllers
 
                     var updatedText = Converter.ReplaceTextWithWildcards(cardText, clozeNames);
 
-                    if (!clozeNames.All(clozeName => Validator.ValidateBase(cardText, clozeName)))
+                    var isValid = clozeNames.Any() && clozeNames.All(clozeName => Validator.ValidateBase(cardText, clozeName));
+
+                    if (!isValid)
                     {
                         var newCard = new Card
                         {
                             DeckID = deckWithID.ID,
-                            Text = updatedText,
+                            Text = cardText,
                             IsValid = false,
-                            Answer = updatedText,
+                            Answer = cardText,
                         };
 
                         repository.AddCard(newCard);
@@ -336,6 +333,28 @@ namespace Memento.Web.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> Export(int deckID)
+        {
+            var deck = await repository.FindDeckAsync(deckID);
+
+            if (deck == null)
+            {
+                return HttpNotFound();
+            }
+            else if (!deck.IsAuthorized(User))
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var cards = deck.GetAllCards();
+
+            var cardsForExport = from card in cards select Converter.FormatForExport(card.Text);
+
+            var fileContentText = string.Join(Environment.NewLine, cardsForExport);
+
+            return File(Encoding.UTF8.GetBytes(fileContentText), MediaTypeNames.Text.Plain, "Export.txt");
         }
 
         protected override void Dispose(bool disposing)

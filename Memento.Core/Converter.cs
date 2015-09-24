@@ -77,7 +77,7 @@ namespace Memento.Core
 
             var answer = GetAnswerFromField(text, clozeName);
 
-            var answerWithDelimeter = ParseDelimiter(answer);
+            var answerWithDelimeter = DelimiterToTag(answer);
 
             var result = LineBreaksToTags(answerWithDelimeter);
 
@@ -167,6 +167,17 @@ namespace Memento.Core
             return result;
         }
 
+        public static string FormatForExport(string text)
+        {
+            var text2 = DelimiterToTab(text);
+
+            var text3 = LineBreaksToTagsAlt(text2);
+
+            var result = text3.Contains("\t") ? text3 : text3 + "\t";
+
+            return result;
+        }
+
         private static string ConvertToCloze(string card, bool justClozes)
         {
             var isCloze = IsClozeCard(card);
@@ -246,7 +257,7 @@ namespace Memento.Core
 
             return field;
         }
-        
+
         private static string TagsToLineBreaks(string text)
         {
             var result1 = Regex.Replace(text, "<br />", string.Empty);
@@ -261,10 +272,21 @@ namespace Memento.Core
             return Regex.Replace(text, Environment.NewLine, "<br />");
         }
 
-        private static string ParseDelimiter(string text)
+        private static string LineBreaksToTagsAlt(string text)
+        {
+            return Regex.Replace(text, Environment.NewLine, "<div></div>");
+        }
+
+        private static string DelimiterToTag(string text)
         {
             var delimiter = Environment.NewLine + Settings.Default.CommentDelimiter + Environment.NewLine;
             return Regex.Replace(text, delimiter, "<hr />");
+        }
+
+        private static string DelimiterToTab(string text)
+        {
+            var delimiter = Environment.NewLine + Settings.Default.CommentDelimiter + Environment.NewLine;
+            return Regex.Replace(text, delimiter, "\t");
         }
 
         private static bool IsClozeCard(string card)
