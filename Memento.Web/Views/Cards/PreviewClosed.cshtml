@@ -20,11 +20,11 @@
             @Html.ActionLink("Edit card", "Edit", new { id = Model.ID }) |
             @Html.ActionLink("Delete card", "Delete", new { id = Model.ID })
         </div>
-
-        @Html.DisplayFor(model => model.Text)
-
-        <br />
-
+        <hr />
+        <div class="card-text">
+            @Html.Raw(Model.Text)
+        </div>
+        <hr />
         <input type="submit" value="Show" class="btn btn-default" />
     }
 </div>

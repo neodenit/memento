@@ -15,7 +15,7 @@ namespace Memento.Core
         {
             var cards = deckText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
 
-            var cardsWithoutTags = from card in cards select TagsToLineBreaksAlt(card);
+            var cardsWithoutTags = from card in cards select TagsToLineBreaks(card);
 
             var clozeCards = from card in cardsWithoutTags select ConvertToCloze(card, justClozes);
 
@@ -50,7 +50,9 @@ namespace Memento.Core
 
             var question = GetQuestionFromField(questionPart, clozeName);
 
-            return question;
+            var result = LineBreaksToTags(question);
+
+            return result;
         }
 
         public static string GetAnswerValue(string field, string clozeName)
@@ -75,7 +77,9 @@ namespace Memento.Core
 
             var answer = GetAnswerFromField(text, clozeName);
 
-            var result = ParseDelimiter(answer);
+            var answerWithDelimeter = ParseDelimiter(answer);
+
+            var result = LineBreaksToTags(answerWithDelimeter);
 
             return result;
         }
@@ -242,20 +246,12 @@ namespace Memento.Core
 
             return field;
         }
-
+        
         private static string TagsToLineBreaks(string text)
         {
-            var result1 = Regex.Replace(text, "<br />", Environment.NewLine);
-            var result2 = Regex.Replace(result1, "<div>(.+?)</div>", "$1\r\n");
-
-            return result2;
-        }
-
-        private static string TagsToLineBreaksAlt(string text)
-        {
-            var result1 = Regex.Replace(text, "<br />", Environment.NewLine);
-            var result2 = Regex.Replace(result1, "<div>", string.Empty);
-            var result3 = Regex.Replace(result2, "</div>", Environment.NewLine);
+            var result1 = Regex.Replace(text, "<br />", string.Empty);
+            var result2 = Regex.Replace(result1, "<div>", Environment.NewLine);
+            var result3 = Regex.Replace(result2, "</div>", string.Empty);
 
             return result3;
         }

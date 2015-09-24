@@ -18,9 +18,11 @@
             @Html.ActionLink("Edit card", "Edit", new { id = Model.ID }) |
             @Html.ActionLink("Delete card", "Delete", new { id = Model.ID })
         </div>
-
-        @Html.DisplayFor(model => model.Text)
-        <br />
+        <hr />
+        <div class="card-text">
+            @Html.Raw(Model.Text)
+        </div>
+        <hr />
         @Html.EditorFor(model => model.Answer)
 
         <input type="submit" value="Answer" class="btn btn-default" />
