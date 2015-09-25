@@ -92,7 +92,7 @@ namespace Memento.Web.Controllers
                 return RedirectToAction("Question", new { id = card.ID });
             }
         }
-        
+
         public async Task<ActionResult> PreviewClosed(int id)
         {
             var card = await repository.FindCardAsync(id);
@@ -403,7 +403,7 @@ namespace Memento.Web.Controllers
                 return View(card);
             }
         }
-        
+
         // GET: Cards/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
@@ -431,7 +431,7 @@ namespace Memento.Web.Controllers
         // POST: Cards/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,Text")] Card card)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,Text,Answer")] Card card)
         {
             if (ModelState.IsValid)
             {
@@ -479,7 +479,7 @@ namespace Memento.Web.Controllers
             {
                 return new HttpUnauthorizedResult();
             }
-            
+
             var clozes = deck.GetClozes();
 
             Scheduler.ShuffleNewCards(clozes);
