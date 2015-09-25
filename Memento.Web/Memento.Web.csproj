@@ -300,7 +300,6 @@
     <Content Include="Views\Cards\Right.cshtml" />
     <Content Include="Views\Cards\Wrong.cshtml" />
     <Content Include="Views\Cards\Typo.cshtml" />
-    <Content Include="Views\Cards\Correction.cshtml" />
     <Content Include="Views\Cards\Question.cshtml" />
     <Content Include="Views\Cards\PreviewClosed.cshtml" />
     <Content Include="Views\Cards\PreviewOpened.cshtml" />
