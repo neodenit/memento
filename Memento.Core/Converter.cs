@@ -13,15 +13,11 @@ namespace Memento.Core
 
         public static IEnumerable<string> GetCardsFromDeck(string deckText, bool justClozes = false)
         {
-            var cards = deckText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+            var cards = GetCards(deckText);
 
-            var cardsWithoutTags = from card in cards select TagsToLineBreaks(card);
+            var clozes = RawCardsToClozes(justClozes, cards);
 
-            var clozeCards = from card in cardsWithoutTags select ConvertToCloze(card, justClozes);
-
-            var notEmptyClozeCards = from card in clozeCards where !string.IsNullOrEmpty(card) select card;
-
-            return notEmptyClozeCards;
+            return clozes;
         }
 
         public static IEnumerable<string> GetClozeNames(string field)
@@ -178,6 +174,31 @@ namespace Memento.Core
             return result;
         }
 
+        private static IEnumerable<string> GetCards(string deckText)
+        {
+            return deckText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+        }
+
+        private static IEnumerable<string> RawCardsToClozes(bool justClozes, IEnumerable<string> cards)
+        {
+            var clozes = from card in cards select CardToCloze(card, justClozes);
+
+            var notEmptyClozeCards = from card in clozes where !string.IsNullOrEmpty(card) select card;
+
+            return notEmptyClozeCards;
+        }
+
+        private static string CardToCloze(string card, bool justClozes)
+        {
+            var cardWithoutTags = TagsToLineBreaks(card);
+
+            var trimmedCard = TrimNewLines(cardWithoutTags);
+
+            var result = ConvertToCloze(trimmedCard, justClozes);
+
+            return result;
+        }
+
         private static string ConvertToCloze(string card, bool justClozes)
         {
             var isCloze = IsClozeCard(card);
@@ -289,6 +310,23 @@ namespace Memento.Core
             return Regex.Replace(text, delimiter, "\t");
         }
 
+        private static string TrimNewLines(string text)
+        {
+            var result = text.Trim(Environment.NewLine.ToCharArray());
+
+            return result;
+        }
+
+        private static string RestictNewLines(string text)
+        {
+            var pattern = string.Join(string.Empty, Enumerable.Repeat(Environment.NewLine, 3));
+            var replacement = string.Join(string.Empty, Enumerable.Repeat(Environment.NewLine, 2));
+
+            var result = Regex.Replace(text, pattern, replacement);
+
+            return result;
+        }
+
         private static bool IsClozeCard(string card)
         {
             var first = GetFirstField(card);
@@ -322,7 +360,7 @@ namespace Memento.Core
             }
         }
 
-        private static string[] GetParts(string card)
+        private static IEnumerable<string> GetParts(string card)
         {
             var delimiter = Environment.NewLine + Settings.Default.CommentDelimiter + Environment.NewLine;
 
@@ -331,7 +369,7 @@ namespace Memento.Core
             return parts;
         }
 
-        private static string[] GetFields(string card)
+        private static IEnumerable<string> GetFields(string card)
         {
             var fields = card.Split('\t');
 
