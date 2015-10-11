@@ -174,6 +174,26 @@ namespace Memento.Core
             return result;
         }
 
+        private static bool IsInQuotationMarks(string text)
+        {
+            return text.StartsWith("\"");
+        }
+
+        private static string UnescapeQuotationMarks(string text)
+        {
+            var substitution = "&quot;";
+            var doubleMark = "\"{2}";
+            var singleMark = "\"";
+
+            var text2 = Regex.Replace(text, doubleMark, substitution);
+
+            var text3 = Regex.Replace(text2, singleMark, string.Empty);
+
+            var text4 = Regex.Replace(text3, substitution, singleMark);
+
+            return text4;
+        }
+
         private static IEnumerable<string> GetCards(string deckText)
         {
             return deckText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
@@ -190,7 +210,9 @@ namespace Memento.Core
 
         private static string CardToCloze(string card, bool justClozes)
         {
-            var cardWithoutTags = TagsToLineBreaks(card);
+            var unescapedCard = IsInQuotationMarks(card) ? UnescapeQuotationMarks(card) : card;
+
+            var cardWithoutTags = TagsToLineBreaks(unescapedCard);
 
             var trimmedCard = TrimNewLines(cardWithoutTags);
 
