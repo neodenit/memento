@@ -51,7 +51,9 @@ namespace Memento.Web.Controllers
                 {
                     var clozes = deck.GetClozes();
 
-                    return View(clozes);
+                    var orderedClozes = clozes.OrderBy(cloze => cloze.Position);
+
+                    return View(orderedClozes);
                 }
             }
         }
@@ -486,7 +488,7 @@ namespace Memento.Web.Controllers
 
             await repository.SaveChangesAsync();
 
-            return View("Index", clozes);
+            return RedirectToAction("Index", new { deckID });
         }
 
         // GET: Cards/Delete/5
