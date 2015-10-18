@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Memento.Core;
-using Memento.DomainModel;
 using Memento.DomainModel.Repository;
 using Memento.Core.Evaluators;
+using Memento.DomainModel.Models;
 
 namespace Memento.Web.Controllers
 {
@@ -53,7 +53,9 @@ namespace Memento.Web.Controllers
 
                     var orderedClozes = clozes.OrderBy(cloze => cloze.Position);
 
-                    return View(orderedClozes);
+                    var clozeViews = from cloze in orderedClozes select new ClozeView(cloze);
+
+                    return View(clozeViews);
                 }
             }
         }

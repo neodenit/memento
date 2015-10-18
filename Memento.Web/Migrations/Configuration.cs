@@ -5,14 +5,14 @@ namespace Memento.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Memento.DomainModel.MementoContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<Memento.DomainModel.Models.MementoContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
         }
 
-        protected override void Seed(Memento.DomainModel.MementoContext context)
+        protected override void Seed(Memento.DomainModel.Models.MementoContext context)
         {
             //  This method will be called after migrating to the latest version.
 

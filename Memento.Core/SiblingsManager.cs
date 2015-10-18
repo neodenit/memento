@@ -20,17 +20,17 @@ namespace Memento.Core
 
         private static IEnumerable<ICard> GetCardsToMove(IDeck deck, IEnumerable<ICard> cards)
         {
-            var topicID = cards.GetMinElement(card => card.Position).TopicID;
+            var cardID = cards.GetMinElement(card => card.Position).CardID;
 
             var nextCards = cards.Skip(1).Take(deck.StartDelay);
 
-            if (nextCards.All(card => card.TopicID == topicID))
+            if (nextCards.All(card => card.CardID == cardID))
             {
-                return cards.Skip(1).TakeWhile(card => card.TopicID == topicID);
+                return cards.Skip(1).TakeWhile(card => card.CardID == cardID);
             }
-            else if (nextCards.Any(card => card.TopicID == topicID))
+            else if (nextCards.Any(card => card.CardID == cardID))
             {
-                return nextCards.Where(card => card.TopicID == topicID);
+                return nextCards.Where(card => card.CardID == cardID);
             }
             else
             {

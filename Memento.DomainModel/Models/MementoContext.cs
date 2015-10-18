@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 
-namespace Memento.DomainModel
+namespace Memento.DomainModel.Models
 {
     public class MementoContext : DbContext
     {

@@ -1,4 +1,5 @@
 ﻿using Memento.Core;
+using Memento.DomainModel.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

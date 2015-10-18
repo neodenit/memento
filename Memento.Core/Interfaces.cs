@@ -23,6 +23,6 @@ namespace Memento.Core
 
         bool IsNew { get; set; }
 
-        int TopicID { get; }
+        int CardID { get; }
     }
 }

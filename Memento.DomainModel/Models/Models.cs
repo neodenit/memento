@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Principal;
 using Memento.Core;
 
-namespace Memento.DomainModel
+namespace Memento.DomainModel.Models
 {
     public enum ControlModes
     {
@@ -138,8 +138,6 @@ namespace Memento.DomainModel
         public bool IsNew { get; set; }
 
         public int LastDelay { get; set; }
-
-        public int TopicID { get { return Card.ID; } }
     }
 
     public class Answer

@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using Memento.Web.Controllers;
 using Memento.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Memento.DomainModel;
+using Memento.DomainModel.Models;
 
 namespace Memento.Tests.Controllers
 {

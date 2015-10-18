@@ -10,10 +10,10 @@ using System.Web;
 using System.Web.Mvc;
 using Ionic.Zip;
 using Memento.Core;
-using Memento.DomainModel;
 using Memento.DomainModel.Repository;
 using System.Text;
 using System.Net.Mime;
+using Memento.DomainModel.Models;
 
 namespace Memento.Web.Controllers
 {
