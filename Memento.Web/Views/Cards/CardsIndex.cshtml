@@ -1,0 +1,17 @@
+﻿@model IEnumerable<Memento.DomainModel.Models.Card>
+
+@{
+    ViewBag.Title = "Cards Index";
+}
+
+<h2>Index</h2>
+
+<hr />
+
+@foreach (var item in Model)
+{
+    <div class="card-text">
+        @Html.Raw(item.Text)
+    </div>
+    <hr />
+}

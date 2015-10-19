@@ -1,4 +1,4 @@
-﻿@model Memento.DomainModel.Deck
+﻿@model Memento.DomainModel.Models.Deck
 
 @{
     ViewBag.Title = "Details";
@@ -22,7 +22,8 @@
 
 <div>
     @Html.ActionLink("Create New Card", "Create", "Cards", new { DeckID = Model.ID }, null) |
-    @Html.ActionLink("Index", "Index", "Cards", new { DeckID = Model.ID }, null) |
+    @Html.ActionLink("Clozes Index", "Index", "Cards", new { DeckID = Model.ID }, null) |
+    @Html.ActionLink("Cards Index", "CardsIndex", "Cards", new { DeckID = Model.ID }, null) |
     @Html.ActionLink("Import", "Import", new { DeckID = Model.ID }) |
     @Html.ActionLink("Export", "Export", new { DeckID = Model.ID })
 </div>
