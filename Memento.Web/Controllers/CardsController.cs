@@ -60,6 +60,29 @@ namespace Memento.Web.Controllers
             }
         }
 
+        public async Task<ActionResult> CardsIndex(int? DeckID)
+        {
+            if (DeckID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            else
+            {
+                var deck = await repository.FindDeckAsync(DeckID);
+
+                if (!deck.IsAuthorized(User))
+                {
+                    return new HttpUnauthorizedResult();
+                }
+                else
+                {
+                    var cards = deck.GetValidCards();
+
+                    return View(cards);
+                }
+            }
+        }
+
         public ActionResult DetailsEmpty(int? DeckID)
         {
             if (DeckID == null)
@@ -469,6 +492,13 @@ namespace Memento.Web.Controllers
             {
                 return View(card);
             }
+        }
+
+        public async Task<ActionResult> ShuffleNewCards(int cardID)
+        {
+            var card = await repository.FindCardAsync(cardID);
+
+            return await ShuffleNew(card.DeckID);
         }
 
         public async Task<ActionResult> ShuffleNew(int deckID)

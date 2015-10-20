@@ -8,7 +8,7 @@
 
 @if (Model.Any(item => item.IsNew))
 {
-    @Html.ActionLink("Shuffle new", "ShuffleNew", new { DeckID = Model.First().Card.DeckID })
+    @Html.ActionLink("Shuffle new", "ShuffleNewCards", new { cardID = Model.First().CardID })
 }
 
 <table class="table">
