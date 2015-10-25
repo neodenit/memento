@@ -98,6 +98,8 @@ namespace Memento.DomainModel.Models
 
         public bool IsValid { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public Cloze GetNextCloze()
         {
             var cloze = Clozes.GetMinElement(item => item.Position);

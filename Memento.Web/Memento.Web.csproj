@@ -194,6 +194,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510251851136_Add IsDeleted.cs" />
+    <Compile Include="Migrations\201510251851136_Add IsDeleted.Designer.cs">
+      <DependentUpon>201510251851136_Add IsDeleted.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
@@ -323,6 +327,11 @@
       <Project>{4ccb3552-1782-4ca3-806e-fe846ca2f6cf}</Project>
       <Name>Memento.DomainModel</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201510251851136_Add IsDeleted.resx">
+      <DependentUpon>201510251851136_Add IsDeleted.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
