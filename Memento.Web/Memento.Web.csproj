@@ -194,9 +194,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201510251851136_Add IsDeleted.cs" />
-    <Compile Include="Migrations\201510251851136_Add IsDeleted.Designer.cs">
-      <DependentUpon>201510251851136_Add IsDeleted.cs</DependentUpon>
+    <Compile Include="Migrations\201506291851096_InitialCreate.cs" />
+    <Compile Include="Migrations\201506291851096_InitialCreate.Designer.cs">
+      <DependentUpon>201506291851096_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
@@ -235,6 +235,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <None Include="Properties\PublishProfiles\memento-srs.pubxml" />
     <None Include="Properties\PublishProfiles\reading-list.pubxml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -329,8 +330,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201510251851136_Add IsDeleted.resx">
-      <DependentUpon>201510251851136_Add IsDeleted.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201506291851096_InitialCreate.resx">
+      <DependentUpon>201506291851096_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

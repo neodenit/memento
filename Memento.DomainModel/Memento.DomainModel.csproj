@@ -50,6 +50,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\201510251851136_Add IsDeleted.cs" />
+    <Compile Include="Migrations\201510251851136_Add IsDeleted.Designer.cs">
+      <DependentUpon>201510251851136_Add IsDeleted.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\MementoContext.cs" />
     <Compile Include="Models\Models.cs" />
     <Compile Include="Models\ViewModels.cs" />
@@ -66,6 +71,11 @@
       <Project>{2f5faa65-d83a-47d4-abea-f2693dae25a3}</Project>
       <Name>Memento.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201510251851136_Add IsDeleted.resx">
+      <DependentUpon>201510251851136_Add IsDeleted.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
