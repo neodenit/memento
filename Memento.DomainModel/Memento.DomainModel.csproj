@@ -50,9 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\201510251851136_Add IsDeleted.cs" />
-    <Compile Include="Migrations\201510251851136_Add IsDeleted.Designer.cs">
-      <DependentUpon>201510251851136_Add IsDeleted.cs</DependentUpon>
+    <Compile Include="Migrations\201511011032471_Initial.cs" />
+    <Compile Include="Migrations\201511011032471_Initial.Designer.cs">
+      <DependentUpon>201511011032471_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\MementoContext.cs" />
@@ -73,8 +73,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201510251851136_Add IsDeleted.resx">
-      <DependentUpon>201510251851136_Add IsDeleted.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201511011032471_Initial.resx">
+      <DependentUpon>201511011032471_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
