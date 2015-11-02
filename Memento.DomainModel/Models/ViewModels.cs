@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace Memento.DomainModel.Models
         public int TopicID { get; set; }
 
         public string Text { get; set; }
-        
+
         public ClozeView(Cloze cloze, string text = "")
         {
             ID = cloze.ID;
@@ -33,6 +34,52 @@ namespace Memento.DomainModel.Models
             IsNew = cloze.IsNew;
             LastDelay = cloze.LastDelay;
             Text = text;
+        }
+    }
+
+    public class EditCardViewModel
+    {
+        public int ID { get; set; }
+
+        public int DeckID { get; set; }
+
+        [Required]
+        [DataType(DataType.MultilineText)]
+        public string Text { get; set; }
+
+        public EditCardViewModel() { }
+
+        public EditCardViewModel(Card card)
+        {
+            ID = card.ID;
+            DeckID = card.DeckID;
+            Text = card.Text;
+        }
+    }
+
+    public class AnswerCardViewModel
+    {
+        public int ID { get; set; }
+
+        public int DeckID { get; set; }
+
+        public string DeckTitle { get; set; }
+
+        [Required]
+        [DataType(DataType.MultilineText)]
+        public string Text { get; set; }
+
+        [Required]
+        public string Answer { get; set; }
+
+        public AnswerCardViewModel() { }
+
+        public AnswerCardViewModel(Card card)
+        {
+            ID = card.ID;
+            DeckID = card.DeckID;
+            Text = card.Text;
+            DeckTitle = card.Deck.Title;
         }
     }
 }

@@ -11,6 +11,7 @@ using Memento.Core;
 using Memento.DomainModel.Repository;
 using Memento.Core.Evaluators;
 using Memento.DomainModel.Models;
+using System.Collections.ObjectModel;
 
 namespace Memento.Web.Controllers
 {
@@ -218,16 +219,17 @@ namespace Memento.Web.Controllers
             {
                 var cloze = card.GetNextCloze();
 
-                card.Text = Converter.GetQuestion(card.Text, cloze.Label);
-                card.Answer = string.Empty;
+                var cardViewModel = new AnswerCardViewModel(card);
 
-                return View(card);
+                cardViewModel.Text = Converter.GetQuestion(card.Text, cloze.Label);
+
+                return View(cardViewModel);
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Question([Bind(Include = "ID, Answer")]Card card)
+        public async Task<ActionResult> Question([Bind(Include = "ID, Answer")]AnswerCardViewModel card)
         {
             var dbCard = await repository.FindCardAsync(card.ID);
 
@@ -239,6 +241,8 @@ namespace Memento.Web.Controllers
             {
                 var cloze = dbCard.GetNextCloze();
 
+                var cardViewModel = new AnswerCardViewModel(dbCard);
+
                 var answer = Converter.GetAnswerValue(dbCard.Text, cloze.Label);
 
                 var result = new PhraseEvaluator(0.2).Evaluate(answer, card.Answer);
@@ -246,21 +250,17 @@ namespace Memento.Web.Controllers
                 switch (result)
                 {
                     case Mark.Correct:
-                        dbCard.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);
+                        cardViewModel.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);
 
-                        return View("Right", dbCard);
+                        return View("Right", cardViewModel);
                     case Mark.Incorrect:
-                        ViewBag.Answer = card.Answer;
+                        cardViewModel.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);
 
-                        dbCard.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);
-
-                        return View("Wrong", dbCard);
+                        return View("Wrong", cardViewModel);
                     case Mark.Typo:
-                        ViewBag.Answer = card.Answer;
+                        cardViewModel.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);
 
-                        dbCard.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);
-
-                        return View("Typo", dbCard);
+                        return View("Typo", cardViewModel);
                     default:
                         throw new Exception();
                 }
@@ -269,7 +269,7 @@ namespace Memento.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Right([Bind(Include = "ID")]Card card)
+        public async Task<ActionResult> Right([Bind(Include = "ID")]AnswerCardViewModel card)
         {
             var dbCard = await repository.FindCardAsync(card.ID);
 
@@ -292,7 +292,7 @@ namespace Memento.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Wrong([Bind(Include = "ID, Answer")]Card card, string NextButton, string AltButton)
+        public async Task<ActionResult> Wrong([Bind(Include = "ID, Answer")]AnswerCardViewModel card, string NextButton, string AltButton)
         {
             var dbCard = await repository.FindCardAsync(card.ID);
 
@@ -335,7 +335,7 @@ namespace Memento.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Typo([Bind(Include = "ID, Answer")]Card card, string TypoButton, string WrongButton, string AltButton)
+        public async Task<ActionResult> Typo([Bind(Include = "ID, Answer")]AnswerCardViewModel card, string TypoButton, string WrongButton, string AltButton)
         {
             var dbCard = await repository.FindCardAsync(card.ID);
 
@@ -381,13 +381,13 @@ namespace Memento.Web.Controllers
             {
                 ViewBag.DeckID = new SelectList(repository.GetUserDecks(User.Identity.Name), "ID", "Title");
 
-                var card = new Card { DeckID = -1 };
+                var card = new EditCardViewModel { DeckID = -1 };
 
                 return View(card);
             }
             else
             {
-                var card = new Card { DeckID = DeckID.Value };
+                var card = new EditCardViewModel { DeckID = DeckID.Value };
 
                 return View(card);
             }
@@ -396,12 +396,10 @@ namespace Memento.Web.Controllers
         // POST: Cards/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,DeckID,Text")] Card card)
+        public async Task<ActionResult> Create([Bind(Include = "ID,DeckID,Text")] EditCardViewModel card)
         {
             if (ModelState.IsValid)
             {
-                var deck = await repository.FindDeckAsync(card.DeckID);
-
                 var text = card.Text;
 
                 var clozeNames = Converter.GetClozeNames(text);
@@ -412,17 +410,26 @@ namespace Memento.Web.Controllers
                 }
                 else
                 {
-                    card.Text = Converter.ReplaceTextWithWildcards(card.Text, clozeNames);
+                    var newCard = new Card
+                    {
+                        ID = card.ID,
+                        DeckID = card.DeckID,
+                        Deck = await repository.FindDeckAsync(card.DeckID),
+                        Text = Converter.ReplaceTextWithWildcards(card.Text, clozeNames),
+                        Clozes = new Collection<Cloze>(),
+                        IsValid = true,
+                        IsDeleted = false,
+                    };
 
-                    repository.AddCard(card);
+                    repository.AddCard(newCard);
 
                     await repository.SaveChangesAsync();
 
-                    repository.AddClozes(card, clozeNames);
+                    repository.AddClozes(newCard, clozeNames);
 
                     await repository.SaveChangesAsync();
 
-                    return RedirectToAction("Details", "Deck", new { id = card.DeckID });
+                    return RedirectToAction("Create", "Cards", new { DeckID = card.DeckID });
                 }
             }
             else
@@ -451,7 +458,8 @@ namespace Memento.Web.Controllers
             }
             else
             {
-                return View(card);
+                var cardViewModel = new EditCardViewModel(card);
+                return View(cardViewModel);
             }
         }
 

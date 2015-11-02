@@ -54,6 +54,10 @@
     <Compile Include="Migrations\201511011032471_Initial.Designer.cs">
       <DependentUpon>201511011032471_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511011808506_Drop Answer column.cs" />
+    <Compile Include="Migrations\201511011808506_Drop Answer column.Designer.cs">
+      <DependentUpon>201511011808506_Drop Answer column.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\MementoContext.cs" />
     <Compile Include="Models\Models.cs" />
@@ -75,6 +79,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201511011032471_Initial.resx">
       <DependentUpon>201511011032471_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511011808506_Drop Answer column.resx">
+      <DependentUpon>201511011808506_Drop Answer column.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

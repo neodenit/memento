@@ -1,4 +1,4 @@
-﻿@model Memento.DomainModel.Models.Card
+﻿@model Memento.DomainModel.Models.AnswerCardViewModel
 
 @{
     ViewBag.Title = "Right";
@@ -7,7 +7,7 @@
 <h2>Right</h2>
 
 <div>
-    <h4>@Html.DisplayFor(model => model.Deck.Title)</h4>
+    <h4>@Html.DisplayFor(model => model.DeckTitle)</h4>
     <hr />
 
     @using (Html.BeginForm("Right", "Cards"))
