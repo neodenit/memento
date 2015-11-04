@@ -14,10 +14,8 @@ namespace Memento.Tests.Controllers
     public class DeckControllerTest
     {
         [TestMethod]
-        public void Create()
+        public void Create(DecksController controller)
         {
-            var controller = new DecksController();
-
             var result = controller.Create() as ViewResult;
 
             Assert.IsNotNull(result);

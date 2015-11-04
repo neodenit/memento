@@ -23,11 +23,6 @@ namespace Memento.Web.Controllers
     {
         private readonly IMementoRepository repository;
 
-        public CardsController()
-        {
-            repository = new EFMementoRepository();
-        }
-
         public CardsController(IMementoRepository repository)
         {
             this.repository = repository;
