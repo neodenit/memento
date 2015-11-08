@@ -16,7 +16,7 @@ namespace Memento
             var builder = new ContainerBuilder();
 
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
-            builder.RegisterType<EFMementoRepository>().As<IMementoRepository>().SingleInstance();
+            builder.RegisterType<EFMementoRepository>().As<IMementoRepository>();
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
