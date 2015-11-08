@@ -22,10 +22,12 @@ namespace Memento.Web.Controllers
     public class CardsController : Controller
     {
         private readonly IMementoRepository repository;
+        private readonly IEvaluator evaluator;
 
-        public CardsController(IMementoRepository repository)
+        public CardsController(IMementoRepository repository, IEvaluator evaluator)
         {
             this.repository = repository;
+            this.evaluator = evaluator;
         }
 
         // GET: Cards
@@ -240,7 +242,7 @@ namespace Memento.Web.Controllers
 
                 var answer = Converter.GetAnswerValue(dbCard.Text, cloze.Label);
 
-                var result = new PhraseEvaluator(0.2).Evaluate(answer, card.Answer);
+                var result = evaluator.Evaluate(answer, card.Answer);
 
                 switch (result)
                 {

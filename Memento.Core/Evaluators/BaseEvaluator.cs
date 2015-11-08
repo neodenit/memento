@@ -15,7 +15,7 @@ namespace Memento.Core.Evaluators
         Typo,
     }
 
-    public abstract class BaseEvaluator
+    public abstract class BaseEvaluator : IEvaluator
     {
         protected double permissibleError;
 
