@@ -7,6 +7,7 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using Memento.DomainModel.Repository;
 using Memento.Core.Evaluators;
+using Memento.Core;
 
 namespace Memento
 {
@@ -19,6 +20,8 @@ namespace Memento
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
             builder.RegisterType<EFMementoRepository>().As<IMementoRepository>();
             builder.RegisterType<PhraseEvaluator>().As<IEvaluator>().WithParameter("permissibleError", 0.2);
+            builder.RegisterType<Converter>().As<IConverter>();
+            builder.RegisterType<Validator>().As<IValidator>();
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));

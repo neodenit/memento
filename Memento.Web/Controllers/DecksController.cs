@@ -24,10 +24,14 @@ namespace Memento.Web.Controllers
     public class DecksController : Controller
     {
         private readonly IMementoRepository repository;
+        private readonly IConverter converter;
+        private readonly IValidator validator;
 
-        public DecksController(IMementoRepository repository)
+        public DecksController(IMementoRepository repository, IConverter converter, IValidator validator)
         {
             this.repository = repository;
+            this.converter = converter;
+            this.validator = validator;
         }
 
         // GET: Decks
@@ -273,17 +277,17 @@ namespace Memento.Web.Controllers
             {
                 var text = await new StreamReader(file.InputStream).ReadToEndAsync();
 
-                var cards = Converter.GetCardsFromDeck(text, true);
+                var cards = converter.GetCardsFromDeck(text, true);
 
                 foreach (var card in cards)
                 {
                     var cardText = HttpUtility.HtmlDecode(card);
 
-                    var clozeNames = Converter.GetClozeNames(cardText);
+                    var clozeNames = converter.GetClozeNames(cardText);
 
-                    var updatedText = Converter.ReplaceTextWithWildcards(cardText, clozeNames);
+                    var updatedText = converter.ReplaceTextWithWildcards(cardText, clozeNames);
 
-                    var isValid = clozeNames.Any() && clozeNames.All(clozeName => Validator.ValidateBase(cardText, clozeName));
+                    var isValid = clozeNames.Any() && clozeNames.All(clozeName => validator.ValidateBase(cardText, clozeName));
 
                     if (!isValid)
                     {
@@ -343,7 +347,7 @@ namespace Memento.Web.Controllers
 
             var cards = deck.GetAllCards();
 
-            var cardsForExport = from card in cards select Converter.FormatForExport(card.Text);
+            var cardsForExport = from card in cards select converter.FormatForExport(card.Text);
 
             var fileContentText = string.Join(Environment.NewLine, cardsForExport);
 

@@ -11,10 +11,17 @@ namespace Memento.Tests
     [TestClass]
     public class ConverterTest
     {
+        private readonly IConverter converter;
+
+        public ConverterTest(IConverter converter)
+        {
+            this.converter = converter;
+        }
+
         [TestMethod]
         public void TestReplace()
         {
-            var result = Converter.ReplaceAnswer("Test text with {{c1::cloze}}.", "c1", "cloze|alt");
+            var result = converter.ReplaceAnswer("Test text with {{c1::cloze}}.", "c1", "cloze|alt");
 
             Assert.AreEqual("Test text with {{c1::cloze|alt}}.", result);
         }
@@ -22,7 +29,7 @@ namespace Memento.Tests
         [TestMethod]
         public void TestReplaceWithHint()
         {
-            var result = Converter.ReplaceAnswer("Test text with {{c1::cloze::hint}}.", "c1", "cloze|alt");
+            var result = converter.ReplaceAnswer("Test text with {{c1::cloze::hint}}.", "c1", "cloze|alt");
 
             Assert.AreEqual("Test text with {{c1::cloze|alt::hint}}.", result);
         }
@@ -30,7 +37,7 @@ namespace Memento.Tests
         [TestMethod]
         public void TestReplaceWithWildcard2()
         {
-            var result = Converter.ReplaceTextWithWildcards("Test text with {{c1::cloze}} and another {{c1::cloze}}.", "c1");
+            var result = converter.ReplaceTextWithWildcards("Test text with {{c1::cloze}} and another {{c1::cloze}}.", "c1");
 
             Assert.AreEqual("Test text with {{c1::cloze}} and another {{c1::*}}.", result);
         }
@@ -38,7 +45,7 @@ namespace Memento.Tests
         [TestMethod]
         public void TestReplaceWithWildcard3()
         {
-            var result = Converter.ReplaceTextWithWildcards("Test text with {{c1::cloze}}, another {{c1::cloze}} and another {{c1::cloze}}.", "c1");
+            var result = converter.ReplaceTextWithWildcards("Test text with {{c1::cloze}}, another {{c1::cloze}} and another {{c1::cloze}}.", "c1");
 
             Assert.AreEqual("Test text with {{c1::cloze}}, another {{c1::*}} and another {{c1::*}}.", result);
         }

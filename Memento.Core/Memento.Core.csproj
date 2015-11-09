@@ -60,6 +60,8 @@
     <Compile Include="Evaluators\PhraseEvaluator.cs" />
     <Compile Include="Evaluators\WordsEvaluator.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="IConverter.cs" />
+    <Compile Include="IValidator.cs" />
     <Compile Include="NewCardsManager.cs" />
     <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>

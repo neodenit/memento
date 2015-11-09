@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Memento.Core
 {
-    public static class Converter
+    public class Converter : IConverter
     {
         private const string ClozePattern = @"{{(\w+)::((?:(?!}}).)+?)(::((?:(?!}}).)+?))?}}";
 
-        public static IEnumerable<string> GetCardsFromDeck(string deckText, bool justClozes = false)
+        public IEnumerable<string> GetCardsFromDeck(string deckText, bool justClozes = false)
         {
             var cards = GetCards(deckText);
 
@@ -20,7 +20,7 @@ namespace Memento.Core
             return clozes;
         }
 
-        public static IEnumerable<string> GetClozeNames(string field)
+        public IEnumerable<string> GetClozeNames(string field)
         {
             var clozes = from Match m in Regex.Matches(field, ClozePattern) select m.Groups[1].Value;
 
@@ -29,7 +29,7 @@ namespace Memento.Core
             return result;
         }
 
-        public static IEnumerable<string> GetClozeValues(string field, string clozeName)
+        public IEnumerable<string> GetClozeValues(string field, string clozeName)
         {
             var currentPattern = GetCurrentClozePattern(clozeName);
 
@@ -38,7 +38,7 @@ namespace Memento.Core
             return result;
         }
 
-        public static string GetQuestion(string card, string clozeName, bool stripWildCards = true)
+        public string GetQuestion(string card, string clozeName, bool stripWildCards = true)
         {
             var text = stripWildCards ? ReplaceAllWildCardsWithText(card) : card;
 
@@ -51,7 +51,7 @@ namespace Memento.Core
             return result;
         }
 
-        public static string GetAnswerValue(string field, string clozeName)
+        public string GetAnswerValue(string field, string clozeName)
         {
             var currentPattern = GetCurrentClozePattern(clozeName);
 
@@ -67,7 +67,7 @@ namespace Memento.Core
             }
         }
 
-        public static string GetAnswer(string card, string clozeName, bool stripWildCards = true)
+        public string GetAnswer(string card, string clozeName, bool stripWildCards = true)
         {
             var text = stripWildCards ? ReplaceAllWildCardsWithText(card) : card;
 
@@ -80,13 +80,13 @@ namespace Memento.Core
             return result;
         }
 
-        public static string GetCurrentClozePattern(string clozeName)
+        public string GetCurrentClozePattern(string clozeName)
         {
             var currentPattern = "{{(" + clozeName + ")::((?:(?!}}).)+?)(::((?:(?!}}).)+?))?}}";
             return currentPattern;
         }
 
-        public static string ReplaceAnswer(string text, string label, string newAnswers)
+        public string ReplaceAnswer(string text, string label, string newAnswers)
         {
             var currentPattern = GetCurrentClozePattern(label);
 
@@ -95,7 +95,7 @@ namespace Memento.Core
             return Regex.Replace(text, currentPattern, newPattern);
         }
 
-        public static string ReplaceTextWithWildcards(string text, string label)
+        public string ReplaceTextWithWildcards(string text, string label)
         {
             var currentPattern = GetCurrentClozePattern(label);
 
@@ -115,7 +115,7 @@ namespace Memento.Core
             }
         }
 
-        public static string ReplaceTextWithWildcards(string text, IEnumerable<string> labels)
+        public string ReplaceTextWithWildcards(string text, IEnumerable<string> labels)
         {
             if (labels.Any())
             {
@@ -129,14 +129,14 @@ namespace Memento.Core
             }
         }
 
-        public static string ReplaceAllWildCardsWithText(string text)
+        public string ReplaceAllWildCardsWithText(string text)
         {
             var labels = GetClozeNames(text);
 
             return ReplaceAllWildCardsWithText(text, labels);
         }
 
-        public static string ReplaceAllWildCardsWithText(string text, IEnumerable<string> labels)
+        public string ReplaceAllWildCardsWithText(string text, IEnumerable<string> labels)
         {
             if (labels.Any())
             {
@@ -150,7 +150,7 @@ namespace Memento.Core
             }
         }
 
-        public static string ReplaceWildCardsWithText(string text, string label)
+        public string ReplaceWildCardsWithText(string text, string label)
         {
             var currentPattern = GetCurrentClozePattern(label);
 
@@ -163,7 +163,7 @@ namespace Memento.Core
             return result;
         }
 
-        public static string FormatForExport(string text)
+        public string FormatForExport(string text)
         {
             var text2 = DelimiterToTab(text);
 
@@ -365,7 +365,7 @@ namespace Memento.Core
             return result;
         }
 
-        private static IEnumerable<string> GetClozesFromCard(string card)
+        private IEnumerable<string> GetClozesFromCard(string card)
         {
             var isCloze = IsClozeCard(card);
 
@@ -405,7 +405,7 @@ namespace Memento.Core
             return fields.Count();
         }
 
-        private static IEnumerable<string> GetClozePartsFromField(string field)
+        private IEnumerable<string> GetClozePartsFromField(string field)
         {
             var cs = GetClozeNames(field);
 
@@ -417,7 +417,7 @@ namespace Memento.Core
             }
         }
 
-        private static string GetQuestionFromField(string field, string clozeName)
+        private string GetQuestionFromField(string field, string clozeName)
         {
             var cloze1 = ReplaceClozeWithSquareBrackets(field, clozeName);
 
@@ -432,7 +432,7 @@ namespace Memento.Core
             return result;
         }
 
-        private static string ReplaceClozeWithSquareBrackets(string field, string clozeName)
+        private string ReplaceClozeWithSquareBrackets(string field, string clozeName)
         {
             var clozePattern = GetCurrentClozePattern(clozeName);
 
@@ -458,7 +458,7 @@ namespace Memento.Core
             }
         }
 
-        private static string GetAnswerFromField(string field, string clozeName)
+        private string GetAnswerFromField(string field, string clozeName)
         {
             var currentPattern = GetCurrentClozePattern(clozeName);
 

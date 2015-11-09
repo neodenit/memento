@@ -23,11 +23,15 @@ namespace Memento.Web.Controllers
     {
         private readonly IMementoRepository repository;
         private readonly IEvaluator evaluator;
+        private readonly IConverter converter;
+        private readonly IValidator validator;
 
-        public CardsController(IMementoRepository repository, IEvaluator evaluator)
+        public CardsController(IMementoRepository repository, IEvaluator evaluator, IConverter converter, IValidator validator)
         {
             this.repository = repository;
             this.evaluator = evaluator;
+            this.converter = converter;
+            this.validator = validator;
         }
 
         // GET: Cards
@@ -133,7 +137,7 @@ namespace Memento.Web.Controllers
 
             var cloze = card.GetNextCloze();
 
-            var question = Converter.GetQuestion(card.Text, cloze.Label);
+            var question = converter.GetQuestion(card.Text, cloze.Label);
 
             card.Text = question;
 
@@ -173,7 +177,7 @@ namespace Memento.Web.Controllers
 
             var cloze = card.GetNextCloze();
 
-            var question = Converter.GetAnswer(card.Text, cloze.Label);
+            var question = converter.GetAnswer(card.Text, cloze.Label);
 
             card.Text = question;
 
@@ -218,7 +222,7 @@ namespace Memento.Web.Controllers
 
                 var cardViewModel = new AnswerCardViewModel(card);
 
-                cardViewModel.Text = Converter.GetQuestion(card.Text, cloze.Label);
+                cardViewModel.Text = converter.GetQuestion(card.Text, cloze.Label);
 
                 return View(cardViewModel);
             }
@@ -240,22 +244,22 @@ namespace Memento.Web.Controllers
 
                 var cardViewModel = new AnswerCardViewModel(dbCard);
 
-                var answer = Converter.GetAnswerValue(dbCard.Text, cloze.Label);
+                var answer = converter.GetAnswerValue(dbCard.Text, cloze.Label);
 
                 var result = evaluator.Evaluate(answer, card.Answer);
 
                 switch (result)
                 {
                     case Mark.Correct:
-                        cardViewModel.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);
+                        cardViewModel.Text = converter.GetAnswer(dbCard.Text, cloze.Label);
 
                         return View("Right", cardViewModel);
                     case Mark.Incorrect:
-                        cardViewModel.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);
+                        cardViewModel.Text = converter.GetAnswer(dbCard.Text, cloze.Label);
 
                         return View("Wrong", cardViewModel);
                     case Mark.Typo:
-                        cardViewModel.Text = Converter.GetAnswer(dbCard.Text, cloze.Label);
+                        cardViewModel.Text = converter.GetAnswer(dbCard.Text, cloze.Label);
 
                         return View("Typo", cardViewModel);
                     default:
@@ -312,11 +316,11 @@ namespace Memento.Web.Controllers
             {
                 var cloze = dbCard.GetNextCloze();
 
-                var oldAnswers = Converter.GetAnswerValue(dbCard.Text, cloze.Label);
+                var oldAnswers = converter.GetAnswerValue(dbCard.Text, cloze.Label);
 
                 var newAnswers = string.Format("{0}|{1}", oldAnswers, card.Answer);
 
-                var newText = Converter.ReplaceAnswer(dbCard.Text, cloze.Label, newAnswers);
+                var newText = converter.ReplaceAnswer(dbCard.Text, cloze.Label, newAnswers);
 
                 dbCard.Text = newText;
 
@@ -353,11 +357,11 @@ namespace Memento.Web.Controllers
             {
                 var cloze = dbCard.GetNextCloze();
 
-                var oldAnswers = Converter.GetAnswerValue(dbCard.Text, cloze.Label);
+                var oldAnswers = converter.GetAnswerValue(dbCard.Text, cloze.Label);
 
                 var newAnswers = string.Format("{0}|{1}", oldAnswers, card.Answer);
 
-                var newText = Converter.ReplaceAnswer(dbCard.Text, cloze.Label, newAnswers);
+                var newText = converter.ReplaceAnswer(dbCard.Text, cloze.Label, newAnswers);
 
                 dbCard.Text = newText;
 
@@ -399,9 +403,9 @@ namespace Memento.Web.Controllers
             {
                 var text = card.Text;
 
-                var clozeNames = Converter.GetClozeNames(text);
+                var clozeNames = converter.GetClozeNames(text);
 
-                if (!clozeNames.Any() || !clozeNames.All(clozeName => Validator.ValidateBase(text, clozeName)))
+                if (!clozeNames.Any() || !clozeNames.All(clozeName => validator.ValidateBase(text, clozeName)))
                 {
                     return View(card);
                 }
@@ -412,7 +416,7 @@ namespace Memento.Web.Controllers
                         ID = card.ID,
                         DeckID = card.DeckID,
                         Deck = await repository.FindDeckAsync(card.DeckID),
-                        Text = Converter.ReplaceTextWithWildcards(card.Text, clozeNames),
+                        Text = converter.ReplaceTextWithWildcards(card.Text, clozeNames),
                         Clozes = new Collection<Cloze>(),
                         IsValid = true,
                         IsDeleted = false,
@@ -475,9 +479,9 @@ namespace Memento.Web.Controllers
                 }
                 else
                 {
-                    var clozes = Converter.GetClozeNames(dbCard.Text);
+                    var clozes = converter.GetClozeNames(dbCard.Text);
 
-                    dbCard.Text = Converter.ReplaceTextWithWildcards(card.Text, clozes);
+                    dbCard.Text = converter.ReplaceTextWithWildcards(card.Text, clozes);
 
                     var oldClozes = from cloze in dbCard.Clozes select cloze.Label;
                     var newClozes = clozes;

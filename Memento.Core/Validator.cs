@@ -7,16 +7,23 @@ using System.Threading.Tasks;
 
 namespace Memento.Core
 {
-    public static class Validator
+    public class Validator : IValidator
     {
-        public static bool ValidateFull(string field, string clozeName)
+        private readonly IConverter converter;
+
+        public Validator(IConverter converter)
+        {
+            this.converter = converter;
+        }
+
+        public bool ValidateFull(string field, string clozeName)
         {
             return ValidateBase(field, clozeName) && ValidateLength(field, clozeName);
         }
 
-        public static bool ValidateBase(string field, string clozeName)
+        public bool ValidateBase(string field, string clozeName)
         {
-            var currentPattern = Converter.GetCurrentClozePattern(clozeName);
+            var currentPattern = converter.GetCurrentClozePattern(clozeName);
 
             var firstValue = Regex.Match(field, currentPattern).Groups[2].Value;
 
@@ -27,9 +34,9 @@ namespace Memento.Core
             return result;
         }
 
-        public static bool ValidateLength(string field, string clozeName, int maxLength = 3)
+        public bool ValidateLength(string field, string clozeName, int maxLength = 3)
         {
-            var value = Converter.GetAnswerValue(field, clozeName);
+            var value = converter.GetAnswerValue(field, clozeName);
 
             var words = Regex.Split(value, @"\W");
 
