@@ -61,6 +61,9 @@
     <Compile Include="Evaluators\WordsEvaluator.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="IConverter.cs" />
+    <Compile Include="INewCardsManager.cs" />
+    <Compile Include="IScheduler.cs" />
+    <Compile Include="ISiblingsManager.cs" />
     <Compile Include="IValidator.cs" />
     <Compile Include="NewCardsManager.cs" />
     <Compile Include="Settings.Designer.cs">

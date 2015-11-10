@@ -7,9 +7,16 @@ using System.Threading.Tasks;
 
 namespace Memento.Core
 {
-    public static class SiblingsManager
+    public class SiblingsManager : ISiblingsManager
     {
-        public static void RearrangeSiblings(IDeck deck, IEnumerable<ICard> cards)
+        private readonly IScheduler scheduler;
+
+        public SiblingsManager(IScheduler scheduler)
+        {
+            this.scheduler = scheduler;
+        }
+
+        public void RearrangeSiblings(IDeck deck, IEnumerable<ICard> cards)
         {
             var cardsToMove = GetCardsToMove(deck, cards);
 
@@ -38,11 +45,11 @@ namespace Memento.Core
             }
         }
 
-        private static void MoveCards(IDeck deck, IEnumerable<ICard> allCards, IEnumerable<ICard> cardsToMove)
+        private void MoveCards(IDeck deck, IEnumerable<ICard> allCards, IEnumerable<ICard> cardsToMove)
         {
             foreach (var card in cardsToMove)
             {
-                Scheduler.MoveCard(allCards, card.Position, card.Position + deck.StartDelay, card.LastDelay + deck.StartDelay, true, false);
+                scheduler.MoveCard(allCards, card.Position, card.Position + deck.StartDelay, card.LastDelay + deck.StartDelay, true, false);
             }
         }
     }

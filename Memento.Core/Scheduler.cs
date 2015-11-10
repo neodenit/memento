@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Memento.Core
 {
-    public static class Scheduler
+    public class Scheduler : IScheduler
     {
         public enum Delays
         {
@@ -18,7 +18,7 @@ namespace Memento.Core
             Initial,
         }
 
-        public static void PromoteCard(IDeck deck, IEnumerable<ICard> cards, Delays delay)
+        public void PromoteCard(IDeck deck, IEnumerable<ICard> cards, Delays delay)
         {
             var card = GetFirstCard(cards);
 
@@ -37,14 +37,14 @@ namespace Memento.Core
             card.IsNew = false;
         }
 
-        public static void AddCard(IDeck deck, ICollection<ICard> cards, ICard card)
+        public void AddCard(IDeck deck, ICollection<ICard> cards, ICard card)
         {
             PrepareForAdding(deck, cards, card);
 
             cards.Add(card);
         }
 
-        public static void PrepareForAdding(IDeck deck, IEnumerable<ICard> cards, ICard card)
+        public void PrepareForAdding(IDeck deck, IEnumerable<ICard> cards, ICard card)
         {
             var maxNewPosition = GetMaxNewPosition(cards);
 
@@ -55,7 +55,7 @@ namespace Memento.Core
             card.IsNew = true;
         }
 
-        public static void PrepareForRemoving(IDeck deck, IEnumerable<ICard> cards, ICard card)
+        public void PrepareForRemoving(IDeck deck, IEnumerable<ICard> cards, ICard card)
         {
             var position = card.Position;
 
@@ -66,14 +66,14 @@ namespace Memento.Core
             DecreaseDelays(movedCards);
         }
 
-        public static void ShuffleNewCards(IEnumerable<ICard> cards)
+        public void ShuffleNewCards(IEnumerable<ICard> cards)
         {
             var newCards = from item in cards where item.IsNew select item;
 
             ShuffleCards(newCards);
         }
 
-        public static void MoveCard(IEnumerable<ICard> cards, int oldPosition, int newPosition, int newDelay, bool correctMovedCardsDelays, bool correctRestCardsDelays)
+        public void MoveCard(IEnumerable<ICard> cards, int oldPosition, int newPosition, int newDelay, bool correctMovedCardsDelays, bool correctRestCardsDelays)
         {
             var movedCard = cards.Single(item => item.Position == oldPosition);
 

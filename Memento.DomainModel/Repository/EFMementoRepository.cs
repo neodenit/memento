@@ -11,6 +11,16 @@ namespace Memento.DomainModel.Repository
     public class EFMementoRepository : IMementoRepository
     {
         private MementoContext db = new MementoContext();
+        private readonly IScheduler scheduler;
+        private readonly ISiblingsManager siblingsManager;
+        private readonly INewCardsManager newCardsManager;
+
+        public EFMementoRepository(IScheduler scheduler, ISiblingsManager siblingsManager, INewCardsManager newCardsManager)
+        {
+            this.scheduler = scheduler;
+            this.siblingsManager = siblingsManager;
+            this.newCardsManager = newCardsManager;
+        }
 
         public IQueryable<Deck> GetUserDecks(string userName)
         {
@@ -46,7 +56,7 @@ namespace Memento.DomainModel.Repository
         {
             db.Clozes.Add(cloze);
         }
-                
+
         public void RemoveDeck(Deck deck)
         {
             db.Decks.Remove(deck);
@@ -68,7 +78,7 @@ namespace Memento.DomainModel.Repository
             {
                 var cloze = new Cloze(card.ID, clozeName);
 
-                Scheduler.PrepareForAdding(card.Deck, card.Clozes, cloze);
+                scheduler.PrepareForAdding(card.Deck, card.Clozes, cloze);
 
                 AddCloze(cloze);
             }
@@ -80,7 +90,7 @@ namespace Memento.DomainModel.Repository
             {
                 var cloze = card.Clozes.Single(item => item.Label == clozeName);
 
-                Scheduler.PrepareForRemoving(card.Deck, card.Clozes, cloze);
+                scheduler.PrepareForRemoving(card.Deck, card.Clozes, cloze);
 
                 card.Clozes.Remove(cloze);
             }
@@ -111,17 +121,17 @@ namespace Memento.DomainModel.Repository
 
             if (Settings.Default.EnableSiblingsHandling)
             {
-                SiblingsManager.RearrangeSiblings(deck, clozes);
+                siblingsManager.RearrangeSiblings(deck, clozes);
             }
 
             if (Settings.Default.EnableNewCardsHandling)
             {
-                NewCardsManager.RearrangeNewCards(deck, clozes);
+                newCardsManager.RearrangeNewCards(deck, clozes);
             }
 
-            Scheduler.PromoteCard(deck, clozes, delay);
+            scheduler.PromoteCard(deck, clozes, delay);
         }
-        
+
         public Task SaveChangesAsync()
         {
             return db.SaveChangesAsync();

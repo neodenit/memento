@@ -12,6 +12,13 @@ namespace Memento.Tests
     [TestClass]
     public class SchedulerTest
     {
+        private readonly IScheduler scheduler;
+
+        public SchedulerTest(IScheduler scheduler)
+        {
+            this.scheduler = scheduler;
+        }
+
         [TestMethod]
         public void TestAddNewCardToEmptyDeck()
         {
@@ -20,7 +27,7 @@ namespace Memento.Tests
             var cards = Enumerable.Empty<Cloze>().ToList();
             var card = new Cloze();
 
-            Scheduler.PrepareForAdding(deck, cards, card);
+            scheduler.PrepareForAdding(deck, cards, card);
 
             Assert.IsTrue(card.IsNew);
             Assert.AreEqual(0, card.Position);
@@ -37,7 +44,7 @@ namespace Memento.Tests
             var cards = (from i in Enumerable.Range(0, n) select new Cloze { Position = i }).ToList();
             var card = new Cloze();
 
-            Scheduler.PrepareForAdding(deck, cards, card);
+            scheduler.PrepareForAdding(deck, cards, card);
 
             Assert.IsTrue(card.IsNew);
             Assert.AreEqual(n, card.Position);
@@ -55,7 +62,7 @@ namespace Memento.Tests
             var card = cards.Single(item => item.Position == oldPosition);
             var cardID = card.ID;
 
-            Scheduler.MoveCard(cards, oldPosition, newPosition, card.LastDelay, true, true);
+            scheduler.MoveCard(cards, oldPosition, newPosition, card.LastDelay, true, true);
 
             var cardOnNewPosition = cards.Single(item => item.Position == newPosition);
             Assert.AreEqual(cardID, cardOnNewPosition.ID);
@@ -73,7 +80,7 @@ namespace Memento.Tests
             var card = cards.Single(item => item.Position == oldPosition);
             var cardID = card.ID;
 
-            Scheduler.MoveCard(cards, oldPosition, newPosition, card.LastDelay, true, true);
+            scheduler.MoveCard(cards, oldPosition, newPosition, card.LastDelay, true, true);
 
             var cardOnNewPosition = cards.Single(item => item.Position == newPosition);
             Assert.AreEqual(cardID, cardOnNewPosition.ID);

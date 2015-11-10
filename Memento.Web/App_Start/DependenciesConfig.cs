@@ -22,7 +22,10 @@ namespace Memento
             builder.RegisterType<PhraseEvaluator>().As<IEvaluator>().WithParameter("permissibleError", 0.2);
             builder.RegisterType<Converter>().As<IConverter>();
             builder.RegisterType<Validator>().As<IValidator>();
-
+            builder.RegisterType<Scheduler>().As<IScheduler>();
+            builder.RegisterType<NewCardsManager>().As<INewCardsManager>();
+            builder.RegisterType<SiblingsManager>().As<ISiblingsManager>();
+            
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
         }

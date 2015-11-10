@@ -25,13 +25,15 @@ namespace Memento.Web.Controllers
         private readonly IEvaluator evaluator;
         private readonly IConverter converter;
         private readonly IValidator validator;
+        private readonly IScheduler scheduler;
 
-        public CardsController(IMementoRepository repository, IEvaluator evaluator, IConverter converter, IValidator validator)
+        public CardsController(IMementoRepository repository, IEvaluator evaluator, IConverter converter, IValidator validator, IScheduler scheduler)
         {
             this.repository = repository;
             this.evaluator = evaluator;
             this.converter = converter;
             this.validator = validator;
+            this.scheduler = scheduler;
         }
 
         // GET: Cards
@@ -525,7 +527,7 @@ namespace Memento.Web.Controllers
 
             var clozes = deck.GetClozes();
 
-            Scheduler.ShuffleNewCards(clozes);
+            scheduler.ShuffleNewCards(clozes);
 
             await repository.SaveChangesAsync();
 

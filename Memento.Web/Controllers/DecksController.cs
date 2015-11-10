@@ -26,12 +26,14 @@ namespace Memento.Web.Controllers
         private readonly IMementoRepository repository;
         private readonly IConverter converter;
         private readonly IValidator validator;
+        private readonly IScheduler scheduler;
 
-        public DecksController(IMementoRepository repository, IConverter converter, IValidator validator)
+        public DecksController(IMementoRepository repository, IConverter converter, IValidator validator, IScheduler scheduler)
         {
             this.repository = repository;
             this.converter = converter;
             this.validator = validator;
+            this.scheduler = scheduler;
         }
 
         // GET: Decks
@@ -319,7 +321,7 @@ namespace Memento.Web.Controllers
 
                             var deckClozes = deck.GetClozes();
 
-                            Scheduler.PrepareForAdding(deck, deckClozes, newCloze);
+                            scheduler.PrepareForAdding(deck, deckClozes, newCloze);
 
                             repository.AddCloze(newCloze);
                         }

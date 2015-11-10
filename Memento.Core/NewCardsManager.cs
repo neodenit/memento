@@ -7,9 +7,16 @@ using System.Threading.Tasks;
 
 namespace Memento.Core
 {
-    public static class NewCardsManager
+    public class NewCardsManager : INewCardsManager
     {
-        public static void RearrangeNewCards(IDeck deck, IEnumerable<ICard> cards)
+        private readonly IScheduler scheduler;
+
+        public NewCardsManager(IScheduler scheduler)
+        {
+            this.scheduler = scheduler;
+        }
+
+        public void RearrangeNewCards(IDeck deck, IEnumerable<ICard> cards)
         {
             var activeCards = cards.Take(deck.StartDelay);
 
@@ -17,7 +24,7 @@ namespace Memento.Core
             {
                 var newCard = cards.Where(card => card.IsNew).GetMinElement(card => card.Position);
 
-                Scheduler.MoveCard(cards, newCard.Position, deck.StartDelay, newCard.LastDelay, true, false);
+                scheduler.MoveCard(cards, newCard.Position, deck.StartDelay, newCard.LastDelay, true, false);
             }
 
             Debug.Assert(Helpers.CheckPositions(cards));
