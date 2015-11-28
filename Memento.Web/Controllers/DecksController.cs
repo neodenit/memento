@@ -1,19 +1,20 @@
-﻿using System;
+﻿using Ionic.Zip;
+using Memento.Core;
+using Memento.Core.Validators;
+using Memento.DomainModel.Models;
+using Memento.DomainModel.Repository;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mime;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Ionic.Zip;
-using Memento.Core;
-using Memento.DomainModel.Repository;
-using System.Text;
-using System.Net.Mime;
-using Memento.DomainModel.Models;
 
 namespace Memento.Web.Controllers
 {
@@ -289,7 +290,7 @@ namespace Memento.Web.Controllers
 
                     var updatedText = converter.ReplaceTextWithWildcards(cardText, clozeNames);
 
-                    var isValid = clozeNames.Any() && clozeNames.All(clozeName => validator.ValidateBase(cardText, clozeName));
+                    var isValid = clozeNames.Any() && clozeNames.All(clozeName => validator.Validate(cardText, clozeName));
 
                     if (!isValid)
                     {

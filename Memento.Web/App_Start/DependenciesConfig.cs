@@ -8,6 +8,7 @@ using Autofac.Integration.Mvc;
 using Memento.DomainModel.Repository;
 using Memento.Core.Evaluators;
 using Memento.Core;
+using Memento.Core.Validators;
 
 namespace Memento
 {
@@ -21,7 +22,7 @@ namespace Memento
             builder.RegisterType<EFMementoRepository>().As<IMementoRepository>();
             builder.RegisterType<PhraseEvaluator>().As<IEvaluator>().WithParameter("permissibleError", 0.2);
             builder.RegisterType<Converter>().As<IConverter>();
-            builder.RegisterType<Validator>().As<IValidator>();
+            builder.RegisterType<CombinedValidator>().As<IValidator>();
             builder.RegisterType<Scheduler>().As<IScheduler>();
             builder.RegisterType<NewCardsManager>().As<INewCardsManager>();
             builder.RegisterType<SiblingsManager>().As<ISiblingsManager>();

@@ -1,5 +1,11 @@
-﻿using System;
+﻿using Memento.Core;
+using Memento.Core.Evaluators;
+using Memento.Core.Validators;
+using Memento.DomainModel.Models;
+using Memento.DomainModel.Repository;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
@@ -7,11 +13,6 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Memento.Core;
-using Memento.DomainModel.Repository;
-using Memento.Core.Evaluators;
-using Memento.DomainModel.Models;
-using System.Collections.ObjectModel;
 
 namespace Memento.Web.Controllers
 {
@@ -407,7 +408,7 @@ namespace Memento.Web.Controllers
 
                 var clozeNames = converter.GetClozeNames(text);
 
-                if (!clozeNames.Any() || !clozeNames.All(clozeName => validator.ValidateBase(text, clozeName)))
+                if (!clozeNames.Any() || !clozeNames.All(clozeName => validator.Validate(text, clozeName)))
                 {
                     return View(card);
                 }
