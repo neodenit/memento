@@ -67,5 +67,17 @@ namespace Memento.Core {
                 return ((bool)(this["EnableSiblingsHandling"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int DefaultValidLength {
+            get {
+                return ((int)(this["DefaultValidLength"]));
+            }
+            set {
+                this["DefaultValidLength"] = value;
+            }
+        }
     }
 }

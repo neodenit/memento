@@ -16,9 +16,9 @@ namespace Memento.Core
             this.converter = converter;
         }
 
-        public bool ValidateFull(string field, string clozeName)
+        public bool ValidateFull(string field, string clozeName, int? maxLength = null)
         {
-            return ValidateBase(field, clozeName) && ValidateLength(field, clozeName);
+            return ValidateBase(field, clozeName) && ValidateLength(field, clozeName, maxLength);
         }
 
         public bool ValidateBase(string field, string clozeName)
@@ -34,15 +34,17 @@ namespace Memento.Core
             return result;
         }
 
-        public bool ValidateLength(string field, string clozeName, int maxLength = 3)
+        public bool ValidateLength(string field, string clozeName, int? maxLength = null)
         {
+            var maxValidLength = maxLength ?? Settings.Default.DefaultValidLength;
+
             var value = converter.GetAnswerValue(field, clozeName);
 
             var words = Regex.Split(value, @"\W");
 
             var wordsNumber = words.Length;
 
-            var result = wordsNumber <= maxLength;
+            var result = wordsNumber <= maxValidLength;
 
             return result;
         }

@@ -3,7 +3,7 @@
     public interface IValidator
     {
         bool ValidateBase(string field, string clozeName);
-        bool ValidateFull(string field, string clozeName);
-        bool ValidateLength(string field, string clozeName, int maxLength = 3);
+        bool ValidateFull(string field, string clozeName, int? maxLength = null);
+        bool ValidateLength(string field, string clozeName, int? maxLength = null);
     }
 }
