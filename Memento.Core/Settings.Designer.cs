@@ -68,15 +68,12 @@ namespace Memento.Core {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
         public int DefaultValidLength {
             get {
                 return ((int)(this["DefaultValidLength"]));
-            }
-            set {
-                this["DefaultValidLength"] = value;
             }
         }
     }

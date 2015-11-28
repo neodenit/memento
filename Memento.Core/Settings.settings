@@ -17,7 +17,7 @@
     <Setting Name="EnableSiblingsHandling" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="DefaultValidLength" Type="System.Int32" Scope="User">
+    <Setting Name="DefaultValidLength" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">3</Value>
     </Setting>
   </Settings>
