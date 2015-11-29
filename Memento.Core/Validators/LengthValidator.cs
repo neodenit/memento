@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Memento.Core.Validators
 {
-    public class LengthValidator : IValidator
+    public class LengthValidator : BaseValidator
     {
-        private readonly IConverter converter;
+        protected readonly IConverter converter;
 
-        public LengthValidator(IConverter converter)
+        public LengthValidator(IConverter converter, IValidator baseValidator = null) : base(baseValidator)
         {
             this.converter = converter;
         }
 
-        public bool Validate(string field, string clozeName)
+        protected override bool ValidateThis(string field, string clozeName)
         {
             var maxValidLength = Settings.Default.DefaultValidLength;
 

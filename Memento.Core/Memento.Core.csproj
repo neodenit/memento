@@ -64,6 +64,7 @@
     <Compile Include="INewCardsManager.cs" />
     <Compile Include="IScheduler.cs" />
     <Compile Include="ISiblingsManager.cs" />
+    <Compile Include="Validators\BaseValidator.cs" />
     <Compile Include="Validators\IValidator.cs" />
     <Compile Include="NewCardsManager.cs" />
     <Compile Include="Settings.Designer.cs">

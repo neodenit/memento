@@ -2,16 +2,19 @@
 {
     public class CombinedValidator : IValidator
     {
-        private readonly IConverter converter;
+        private readonly IValidator validator;
 
         public CombinedValidator(IConverter converter)
         {
-            this.converter = converter;
+            var existenceValidator = new ExistenceValidator(converter);
+            var existenceAndLengthValidator = new LengthValidator(converter, existenceValidator);
+
+            validator = existenceAndLengthValidator;
         }
 
         public bool Validate(string field, string clozeName)
         {
-            return new ExistenceValidator(converter).Validate(field, clozeName) && new LengthValidator(converter).Validate(field, clozeName);
+            return validator.Validate(field, clozeName);
         }
     }
 }

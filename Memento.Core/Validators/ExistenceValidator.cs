@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Memento.Core.Validators
 {
-    public class ExistenceValidator : IValidator
+    public class ExistenceValidator : BaseValidator
     {
-        private readonly IConverter converter;
+        protected readonly IConverter converter;
 
-        public ExistenceValidator(IConverter converter)
+        public ExistenceValidator(IConverter converter, IValidator baseValidator = null) : base(baseValidator)
         {
             this.converter = converter;
         }
 
-        public bool Validate(string field, string clozeName)
+        protected override bool ValidateThis(string field, string clozeName)
         {
             var currentPattern = converter.GetCurrentClozePattern(clozeName);
 
