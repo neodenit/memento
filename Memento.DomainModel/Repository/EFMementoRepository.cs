@@ -27,6 +27,21 @@ namespace Memento.DomainModel.Repository
             return db.Decks.Where(item => item.Owner == userName);
         }
 
+        public Deck FindDeck(int? id)
+        {
+            return db.Decks.Find(id);
+        }
+
+        public Card FindCard(int? id)
+        {
+            return db.Cards.Find(id);
+        }
+
+        public Cloze FindCloze(int? id)
+        {
+            return db.Clozes.Find(id);
+        }
+
         public Task<Deck> FindDeckAsync(int? id)
         {
             return db.Decks.FindAsync(id);

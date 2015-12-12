@@ -13,6 +13,9 @@ namespace Memento.DomainModel.Repository
     {
         IQueryable<Deck> GetUserDecks(string userName);
         IQueryable<Answer> GetAnswersForDeck(int deckID);
+        Deck FindDeck(int? id);
+        Card FindCard(int? id);
+        Cloze FindCloze(int? id);
         Task<Deck> FindDeckAsync(int? id);
         Task<Card> FindCardAsync(int? id);
         Task<Cloze> FindClozeAsync(int? id);

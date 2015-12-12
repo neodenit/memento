@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Principal;
 using Memento.Core;
+using Memento.DomainModel.Attributes;
 
 namespace Memento.DomainModel.Models
 {
@@ -22,6 +23,7 @@ namespace Memento.DomainModel.Models
 
     public class Deck : IDeck
     {
+        [CheckDeckOwner]
         public int ID { get; set; }
 
         [Required]
@@ -81,6 +83,7 @@ namespace Memento.DomainModel.Models
 
     public class Card
     {
+        [CheckCardOwner]
         public int ID { get; set; }
 
         public int DeckID { get; set; }
