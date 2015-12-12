@@ -79,6 +79,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\CheckCardExistenceAttribute.cs" />
+    <Compile Include="Attributes\CheckDeckExistenceAttribute.cs" />
     <Compile Include="Attributes\CheckDeckOwnerAttribute.cs" />
     <Compile Include="Attributes\CheckCardOwnerAttribute.cs" />
     <Compile Include="Migrations\201511011032471_Initial.cs" />

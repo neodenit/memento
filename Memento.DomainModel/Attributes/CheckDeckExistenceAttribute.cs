@@ -11,17 +11,17 @@ using System.Web.Mvc;
 
 namespace Memento.DomainModel.Attributes
 {
-    public class CheckCardOwnerAttribute : ValidationAttribute
+    public class CheckDeckExistenceAttribute : ValidationAttribute
     {
         private IMementoRepository repository = DependencyResolver.Current.GetService<IMementoRepository>();
 
         public override bool IsValid(object value)
         {
-            var cardID = (int)value;
+            var deckID = (int)value;
 
-            var card = repository.FindCard(cardID);
+            var deck = repository.FindDeck(deckID);
 
-            return card == null || card.Deck.Owner == HttpContext.Current.User.Identity.Name;
+            return deck != null;
         }
     }
 }

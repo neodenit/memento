@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace Memento.DomainModel.Attributes
 {
-    public class CheckCardOwnerAttribute : ValidationAttribute
+    public class CheckCardExistenceAttribute : ValidationAttribute
     {
         private IMementoRepository repository = DependencyResolver.Current.GetService<IMementoRepository>();
 
@@ -21,7 +21,7 @@ namespace Memento.DomainModel.Attributes
 
             var card = repository.FindCard(cardID);
 
-            return card == null || card.Deck.Owner == HttpContext.Current.User.Identity.Name;
+            return card != null;
         }
     }
 }
