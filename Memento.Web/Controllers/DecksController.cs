@@ -1,6 +1,7 @@
 ﻿using Ionic.Zip;
 using Memento.Core;
 using Memento.Core.Validators;
+using Memento.DomainModel.Attributes;
 using Memento.DomainModel.Models;
 using Memento.DomainModel.Repository;
 using System;
@@ -41,76 +42,49 @@ namespace Memento.Web.Controllers
         public async Task<ActionResult> Index()
         {
             var decks = repository.GetUserDecks(User.Identity.Name);
-
             var orderedDecks = decks.OrderBy(deck => deck.Title);
 
             return View(await orderedDecks.ToListAsync());
         }
 
         // GET: Decks/Details/5
-        public async Task<ActionResult> Details(int? id)
+        public async Task<ActionResult> Details([CheckDeckExistence, CheckDeckOwner] int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
             var deck = await repository.FindDeckAsync(id);
+            var startTime = DateTime.Now.AddDays(-10);
+            var answers = repository
+                .GetAnswersForDeck(deck.ID)
+                .Where(answer => answer.Time >= startTime)
+                .ToList();
 
-            if (deck == null)
-            {
-                return HttpNotFound();
-            }
-            else if (!deck.IsAuthorized(User))
-            {
-                return new HttpUnauthorizedResult();
-            }
-            else
-            {
-                var startTime = DateTime.Now.AddDays(-10);
+            var groupedAnswers = from answer in answers group answer by answer.Time.Date;
 
-                var answers = repository
-                    .GetAnswersForDeck(deck.ID)
-                    .Where(answer => answer.Time >= startTime)
-                    .ToList();
+            var answerLabels = from item in groupedAnswers select item.Key.ToShortDateString();
+            var answerValues = from item in groupedAnswers select item.Count();
 
-                var groupedAnswers = from answer in answers group answer by answer.Time.Date;
+            var groupedCorrectAnswers = from answer in answers where answer.IsCorrect group answer by answer.Time.Date;
 
-                var answerLabels = from item in groupedAnswers select item.Key.ToShortDateString();
-                var answerValues = from item in groupedAnswers select item.Count();
+            var correctAnswerLabels = from item in groupedCorrectAnswers select item.Key.ToShortDateString();
+            var correctAnswerValues = from item in groupedCorrectAnswers select item.Count();
 
-                var groupedCorrectAnswers = from answer in answers where answer.IsCorrect group answer by answer.Time.Date;
+            var cardsLabels = answerLabels;
+            var cardsValues = from item in groupedAnswers select item.GetMaxElement(x => x.Time).CardsInRepetition;
 
-                var correctAnswerLabels = from item in groupedCorrectAnswers select item.Key.ToShortDateString();
-                var correctAnswerValues = from item in groupedCorrectAnswers select item.Count();
+            ViewBag.Answers = new { labels = answerLabels, values = answerValues };
+            ViewBag.CorrectAnswers = new { labels = correctAnswerLabels, values = correctAnswerValues };
+            ViewBag.Cards = new { labels = cardsLabels, values = cardsValues };
 
-                var cardsLabels = answerLabels;
-                var cardsValues = from item in groupedAnswers select item.GetMaxElement(x => x.Time).CardsInRepetition;
-
-                ViewBag.Answers = new { labels = answerLabels, values = answerValues };
-                ViewBag.CorrectAnswers = new { labels = correctAnswerLabels, values = correctAnswerValues };
-                ViewBag.Cards = new { labels = cardsLabels, values = cardsValues };
-
-                return View(deck);
-            }
+            return View(deck);
         }
 
         // POST: Decks/Details
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Details([Bind(Include = "ID")]Deck deck)
+        public async Task<ActionResult> Details([Bind(Include = "ID")] Deck deck)
         {
             var dbDeck = await repository.FindDeckAsync(deck.ID);
 
-            if (dbDeck == null)
-            {
-                return HttpNotFound();
-            }
-            else if (!dbDeck.IsAuthorized(User))
-            {
-                return new HttpUnauthorizedResult();
-            }
-            else if (dbDeck.GetValidCards().Any())
+            if (dbDeck.GetValidCards().Any())
             {
                 var card = dbDeck.GetNextCard();
 
@@ -133,7 +107,7 @@ namespace Memento.Web.Controllers
         // POST: Decks/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Title,ControlMode,DelayMode,StartDelay,Coeff")] Deck deck)
+        public async Task<ActionResult> Create([Bind(Include = "Title, ControlMode, DelayMode, StartDelay, Coeff")] Deck deck)
         {
             if (deck.ControlMode == ControlModes.Automatic && deck.DelayMode == DelayModes.Combined)
             {
@@ -157,46 +131,21 @@ namespace Memento.Web.Controllers
         }
 
         // GET: Decks/Edit/5
-        public async Task<ActionResult> Edit(int? id)
+        public async Task<ActionResult> Edit([CheckDeckExistence, CheckDeckOwner] int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
             var deck = await repository.FindDeckAsync(id);
 
-            if (deck == null)
-            {
-                return HttpNotFound();
-            }
-            else if (!deck.IsAuthorized(User))
-            {
-                return new HttpUnauthorizedResult();
-            }
-            else
-            {
-                return View(deck);
-            }
+            return View(deck);
         }
 
         // POST: Decks/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,Title,StartDelay,Coeff")] Deck deck)
+        public async Task<ActionResult> Edit([Bind(Include = "ID, Title, StartDelay, Coeff")] Deck deck)
         {
             if (ModelState.IsValid)
             {
                 var dbDeck = await repository.FindDeckAsync(deck.ID);
-
-                if (deck == null)
-                {
-                    return HttpNotFound();
-                }
-                else if (!dbDeck.IsAuthorized(User))
-                {
-                    return new HttpUnauthorizedResult();
-                }
 
                 dbDeck.Title = deck.Title;
                 dbDeck.StartDelay = deck.StartDelay;
@@ -212,41 +161,20 @@ namespace Memento.Web.Controllers
             }
         }
 
-        public async Task<ActionResult> Delete(int? id)
+        public async Task<ActionResult> Delete([CheckDeckExistence, CheckDeckOwner] int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
             var deck = await repository.FindDeckAsync(id);
 
-            if (deck == null)
-            {
-                return HttpNotFound();
-            }
-            else if (!deck.IsAuthorized(User))
-            {
-                return new HttpUnauthorizedResult();
-            }
-            else
-            {
-                return View(deck);
-            }
+            return View(deck);
         }
 
         // POST: Decks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed([CheckDeckExistence, CheckDeckOwner] int id)
         {
             var deck = await repository.FindDeckAsync(id);
-
-            if (!deck.IsAuthorized(User))
-            {
-                return new HttpUnauthorizedResult();
-            }
-
+            
             repository.RemoveDeck(deck);
 
             await repository.SaveChangesAsync();
@@ -254,7 +182,7 @@ namespace Memento.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Import(int deckID)
+        public ActionResult Import([CheckDeckExistence, CheckDeckOwner] int deckID)
         {
             var deckWithID = new Deck { ID = deckID };
 
@@ -266,30 +194,17 @@ namespace Memento.Web.Controllers
         public async Task<ActionResult> Import(Deck deckWithID, HttpPostedFileBase file)
         {
             var deck = await repository.FindDeckAsync(deckWithID.ID);
-
-            if (deck == null)
-            {
-                return HttpNotFound();
-            }
-            else if (!deck.IsAuthorized(User))
-            {
-                return new HttpUnauthorizedResult();
-            }
-
+            
             if (file != null && file.ContentLength > 0)
             {
                 var text = await new StreamReader(file.InputStream).ReadToEndAsync();
-
                 var cards = converter.GetCardsFromDeck(text, true);
 
                 foreach (var card in cards)
                 {
                     var cardText = HttpUtility.HtmlDecode(card);
-
                     var clozeNames = converter.GetClozeNames(cardText);
-
                     var updatedText = converter.ReplaceTextWithWildcards(cardText, clozeNames);
-
                     var isValid = clozeNames.Any() && clozeNames.All(clozeName => validator.Validate(cardText, clozeName));
 
                     if (!isValid)
@@ -319,7 +234,6 @@ namespace Memento.Web.Controllers
                         foreach (var clozeName in clozeNames)
                         {
                             var newCloze = new Cloze(newCard.ID, clozeName);
-
                             var deckClozes = deck.GetClozes();
 
                             scheduler.PrepareForAdding(deck, deckClozes, newCloze);
@@ -335,23 +249,11 @@ namespace Memento.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<ActionResult> Export(int deckID)
+        public async Task<ActionResult> Export([CheckDeckExistence, CheckDeckOwner] int deckID)
         {
-            var deck = await repository.FindDeckAsync(deckID);
-
-            if (deck == null)
-            {
-                return HttpNotFound();
-            }
-            else if (!deck.IsAuthorized(User))
-            {
-                return new HttpUnauthorizedResult();
-            }
-
+            var deck = await repository.FindDeckAsync(deckID);            
             var cards = deck.GetAllCards();
-
             var cardsForExport = from card in cards select converter.FormatForExport(card.Text);
-
             var fileContentText = string.Join(Environment.NewLine, cardsForExport);
 
             return File(Encoding.UTF8.GetBytes(fileContentText), MediaTypeNames.Text.Plain, "Export.txt");
