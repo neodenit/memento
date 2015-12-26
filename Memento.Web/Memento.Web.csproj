@@ -306,6 +306,8 @@
     <Content Include="Views\Cards\PreviewClosed.cshtml" />
     <Content Include="Views\Cards\PreviewOpened.cshtml" />
     <Content Include="Views\Cards\CardsIndex.cshtml" />
+    <Content Include="Views\Cards\DeletedIndex.cshtml" />
+    <Content Include="Views\Cards\Restore.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

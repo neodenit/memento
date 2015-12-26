@@ -70,7 +70,12 @@ namespace Memento.DomainModel.Models
 
         public IEnumerable<Card> GetValidCards()
         {
-            return Cards.Where(card => card.IsValid);
+            return Cards.Where(card => card.IsValid && !card.IsDeleted);
+        }
+
+        public IEnumerable<Card> GetDeletedCards()
+        {
+            return Cards.Where(card => card.IsDeleted);
         }
 
         public bool IsAuthorized(IPrincipal user)

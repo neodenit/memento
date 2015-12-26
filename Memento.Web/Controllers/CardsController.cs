@@ -39,9 +39,9 @@ namespace Memento.Web.Controllers
         }
 
         // GET: Cards
-        public async Task<ActionResult> Index([CheckDeckExistence, CheckDeckOwner] int DeckID)
+        public async Task<ActionResult> Index([CheckDeckExistence, CheckDeckOwner] int deckID)
         {
-            var deck = await repository.FindDeckAsync(DeckID);
+            var deck = await repository.FindDeckAsync(deckID);
             var clozes = deck.GetClozes();
             var orderedClozes = clozes.OrderBy(cloze => cloze.Position);
             var clozeViews = from cloze in orderedClozes select new ClozeView(cloze);
@@ -49,17 +49,26 @@ namespace Memento.Web.Controllers
             return View(clozeViews);
         }
 
-        public async Task<ActionResult> CardsIndex([CheckDeckExistence, CheckDeckOwner] int DeckID)
+        public async Task<ActionResult> CardsIndex([CheckDeckExistence, CheckDeckOwner] int deckID)
         {
-            var deck = await repository.FindDeckAsync(DeckID);
+            var deck = await repository.FindDeckAsync(deckID);
             var cards = deck.GetValidCards();
 
             return View(cards);
         }
 
-        public ActionResult DetailsEmpty([CheckDeckExistence, CheckDeckOwner] int DeckID)
+        public async Task<ActionResult> DeletedIndex([CheckDeckExistence, CheckDeckOwner] int deckID)
         {
-            return View("Details", new Card { DeckID = DeckID, ID = -1 });
+            var deck = await repository.FindDeckAsync(deckID);
+            var cards = deck.GetDeletedCards();
+            var viewModel = from card in cards select new EditCardViewModel(card);
+
+            return View(viewModel);
+        }
+
+        public ActionResult DetailsEmpty([CheckDeckExistence, CheckDeckOwner] int deckID)
+        {
+            return View("Details", new Card { DeckID = deckID, ID = -1 });
         }
 
         public async Task<ActionResult> Details([CheckCardExistence, CheckCardOwner] int id)
@@ -360,6 +369,26 @@ namespace Memento.Web.Controllers
             return RedirectToAction("Index", new { deckID });
         }
 
+        public async Task<ActionResult> Restore([CheckCardExistence, CheckCardOwner] int id)
+        {
+            var card = await repository.FindCardAsync(id);
+
+            return View(card);
+        }
+
+        [HttpPost, ActionName("Restore")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RestoreConfirmed([CheckCardExistence, CheckCardOwner] int id)
+        {
+            var card = await repository.FindCardAsync(id);
+
+            card.IsDeleted = false;
+
+            await repository.SaveChangesAsync();
+
+            return RedirectToAction("DeletedIndex", "Cards", new { DeckID = card.DeckID });
+        }
+
         // GET: Cards/Delete/5
         public async Task<ActionResult> Delete([CheckCardExistence, CheckCardOwner] int id)
         {
@@ -374,12 +403,19 @@ namespace Memento.Web.Controllers
         public async Task<ActionResult> DeleteConfirmed([CheckCardExistence, CheckCardOwner] int id)
         {
             var card = await repository.FindCardAsync(id);
-            
-            repository.RemoveCard(card);
+
+            if (card.IsDeleted)
+            {
+                repository.RemoveCard(card);
+            }
+            else
+            {
+                card.IsDeleted = true;
+            }
 
             await repository.SaveChangesAsync();
 
-            return RedirectToAction("Details", "Deck", new { id = card.DeckID });
+            return RedirectToAction("Details", "Decks", new { id = card.DeckID });
         }
 
         private async Task<ActionResult> PromoteAndRedirect(Deck deck, Scheduler.Delays delay)
