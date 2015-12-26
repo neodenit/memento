@@ -8,10 +8,6 @@ namespace Memento.Core.Evaluators
 {
     public class WordsEvaluator : BaseEvaluator
     {
-        public WordsEvaluator(double permissibleError) : base(permissibleError)
-        {
-        }
-
         public override Mark Evaluate(string correctAnswer, string answer)
         {
             var correctAnswerVariants = GetVariants(correctAnswer);

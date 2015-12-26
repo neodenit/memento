@@ -17,13 +17,6 @@ namespace Memento.Core.Evaluators
 
     public abstract class BaseEvaluator : IEvaluator
     {
-        protected double permissibleError;
-
-        public BaseEvaluator(double permissibleError)
-        {
-            this.permissibleError = permissibleError;
-        }
-
         public abstract Mark Evaluate(string correctAnswer, string answer);
 
         protected string Normalize(string answer)
@@ -40,9 +33,7 @@ namespace Memento.Core.Evaluators
 
         protected IEnumerable<string> GetWords(string correctAnswer)
         {
-            var words = from word in Regex.Split(correctAnswer, @"\W") select word.ToUpper();
-
-            return words;
+            return from word in Regex.Split(correctAnswer, @"\W") select word.ToUpper();
         }
 
         protected Mark Check(IEnumerable<string> correctWords, IEnumerable<string> answerWords)
@@ -84,6 +75,8 @@ namespace Memento.Core.Evaluators
             }
             else
             {
+                var permissibleError = Settings.Default.PermissibleError;
+
                 var distance = Levenshtein.CalculateDistance(correctAnswer, answer, 1);
 
                 var minDistance = correctAnswer.Length * permissibleError;

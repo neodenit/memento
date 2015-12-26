@@ -76,5 +76,14 @@ namespace Memento.Core {
                 return ((int)(this["DefaultValidLength"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.2")]
+        public double PermissibleError {
+            get {
+                return ((double)(this["PermissibleError"]));
+            }
+        }
     }
 }

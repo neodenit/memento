@@ -20,7 +20,7 @@ namespace Memento
 
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
             builder.RegisterType<EFMementoRepository>().As<IMementoRepository>();
-            builder.RegisterType<PhraseEvaluator>().As<IEvaluator>().WithParameter("permissibleError", 0.2);
+            builder.RegisterType<PhraseEvaluator>().As<IEvaluator>();
             builder.RegisterType<Converter>().As<IConverter>();
             builder.RegisterType<CombinedValidator>().As<IValidator>();
             builder.RegisterType<Scheduler>().As<IScheduler>();
