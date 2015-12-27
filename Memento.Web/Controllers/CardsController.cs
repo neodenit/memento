@@ -66,6 +66,15 @@ namespace Memento.Web.Controllers
             return View(viewModel);
         }
 
+        public async Task<ActionResult> DraftIndex([CheckDeckExistence, CheckDeckOwner] int deckID)
+        {
+            var deck = await repository.FindDeckAsync(deckID);
+            var cards = deck.GetDraftCards();
+            var viewModel = from card in cards select new EditCardViewModel(card);
+
+            return View(viewModel);
+        }
+
         public ActionResult DetailsEmpty([CheckDeckExistence, CheckDeckOwner] int deckID)
         {
             return View("Details", new Card { DeckID = deckID, ID = -1 });

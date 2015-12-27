@@ -73,6 +73,11 @@ namespace Memento.DomainModel.Models
             return Cards.Where(card => card.IsValid && !card.IsDeleted);
         }
 
+        public IEnumerable<Card> GetDraftCards()
+        {
+            return Cards.Where(card => !card.IsValid && !card.IsDeleted);
+        }
+
         public IEnumerable<Card> GetDeletedCards()
         {
             return Cards.Where(card => card.IsDeleted);

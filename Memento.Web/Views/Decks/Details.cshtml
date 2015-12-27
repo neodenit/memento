@@ -26,7 +26,8 @@
     @Html.ActionLink("Cards Index", "CardsIndex", "Cards", new { DeckID = Model.ID }, null) |
     @Html.ActionLink("Import", "Import", new { DeckID = Model.ID }) |
     @Html.ActionLink("Export", "Export", new { DeckID = Model.ID }) |
-    @Html.ActionLink("Deleted cards", "DeletedIndex", "Cards", new { DeckID = Model.ID }, null)
+    @Html.ActionLink("Deleted cards", "DeletedIndex", "Cards", new { DeckID = Model.ID }, null) |
+    @Html.ActionLink("Draft cards", "DraftIndex", "Cards", new { DeckID = Model.ID }, null)
 </div>
 
 <div class="col-md-offset-2 col-md-10">

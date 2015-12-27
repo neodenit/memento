@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Memento.DomainModel.Models.EditCardViewModel>
+
+@{
+    ViewBag.Title = "Draft cards";
+}
+
+<h2>Draft cards</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Text)
+        </th>
+        <th>
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Text)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { item.ID })
+        </td>
+    </tr>
+}
+
+</table>
