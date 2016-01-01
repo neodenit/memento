@@ -89,9 +89,17 @@ namespace Memento.Web.Controllers
             {
                 return RedirectToAction("PreviewClosed", new { id = card.ID });
             }
-            else
+            else if (card.Deck.ControlMode == ControlModes.Manual)
+            {
+                return RedirectToAction("RepeatClosed", new { id = card.ID });
+            }
+            else if (card.Deck.ControlMode == ControlModes.Automatic)
             {
                 return RedirectToAction("Question", new { id = card.ID });
+            }
+            else
+            {
+                throw new Exception();
             }
         }
 
@@ -133,6 +141,62 @@ namespace Memento.Web.Controllers
             var dbCard = await repository.FindCardAsync(card.ID);
 
             return await PromoteAndRedirect(dbCard.Deck, Scheduler.Delays.Same);
+        }
+
+        public async Task<ActionResult> RepeatClosed([CheckCardExistence, CheckCardOwner] int id)
+        {
+            var card = await repository.FindCardAsync(id);
+            var cloze = card.GetNextCloze();
+            var question = converter.GetQuestion(card.Text, cloze.Label);
+
+            card.Text = question;
+
+            return View(card);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RepeatClozed([Bind(Include = "ID")] Card card)
+        {
+            var dbCard = await repository.FindCardAsync(card.ID);
+
+            return RedirectToAction("RepeatOpened", new { id = dbCard.ID });
+        }
+
+        public async Task<ActionResult> RepeatOpened([CheckCardExistence, CheckCardOwner] int id)
+        {
+            var card = await repository.FindCardAsync(id);
+            var cloze = card.GetNextCloze();
+            var question = converter.GetAnswer(card.Text, cloze.Label);
+
+            card.Text = question;
+
+            return View(card);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RepeatOpened([Bind(Include = "ID")] Card card, string againButton, string badButton, string goodButton)
+        {
+            var dbCard = await repository.FindCardAsync(card.ID);
+
+            var cloze = dbCard.GetNextCloze();
+
+            var isCorrect = goodButton != null;
+
+            repository.AddAnswer(cloze, isCorrect);
+
+            await repository.SaveChangesAsync();
+
+            var delay = againButton != null ?
+                        Scheduler.Delays.Initial :
+                        badButton != null ?
+                        Scheduler.Delays.Previous :
+                        goodButton != null ?
+                        Scheduler.Delays.Next :
+                        Scheduler.Delays.Same;
+
+            return await PromoteAndRedirect(dbCard.Deck, delay);
         }
 
         public async Task<ActionResult> Question([CheckCardExistence, CheckCardOwner] int id)

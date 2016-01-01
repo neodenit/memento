@@ -1,0 +1,43 @@
+﻿@using Memento.DomainModel.Models
+
+@model Card
+
+@{
+    ViewBag.Title = "Repeat";
+}
+
+<h2>Repeat</h2>
+
+<div>
+    <h4>@Html.DisplayFor(model => model.Deck.Title)</h4>
+    <hr />
+
+    @using (Html.BeginForm("RepeatOpened", "Cards"))
+    {
+    @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(model => model.ID)
+
+        <div class="topactions">
+            @Html.ActionLink("Edit card", "Edit", new { id = Model.ID }) |
+            @Html.ActionLink("Delete card", "Delete", new { id = Model.ID })
+        </div>
+        <hr />
+        <div class="card-text">
+            @Html.Raw(Model.Text)
+        </div>
+        <hr />
+
+        if (Model.Deck.DelayMode == DelayModes.Sharp || Model.Deck.DelayMode == DelayModes.Combined)
+        {
+        <input type="submit" name="AgainButton" value="Again" class="btn btn-default" />
+        }
+
+        if (Model.Deck.DelayMode == DelayModes.Smooth || Model.Deck.DelayMode == DelayModes.Combined)
+        {
+        <input type="submit" name="BadButton" value="Bad" class="btn btn-default" />
+        }
+
+        <input type="submit" name="GoodButton" value="Good" class="btn btn-default" />
+    }
+</div>

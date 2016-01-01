@@ -309,6 +309,8 @@
     <Content Include="Views\Cards\DeletedIndex.cshtml" />
     <Content Include="Views\Cards\Restore.cshtml" />
     <Content Include="Views\Cards\DraftIndex.cshtml" />
+    <Content Include="Views\Cards\RepeatOpened.cshtml" />
+    <Content Include="Views\Cards\RepeatClosed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

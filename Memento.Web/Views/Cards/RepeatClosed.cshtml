@@ -1,0 +1,30 @@
+﻿@model Memento.DomainModel.Models.Card
+
+@{
+    ViewBag.Title = "Repeat";
+}
+
+<h2>Repeat</h2>
+
+<div>
+    <h4>@Html.DisplayFor(model => model.Deck.Title)</h4>
+    <hr />
+
+    @using (Html.BeginForm("RepeatClozed", "Cards"))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(model => model.ID)
+
+        <div class="topactions">
+            @Html.ActionLink("Edit card", "Edit", new { id = Model.ID }) |
+            @Html.ActionLink("Delete card", "Delete", new { id = Model.ID })
+        </div>
+        <hr />
+        <div class="card-text">
+            @Html.Raw(Model.Text)
+        </div>
+        <hr />
+        <input type="submit" value="Show" class="btn btn-default" />
+    }
+</div>
