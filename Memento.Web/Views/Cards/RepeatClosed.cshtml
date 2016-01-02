@@ -10,10 +10,8 @@
     <h4>@Html.DisplayFor(model => model.Deck.Title)</h4>
     <hr />
 
-    @using (Html.BeginForm("RepeatClozed", "Cards"))
+    @using (Html.BeginForm("RepeatOpened", "Cards", FormMethod.Get))
     {
-        @Html.AntiForgeryToken()
-
         @Html.HiddenFor(model => model.ID)
 
         <div class="topactions">

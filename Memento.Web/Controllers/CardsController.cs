@@ -114,15 +114,6 @@ namespace Memento.Web.Controllers
             return View(card);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> PreviewClozed([Bind(Include = "ID")] Card card)
-        {
-            var dbCard = await repository.FindCardAsync(card.ID);
-
-            return RedirectToAction("PreviewOpened", new { id = dbCard.ID });
-        }
-
         public async Task<ActionResult> PreviewOpened([CheckCardExistence, CheckCardOwner] int id)
         {
             var card = await repository.FindCardAsync(id);
@@ -152,15 +143,6 @@ namespace Memento.Web.Controllers
             card.Text = question;
 
             return View(card);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RepeatClozed([Bind(Include = "ID")] Card card)
-        {
-            var dbCard = await repository.FindCardAsync(card.ID);
-
-            return RedirectToAction("RepeatOpened", new { id = dbCard.ID });
         }
 
         public async Task<ActionResult> RepeatOpened([CheckCardExistence, CheckCardOwner] int id)
