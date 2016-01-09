@@ -91,11 +91,12 @@ namespace Memento.DomainModel.Repository
         {
             foreach (var clozeName in clozeNames)
             {
-                var cloze = new Cloze(card.ID, clozeName);
+                var newCloze = new Cloze(card.ID, clozeName);
+                var deckClozes = card.Deck.GetClozes();
 
-                scheduler.PrepareForAdding(card.Deck, card.Clozes, cloze);
+                scheduler.PrepareForAdding(card.Deck, deckClozes, newCloze);
 
-                AddCloze(cloze);
+                AddCloze(newCloze);
             }
         }
 

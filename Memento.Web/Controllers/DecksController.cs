@@ -231,15 +231,7 @@ namespace Memento.Web.Controllers
 
                         await repository.SaveChangesAsync();
 
-                        foreach (var clozeName in clozeNames)
-                        {
-                            var newCloze = new Cloze(newCard.ID, clozeName);
-                            var deckClozes = deck.GetClozes();
-
-                            scheduler.PrepareForAdding(deck, deckClozes, newCloze);
-
-                            repository.AddCloze(newCloze);
-                        }
+                        repository.AddClozes(newCard, clozeNames);
                     }
 
                     await repository.SaveChangesAsync();
