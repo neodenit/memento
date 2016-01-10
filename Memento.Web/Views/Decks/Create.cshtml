@@ -25,38 +25,48 @@
 
         <hr />
 
-        <div class="col-md-offset-2" id="ControlMode">
-            <div>
-                <div class="radio">
-                    <label>
-                        @Html.RadioButtonFor(model => model.ControlMode, "Automatic", new { id = "AutoMode" }) Automatic
-                    </label>
-                </div>
-                <div class="radio">
-                    <label>
-                        @Html.RadioButtonFor(model => model.ControlMode, "Manual", new { id = "ManualMode" }) Manual
-                    </label>
+        <div class="form-group">
+            <label class="control-label col-md-2" for="ControlMode">
+                Evaluation mode
+            </label>
+            <div class="col-md-10" id="ControlMode">
+                <div>
+                    <div class="radio">
+                        <label data-toggle="tooltip" data-placement="right" title="Your answers will be evaluated by the app.">
+                            @Html.RadioButtonFor(model => model.ControlMode, "Automatic", new { id = "AutoMode" }) Automatic
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label data-toggle="tooltip" data-placement="right" title="You will tell the app if you were right or wrong after seeing the correct answer.">
+                            @Html.RadioButtonFor(model => model.ControlMode, "Manual", new { id = "ManualMode" }) Manual
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
 
         <hr />
 
-        <div class="col-md-offset-2" id="DelayMode">
-            <div class="radio">
-                <label>
-                    @Html.RadioButtonFor(model => model.DelayMode, "Smooth", new { id = "SmoothMode" }) Smooth
-                </label>
-            </div>
-            <div class="radio">
-                <label>
-                    @Html.RadioButtonFor(model => model.DelayMode, "Sharp", new { id = "SharpMode" }) Sharp
-                </label>
-            </div>
-            <div id="Combined" class="radio disabled">
-                <label>
-                    @Html.RadioButtonFor(model => model.DelayMode, "Combined", new { id = "CombinedMode", disabled = "disabled" }) Combined
-                </label>
+        <div class="form-group">
+            <label class="control-label col-md-2" for="ControlMode">
+                Penalty mode
+            </label>
+            <div class="col-md-10" id="DelayMode">
+                <div class="radio">
+                    <label data-toggle="tooltip" data-placement="right" title="Wrong answer will change delay to the previous value.">
+                        @Html.RadioButtonFor(model => model.DelayMode, "Smooth", new { id = "SmoothMode" }) Smooth
+                    </label>
+                </div>
+                <div class="radio">
+                    <label data-toggle="tooltip" data-placement="right" title="Wrong answer will change delay to the initial value.">
+                        @Html.RadioButtonFor(model => model.DelayMode, "Sharp", new { id = "SharpMode" }) Sharp
+                    </label>
+                </div>
+                <div id="Combined" class="radio disabled">
+                    <label data-toggle="tooltip" data-placement="right" title="You will choose between smooth or sharp penalty.">
+                        @Html.RadioButtonFor(model => model.DelayMode, "Combined", new { id = "CombinedMode", disabled = "disabled" }) Combined
+                    </label>
+                </div>
             </div>
         </div>
 
@@ -65,16 +75,16 @@
         <div id="SRSDeckParams">
             <div class="form-group">
                 @Html.LabelFor(model => model.StartDelay, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.StartDelay, new { htmlAttributes = new { @class = "form-control" } })
+                <div class="col-md-1">
+                    @Html.EditorFor(model => model.StartDelay, new { htmlAttributes = new { @class = "form-control", data_toggle = "tooltip", data_placement = "right", title = "Number of steps the card will move the first time." } })
                     @Html.ValidationMessageFor(model => model.StartDelay, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
                 @Html.LabelFor(model => model.Coeff, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Coeff, new { htmlAttributes = new { @class = "form-control" } })
+                <div class="col-md-1">
+                    @Html.EditorFor(model => model.Coeff, new { htmlAttributes = new { @class = "form-control", data_toggle = "tooltip", data_placement = "right", title = "Coefficient used to calculate the next delay." } })
                     @Html.ValidationMessageFor(model => model.Coeff, "", new { @class = "text-danger" })
                 </div>
             </div>

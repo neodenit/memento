@@ -42,7 +42,7 @@ namespace Memento.DomainModel.Models
         [Display(Name = "Allow Small Delays")]
         public bool AllowSmallDelays { get; set; }
 
-        [Display(Name = "Start Delay")]
+        [Display(Name = "Initial Delay")]
         public int StartDelay { get; set; }
 
         [Display(Name = "Coefficient")]
