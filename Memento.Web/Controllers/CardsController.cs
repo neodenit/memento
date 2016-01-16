@@ -4,6 +4,7 @@ using Memento.Core.Validators;
 using Memento.DomainModel.Attributes;
 using Memento.DomainModel.Models;
 using Memento.DomainModel.Repository;
+using Memento.DomainModel.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Memento.DomainModel.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Memento.DomainModel.Models
+namespace Memento.DomainModel.ViewModels
 {
     public class ClozeViewModel
     {
