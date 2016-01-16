@@ -12,4 +12,6 @@
             $('#CombinedMode').prop('disabled', false);
         }
     });
+
+    $('[data-toggle="tooltip"]').tooltip();
 });
