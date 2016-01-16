@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Memento.Core;
+using Memento.DomainModel.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Principal;
-using Memento.Core;
-using Memento.DomainModel.Attributes;
 
 namespace Memento.DomainModel.Models
 {
@@ -89,94 +89,5 @@ namespace Memento.DomainModel.Models
 
             return Owner == userName;
         }
-    }
-
-    public class Card
-    {
-        [CheckCardOwner]
-        public int ID { get; set; }
-
-        public int DeckID { get; set; }
-
-        public virtual Deck Deck { get; set; }
-
-        [Required]
-        [DataType(DataType.MultilineText)]
-        public string Text { get; set; }
-
-        public virtual ICollection<Cloze> Clozes { get; set; }
-
-        public bool IsValid { get; set; }
-
-        public bool IsDeleted { get; set; }
-
-        public Cloze GetNextCloze()
-        {
-            var cloze = Clozes.GetMinElement(item => item.Position);
-
-            return cloze;
-        }
-
-        public bool IsAuthorized(IPrincipal user)
-        {
-            var userName = user.Identity.Name;
-
-            return Deck.Owner == userName;
-        }
-    }
-
-    public class Cloze : ICard
-    {
-        public Cloze()
-        {
-        }
-
-        public Cloze(int cardID, string label)
-        {
-            CardID = cardID;
-            Label = label;
-        }
-
-        public int ID { get; set; }
-
-        public int CardID { get; set; }
-
-        public virtual Card Card { get; set; }
-
-        public string Label { get; set; }
-
-        public int Position { get; set; }
-
-        public bool IsNew { get; set; }
-
-        public int LastDelay { get; set; }
-    }
-
-    public class Answer
-    {
-        public int ID { get; set; }
-
-        public DateTime Time { get; set; }
-
-        public string Owner { get; set; }
-
-        public bool IsCorrect { get; set; }
-
-        public int ClozeID { get; set; }
-
-        public int CardID { get; set; }
-
-        public int DeckID { get; set; }
-
-        public int CardsInRepetition { get; set; }
-    }
-
-    public class DailyRepetitionStat
-    {
-        public DateTime Date { get; set; }
-
-        public int TotalCount { get; set; }
-
-        public int NewCount { get; set; }
     }
 }

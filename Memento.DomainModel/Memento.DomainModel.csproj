@@ -92,9 +92,12 @@
       <DependentUpon>201511011808506_Drop Answer column.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\MementoContext.cs" />
-    <Compile Include="Models\Models.cs" />
-    <Compile Include="Models\ViewModels.cs" />
+    <Compile Include="MementoContext.cs" />
+    <Compile Include="Models\Answer.cs" />
+    <Compile Include="Models\Card.cs" />
+    <Compile Include="Models\Cloze.cs" />
+    <Compile Include="Models\Deck.cs" />
+    <Compile Include="ViewModels\ViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\EFMementoRepository.cs" />
     <Compile Include="Repository\IMementoRepository.cs" />
