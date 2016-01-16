@@ -44,7 +44,7 @@ namespace Memento.Web.Controllers
             var deck = await repository.FindDeckAsync(deckID);
             var clozes = deck.GetClozes();
             var orderedClozes = clozes.OrderBy(cloze => cloze.Position);
-            var clozeViews = from cloze in orderedClozes select new ClozeView(cloze);
+            var clozeViews = from cloze in orderedClozes select new ClozeViewModel(cloze);
 
             return View(clozeViews);
         }
