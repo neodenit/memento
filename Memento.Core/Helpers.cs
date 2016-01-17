@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Memento.Core
@@ -15,5 +16,8 @@ namespace Memento.Core
 
             return result;
         }
+
+        public static IEnumerable<string> GetWords(string text) => Regex.Split(text, @"\W");
+        public static int GetWordsNumber(string text) => GetWords(text).Count();
     }
 }

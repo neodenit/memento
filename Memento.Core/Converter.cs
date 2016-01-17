@@ -4,18 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static Memento.Core.ConverterPatterns;
 
 namespace Memento.Core
 {
     public class Converter : IConverter
     {
-        private const string ClozePattern = @"{{(\w+)::((?:(?!}}).)+?)(::((?:(?!}}).)+?))?}}";
-
-        public IEnumerable<string> GetCardsFromDeck(string deckText, bool justClozes = false)
+        public IEnumerable<string> GetCardsFromDeck(string deckText)
         {
             var cards = GetCards(deckText);
 
-            var clozes = RawCardsToClozes(justClozes, cards);
+            var clozes = RawCardsToClozes(cards);
 
             return clozes;
         }
@@ -73,33 +72,36 @@ namespace Memento.Core
 
             var answer = GetAnswerFromField(text, clozeName);
 
-            var answerWithDelimeter = DelimiterToTag(answer);
+            var answerWithDelimeter = DelimeterToTag(answer);
 
             var result = LineBreaksToTags(answerWithDelimeter);
 
             return result;
         }
 
-        public string GetCurrentClozePattern(string clozeName)
-        {
-            var currentPattern = "{{(" + clozeName + ")::((?:(?!}}).)+?)(::((?:(?!}}).)+?))?}}";
-            return currentPattern;
-        }
+        public string GetCurrentClozePattern(string clozeName) => ClozePattern.Replace(LabelPattern, clozeName);
 
         public string ReplaceAnswer(string text, string label, string newAnswers)
         {
             var currentPattern = GetCurrentClozePattern(label);
 
-            var newPattern = "{{" + label + "::" + newAnswers + "$3}}";
+            var newPattern = $"{{{label}::{newAnswers}$3}}";
 
             return Regex.Replace(text, currentPattern, newPattern);
         }
 
+        public string AddAnswer(string text, string label, string newAnswer)
+        {
+            var oldAnswers = GetAnswerValue(text, label);
+            var newAnswers = $"{oldAnswers}|{newAnswer}";
+
+            return ReplaceAnswer(text, label, newAnswers);
+        }
         public string ReplaceTextWithWildcards(string text, string label)
         {
             var currentPattern = GetCurrentClozePattern(label);
 
-            var newPattern = "{{" + label + "::*}}";
+            var newPattern = $"{{{label}::*}}";
 
             var regex = new Regex(currentPattern);
 
@@ -165,19 +167,16 @@ namespace Memento.Core
 
         public string FormatForExport(string text)
         {
-            var text2 = DelimiterToTab(text);
+            var text2 = DelimeterToRaw(text);
 
             var text3 = LineBreaksToTagsAlt(text2);
 
-            var result = text3.Contains("\t") ? text3 : text3 + "\t";
+            var result = text3.Contains(RawDelimeter) ? text3 : text3 + RawDelimeter;
 
             return result;
         }
 
-        private static bool IsInQuotationMarks(string text)
-        {
-            return text.StartsWith("\"");
-        }
+        private static bool IsInQuotationMarks(string text) => text.StartsWith("\"");
 
         private static string UnescapeQuotationMarks(string text)
         {
@@ -194,21 +193,19 @@ namespace Memento.Core
             return text4;
         }
 
-        private static IEnumerable<string> GetCards(string deckText)
-        {
-            return deckText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
-        }
+        private static IEnumerable<string> GetCards(string deckText) =>
+            deckText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
 
-        private static IEnumerable<string> RawCardsToClozes(bool justClozes, IEnumerable<string> cards)
+        private static IEnumerable<string> RawCardsToClozes(IEnumerable<string> cards)
         {
-            var clozes = from card in cards select CardToCloze(card, justClozes);
+            var clozes = from card in cards select CardToCloze(card);
 
             var notEmptyClozeCards = from card in clozes where !string.IsNullOrEmpty(card) select card;
 
             return notEmptyClozeCards;
         }
 
-        private static string CardToCloze(string card, bool justClozes)
+        private static string CardToCloze(string card)
         {
             var unescapedCard = IsInQuotationMarks(card) ? UnescapeQuotationMarks(card) : card;
 
@@ -216,12 +213,12 @@ namespace Memento.Core
 
             var trimmedCard = TrimNewLines(cardWithoutTags);
 
-            var result = ConvertToCloze(trimmedCard, justClozes);
+            var result = ConvertToCloze(trimmedCard);
 
             return result;
         }
 
-        private static string ConvertToCloze(string card, bool justClozes)
+        private static string ConvertToCloze(string card)
         {
             var isCloze = IsClozeCard(card);
 
@@ -229,77 +226,51 @@ namespace Memento.Core
             {
                 var cloze = GetFirstField(card);
                 var comment = GetSecondField(card);
+                var trimmedComment = comment.Trim();
 
                 var result = string.IsNullOrWhiteSpace(comment) ?
                     cloze.Trim() :
-                    string.Format("{0}{1}{1}{2}{1}{1}{3}", cloze.Trim(), Environment.NewLine, Settings.Default.CommentDelimiter, comment.Trim());
+                    cloze.Trim() + Delimeter + comment.Trim();
 
                 return result;
             }
-            else if (!justClozes)
+            else if (CountFields(card) >= 2)
             {
-                var fieldsCount = CountFields(card);
+                var question = GetFirstField(card);
+                var answer = GetSecondField(card);
+                var comment = GetThirdField(card);
 
-                if (fieldsCount >= 2)
-                {
-                    var question = GetFirstField(card);
-                    var answer = GetSecondField(card);
-                    var comment = GetThirdField(card);
+                var wordsNumber = Helpers.GetWordsNumber(answer);
 
-                    var clozedAnswer = "{{c1::" + answer + "}}";
+                var correctedAnswer =
+                    wordsNumber <= Settings.Default.DefaultValidLength ?
+                    $"{{c1::{answer.Trim()}}}" :
+                    answer.Trim();
 
-                    var result =
-                        string.IsNullOrWhiteSpace(comment) ?
-                        string.Format("{0}{1}{1}{2}", question.Trim(), Environment.NewLine, clozedAnswer.Trim()) :
-                        string.Format("{0}{1}{1}{2}{1}{1}{3}{1}{1}{4}", question.Trim(), Environment.NewLine, clozedAnswer.Trim(), Settings.Default.CommentDelimiter, comment.Trim());
+                var result =
+                    string.IsNullOrWhiteSpace(comment) ?
+                    question.Trim() + EmptyLine + correctedAnswer :
+                    question.Trim() + EmptyLine + correctedAnswer + Delimeter + comment.Trim();
 
-                    return result;
-                }
-                else
-                {
-                    return string.Empty;
-                }
+                return result;
             }
             else
             {
-                return string.Empty;
+                return ReplaceDelimeters(card);
             }
         }
 
-        private static string GetQuestionPart(string card)
-        {
-            var part = GetParts(card).ElementAt(0).Trim();
+        private static string ReplaceDelimeters(string card) => card.Replace(RawDelimeter, Delimeter);
 
-            return part;
-        }
+        private static string GetQuestionPart(string card) => GetParts(card).ElementAt(0).Trim();
 
-        private static string GetCommentPart(string card)
-        {
-            var part = GetParts(card).ElementAt(1).Trim();
+        private static string GetCommentPart(string card) => GetParts(card).ElementAt(1).Trim();
 
-            return part;
-        }
+        private static string GetFirstField(string card) => GetFields(card).ElementAt(0);
 
-        private static string GetFirstField(string card)
-        {
-            var field = GetFields(card).ElementAt(0);
+        private static string GetSecondField(string card) => GetFields(card).ElementAt(1);
 
-            return field;
-        }
-
-        private static string GetSecondField(string card)
-        {
-            var field = GetFields(card).ElementAt(1);
-
-            return field;
-        }
-
-        private static string GetThirdField(string card)
-        {
-            var field = GetFields(card).ElementAt(2);
-
-            return field;
-        }
+        private static string GetThirdField(string card) => GetFields(card).ElementAt(2);
 
         private static string TagsToLineBreaks(string text)
         {
@@ -310,34 +281,15 @@ namespace Memento.Core
             return result3;
         }
 
-        private static string LineBreaksToTags(string text)
-        {
-            return Regex.Replace(text, Environment.NewLine, "<br />");
-        }
+        private static string LineBreaksToTags(string text) => Regex.Replace(text, Environment.NewLine, LineBreakTag);
 
-        private static string LineBreaksToTagsAlt(string text)
-        {
-            return Regex.Replace(text, Environment.NewLine, "<div></div>");
-        }
+        private static string LineBreaksToTagsAlt(string text) => Regex.Replace(text, Environment.NewLine, AltLineBreakTag);
 
-        private static string DelimiterToTag(string text)
-        {
-            var delimiter = Environment.NewLine + Settings.Default.CommentDelimiter + Environment.NewLine;
-            return Regex.Replace(text, delimiter, "<hr />");
-        }
+        private static string DelimeterToTag(string text) => Regex.Replace(text, Delimeter, DelimeterTag);
 
-        private static string DelimiterToTab(string text)
-        {
-            var delimiter = Environment.NewLine + Settings.Default.CommentDelimiter + Environment.NewLine;
-            return Regex.Replace(text, delimiter, "\t");
-        }
+        private static string DelimeterToRaw(string text) => Regex.Replace(text, Delimeter, RawDelimeter);
 
-        private static string TrimNewLines(string text)
-        {
-            var result = text.Trim(Environment.NewLine.ToCharArray());
-
-            return result;
-        }
+        private static string TrimNewLines(string text) => text.Trim(Environment.NewLine.ToCharArray());
 
         private static string RestictNewLines(string text)
         {
@@ -358,12 +310,7 @@ namespace Memento.Core
             return isCloze;
         }
 
-        private static bool IsClozeField(string text)
-        {
-            var result = Regex.IsMatch(text, ClozePattern);
-
-            return result;
-        }
+        private static bool IsClozeField(string text) => Regex.IsMatch(text, ClozePattern);
 
         private IEnumerable<string> GetClozesFromCard(string card)
         {
@@ -382,21 +329,11 @@ namespace Memento.Core
             }
         }
 
-        private static IEnumerable<string> GetParts(string card)
-        {
-            var delimiter = Environment.NewLine + Settings.Default.CommentDelimiter + Environment.NewLine;
+        private static IEnumerable<string> GetParts(string card) =>
+            card.Split(new[] { Delimeter }, StringSplitOptions.None);
 
-            var parts = card.Split(new string[] { delimiter }, StringSplitOptions.None);
-
-            return parts;
-        }
-
-        private static IEnumerable<string> GetFields(string card)
-        {
-            var fields = card.Split('\t');
-
-            return fields;
-        }
+        private static IEnumerable<string> GetFields(string card) =>
+            card.Split(new[] { RawDelimeter }, StringSplitOptions.None);
 
         private static int CountFields(string card)
         {
@@ -426,11 +363,7 @@ namespace Memento.Core
             return cloze2;
         }
 
-        private static string StripClozes(string field)
-        {
-            var result = Regex.Replace(field, ClozePattern, "$2");
-            return result;
-        }
+        private static string StripClozes(string field) => Regex.Replace(field, ClozePattern, "$2");
 
         private string ReplaceClozeWithSquareBrackets(string field, string clozeName)
         {
@@ -442,13 +375,13 @@ namespace Memento.Core
             {
                 var hint = match.Groups[4];
 
-                var result = Regex.Replace(field, clozePattern, string.Format("[{0}]", hint));
+                var result = Regex.Replace(field, clozePattern, $"[{hint}]");
 
                 return result;
             }
             else if (!string.IsNullOrEmpty(match.Groups[2].Value))
             {
-                var result = Regex.Replace(field, clozePattern, "[...]");
+                var result = Regex.Replace(field, clozePattern, $"[{Mask}]");
 
                 return result;
             }

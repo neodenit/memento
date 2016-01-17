@@ -22,9 +22,7 @@ namespace Memento.Core.Validators
 
             var value = converter.GetAnswerValue(field, clozeName);
 
-            var words = Regex.Split(value, @"\W");
-
-            var wordsNumber = words.Length;
+            var wordsNumber = Helpers.GetWordsNumber(value);
 
             var result = wordsNumber <= maxValidLength;
 

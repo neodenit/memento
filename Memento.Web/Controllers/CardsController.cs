@@ -254,11 +254,7 @@ namespace Memento.Web.Controllers
             }
             else if (AltButton != null)
             {
-                var oldAnswers = converter.GetAnswerValue(dbCard.Text, cloze.Label);
-                var newAnswers = string.Format("{0}|{1}", oldAnswers, card.Answer);
-                var newText = converter.ReplaceAnswer(dbCard.Text, cloze.Label, newAnswers);
-
-                dbCard.Text = newText;
+                dbCard.Text = converter.AddAnswer(dbCard.Text, cloze.Label, card.Answer);
 
                 await repository.SaveChangesAsync();
 
@@ -287,11 +283,8 @@ namespace Memento.Web.Controllers
             else if (AltButton != null)
             {
                 var cloze = dbCard.GetNextCloze();
-                var oldAnswers = converter.GetAnswerValue(dbCard.Text, cloze.Label);
-                var newAnswers = string.Format("{0}|{1}", oldAnswers, card.Answer);
-                var newText = converter.ReplaceAnswer(dbCard.Text, cloze.Label, newAnswers);
 
-                dbCard.Text = newText;
+                dbCard.Text = converter.AddAnswer(dbCard.Text, cloze.Label, card.Answer);
 
                 await repository.SaveChangesAsync();
 

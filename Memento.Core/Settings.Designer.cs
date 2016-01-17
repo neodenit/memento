@@ -44,9 +44,9 @@ namespace Memento.Core {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("---")]
-        public string CommentDelimiter {
+        public string CommentDelimeter {
             get {
-                return ((string)(this["CommentDelimiter"]));
+                return ((string)(this["CommentDelimeter"]));
             }
         }
         
