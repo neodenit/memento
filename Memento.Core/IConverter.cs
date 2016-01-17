@@ -7,7 +7,7 @@ namespace Memento.Core
         string FormatForExport(string text);
         string GetAnswer(string card, string clozeName, bool stripWildCards = true);
         string GetAnswerValue(string field, string clozeName);
-        IEnumerable<string> GetCardsFromDeck(string deckText, bool justClozes = false);
+        IEnumerable<string> GetCardsFromDeck(string deckText);
         IEnumerable<string> GetClozeNames(string field);
         IEnumerable<string> GetClozeValues(string field, string clozeName);
         string GetCurrentClozePattern(string clozeName);

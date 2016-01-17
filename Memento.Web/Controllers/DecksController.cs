@@ -198,7 +198,7 @@ namespace Memento.Web.Controllers
             if (file != null && file.ContentLength > 0)
             {
                 var text = await new StreamReader(file.InputStream).ReadToEndAsync();
-                var cards = converter.GetCardsFromDeck(text, true);
+                var cards = converter.GetCardsFromDeck(text);
 
                 foreach (var card in cards)
                 {
