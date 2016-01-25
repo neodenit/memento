@@ -6,18 +6,24 @@
         var start = domElement.selectionStart;
         var end = domElement.selectionEnd;
 
-        var text = element.val();
+        if (start === end) {
+            $('#customErrorMessage').removeClass('hidden');
+        } else {
+            $('#customErrorMessage').addClass('hidden');
 
-        var startPart = text.substring(0, start);
-        var middlePart = text.substring(start, end);
-        var endPart = text.substring(end, text.length);
+            var text = element.val();
 
-        var label = getNextLabel(text, middlePart);
+            var startPart = text.substring(0, start);
+            var middlePart = text.substring(start, end);
+            var endPart = text.substring(end, text.length);
 
-        if (label) {
-            var newText = startPart + '{{' + label + '::' + middlePart + '}}' + endPart;
+            var label = getNextLabel(text, middlePart);
 
-            element.val(newText);
+            if (label) {
+                var newText = startPart + '{{' + label + '::' + middlePart + '}}' + endPart;
+
+                element.val(newText);
+            }
         }
 
         return false;

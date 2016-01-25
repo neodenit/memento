@@ -1,4 +1,4 @@
-﻿@model Memento.DomainModel.Models.EditCardViewModel
+﻿@model Memento.DomainModel.ViewModels.EditCardViewModel
 
 @{
     ViewBag.Title = "Create Card";
@@ -12,8 +12,10 @@
 
     <div class="form-horizontal">
         <hr />
+
         <p>To create new card paste text bellow, select word(s) for cloze deletion and click "Add Сloze" button. You may add as many cloze deletions as you want. Click "Create" to finish.</p>
         <hr />
+
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         <div class="form-group">
@@ -21,6 +23,8 @@
                 <button class="btn btn-default" id="AddCloze">Add Cloze</button>
             </div>
         </div>
+
+        <div id="customErrorMessage" class="col-md-offset-2 text-danger hidden">Please select key word(s) first.</div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Text, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -41,11 +45,11 @@
 <div>
     @if (Model.DeckID == -1)
     {
-        @Html.ActionLink("Index", "Index", "Decks");
+    @Html.ActionLink("Index", "Index", "Decks");
     }
     else
     {
-        @Html.ActionLink("Back", "Details", "Decks", new { id = Model.DeckID }, null);
+    @Html.ActionLink("Back", "Details", "Decks", new { id = Model.DeckID }, null);
     }
 </div>
 
