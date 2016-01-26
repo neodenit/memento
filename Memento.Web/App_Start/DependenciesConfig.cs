@@ -22,7 +22,7 @@ namespace Memento
             builder.RegisterType<EFMementoRepository>().As<IMementoRepository>();
             builder.RegisterType<PhraseEvaluator>().As<IEvaluator>();
             builder.RegisterType<Converter>().As<IConverter>();
-            builder.RegisterType<CombinedValidator>().As<IValidator>();
+            builder.RegisterType<ExistenceValidator>().As<IValidator>().WithParameter("baseValidator", null);
             builder.RegisterType<Scheduler>().As<IScheduler>();
             builder.RegisterType<NewCardsManager>().As<INewCardsManager>();
             builder.RegisterType<SiblingsManager>().As<ISiblingsManager>();
