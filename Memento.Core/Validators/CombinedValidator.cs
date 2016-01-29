@@ -4,6 +4,8 @@
     {
         private readonly IValidator validator;
 
+        public virtual string ErrorMessage { get; } = "Card is invalid.";
+
         public CombinedValidator(IConverter converter)
         {
             var existenceValidator = new ExistenceValidator(converter);

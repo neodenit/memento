@@ -325,33 +325,26 @@ namespace Memento.Web.Controllers
                 var text = card.Text;
                 var clozeNames = converter.GetClozeNames(text);
 
-                if (!clozeNames.Any() || !clozeNames.All(clozeName => validator.Validate(text, clozeName)))
+                var newCard = new Card
                 {
-                    return View(card);
-                }
-                else
-                {
-                    var newCard = new Card
-                    {
-                        ID = card.ID,
-                        DeckID = card.DeckID,
-                        Deck = await repository.FindDeckAsync(card.DeckID),
-                        Text = converter.ReplaceTextWithWildcards(card.Text, clozeNames),
-                        Clozes = new Collection<Cloze>(),
-                        IsValid = true,
-                        IsDeleted = false,
-                    };
+                    ID = card.ID,
+                    DeckID = card.DeckID,
+                    Deck = await repository.FindDeckAsync(card.DeckID),
+                    Text = converter.ReplaceTextWithWildcards(card.Text, clozeNames),
+                    Clozes = new Collection<Cloze>(),
+                    IsValid = true,
+                    IsDeleted = false,
+                };
 
-                    repository.AddCard(newCard);
+                repository.AddCard(newCard);
 
-                    await repository.SaveChangesAsync();
+                await repository.SaveChangesAsync();
 
-                    repository.AddClozes(newCard, clozeNames);
+                repository.AddClozes(newCard, clozeNames);
 
-                    await repository.SaveChangesAsync();
+                await repository.SaveChangesAsync();
 
-                    return RedirectToAction("Create", "Cards", new { DeckID = card.DeckID });
-                }
+                return RedirectToAction("Create", "Cards", new { DeckID = card.DeckID });
             }
             else
             {

@@ -11,6 +11,8 @@ namespace Memento.Core.Validators
     {
         protected readonly IConverter converter;
 
+        public override string ErrorMessage { get; } = "Please add cloze deletions.";
+
         public ExistenceValidator(IConverter converter, IValidator baseValidator = null) : base(baseValidator)
         {
             this.converter = converter;

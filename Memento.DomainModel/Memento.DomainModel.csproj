@@ -79,6 +79,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\CheckClozesAttribute.cs" />
     <Compile Include="Attributes\CheckCardExistenceAttribute.cs" />
     <Compile Include="Attributes\CheckDeckExistenceAttribute.cs" />
     <Compile Include="Attributes\CheckDeckOwnerAttribute.cs" />

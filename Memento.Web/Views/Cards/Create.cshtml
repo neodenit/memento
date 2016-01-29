@@ -16,15 +16,15 @@
         <p>To create new card paste text bellow, select word(s) for cloze deletion and click "Add Сloze" button. You may add as many cloze deletions as you want. Click "Create" to finish.</p>
         <hr />
 
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.ValidationSummary(true, "", new { @class = "col-md-offset-2 text-danger" })
+
+        <div id="customErrorMessage" class="col-md-offset-2 text-danger hidden">Please select key word(s).</div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <button class="btn btn-default" id="AddCloze">Add Cloze</button>
             </div>
         </div>
-
-        <div id="customErrorMessage" class="col-md-offset-2 text-danger hidden">Please select key word(s) first.</div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Text, htmlAttributes: new { @class = "control-label col-md-2" })
