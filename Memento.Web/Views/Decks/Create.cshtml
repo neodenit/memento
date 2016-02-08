@@ -32,12 +32,12 @@
             <div class="col-md-10" id="ControlMode">
                 <div>
                     <div class="radio">
-                        <label data-toggle="tooltip" data-placement="right" title="Your answers will be evaluated by the app.">
+                        <label data-toggle="tooltip" data-placement="right" title="@Resources.Resources.AutomaticModeHint">
                             @Html.RadioButtonFor(model => model.ControlMode, "Automatic", new { id = "AutoMode" }) Automatic
                         </label>
                     </div>
                     <div class="radio">
-                        <label data-toggle="tooltip" data-placement="right" title="You will tell the app if you were right or wrong after seeing the correct answer.">
+                        <label data-toggle="tooltip" data-placement="right" title="@Resources.Resources.ManualModeHint">
                             @Html.RadioButtonFor(model => model.ControlMode, "Manual", new { id = "ManualMode" }) Manual
                         </label>
                     </div>
@@ -53,17 +53,17 @@
             </label>
             <div class="col-md-10" id="DelayMode">
                 <div class="radio">
-                    <label data-toggle="tooltip" data-placement="right" title="Wrong answer will change delay to the previous value.">
+                    <label data-toggle="tooltip" data-placement="right" title="@Resources.Resources.SmoothDelayModeHint">
                         @Html.RadioButtonFor(model => model.DelayMode, "Smooth", new { id = "SmoothMode" }) Smooth
                     </label>
                 </div>
                 <div class="radio">
-                    <label data-toggle="tooltip" data-placement="right" title="Wrong answer will change delay to the initial value.">
+                    <label data-toggle="tooltip" data-placement="right" title="@Resources.Resources.SharpDelayModeHint">
                         @Html.RadioButtonFor(model => model.DelayMode, "Sharp", new { id = "SharpMode" }) Sharp
                     </label>
                 </div>
                 <div id="Combined" class="radio disabled">
-                    <label data-toggle="tooltip" data-placement="right" title="You will choose between smooth or sharp penalty.">
+                    <label data-toggle="tooltip" data-placement="right" title="@Resources.Resources.CombinedDelayModeHint">
                         @Html.RadioButtonFor(model => model.DelayMode, "Combined", new { id = "CombinedMode", disabled = "disabled" }) Combined
                     </label>
                 </div>
@@ -76,7 +76,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.StartDelay, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-1">
-                    @Html.EditorFor(model => model.StartDelay, new { htmlAttributes = new { @class = "form-control", data_toggle = "tooltip", data_placement = "right", title = "Number of steps the card will move the first time." } })
+                    @Html.EditorFor(model => model.StartDelay, new { htmlAttributes = new { @class = "form-control", data_toggle = "tooltip", data_placement = "right", title = @Resources.Resources.StartDelayHint } })
                     @Html.ValidationMessageFor(model => model.StartDelay, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -84,7 +84,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Coeff, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-1">
-                    @Html.EditorFor(model => model.Coeff, new { htmlAttributes = new { @class = "form-control", data_toggle = "tooltip", data_placement = "right", title = "Coefficient used to calculate the next delay." } })
+                    @Html.EditorFor(model => model.Coeff, new { htmlAttributes = new { @class = "form-control", data_toggle = "tooltip", data_placement = "right", title = @Resources.Resources.CoefficientHint } })
                     @Html.ValidationMessageFor(model => model.Coeff, "", new { @class = "text-danger" })
                 </div>
             </div>
