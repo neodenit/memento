@@ -11,11 +11,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Memento.Tests</RootNamespace>
     <AssemblyName>Memento.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -102,6 +103,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Memento.Common\Memento.Common.csproj">
+      <Project>{af08785a-2a1b-47f8-8100-460b69df26be}</Project>
+      <Name>Memento.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Memento.Core\Memento.Core.csproj">
       <Project>{2f5faa65-d83a-47d4-abea-f2693dae25a3}</Project>
       <Name>Memento.Core</Name>
@@ -109,6 +114,10 @@
     <ProjectReference Include="..\Memento.DomainModel\Memento.DomainModel.csproj">
       <Project>{4ccb3552-1782-4ca3-806e-fe846ca2f6cf}</Project>
       <Name>Memento.DomainModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Memento.Interfaces\Memento.Interfaces.csproj">
+      <Project>{57e544cd-a620-4820-bbf4-dc8c27b4968e}</Project>
+      <Name>Memento.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\Memento.Web\Memento.Web.csproj">
       <Project>{1c82468e-77f8-44fa-be30-dc56be50b3cf}</Project>

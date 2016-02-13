@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Memento.Core
+namespace Memento.Common
 {
     public static class Extension
     {

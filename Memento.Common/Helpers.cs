@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Memento.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Memento.Core
+namespace Memento.Common
 {
     public class Helpers
     {

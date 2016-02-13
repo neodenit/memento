@@ -1,5 +1,6 @@
 ﻿using Memento.Core;
 using Memento.DomainModel.Models;
+using Memento.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -131,7 +132,7 @@ namespace Memento.DomainModel.Repository
             db.Answers.Add(answer);
         }
 
-        public void PromoteCard(Deck deck, Scheduler.Delays delay)
+        public void PromoteCard(Deck deck, Delays delay)
         {
             var clozes = deck.GetClozes();
 

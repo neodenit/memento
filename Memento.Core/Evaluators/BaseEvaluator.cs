@@ -1,4 +1,5 @@
-﻿using MinimumEditDistance;
+﻿using Memento.Interfaces;
+using MinimumEditDistance;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +9,6 @@ using System.Threading.Tasks;
 
 namespace Memento.Core.Evaluators
 {
-    public enum Mark
-    {
-        Correct,
-        Incorrect,
-        Typo,
-    }
-
     public abstract class BaseEvaluator : IEvaluator
     {
         public abstract Mark Evaluate(string correctAnswer, string answer);

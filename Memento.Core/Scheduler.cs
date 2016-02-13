@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Memento.Common;
+using Memento.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,15 +11,6 @@ namespace Memento.Core
 {
     public class Scheduler : IScheduler
     {
-        public enum Delays
-        {
-            AfterNext,
-            Next,
-            Same,
-            Previous,
-            Initial,
-        }
-
         public void PromoteCard(IDeck deck, IEnumerable<ICard> cards, Delays delay)
         {
             var card = GetFirstCard(cards);

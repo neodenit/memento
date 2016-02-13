@@ -1,10 +1,8 @@
-﻿using Memento.Core;
-using Memento.Core.Evaluators;
-using Memento.Core.Validators;
-using Memento.DomainModel.Attributes;
+﻿using Memento.DomainModel.Attributes;
 using Memento.DomainModel.Models;
 using Memento.DomainModel.Repository;
 using Memento.DomainModel.ViewModels;
+using Memento.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -132,7 +130,7 @@ namespace Memento.Web.Controllers
         {
             var dbCard = await repository.FindCardAsync(card.ID);
 
-            return await PromoteAndRedirect(dbCard.Deck, Scheduler.Delays.Same);
+            return await PromoteAndRedirect(dbCard.Deck, Delays.Same);
         }
 
         public async Task<ActionResult> RepeatClosed([CheckCardExistence, CheckCardOwner] int id)
@@ -172,12 +170,12 @@ namespace Memento.Web.Controllers
             await repository.SaveChangesAsync();
 
             var delay = againButton != null ?
-                        Scheduler.Delays.Initial :
+                        Delays.Initial :
                         badButton != null ?
-                        Scheduler.Delays.Previous :
+                        Delays.Previous :
                         goodButton != null ?
-                        Scheduler.Delays.Next :
-                        Scheduler.Delays.Same;
+                        Delays.Next :
+                        Delays.Same;
 
             return await PromoteAndRedirect(dbCard.Deck, delay);
         }
@@ -233,7 +231,7 @@ namespace Memento.Web.Controllers
 
             await repository.SaveChangesAsync();
 
-            return await PromoteAndRedirect(dbCard.Deck, Scheduler.Delays.Next);
+            return await PromoteAndRedirect(dbCard.Deck, Delays.Next);
         }
 
 
@@ -250,7 +248,7 @@ namespace Memento.Web.Controllers
 
                 await repository.SaveChangesAsync();
 
-                return await PromoteAndRedirect(dbCard.Deck, Scheduler.Delays.Previous);
+                return await PromoteAndRedirect(dbCard.Deck, Delays.Previous);
             }
             else if (AltButton != null)
             {
@@ -278,7 +276,7 @@ namespace Memento.Web.Controllers
             }
             else if (WrongButton != null)
             {
-                return await PromoteAndRedirect(dbCard.Deck, Scheduler.Delays.Previous);
+                return await PromoteAndRedirect(dbCard.Deck, Delays.Previous);
             }
             else if (AltButton != null)
             {
@@ -460,7 +458,7 @@ namespace Memento.Web.Controllers
             return RedirectToAction("Details", "Decks", new { id = card.DeckID });
         }
 
-        private async Task<ActionResult> PromoteAndRedirect(Deck deck, Scheduler.Delays delay)
+        private async Task<ActionResult> PromoteAndRedirect(Deck deck, Delays delay)
         {
             repository.PromoteCard(deck, delay);
 

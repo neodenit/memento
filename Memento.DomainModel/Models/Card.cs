@@ -1,4 +1,4 @@
-﻿using Memento.Core;
+﻿using Memento.Common;
 using Memento.DomainModel.Attributes;
 using System;
 using System.Collections.Generic;

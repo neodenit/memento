@@ -1,5 +1,6 @@
-﻿using Memento.Core;
+﻿using Memento.Common;
 using Memento.DomainModel.Attributes;
+using Memento.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

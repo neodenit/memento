@@ -1,5 +1,5 @@
-﻿using Memento.Core;
-using Memento.DomainModel.Models;
+﻿using Memento.DomainModel.Models;
+using Memento.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +28,7 @@ namespace Memento.DomainModel.Repository
         void AddClozes(Card card, IEnumerable<string> clozeNames);
         void RemoveClozes(Card card, IEnumerable<string> clozeNames);
         void AddAnswer(Cloze cloze, bool isCorrect);
-        void PromoteCard(Deck deck, Scheduler.Delays delay);
+        void PromoteCard(Deck deck, Delays delay);
         Task SaveChangesAsync();
         void Dispose();
     }

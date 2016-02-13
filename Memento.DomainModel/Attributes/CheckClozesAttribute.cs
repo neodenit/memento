@@ -1,6 +1,5 @@
-﻿using Memento.Core;
-using Memento.Core.Validators;
-using Memento.DomainModel.ViewModels;
+﻿using Memento.DomainModel.ViewModels;
+using Memento.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

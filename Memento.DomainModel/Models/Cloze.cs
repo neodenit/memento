@@ -1,4 +1,4 @@
-﻿using Memento.Core;
+﻿using Memento.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

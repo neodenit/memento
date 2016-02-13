@@ -3,12 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Autofac;
-using Autofac.Integration.Mvc;
-using Memento.DomainModel.Repository;
-using Memento.Core.Evaluators;
-using Memento.Core;
-using Memento.Core.Validators;
+using Memento.DependecyInjection;
 
 namespace Memento
 {
@@ -16,19 +11,10 @@ namespace Memento
     {
         public static void RegisterDependencies()
         {
-            var builder = new ContainerBuilder();
+            var assembly = typeof(MvcApplication).Assembly;
+            var resolver = DependencyInjector.GetResolver(assembly);
 
-            builder.RegisterControllers(typeof(MvcApplication).Assembly);
-            builder.RegisterType<EFMementoRepository>().As<IMementoRepository>();
-            builder.RegisterType<PhraseEvaluator>().As<IEvaluator>();
-            builder.RegisterType<Converter>().As<IConverter>();
-            builder.RegisterType<ExistenceValidator>().As<IValidator>().WithParameter("baseValidator", null);
-            builder.RegisterType<Scheduler>().As<IScheduler>();
-            builder.RegisterType<NewCardsManager>().As<INewCardsManager>();
-            builder.RegisterType<SiblingsManager>().As<ISiblingsManager>();
-            
-            var container = builder.Build();
-            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+            DependencyResolver.SetResolver(resolver);
         }
     }
 }

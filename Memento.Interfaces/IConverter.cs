@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Memento.Core
+namespace Memento.Interfaces
 {
     public interface IConverter
     {

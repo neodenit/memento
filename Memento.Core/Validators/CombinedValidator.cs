@@ -1,4 +1,6 @@
-﻿namespace Memento.Core.Validators
+﻿using Memento.Interfaces;
+
+namespace Memento.Core.Validators
 {
     public class CombinedValidator : IValidator
     {

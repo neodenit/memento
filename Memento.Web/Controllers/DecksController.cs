@@ -1,9 +1,10 @@
 ﻿using Ionic.Zip;
+using Memento.Common;
 using Memento.Core;
-using Memento.Core.Validators;
 using Memento.DomainModel.Attributes;
 using Memento.DomainModel.Models;
 using Memento.DomainModel.Repository;
+using Memento.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;

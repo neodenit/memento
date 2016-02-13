@@ -1,4 +1,4 @@
-﻿namespace Memento.Core
+﻿namespace Memento.Interfaces
 {
     public interface IDeck
     {

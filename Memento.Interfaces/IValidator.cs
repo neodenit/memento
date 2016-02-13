@@ -1,4 +1,4 @@
-﻿namespace Memento.Core.Validators
+﻿namespace Memento.Interfaces
 {
     public interface IValidator
     {
