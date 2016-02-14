@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Memento.DomainModel.Models
 {
-    public class Cloze : ICard
+    public class Cloze : ICloze
     {
         public Cloze()
         {

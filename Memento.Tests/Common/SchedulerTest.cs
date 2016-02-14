@@ -21,72 +21,72 @@ namespace Memento.Tests
         }
 
         [TestMethod]
-        public void TestAddNewCardToEmptyDeck()
+        public void TestAddNewClozeToEmptyDeck()
         {
             var delay = 8;
             var deck = new Deck { StartDelay = delay };
-            var cards = Enumerable.Empty<Cloze>().ToList();
-            var card = new Cloze();
+            var clozes = Enumerable.Empty<Cloze>().ToList();
+            var cloze = new Cloze();
 
-            scheduler.PrepareForAdding(deck, cards, card);
+            scheduler.PrepareForAdding(deck, clozes, cloze);
 
-            Assert.IsTrue(card.IsNew);
-            Assert.AreEqual(0, card.Position);
-            Assert.AreEqual(delay, card.LastDelay);
-            Assert.IsTrue(Helpers.CheckPositions(cards));
+            Assert.IsTrue(cloze.IsNew);
+            Assert.AreEqual(0, cloze.Position);
+            Assert.AreEqual(delay, cloze.LastDelay);
+            Assert.IsTrue(Helpers.CheckPositions(clozes));
         }
 
         [TestMethod]
-        public void TestAddNewCardToNonEmptyDeck()
+        public void TestAddNewClozeToNonEmptyDeck()
         {
             var delay = 8;
             var n = 10;
             var deck = new Deck { StartDelay = delay };
-            var cards = (from i in Enumerable.Range(0, n) select new Cloze { Position = i }).ToList();
-            var card = new Cloze();
+            var clozes = (from i in Enumerable.Range(0, n) select new Cloze { Position = i }).ToList();
+            var cloze = new Cloze();
 
-            scheduler.PrepareForAdding(deck, cards, card);
+            scheduler.PrepareForAdding(deck, clozes, cloze);
 
-            Assert.IsTrue(card.IsNew);
-            Assert.AreEqual(n, card.Position);
-            Assert.AreEqual(delay, card.LastDelay);
-            Assert.IsTrue(Helpers.CheckPositions(cards));
+            Assert.IsTrue(cloze.IsNew);
+            Assert.AreEqual(n, cloze.Position);
+            Assert.AreEqual(delay, cloze.LastDelay);
+            Assert.IsTrue(Helpers.CheckPositions(clozes));
         }
 
         [TestMethod]
-        public void TestMoveCardForvard()
+        public void TestMoveClozeForvard()
         {
             var oldPosition = 10;
             var newPosition = 20;
             var n = 30;
-            var cards = (from i in Enumerable.Range(0, n) select new Cloze { Position = i, ID = i }).ToList();
-            var card = cards.Single(item => item.Position == oldPosition);
-            var cardID = card.ID;
+            var clozes = (from i in Enumerable.Range(0, n) select new Cloze { Position = i, ID = i }).ToList();
+            var cloze = clozes.Single(item => item.Position == oldPosition);
+            var clozeID = cloze.ID;
 
-            scheduler.MoveCard(cards, oldPosition, newPosition, card.LastDelay, true, true);
+            scheduler.MoveCloze(clozes, oldPosition, newPosition, cloze.LastDelay, true, true);
 
-            var cardOnNewPosition = cards.Single(item => item.Position == newPosition);
-            Assert.AreEqual(cardID, cardOnNewPosition.ID);
-            Assert.AreEqual(newPosition, card.Position);
-            Assert.IsTrue(Helpers.CheckPositions(cards));
+            var clozeOnNewPosition = clozes.Single(item => item.Position == newPosition);
+            Assert.AreEqual(clozeID, clozeOnNewPosition.ID);
+            Assert.AreEqual(newPosition, cloze.Position);
+            Assert.IsTrue(Helpers.CheckPositions(clozes));
         }
 
         [TestMethod]
-        public void TestMoveCardBackward()
+        public void TestMoveClozeBackward()
         {
             var oldPosition = 20;
             var newPosition = 10;
             var n = 30;
-            var cards = (from i in Enumerable.Range(0, n) select new Cloze { Position = i, ID = i }).ToList();
-            var card = cards.Single(item => item.Position == oldPosition);
-            var cardID = card.ID;
+            var clozes = (from i in Enumerable.Range(0, n) select new Cloze { Position = i, ID = i }).ToList();
+            var cloze = clozes.Single(item => item.Position == oldPosition);
+            var clozeID = cloze.ID;
 
-            scheduler.MoveCard(cards, oldPosition, newPosition, card.LastDelay, true, true);
+            scheduler.MoveCloze(clozes, oldPosition, newPosition, cloze.LastDelay, true, true);
 
-            var cardOnNewPosition = cards.Single(item => item.Position == newPosition);
-            Assert.AreEqual(cardID, cardOnNewPosition.ID);
-            Assert.AreEqual(newPosition, card.Position);
-            Assert.IsTrue(Helpers.CheckPositions(cards));
+            var clozeOnNewPosition = clozes.Single(item => item.Position == newPosition);
+            Assert.AreEqual(clozeID, clozeOnNewPosition.ID);
+            Assert.AreEqual(newPosition, cloze.Position);
+            Assert.IsTrue(Helpers.CheckPositions(clozes));
         }
     }
 }

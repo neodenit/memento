@@ -402,7 +402,7 @@ namespace Memento.Web.Controllers
             var deck = await repository.FindDeckAsync(deckID);
             var clozes = deck.GetClozes();
 
-            scheduler.ShuffleNewCards(clozes);
+            scheduler.ShuffleNewClozes(clozes);
 
             await repository.SaveChangesAsync();
 

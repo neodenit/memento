@@ -49,7 +49,7 @@
     <Compile Include="Evaluators\PhraseEvaluator.cs" />
     <Compile Include="Evaluators\WordsEvaluator.cs" />
     <Compile Include="Validators\BaseValidator.cs" />
-    <Compile Include="NewCardsManager.cs" />
+    <Compile Include="NewClozesManager.cs" />
     <Compile Include="Converter.cs" />
     <Compile Include="Scheduler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

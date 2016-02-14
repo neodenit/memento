@@ -18,40 +18,40 @@ namespace Memento.Core
             this.scheduler = scheduler;
         }
 
-        public void RearrangeSiblings(IDeck deck, IEnumerable<ICard> cards)
+        public void RearrangeSiblings(IDeck deck, IEnumerable<ICloze> clozes)
         {
-            var cardsToMove = GetCardsToMove(deck, cards);
+            var clozesToMove = GetClozesToMove(deck, clozes);
 
-            MoveCards(deck, cards, cardsToMove);
+            MoveClozes(deck, clozes, clozesToMove);
 
-            Debug.Assert(Helpers.CheckPositions(cards));
+            Debug.Assert(Helpers.CheckPositions(clozes));
         }
 
-        private static IEnumerable<ICard> GetCardsToMove(IDeck deck, IEnumerable<ICard> cards)
+        private static IEnumerable<ICloze> GetClozesToMove(IDeck deck, IEnumerable<ICloze> clozes)
         {
-            var cardID = cards.GetMinElement(card => card.Position).CardID;
+            var cardID = clozes.GetMinElement(cloze => cloze.Position).CardID;
 
-            var nextCards = cards.Skip(1).Take(deck.StartDelay);
+            var nextClozes = clozes.Skip(1).Take(deck.StartDelay);
 
-            if (nextCards.All(card => card.CardID == cardID))
+            if (nextClozes.All(cloze => cloze.CardID == cardID))
             {
-                return cards.Skip(1).TakeWhile(card => card.CardID == cardID);
+                return clozes.Skip(1).TakeWhile(cloze => cloze.CardID == cardID);
             }
-            else if (nextCards.Any(card => card.CardID == cardID))
+            else if (nextClozes.Any(cloze => cloze.CardID == cardID))
             {
-                return nextCards.Where(card => card.CardID == cardID);
+                return nextClozes.Where(cloze => cloze.CardID == cardID);
             }
             else
             {
-                return Enumerable.Empty<ICard>();
+                return Enumerable.Empty<ICloze>();
             }
         }
 
-        private void MoveCards(IDeck deck, IEnumerable<ICard> allCards, IEnumerable<ICard> cardsToMove)
+        private void MoveClozes(IDeck deck, IEnumerable<ICloze> allClozes, IEnumerable<ICloze> clozesToMove)
         {
-            foreach (var card in cardsToMove)
+            foreach (var cloze in clozesToMove)
             {
-                scheduler.MoveCard(allCards, card.Position, card.Position + deck.StartDelay, card.LastDelay + deck.StartDelay, true, false);
+                scheduler.MoveCloze(allClozes, cloze.Position, cloze.Position + deck.StartDelay, cloze.LastDelay + deck.StartDelay, true, false);
             }
         }
     }

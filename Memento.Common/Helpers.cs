@@ -10,10 +10,10 @@ namespace Memento.Common
 {
     public class Helpers
     {
-        public static bool CheckPositions(IEnumerable<ICard> cards)
+        public static bool CheckPositions(IEnumerable<ICloze> clozes)
         {
-            var n = cards.Count();
-            var result = Enumerable.Range(0, n).All(i => cards.Any(card => card.Position == i));
+            var n = clozes.Count();
+            var result = Enumerable.Range(0, n).All(i => clozes.Any(cloze => cloze.Position == i));
 
             return result;
         }

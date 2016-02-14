@@ -27,7 +27,7 @@ namespace Memento.DependecyInjection
             builder.RegisterType<Converter>().As<IConverter>();
             builder.RegisterType<ExistenceValidator>().As<IValidator>().WithParameter("baseValidator", null);
             builder.RegisterType<Scheduler>().As<IScheduler>();
-            builder.RegisterType<NewCardsManager>().As<INewCardsManager>();
+            builder.RegisterType<NewClozesManager>().As<INewClozesManager>();
             builder.RegisterType<SiblingsManager>().As<ISiblingsManager>();
 
             var container = builder.Build();

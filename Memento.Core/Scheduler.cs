@@ -11,13 +11,13 @@ namespace Memento.Core
 {
     public class Scheduler : IScheduler
     {
-        public void PromoteCard(IDeck deck, IEnumerable<ICard> cards, Delays delay)
+        public void PromoteCloze(IDeck deck, IEnumerable<ICloze> clozes, Delays delay)
         {
-            var card = GetFirstCard(cards);
+            var cloze = GetFirstCloze(clozes);
 
-            var maxNewPosition = GetMaxPosition(cards);
+            var maxNewPosition = GetMaxPosition(clozes);
 
-            var step = GetStep(deck, delay, card.LastDelay);
+            var step = GetStep(deck, delay, cloze.LastDelay);
 
             Debug.Assert(step > 0, "Step value is negative.");
 
@@ -25,167 +25,164 @@ namespace Memento.Core
 
             var newDelay = newPosition > deck.StartDelay || deck.AllowSmallDelays ? newPosition : deck.StartDelay;
 
-            MoveCard(cards, card.Position, newPosition, newDelay, false, true);
+            MoveCloze(clozes, cloze.Position, newPosition, newDelay, false, true);
 
-            card.IsNew = false;
+            cloze.IsNew = false;
         }
 
-        public void AddCard(IDeck deck, ICollection<ICard> cards, ICard card)
+        public void AddCloze(IDeck deck, ICollection<ICloze> clozes, ICloze cloze)
         {
-            PrepareForAdding(deck, cards, card);
+            PrepareForAdding(deck, clozes, cloze);
 
-            cards.Add(card);
+            clozes.Add(cloze);
         }
 
-        public void PrepareForAdding(IDeck deck, IEnumerable<ICard> cards, ICard card)
+        public void PrepareForAdding(IDeck deck, IEnumerable<ICloze> clozes, ICloze cloze)
         {
-            var maxNewPosition = GetMaxNewPosition(cards);
+            var maxNewPosition = GetMaxNewPosition(clozes);
 
-            card.Position = maxNewPosition;
+            cloze.Position = maxNewPosition;
 
-            card.LastDelay = deck.StartDelay;
+            cloze.LastDelay = deck.StartDelay;
 
-            card.IsNew = true;
+            cloze.IsNew = true;
         }
 
-        public void PrepareForRemoving(IDeck deck, IEnumerable<ICard> cards, ICard card)
+        public void PrepareForRemoving(IDeck deck, IEnumerable<ICloze> clozes, ICloze cloze)
         {
-            var position = card.Position;
+            var position = cloze.Position;
 
-            var movedCards = GetRestCards(cards, position);
+            var movedClozes = GetRestClozes(clozes, position);
 
-            DecreasePosition(movedCards);
+            DecreasePosition(movedClozes);
 
-            DecreaseDelays(movedCards);
+            DecreaseDelays(movedClozes);
         }
 
-        public void ShuffleNewCards(IEnumerable<ICard> cards)
+        public void ShuffleNewClozes(IEnumerable<ICloze> clozes)
         {
-            var newCards = from item in cards where item.IsNew select item;
+            var newClozes = from cloze in clozes where cloze.IsNew select cloze;
 
-            ShuffleCards(newCards);
+            ShuffleClozes(newClozes);
         }
 
-        public void MoveCard(IEnumerable<ICard> cards, int oldPosition, int newPosition, int newDelay, bool correctMovedCardsDelays, bool correctRestCardsDelays)
+        public void MoveCloze(IEnumerable<ICloze> clozes, int oldPosition, int newPosition, int newDelay, bool correctMovedClozesDelays, bool correctRestClozesDelays)
         {
-            var movedCard = cards.Single(item => item.Position == oldPosition);
+            var movedCloze = clozes.Single(cloze => cloze.Position == oldPosition);
 
-            movedCard.Position = -1;
+            movedCloze.Position = -1;
 
             var newLimitedPosition =
                 oldPosition > newPosition ?
                 Math.Max(newPosition, 0) :
-                Math.Min(newPosition, GetMaxPosition(cards));
+                Math.Min(newPosition, GetMaxPosition(clozes));
 
             if (oldPosition > newPosition)
             {
-                var movedCards = GetRange(cards, newLimitedPosition, oldPosition - 1);
+                var movedClozes = GetRange(clozes, newLimitedPosition, oldPosition - 1);
 
-                IncreasePosition(movedCards);
+                IncreasePosition(movedClozes);
 
-                if (correctMovedCardsDelays)
+                if (correctMovedClozesDelays)
                 {
-                    IncreaseDelays(movedCards);
+                    IncreaseDelays(movedClozes);
                 }
             }
             else
             {
-                var movedCards = GetRange(cards, oldPosition + 1, newLimitedPosition);
+                var movedClozes = GetRange(clozes, oldPosition + 1, newLimitedPosition);
 
-                DecreasePosition(movedCards);
+                DecreasePosition(movedClozes);
 
-                if (correctMovedCardsDelays)
+                if (correctMovedClozesDelays)
                 {
-                    DecreaseDelays(movedCards);
+                    DecreaseDelays(movedClozes);
                 }
 
-                if (correctRestCardsDelays)
+                if (correctRestClozesDelays)
                 {
-                    var restCards = GetRestCards(cards, newLimitedPosition);
+                    var restClozes = GetRestClozes(clozes, newLimitedPosition);
 
-                    IncreaseDelays(restCards);
+                    IncreaseDelays(restClozes);
                 }
             }
 
-            movedCard.Position = newLimitedPosition;
-            movedCard.LastDelay = newDelay;
+            movedCloze.Position = newLimitedPosition;
+            movedCloze.LastDelay = newDelay;
         }
 
-        private static void ShuffleCards(IEnumerable<ICard> cards)
+        private static void ShuffleClozes(IEnumerable<ICloze> clozes)
         {
-            var positions = from item in cards select item.Position;
+            var positions = from cloze in clozes select cloze.Position;
 
             var shuffledNumbers = positions.OrderBy(item => Guid.NewGuid());
 
-            var zip = Enumerable.Zip(cards, shuffledNumbers, (card, newPos) => new { card, newPos });
+            var zip = Enumerable.Zip(clozes, shuffledNumbers, (cloze, newPos) => new { cloze, newPos });
 
-            zip.ToList().ForEach(item => item.card.Position = item.newPos);
+            zip.ToList().ForEach(item => item.cloze.Position = item.newPos);
         }
 
-        private static IEnumerable<ICard> GetRestCards(IEnumerable<ICard> cards, int position)
+        private static IEnumerable<ICloze> GetRestClozes(IEnumerable<ICloze> clozes, int position)
         {
-            var result = from item in cards where item.Position >= position select item;
+            var result = from cloze in clozes where cloze.Position >= position select cloze;
 
             return result;
         }
 
-        private static IEnumerable<ICard> GetRange(IEnumerable<ICard> cards, int minPosition, int maxPosition)
+        private static IEnumerable<ICloze> GetRange(IEnumerable<ICloze> clozes, int minPosition, int maxPosition)
         {
-            var result = from card in cards
-                         where card.Position >= minPosition && card.Position <= maxPosition
-                         select card;
+            var result = from cloze in clozes
+                         where cloze.Position >= minPosition && cloze.Position <= maxPosition
+                         select cloze;
 
             return result;
         }
 
-        private static void IncreasePosition(IEnumerable<ICard> cards)
+        private static void IncreasePosition(IEnumerable<ICloze> clozes)
         {
-            foreach (var item in cards)
+            foreach (var cloze in clozes)
             {
-                item.Position++;
+                cloze.Position++;
             }
         }
 
-        private static void DecreasePosition(IEnumerable<ICard> cards)
+        private static void DecreasePosition(IEnumerable<ICloze> clozes)
         {
-            foreach (var item in cards)
+            foreach (var cloze in clozes)
             {
-                item.Position--;
+                cloze.Position--;
             }
         }
 
-        private static void IncreaseDelays(IEnumerable<ICard> cards)
+        private static void IncreaseDelays(IEnumerable<ICloze> clozes)
         {
-            foreach (var card in cards)
+            foreach (var cloze in clozes)
             {
-                if (!card.IsNew)
+                if (!cloze.IsNew)
                 {
-                    card.LastDelay++;
+                    cloze.LastDelay++;
                 }
             }
         }
 
-        private static void DecreaseDelays(IEnumerable<ICard> cards)
+        private static void DecreaseDelays(IEnumerable<ICloze> clozes)
         {
-            foreach (var card in cards)
+            foreach (var cloze in clozes)
             {
-                if (!card.IsNew)
+                if (!cloze.IsNew)
                 {
-                    card.LastDelay--;
+                    cloze.LastDelay--;
                 }
             }
         }
 
-        private static int GetMaxPosition(IEnumerable<ICard> cards)
-        {
-            return cards.Any() ? cards.Max(item => item.Position) : 0;
-        }
+        private static int GetMaxPosition(IEnumerable<ICloze> clozes) => clozes.Any() ? clozes.Max(cloze => cloze.Position) : 0;
 
-        private static int GetMaxNewPosition(IEnumerable<ICard> cards)
+        private static int GetMaxNewPosition(IEnumerable<ICloze> clozes)
         {
-            if (cards.Any())
+            if (clozes.Any())
             {
-                var max = cards.Max(item => item.Position);
+                var max = clozes.Max(cloze => cloze.Position);
                 var nextToMax = max + 1;
                 return nextToMax;
             }
@@ -195,23 +192,18 @@ namespace Memento.Core
             }
         }
 
-        private static ICard GetFirstCard(IEnumerable<ICard> cards)
-        {
-            var card = cards.GetMinElement(item => item.Position);
-
-            return card;
-        }
+        private static ICloze GetFirstCloze(IEnumerable<ICloze> clozes) => clozes.GetMinElement(cloze => cloze.Position);
 
         [Obsolete]
-        private static void ReservePosition(IEnumerable<ICard> cards, int position, bool correctDelays)
+        private static void ReservePosition(IEnumerable<ICloze> clozes, int position, bool correctDelays)
         {
-            var movedCards = from item in cards where item.Position >= position select item;
+            var movedClozes = from cloze in clozes where cloze.Position >= position select cloze;
 
-            IncreasePosition(movedCards);
+            IncreasePosition(movedClozes);
 
             if (correctDelays)
             {
-                IncreaseDelays(movedCards);
+                IncreaseDelays(movedClozes);
             }
         }
 

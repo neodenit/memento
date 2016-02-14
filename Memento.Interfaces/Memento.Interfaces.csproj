@@ -40,11 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ICard.cs" />
+    <Compile Include="ICloze.cs" />
     <Compile Include="IConverter.cs" />
     <Compile Include="IDeck.cs" />
     <Compile Include="IEvaluator.cs" />
-    <Compile Include="INewCardsManager.cs" />
+    <Compile Include="INewClozesManager.cs" />
     <Compile Include="IScheduler.cs" />
     <Compile Include="ISiblingsManager.cs" />
     <Compile Include="IValidator.cs" />

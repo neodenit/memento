@@ -1,6 +1,6 @@
 ﻿namespace Memento.Interfaces
 {
-    public interface ICard
+    public interface ICloze
     {
         int Position { get; set; }
 

@@ -14,9 +14,9 @@ namespace Memento.DomainModel.Repository
         private MementoContext db = new MementoContext();
         private readonly IScheduler scheduler;
         private readonly ISiblingsManager siblingsManager;
-        private readonly INewCardsManager newCardsManager;
+        private readonly INewClozesManager newCardsManager;
 
-        public EFMementoRepository(IScheduler scheduler, ISiblingsManager siblingsManager, INewCardsManager newCardsManager)
+        public EFMementoRepository(IScheduler scheduler, ISiblingsManager siblingsManager, INewClozesManager newCardsManager)
         {
             this.scheduler = scheduler;
             this.siblingsManager = siblingsManager;
@@ -143,10 +143,10 @@ namespace Memento.DomainModel.Repository
 
             if (Settings.Default.EnableNewCardsHandling)
             {
-                newCardsManager.RearrangeNewCards(deck, clozes);
+                newCardsManager.RearrangeNewClozes(deck, clozes);
             }
 
-            scheduler.PromoteCard(deck, clozes, delay);
+            scheduler.PromoteCloze(deck, clozes, delay);
         }
 
         public Task SaveChangesAsync()
