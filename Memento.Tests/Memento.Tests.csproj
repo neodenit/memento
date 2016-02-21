@@ -90,9 +90,12 @@
     <Reference Include="System.Net.Http.WebRequest" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestDbAsync\TestDbAsyncEnumerator.cs" />
+    <Compile Include="TestDbAsync\TestDbAsyncEnumerable.cs" />
+    <Compile Include="TestDbAsync\TestDbAsyncQueryProvider.cs" />
     <Compile Include="Common\ConverterTest.cs" />
     <Compile Include="Common\SchedulerTest.cs" />
-    <Compile Include="Controllers\DeckControllerTest.cs" />
+    <Compile Include="Controllers\DecksControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>
