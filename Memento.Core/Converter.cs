@@ -86,8 +86,7 @@ namespace Memento.Core
         public string ReplaceAnswer(string text, string label, string newAnswers)
         {
             var currentPattern = GetCurrentClozePattern(label);
-
-            var newPattern = $"{{{label}::{newAnswers}$3}}";
+            var newPattern = $"{{{{{label}::{newAnswers}$3}}}}";
 
             return Regex.Replace(text, currentPattern, newPattern);
         }
@@ -103,7 +102,7 @@ namespace Memento.Core
         {
             var currentPattern = GetCurrentClozePattern(label);
 
-            var newPattern = $"{{{label}::*}}";
+            var newPattern = $"{{{{{label}::*}}}}";
 
             var regex = new Regex(currentPattern);
 
@@ -246,7 +245,7 @@ namespace Memento.Core
 
                 var correctedAnswer =
                     wordsNumber <= Settings.Default.DefaultValidLength ?
-                    $"{{c1::{answer.Trim()}}}" :
+                    $"{{{{c1::{answer.Trim()}}}}}" :
                     answer.Trim();
 
                 var result =
