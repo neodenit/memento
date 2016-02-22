@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Memento.Core {
+namespace Memento.Common {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -83,6 +83,15 @@ namespace Memento.Core {
         public double PermissibleError {
             get {
                 return ((double)(this["PermissibleError"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AddRandomization {
+            get {
+                return ((bool)(this["AddRandomization"]));
             }
         }
     }

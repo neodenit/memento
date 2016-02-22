@@ -9,10 +9,10 @@ using Memento.Interfaces;
 using Moq;
 using System.Web.Mvc;
 using Memento.DomainModel.Models;
-using Memento.Core;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using Memento.Tests.TestDbAsync;
+using Memento.Common;
 
 namespace Memento.Web.Controllers.Tests
 {

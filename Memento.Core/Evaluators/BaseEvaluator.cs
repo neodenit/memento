@@ -1,4 +1,5 @@
-﻿using Memento.Interfaces;
+﻿using Memento.Common;
+using Memento.Interfaces;
 using MinimumEditDistance;
 using System;
 using System.Collections.Generic;

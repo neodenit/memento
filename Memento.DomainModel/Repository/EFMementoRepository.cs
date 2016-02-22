@@ -1,4 +1,4 @@
-﻿using Memento.Core;
+﻿using Memento.Common;
 using Memento.DomainModel.Models;
 using Memento.Interfaces;
 using System;

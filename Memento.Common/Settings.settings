@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Memento.Core" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Memento.Common" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="Coeff" Type="System.Double" Scope="Application">
@@ -22,6 +22,9 @@
     </Setting>
     <Setting Name="PermissibleError" Type="System.Double" Scope="Application">
       <Value Profile="(Default)">0.2</Value>
+    </Setting>
+    <Setting Name="AddRandomization" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

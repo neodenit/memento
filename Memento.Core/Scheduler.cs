@@ -11,23 +11,32 @@ namespace Memento.Core
 {
     public class Scheduler : IScheduler
     {
+        private Random random = new Random();
+
         public void PromoteCloze(IDeck deck, IEnumerable<ICloze> clozes, Delays delay)
         {
             var cloze = GetFirstCloze(clozes);
 
             var maxNewPosition = GetMaxPosition(clozes);
 
+            int randomPart = GetRandomPart();
+
             var step = GetStep(deck, delay, cloze.LastDelay);
 
-            Debug.Assert(step > 0, "Step value is negative.");
+            var correctedStep = Settings.Default.AddRandomization ? step + randomPart : step;
 
-            var newPosition = Math.Min(step, maxNewPosition);
+            var newPosition = Math.Min(correctedStep, maxNewPosition);
 
             var newDelay = newPosition > deck.StartDelay || deck.AllowSmallDelays ? newPosition : deck.StartDelay;
 
             MoveCloze(clozes, cloze.Position, newPosition, newDelay, false, true);
 
             cloze.IsNew = false;
+        }
+
+        private int GetRandomPart()
+        {
+            return random.Next(2); // 0 or 1
         }
 
         public void AddCloze(IDeck deck, ICollection<ICloze> clozes, ICloze cloze)
