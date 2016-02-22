@@ -7,29 +7,35 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Memento.DomainModel.Models;
 using Memento.Interfaces;
 using Memento.Common;
+using Memento.Core;
 
 namespace Memento.Tests
 {
     [TestClass]
     public class SchedulerTest
     {
-        private readonly IScheduler scheduler;
+        private IScheduler sut;
 
-        public SchedulerTest(IScheduler scheduler)
+        [TestInitialize]
+        public void Setup()
         {
-            this.scheduler = scheduler;
+            sut = new Scheduler();
         }
 
         [TestMethod]
-        public void TestAddNewClozeToEmptyDeck()
+        public void AddNewClozeToEmptyDeckTest()
         {
+            // Arrange
+
             var delay = 8;
             var deck = new Deck { StartDelay = delay };
             var clozes = Enumerable.Empty<Cloze>().ToList();
             var cloze = new Cloze();
 
-            scheduler.PrepareForAdding(deck, clozes, cloze);
+            // Act
+            sut.PrepareForAdding(deck, clozes, cloze);
 
+            // Assert
             Assert.IsTrue(cloze.IsNew);
             Assert.AreEqual(0, cloze.Position);
             Assert.AreEqual(delay, cloze.LastDelay);
@@ -39,14 +45,18 @@ namespace Memento.Tests
         [TestMethod]
         public void TestAddNewClozeToNonEmptyDeck()
         {
+            // Arrange
+
             var delay = 8;
             var n = 10;
             var deck = new Deck { StartDelay = delay };
             var clozes = (from i in Enumerable.Range(0, n) select new Cloze { Position = i }).ToList();
             var cloze = new Cloze();
 
-            scheduler.PrepareForAdding(deck, clozes, cloze);
+            // Act
+            sut.PrepareForAdding(deck, clozes, cloze);
 
+            // Assert
             Assert.IsTrue(cloze.IsNew);
             Assert.AreEqual(n, cloze.Position);
             Assert.AreEqual(delay, cloze.LastDelay);
@@ -56,6 +66,8 @@ namespace Memento.Tests
         [TestMethod]
         public void TestMoveClozeForvard()
         {
+            // Arrange
+
             var oldPosition = 10;
             var newPosition = 20;
             var n = 30;
@@ -63,8 +75,10 @@ namespace Memento.Tests
             var cloze = clozes.Single(item => item.Position == oldPosition);
             var clozeID = cloze.ID;
 
-            scheduler.MoveCloze(clozes, oldPosition, newPosition, cloze.LastDelay, true, true);
+            // Act
+            sut.MoveCloze(clozes, oldPosition, newPosition, cloze.LastDelay, true, true);
 
+            // Assert
             var clozeOnNewPosition = clozes.Single(item => item.Position == newPosition);
             Assert.AreEqual(clozeID, clozeOnNewPosition.ID);
             Assert.AreEqual(newPosition, cloze.Position);
@@ -74,6 +88,8 @@ namespace Memento.Tests
         [TestMethod]
         public void TestMoveClozeBackward()
         {
+            // Arrange
+
             var oldPosition = 20;
             var newPosition = 10;
             var n = 30;
@@ -81,8 +97,10 @@ namespace Memento.Tests
             var cloze = clozes.Single(item => item.Position == oldPosition);
             var clozeID = cloze.ID;
 
-            scheduler.MoveCloze(clozes, oldPosition, newPosition, cloze.LastDelay, true, true);
+            // Act
+            sut.MoveCloze(clozes, oldPosition, newPosition, cloze.LastDelay, true, true);
 
+            // Assert
             var clozeOnNewPosition = clozes.Single(item => item.Position == newPosition);
             Assert.AreEqual(clozeID, clozeOnNewPosition.ID);
             Assert.AreEqual(newPosition, cloze.Position);

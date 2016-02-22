@@ -95,7 +95,7 @@
     <Compile Include="TestDbAsync\TestDbAsyncQueryProvider.cs" />
     <Compile Include="Common\ConverterTest.cs" />
     <Compile Include="Common\SchedulerTest.cs" />
-    <Compile Include="Controllers\DecksControllerTests.cs" />
+    <Compile Include="Controllers\DecksControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>

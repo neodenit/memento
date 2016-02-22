@@ -5,48 +5,66 @@ using System.Text;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Memento.Interfaces;
+using Memento.Core;
 
 namespace Memento.Tests
 {
     [TestClass]
     public class ConverterTest
     {
-        private readonly IConverter converter;
+        private IConverter sut;
 
-        public ConverterTest(IConverter converter)
+        [TestInitialize]
+        public void Setup()
         {
-            this.converter = converter;
+            sut = new Converter();
         }
 
         [TestMethod]
-        public void TestReplace()
+        public void ReplaceAnswerTest()
         {
-            var result = converter.ReplaceAnswer("Test text with {{c1::cloze}}.", "c1", "cloze|alt");
+            // Arrange
 
+            // Act
+            var result = sut.ReplaceAnswer("Test text with {{c1::cloze}}.", "c1", "cloze|alt");
+
+            // Assert
             Assert.AreEqual("Test text with {{c1::cloze|alt}}.", result);
         }
 
         [TestMethod]
-        public void TestReplaceWithHint()
+        public void ReplaceAnswerWithHintTest()
         {
-            var result = converter.ReplaceAnswer("Test text with {{c1::cloze::hint}}.", "c1", "cloze|alt");
+            // Arrange
 
+            // Act
+            var result = sut.ReplaceAnswer("Test text with {{c1::cloze::hint}}.", "c1", "cloze|alt");
+
+            // Assert
             Assert.AreEqual("Test text with {{c1::cloze|alt::hint}}.", result);
         }
 
         [TestMethod]
-        public void TestReplaceWithWildcard2()
+        public void ReplaceTwoClozesWithWildcardsTest()
         {
-            var result = converter.ReplaceTextWithWildcards("Test text with {{c1::cloze}} and another {{c1::cloze}}.", "c1");
+            // Arrange
 
+            // Act
+            var result = sut.ReplaceTextWithWildcards("Test text with {{c1::cloze}} and another {{c1::cloze}}.", "c1");
+
+            // Assert
             Assert.AreEqual("Test text with {{c1::cloze}} and another {{c1::*}}.", result);
         }
 
         [TestMethod]
-        public void TestReplaceWithWildcard3()
+        public void ReplaceThreeClozesWithWildcardTest()
         {
-            var result = converter.ReplaceTextWithWildcards("Test text with {{c1::cloze}}, another {{c1::cloze}} and another {{c1::cloze}}.", "c1");
+            // Arrange
 
+            // Act
+            var result = sut.ReplaceTextWithWildcards("Test text with {{c1::cloze}}, another {{c1::cloze}} and another {{c1::cloze}}.", "c1");
+
+            // Assert
             Assert.AreEqual("Test text with {{c1::cloze}}, another {{c1::*}} and another {{c1::*}}.", result);
         }
     }

@@ -12,42 +12,48 @@ namespace Memento.Tests.Controllers
     [TestClass]
     public class HomeControllerTest
     {
+        private HomeController sut;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            var mockContext = new Mock<ControllerContext>();
+            mockContext.Setup(item => item.HttpContext.User.Identity.IsAuthenticated).Returns(true);
+
+            sut = new HomeController { ControllerContext = mockContext.Object };
+        }
+
         [TestMethod]
-        public void Index()
+        public void HomeIndexTest()
         {
             // Arrange
-            var controllerMock = new Mock<ControllerContext>();
-            controllerMock.Setup(item => item.HttpContext.User.Identity.IsAuthenticated).Returns(true);
-            var controller = new HomeController { ControllerContext = controllerMock.Object };
 
             // Act
-            var result = controller.Index() as RedirectToRouteResult;
+            var result = sut.Index() as RedirectToRouteResult;
 
             // Assert
             Assert.IsNotNull(result);
         }
 
         [TestMethod]
-        public void About()
+        public void HomeAboutTest()
         {
             // Arrange
-            HomeController controller = new HomeController();
 
             // Act
-            ViewResult result = controller.About() as ViewResult;
+            var result = sut.About() as ViewResult;
 
             // Assert
-            Assert.AreEqual("Memento", result.ViewBag.Message);
+            Assert.IsNotNull(result);
         }
 
         [TestMethod]
-        public void Contact()
+        public void HomeContactTest()
         {
             // Arrange
-            HomeController controller = new HomeController();
 
             // Act
-            ViewResult result = controller.Contact() as ViewResult;
+            var result = sut.Contact() as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);

@@ -17,13 +17,14 @@ using Memento.Tests.TestDbAsync;
 namespace Memento.Web.Controllers.Tests
 {
     [TestClass()]
-    public class DecksControllerTests
+    public class DecksControllerTest
     {
+        private DecksController sut;
+
         private Mock<IMementoRepository> mockRepository;
         private Mock<IConverter> mockConverter;
         private Mock<IValidator> mockValidator;
         private Mock<IScheduler> mockScheduler;
-        private DecksController sut;
 
         [TestInitialize]
         public void Setup()
