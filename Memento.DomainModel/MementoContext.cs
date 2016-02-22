@@ -19,12 +19,5 @@ namespace Memento.DomainModel.Models
         public DbSet<Cloze> Clozes { get; set; }
 
         public DbSet<Answer> Answers { get; set; }
-
-        public class ExportData
-        {
-            private readonly IEnumerable<Deck> decks;
-            private readonly IEnumerable<Card> cards;
-            private readonly IEnumerable<Cloze> clozes;
-        }
     }
 }
