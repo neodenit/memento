@@ -124,6 +124,10 @@
       <Project>{57e544cd-a620-4820-bbf4-dc8c27b4968e}</Project>
       <Name>Memento.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Memento.Models\Memento.Models.csproj">
+      <Project>{9a7ebcfb-2f3a-4ed3-8dff-c356ad46f230}</Project>
+      <Name>Memento.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Memento.Web\Memento.Web.csproj">
       <Project>{1c82468e-77f8-44fa-be30-dc56be50b3cf}</Project>
       <Name>Memento.Web</Name>

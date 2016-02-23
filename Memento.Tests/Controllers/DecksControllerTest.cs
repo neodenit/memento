@@ -1,20 +1,21 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Memento.Common;
+using Memento.DomainModel.Repository;
+using Memento.Interfaces;
+using Memento.Models.Models;
+using Memento.Tests.TestDbAsync;
+using Memento.Web.Controllers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Memento.DomainModel.Repository;
-using Memento.Interfaces;
-using Moq;
 using System.Web.Mvc;
-using Memento.DomainModel.Models;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using Memento.Tests.TestDbAsync;
-using Memento.Common;
 
-namespace Memento.Web.Controllers.Tests
+namespace Memento.Tests.Controllers
 {
     [TestClass()]
     public class DecksControllerTest
@@ -48,9 +49,9 @@ namespace Memento.Web.Controllers.Tests
         private void AddDbSetMocking()
         {
             var data = new List<Deck> {
-                 new Deck { ID = 1, Title = "Deck 1", Cards = new[] { new Card(), new Card() } },
-                 new Deck { ID = 2, Title = "Deck 2" },
-                 new Deck { ID = 3, Title = "Deck 3" },
+                 new Deck { ID = 1, Cards = new[] { new Card() } },
+                 new Deck { ID = 2, },
+                 new Deck { ID = 3, },
             };
 
             var dataQuery = data.AsQueryable();
@@ -75,7 +76,7 @@ namespace Memento.Web.Controllers.Tests
 
             mockRepository
                 .Setup(x => x.FindDeckAsync(It.IsAny<int>()))
-                .Returns<int>(x => Task.FromResult(data.FirstOrDefault(d => d.ID == x)));//todo
+                .Returns<int>(x => Task.FromResult(data.FirstOrDefault(d => d.ID == x) as IDeck));
         }
 
         [TestMethod()]
@@ -88,6 +89,7 @@ namespace Memento.Web.Controllers.Tests
             var model = result.Model as List<Deck>;
 
             // Assert
+            mockRepository.Verify(x => x.GetUserDecks(It.IsAny<string>()), Times.Once);
             Assert.IsNotNull(model);
         }
 
@@ -139,7 +141,7 @@ namespace Memento.Web.Controllers.Tests
         public async Task DecksCreatePostTest()
         {
             // Arrange
-            var deck = new Deck { ID = 4, Title = "Deck 4" };
+            var deck = new Deck { ID = 4 };
 
             // Act
             var result = await sut.Create(deck) as RedirectToRouteResult;

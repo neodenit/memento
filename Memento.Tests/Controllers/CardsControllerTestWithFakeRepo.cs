@@ -1,15 +1,15 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Memento.Interfaces;
+using Memento.Models.Models;
+using Memento.Models.ViewModels;
 using Memento.Web.Controllers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Moq;
-using Memento.Interfaces;
-using Memento.DomainModel.Models;
 using System.Web.Mvc;
-using Memento.DomainModel.ViewModels;
 
 namespace Memento.Tests.Controllers
 {
@@ -59,7 +59,6 @@ namespace Memento.Tests.Controllers
                 new Cloze { ID = 2 },
                 new Cloze { ID = 3 },
             };
-
             var secondCardClozes = new List<Cloze> {
                 new Cloze { ID = 4 },
                 new Cloze { ID = 5 },
@@ -77,7 +76,7 @@ namespace Memento.Tests.Controllers
                 new Card {
                     ID = 2,
                     IsValid = true,
-                    Clozes = secondCardClozes
+                    Clozes = secondCardClozes,
                 },
             };
 

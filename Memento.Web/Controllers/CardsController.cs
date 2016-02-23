@@ -1,8 +1,7 @@
-﻿using Memento.DomainModel.Attributes;
-using Memento.DomainModel.Models;
-using Memento.DomainModel.Repository;
-using Memento.DomainModel.ViewModels;
+﻿using Memento.Attributes;
 using Memento.Interfaces;
+using Memento.Models.Models;
+using Memento.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -87,11 +86,11 @@ namespace Memento.Web.Controllers
             {
                 return RedirectToAction("PreviewClosed", new { id = card.ID });
             }
-            else if (card.Deck.ControlMode == ControlModes.Manual)
+            else if (card.GetDeck().ControlMode == ControlModes.Manual)
             {
                 return RedirectToAction("RepeatClosed", new { id = card.ID });
             }
-            else if (card.Deck.ControlMode == ControlModes.Automatic)
+            else if (card.GetDeck().ControlMode == ControlModes.Automatic)
             {
                 return RedirectToAction("Question", new { id = card.ID });
             }
@@ -129,7 +128,7 @@ namespace Memento.Web.Controllers
         {
             var dbCard = await repository.FindCardAsync(card.ID);
 
-            return await PromoteAndRedirect(dbCard.Deck, Delays.Same);
+            return await PromoteAndRedirect(dbCard.GetDeck(), Delays.Same);
         }
 
         public async Task<ActionResult> RepeatClosed([CheckCardExistence, CheckCardOwner] int id)
@@ -176,7 +175,7 @@ namespace Memento.Web.Controllers
                         Delays.Next :
                         Delays.Same;
 
-            return await PromoteAndRedirect(dbCard.Deck, delay);
+            return await PromoteAndRedirect(dbCard.GetDeck(), delay);
         }
 
         public async Task<ActionResult> Question([CheckCardExistence, CheckCardOwner] int id)
@@ -230,7 +229,7 @@ namespace Memento.Web.Controllers
 
             await repository.SaveChangesAsync();
 
-            return await PromoteAndRedirect(dbCard.Deck, Delays.Next);
+            return await PromoteAndRedirect(dbCard.GetDeck(), Delays.Next);
         }
 
 
@@ -247,7 +246,7 @@ namespace Memento.Web.Controllers
 
                 await repository.SaveChangesAsync();
 
-                return await PromoteAndRedirect(dbCard.Deck, Delays.Previous);
+                return await PromoteAndRedirect(dbCard.GetDeck(), Delays.Previous);
             }
             else if (AltButton != null)
             {
@@ -275,7 +274,7 @@ namespace Memento.Web.Controllers
             }
             else if (WrongButton != null)
             {
-                return await PromoteAndRedirect(dbCard.Deck, Delays.Previous);
+                return await PromoteAndRedirect(dbCard.GetDeck(), Delays.Previous);
             }
             else if (AltButton != null)
             {
@@ -324,7 +323,7 @@ namespace Memento.Web.Controllers
                 {
                     ID = card.ID,
                     DeckID = card.DeckID,
-                    Deck = await repository.FindDeckAsync(card.DeckID),
+                    Deck = await repository.FindDeckAsync(card.DeckID) as Deck,
                     Text = converter.ReplaceTextWithWildcards(card.Text, clozeNames),
                     Clozes = new Collection<Cloze>(),
                     IsValid = true,
@@ -366,7 +365,7 @@ namespace Memento.Web.Controllers
 
                 dbCard.Text = converter.ReplaceTextWithWildcards(card.Text, clozes);
 
-                var oldClozes = from cloze in dbCard.Clozes select cloze.Label;
+                var oldClozes = from cloze in dbCard.GetClozes() select cloze.Label;
                 var newClozes = clozes;
 
                 var deletedClozes = oldClozes.Except(newClozes).ToList();
@@ -451,7 +450,7 @@ namespace Memento.Web.Controllers
             return RedirectToAction("Details", "Decks", new { id = card.DeckID });
         }
 
-        private async Task<ActionResult> PromoteAndRedirect(Deck deck, Delays delay)
+        private async Task<ActionResult> PromoteAndRedirect(IDeck deck, Delays delay)
         {
             repository.PromoteCard(deck, delay);
 

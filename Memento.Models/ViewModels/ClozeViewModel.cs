@@ -1,4 +1,5 @@
-﻿using Memento.DomainModel.Models;
+﻿using Memento.Interfaces;
+using Memento.Models.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Memento.DomainModel.ViewModels
+namespace Memento.Models.ViewModels
 {
     public class ClozeViewModel
     {
@@ -26,7 +27,7 @@ namespace Memento.DomainModel.ViewModels
 
         public string Text { get; set; }
 
-        public ClozeViewModel(Cloze cloze, string text = "")
+        public ClozeViewModel(ICloze cloze, string text = "")
         {
             ID = cloze.ID;
             CardID = cloze.CardID;

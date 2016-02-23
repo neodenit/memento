@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Memento.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Memento.DomainModel.Models
+namespace Memento.Models.Models
 {
-    public class Answer
+    public class Answer : IAnswer
     {
         public int ID { get; set; }
 

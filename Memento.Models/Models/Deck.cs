@@ -1,5 +1,5 @@
-﻿using Memento.Common;
-using Memento.DomainModel.Attributes;
+﻿using Memento.Attributes;
+using Memento.Common;
 using Memento.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -7,21 +7,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Principal;
 
-namespace Memento.DomainModel.Models
+namespace Memento.Models.Models
 {
-    public enum ControlModes
-    {
-        Automatic,
-        Manual,
-    }
-
-    public enum DelayModes
-    {
-        Smooth,
-        Sharp,
-        Combined,
-    }
-
     public class Deck : IDeck
     {
         [CheckDeckOwner]
@@ -49,37 +36,37 @@ namespace Memento.DomainModel.Models
         [Display(Name = "Coefficient")]
         public double Coeff { get; set; }
 
-        public IEnumerable<Cloze> GetClozes()
+        public IEnumerable<ICloze> GetClozes()
         {
             var validCards = GetValidCards();
-            return validCards.SelectMany(card => card.Clozes ?? Enumerable.Empty<Cloze>());
+            return validCards.SelectMany(card => card.GetClozes() ?? Enumerable.Empty<ICloze>());
         }
 
-        public Card GetNextCard()
+        public ICard GetNextCard()
         {
             var validCards = GetValidCards();
 
-            var nextCard = validCards.GetMinElement(item => item.Clozes.Min(c => c.Position));
+            var nextCard = validCards.GetMinElement(item => item.GetClozes().Min(c => c.Position));
 
             return nextCard;
         }
 
-        public IEnumerable<Card> GetAllCards()
+        public IEnumerable<ICard> GetAllCards()
         {
             return Cards;
         }
 
-        public IEnumerable<Card> GetValidCards()
+        public IEnumerable<ICard> GetValidCards()
         {
             return Cards.Where(card => card.IsValid && !card.IsDeleted);
         }
 
-        public IEnumerable<Card> GetDraftCards()
+        public IEnumerable<ICard> GetDraftCards()
         {
             return Cards.Where(card => !card.IsValid && !card.IsDeleted);
         }
 
-        public IEnumerable<Card> GetDeletedCards()
+        public IEnumerable<ICard> GetDeletedCards()
         {
             return Cards.Where(card => card.IsDeleted);
         }

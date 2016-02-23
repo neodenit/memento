@@ -1,5 +1,4 @@
-﻿using Memento.DomainModel.ViewModels;
-using Memento.Interfaces;
+﻿using Memento.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Memento.DomainModel.Attributes
+namespace Memento.Attributes
 {
     public class CheckClozesAttribute : ValidationAttribute
     {
@@ -18,7 +17,7 @@ namespace Memento.DomainModel.Attributes
 
         public override bool IsValid(object value)
         {
-            var card = (EditCardViewModel)value;
+            var card = (IEditCardViewModel)value;
 
             var text = card.Text;
             var clozeNames = converter.GetClozeNames(text);

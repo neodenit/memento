@@ -79,11 +79,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\CheckClozesAttribute.cs" />
-    <Compile Include="Attributes\CheckCardExistenceAttribute.cs" />
-    <Compile Include="Attributes\CheckDeckExistenceAttribute.cs" />
-    <Compile Include="Attributes\CheckDeckOwnerAttribute.cs" />
-    <Compile Include="Attributes\CheckCardOwnerAttribute.cs" />
     <Compile Include="Migrations\201511011032471_Initial.cs" />
     <Compile Include="Migrations\201511011032471_Initial.Designer.cs">
       <DependentUpon>201511011032471_Initial.cs</DependentUpon>
@@ -94,22 +89,18 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MementoContext.cs" />
-    <Compile Include="Models\Answer.cs" />
-    <Compile Include="Models\Card.cs" />
-    <Compile Include="Models\Cloze.cs" />
-    <Compile Include="Models\Deck.cs" />
-    <Compile Include="Repository\IMementoRepository.cs" />
-    <Compile Include="ViewModels\AnswerCardViewModel.cs" />
-    <Compile Include="ViewModels\ClozeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\EFMementoRepository.cs" />
-    <Compile Include="ViewModels\EditCardViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Memento.Attributes\Memento.Attributes.csproj">
+      <Project>{fa6f41e3-a64f-408c-b831-de622dd25c7b}</Project>
+      <Name>Memento.Attributes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Memento.Common\Memento.Common.csproj">
       <Project>{af08785a-2a1b-47f8-8100-460b69df26be}</Project>
       <Name>Memento.Common</Name>
@@ -121,6 +112,10 @@
     <ProjectReference Include="..\Memento.Interfaces\Memento.Interfaces.csproj">
       <Project>{57e544cd-a620-4820-bbf4-dc8c27b4968e}</Project>
       <Name>Memento.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Memento.Models\Memento.Models.csproj">
+      <Project>{9a7ebcfb-2f3a-4ed3-8dff-c356ad46f230}</Project>
+      <Name>Memento.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

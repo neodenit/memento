@@ -1,6 +1,6 @@
 ﻿using Memento.Common;
-using Memento.DomainModel.Models;
 using Memento.Interfaces;
+using Memento.Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,100 +23,105 @@ namespace Memento.DomainModel.Repository
             this.newCardsManager = newCardsManager;
         }
 
-        public IQueryable<Deck> GetUserDecks(string userName)
+        public IQueryable<IDeck> GetUserDecks(string userName)
         {
             return db.Decks.Where(item => item.Owner == userName);
         }
 
-        public Deck FindDeck(int? id)
+        public IDeck FindDeck(int? id)
         {
             return db.Decks.Find(id);
         }
 
-        public Card FindCard(int? id)
+        public ICard FindCard(int? id)
         {
             return db.Cards.Find(id);
         }
 
-        public Cloze FindCloze(int? id)
+        public ICloze FindCloze(int? id)
         {
             return db.Clozes.Find(id);
         }
 
-        public Task<Deck> FindDeckAsync(int? id)
+        public async Task<IDeck> FindDeckAsync(int? id)
         {
-            return db.Decks.FindAsync(id);
+            return await db.Decks.FindAsync(id);
         }
 
-        public Task<Card> FindCardAsync(int? id)
+        public async Task<ICard> FindCardAsync(int? id)
         {
-            return db.Cards.FindAsync(id);
+            return await db.Cards.FindAsync(id);
         }
 
-        public Task<Cloze> FindClozeAsync(int? id)
+        public async Task<ICloze> FindClozeAsync(int? id)
         {
-            return db.Clozes.FindAsync(id);
+            return await db.Clozes.FindAsync(id);
         }
 
-        public void AddDeck(Deck deck)
+        public IQueryable<IAnswer> GetAnswersForDeck(int deckID)
         {
-            db.Decks.Add(deck);
+            return from answer in db.Answers where answer.DeckID == deckID select answer;
         }
 
-        public void AddCard(Card card)
+        public void AddDeck(IDeck deck)
         {
-            db.Cards.Add(card);
+            db.Decks.Add(deck as Deck);
         }
 
-        public void AddCloze(Cloze cloze)
+        public void AddCard(ICard card)
         {
-            db.Clozes.Add(cloze);
+            db.Cards.Add(card as Card);
         }
 
-        public void RemoveDeck(Deck deck)
+        public void AddCloze(ICloze cloze)
         {
-            db.Decks.Remove(deck);
+            db.Clozes.Add(cloze as Cloze);
         }
 
-        public void RemoveCard(Card card)
+        public void RemoveDeck(IDeck deck)
         {
-            db.Cards.Remove(card);
+            db.Decks.Remove(deck as Deck);
         }
 
-        public void RemoveCloze(Cloze cloze)
+        public void RemoveCard(ICard card)
         {
-            db.Clozes.Remove(cloze);
+            db.Cards.Remove(card as Card);
         }
 
-        public void AddClozes(Card card, IEnumerable<string> clozeNames)
+        public void RemoveCloze(ICloze cloze)
+        {
+            db.Clozes.Remove(cloze as Cloze);
+        }
+
+        public void AddClozes(ICard card, IEnumerable<string> clozeNames)
         {
             foreach (var clozeName in clozeNames)
             {
                 var newCloze = new Cloze(card.ID, clozeName);
-                var deckClozes = card.Deck.GetClozes();
+                var deckClozes = card.GetDeck().GetClozes();
 
-                scheduler.PrepareForAdding(card.Deck, deckClozes, newCloze);
+                scheduler.PrepareForAdding(card.GetDeck(), deckClozes, newCloze);
 
                 AddCloze(newCloze);
             }
         }
 
-        public void RemoveClozes(Card card, IEnumerable<string> clozeNames)
+        public void RemoveClozes(ICard card, IEnumerable<string> clozeNames)
         {
             foreach (var clozeName in clozeNames)
             {
-                var cloze = card.Clozes.Single(item => item.Label == clozeName);
+                var cloze = card.GetClozes().Single(item => item.Label == clozeName);
 
-                scheduler.PrepareForRemoving(card.Deck, card.Clozes, cloze);
+                scheduler.PrepareForRemoving(card.GetDeck(), card.GetClozes(), cloze);
 
-                card.Clozes.Remove(cloze);
+                db.Clozes.Remove(cloze as Cloze);
             }
         }
 
-        public void AddAnswer(Cloze cloze, bool isCorrect)
+        public void AddAnswer(ICloze cloze, bool isCorrect)
         {
-            var card = cloze.Card;
-            var deck = card.Deck;
+            var card = cloze.GetCard();
+            var deck = card.GetDeck();
 
             var answer = new Answer
             {
@@ -132,7 +137,7 @@ namespace Memento.DomainModel.Repository
             db.Answers.Add(answer);
         }
 
-        public void PromoteCard(Deck deck, Delays delay)
+        public void PromoteCard(IDeck deck, Delays delay)
         {
             var clozes = deck.GetClozes();
 
@@ -157,47 +162,6 @@ namespace Memento.DomainModel.Repository
         public void Dispose()
         {
             db.Dispose();
-        }
-
-        private IQueryable<Card> GetUserCards(string userName)
-        {
-            return db.Cards.Where(item => item.Deck.Owner == userName);
-        }
-
-        private IQueryable<Cloze> GetUserClozes(string userName)
-        {
-            return db.Clozes.Where(item => item.Card.Deck.Owner == userName);
-        }
-
-        private IQueryable<Answer> GetUserAnswers(string userName)
-        {
-            return db.Answers.Where(item => item.Owner == userName);
-        }
-
-        private void DeleteUserDecks(string userName)
-        {
-            var items = GetUserDecks(userName);
-            db.Decks.RemoveRange(items);
-            db.SaveChanges();
-        }
-
-        private void DeleteUserCards(string userName)
-        {
-            var items = GetUserCards(userName);
-            db.Cards.RemoveRange(items);
-            db.SaveChanges();
-        }
-
-        private void DeleteUserClozes(string userName)
-        {
-            var items = GetUserClozes(userName);
-            db.Clozes.RemoveRange(items);
-            db.SaveChanges();
-        }
-
-        public IQueryable<Answer> GetAnswersForDeck(int deckID)
-        {
-            return from answer in db.Answers where answer.DeckID == deckID select answer;
         }
     }
 }

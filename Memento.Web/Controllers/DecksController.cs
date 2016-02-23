@@ -1,9 +1,8 @@
 ﻿using Ionic.Zip;
+using Memento.Attributes;
 using Memento.Common;
-using Memento.DomainModel.Attributes;
-using Memento.DomainModel.Models;
-using Memento.DomainModel.Repository;
 using Memento.Interfaces;
+using Memento.Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -44,7 +43,7 @@ namespace Memento.Web.Controllers
             var decks = repository.GetUserDecks(User.Identity.Name);
             var orderedDecks = decks.OrderBy(deck => deck.Title);
 
-            return View(await orderedDecks.ToListAsync());
+            return View(await orderedDecks.Cast<Deck>().ToListAsync());
         }
 
         // GET: Decks/Details/5

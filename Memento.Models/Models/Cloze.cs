@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Memento.DomainModel.Models
+namespace Memento.Models.Models
 {
     public class Cloze : ICloze
     {
@@ -24,6 +24,11 @@ namespace Memento.DomainModel.Models
         public int CardID { get; set; }
 
         public virtual Card Card { get; set; }
+
+        public ICard GetCard()
+        {
+            return Card;
+        }
 
         public string Label { get; set; }
 

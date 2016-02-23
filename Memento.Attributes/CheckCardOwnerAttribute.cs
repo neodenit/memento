@@ -1,4 +1,4 @@
-﻿using Memento.DomainModel.Repository;
+﻿using Memento.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Memento.DomainModel.Attributes
+namespace Memento.Attributes
 {
-    public class CheckCardExistenceAttribute : ValidationAttribute
+    public class CheckCardOwnerAttribute : ValidationAttribute
     {
         private IMementoRepository repository = DependencyResolver.Current.GetService<IMementoRepository>();
 
@@ -21,7 +21,7 @@ namespace Memento.DomainModel.Attributes
 
             var card = repository.FindCard(cardID);
 
-            return card != null;
+            return card == null || card.GetDeck().Owner == HttpContext.Current.User.Identity.Name;
         }
     }
 }

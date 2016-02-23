@@ -1,5 +1,6 @@
 ﻿using Memento.Common;
-using Memento.DomainModel.Attributes;
+using Memento.Attributes;
+using Memento.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,9 +9,9 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Memento.DomainModel.Models
+namespace Memento.Models.Models
 {
-    public class Card
+    public class Card : ICard
     {
         [CheckCardOwner]
         public int ID { get; set; }
@@ -19,17 +20,32 @@ namespace Memento.DomainModel.Models
 
         public virtual Deck Deck { get; set; }
 
+        public IDeck GetDeck()
+        {
+            return Deck;
+        }
+
         [Required]
         [DataType(DataType.MultilineText)]
         public string Text { get; set; }
 
         public virtual ICollection<Cloze> Clozes { get; set; }
 
+        public IEnumerable<ICloze> GetClozes()
+        {
+            return Clozes;
+        }
+
+        public void AddCloze(ICloze cloze)
+        {
+            Clozes.Add(cloze as Cloze);
+        }
+
         public bool IsValid { get; set; }
 
         public bool IsDeleted { get; set; }
 
-        public Cloze GetNextCloze()
+        public ICloze GetNextCloze()
         {
             var cloze = Clozes.GetMinElement(item => item.Position);
 

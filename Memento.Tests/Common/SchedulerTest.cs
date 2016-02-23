@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Memento.DomainModel.Models;
 using Memento.Interfaces;
 using Memento.Common;
 using Memento.Core;
+using Memento.Models.Models;
 
 namespace Memento.Tests
 {
