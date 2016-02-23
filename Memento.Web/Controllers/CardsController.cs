@@ -28,7 +28,7 @@ namespace Memento.Web.Controllers
         private readonly IValidator validator;
         private readonly IScheduler scheduler;
 
-        public CardsController(IMementoRepository repository, IEvaluator evaluator, IConverter converter, IValidator validator, IScheduler scheduler)
+        public CardsController(IMementoRepository repository, IConverter converter, IValidator validator, IScheduler scheduler, IEvaluator evaluator)
         {
             this.repository = repository;
             this.evaluator = evaluator;
@@ -37,8 +37,7 @@ namespace Memento.Web.Controllers
             this.scheduler = scheduler;
         }
 
-        // GET: Cards
-        public async Task<ActionResult> Index([CheckDeckExistence, CheckDeckOwner] int deckID)
+        public async Task<ActionResult> ClozesIndex([CheckDeckExistence, CheckDeckOwner] int deckID)
         {
             var deck = await repository.FindDeckAsync(deckID);
             var clozes = deck.GetClozes();
@@ -294,7 +293,6 @@ namespace Memento.Web.Controllers
             }
         }
 
-        // GET: Cards/Create
         public ActionResult Create(int? DeckID)
         {
             if (DeckID == null)
@@ -313,7 +311,6 @@ namespace Memento.Web.Controllers
             }
         }
 
-        // POST: Cards/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "ID, DeckID, Text")] EditCardViewModel card)
@@ -350,7 +347,6 @@ namespace Memento.Web.Controllers
             }
         }
 
-        // GET: Cards/Edit/5
         public async Task<ActionResult> Edit([CheckCardExistence, CheckCardOwner] int id)
         {
             var card = await repository.FindCardAsync(id);
@@ -359,7 +355,6 @@ namespace Memento.Web.Controllers
             return View(cardViewModel);
         }
 
-        // POST: Cards/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "ID, Text, Answer")] Card card)
@@ -406,7 +401,7 @@ namespace Memento.Web.Controllers
 
             await repository.SaveChangesAsync();
 
-            return RedirectToAction("Index", new { deckID });
+            return RedirectToAction("ClozesIndex", new { deckID });
         }
 
         public async Task<ActionResult> Restore([CheckCardExistence, CheckCardOwner] int id)
@@ -429,7 +424,6 @@ namespace Memento.Web.Controllers
             return RedirectToAction("DeletedIndex", "Cards", new { DeckID = card.DeckID });
         }
 
-        // GET: Cards/Delete/5
         public async Task<ActionResult> Delete([CheckCardExistence, CheckCardOwner] int id)
         {
             var card = await repository.FindCardAsync(id);
@@ -437,7 +431,6 @@ namespace Memento.Web.Controllers
             return View(card);
         }
 
-        // POST: Cards/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed([CheckCardExistence, CheckCardOwner] int id)
