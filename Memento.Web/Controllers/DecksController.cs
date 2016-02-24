@@ -28,22 +28,22 @@ namespace Memento.Web.Controllers
         private readonly IConverter converter;
         private readonly IValidator validator;
         private readonly IScheduler scheduler;
+        private readonly IDecksService decksService;
 
-        public DecksController(IMementoRepository repository, IConverter converter, IValidator validator, IScheduler scheduler)
+        public DecksController(IMementoRepository repository, IConverter converter, IValidator validator, IScheduler scheduler, IDecksService decksService)
         {
             this.repository = repository;
             this.converter = converter;
             this.validator = validator;
             this.scheduler = scheduler;
+            this.decksService = decksService;
         }
 
         // GET: Decks
         public async Task<ActionResult> Index()
         {
-            var decks = repository.GetUserDecks(User.Identity.Name);
-            var orderedDecks = decks.OrderBy(deck => deck.Title);
-
-            return View(await orderedDecks.Cast<Deck>().ToListAsync());
+            var decks = await decksService.GetDecksAsync(User.Identity.Name);
+            return View(decks.Cast<Deck>());
         }
 
         // GET: Decks/Details/5
@@ -51,10 +51,8 @@ namespace Memento.Web.Controllers
         {
             var deck = await repository.FindDeckAsync(id);
             var startTime = DateTime.Now.AddDays(-10);
-            var answers = repository
-                .GetAnswersForDeck(deck.ID)
-                .Where(answer => answer.Time >= startTime)
-                .ToList();
+
+            var answers = await decksService.GetAnswersAsync(deck.ID, startTime);
 
             var groupedAnswers = from answer in answers group answer by answer.Time.Date;
 

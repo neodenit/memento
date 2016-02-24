@@ -96,6 +96,10 @@
       <Project>{9a7ebcfb-2f3a-4ed3-8dff-c356ad46f230}</Project>
       <Name>Memento.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Memento.Services\Memento.Services.csproj">
+      <Project>{9d964827-0f48-40b3-b1ad-591d9e4168d2}</Project>
+      <Name>Memento.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -8,8 +8,8 @@ namespace Memento.Interfaces
 {
     public interface IMementoRepository
     {
-        IQueryable<IDeck> GetUserDecks(string userName);
-        IQueryable<IAnswer> GetAnswersForDeck(int deckID);
+        Task<IEnumerable<IDeck>> GetUserDecksAsync(string userName);
+        Task<IEnumerable<IAnswer>> GetAnswersForDeckAsync(int deckID);
         IDeck FindDeck(int? id);
         ICard FindCard(int? id);
         ICloze FindCloze(int? id);

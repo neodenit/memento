@@ -83,11 +83,11 @@ namespace Memento.Tests
         public Task<IDeck> FindDeckAsync(int? id) =>
             Task.FromResult(decks.FirstOrDefault(d => d.ID == id.Value));
 
-        public IQueryable<IAnswer> GetAnswersForDeck(int deckID) =>
-            answers.Where(a => a.DeckID == deckID).AsQueryable();
+        public Task<IEnumerable<IAnswer>> GetAnswersForDeckAsync(int deckID) =>
+            Task.FromResult(answers.Where(a => a.DeckID == deckID));
 
-        public IQueryable<IDeck> GetUserDecks(string userName) =>
-            decks.Where(d => d.Owner == userName).AsQueryable();
+        public Task<IEnumerable<IDeck>> GetUserDecksAsync(string userName) =>
+            Task.FromResult(decks.Where(d => d.Owner == userName));
 
         public void PromoteCard(IDeck deck, Delays delay) { }
 

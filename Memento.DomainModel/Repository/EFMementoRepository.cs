@@ -3,6 +3,7 @@ using Memento.Interfaces;
 using Memento.Models.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,75 +24,47 @@ namespace Memento.DomainModel.Repository
             this.newCardsManager = newCardsManager;
         }
 
-        public IQueryable<IDeck> GetUserDecks(string userName)
-        {
-            return db.Decks.Where(item => item.Owner == userName);
-        }
+        public async Task<IEnumerable<IDeck>> GetUserDecksAsync(string userName) =>
+            await db.Decks.Where(item => item.Owner == userName).ToListAsync();
 
-        public IDeck FindDeck(int? id)
-        {
-            return db.Decks.Find(id);
-        }
+        public IDeck FindDeck(int? id) =>
+            db.Decks.Find(id);
 
-        public ICard FindCard(int? id)
-        {
-            return db.Cards.Find(id);
-        }
+        public ICard FindCard(int? id) =>
+            db.Cards.Find(id);
 
-        public ICloze FindCloze(int? id)
-        {
-            return db.Clozes.Find(id);
-        }
+        public ICloze FindCloze(int? id) =>
+            db.Clozes.Find(id);
 
-        public async Task<IDeck> FindDeckAsync(int? id)
-        {
-            return await db.Decks.FindAsync(id);
-        }
+        public async Task<IDeck> FindDeckAsync(int? id) =>
+            await db.Decks.FindAsync(id);
 
-        public async Task<ICard> FindCardAsync(int? id)
-        {
-            return await db.Cards.FindAsync(id);
-        }
+        public async Task<ICard> FindCardAsync(int? id) =>
+            await db.Cards.FindAsync(id);
 
-        public async Task<ICloze> FindClozeAsync(int? id)
-        {
-            return await db.Clozes.FindAsync(id);
-        }
+        public async Task<ICloze> FindClozeAsync(int? id) =>
+            await db.Clozes.FindAsync(id);
 
-        public IQueryable<IAnswer> GetAnswersForDeck(int deckID)
-        {
-            return from answer in db.Answers where answer.DeckID == deckID select answer;
-        }
+        public async Task<IEnumerable<IAnswer>> GetAnswersForDeckAsync(int deckID) =>
+            await db.Answers.Where(a => a.DeckID == deckID).ToListAsync();
 
-        public void AddDeck(IDeck deck)
-        {
+        public void AddDeck(IDeck deck) =>
             db.Decks.Add(deck as Deck);
-        }
 
-        public void AddCard(ICard card)
-        {
+        public void AddCard(ICard card) =>
             db.Cards.Add(card as Card);
-        }
 
-        public void AddCloze(ICloze cloze)
-        {
+        public void AddCloze(ICloze cloze) =>
             db.Clozes.Add(cloze as Cloze);
-        }
 
-        public void RemoveDeck(IDeck deck)
-        {
+        public void RemoveDeck(IDeck deck) =>
             db.Decks.Remove(deck as Deck);
-        }
 
-        public void RemoveCard(ICard card)
-        {
+        public void RemoveCard(ICard card) =>
             db.Cards.Remove(card as Card);
-        }
 
-        public void RemoveCloze(ICloze cloze)
-        {
+        public void RemoveCloze(ICloze cloze) =>
             db.Clozes.Remove(cloze as Cloze);
-        }
 
         public void AddClozes(ICard card, IEnumerable<string> clozeNames)
         {
@@ -154,14 +127,10 @@ namespace Memento.DomainModel.Repository
             scheduler.PromoteCloze(deck, clozes, delay);
         }
 
-        public Task SaveChangesAsync()
-        {
-            return db.SaveChangesAsync();
-        }
+        public Task SaveChangesAsync() =>
+            db.SaveChangesAsync();
 
-        public void Dispose()
-        {
+        public void Dispose() =>
             db.Dispose();
-        }
     }
 }

@@ -292,11 +292,11 @@ namespace Memento.Web.Controllers
             }
         }
 
-        public ActionResult Create(int? DeckID)
+        public async Task<ActionResult> Create(int? DeckID)
         {
             if (DeckID == null)
             {
-                ViewBag.DeckID = new SelectList(repository.GetUserDecks(User.Identity.Name), "ID", "Title");
+                ViewBag.DeckID = new SelectList(await repository.GetUserDecksAsync(User.Identity.Name), "ID", "Title");
 
                 var card = new EditCardViewModel { DeckID = -1 };
 

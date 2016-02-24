@@ -26,6 +26,7 @@ namespace Memento.Tests.Controllers
         private Mock<IConverter> mockConverter;
         private Mock<IValidator> mockValidator;
         private Mock<IScheduler> mockScheduler;
+        private Mock<IDecksService> mockDecksService;
 
         [TestInitialize]
         public void Setup()
@@ -34,14 +35,18 @@ namespace Memento.Tests.Controllers
             mockConverter = new Mock<IConverter>();
             mockValidator = new Mock<IValidator>();
             mockScheduler = new Mock<IScheduler>();
+            mockDecksService = new Mock<IDecksService>();
 
             var mockContext = new Mock<ControllerContext>();
             mockContext.Setup(item => item.HttpContext.User.Identity.Name).Returns("user@server.com");
 
-            sut = new DecksController(mockRepository.Object, mockConverter.Object, mockValidator.Object, mockScheduler.Object)
+            sut = new DecksController(mockRepository.Object, mockConverter.Object, mockValidator.Object, mockScheduler.Object, mockDecksService.Object)
             {
                 ControllerContext = mockContext.Object
             };
+
+            mockDecksService.Setup(x => x.GetAnswersAsync(It.IsAny<int>(), It.IsAny<DateTime>()))
+                .Returns(Task.FromResult(Enumerable.Empty<IAnswer>()));
 
             AddDbSetMocking();
         }
@@ -71,8 +76,8 @@ namespace Memento.Tests.Controllers
             mockDbSet.As<IQueryable<Deck>>().Setup(m => m.GetEnumerator()).Returns(dataQuery.GetEnumerator());
 
             mockRepository
-                .Setup(x => x.GetUserDecks(It.IsAny<string>()))
-                .Returns(mockDbSet.Object);
+                .Setup(x => x.GetUserDecksAsync(It.IsAny<string>()))
+                .Returns(async () => await mockDbSet.Object.ToListAsync<IDeck>());
 
             mockRepository
                 .Setup(x => x.FindDeckAsync(It.IsAny<int>()))
@@ -86,10 +91,10 @@ namespace Memento.Tests.Controllers
 
             // Act
             var result = await sut.Index() as ViewResult;
-            var model = result.Model as List<Deck>;
+            var model = result.Model as IEnumerable<Deck>;
 
             // Assert
-            mockRepository.Verify(x => x.GetUserDecks(It.IsAny<string>()), Times.Once);
+            mockDecksService.Verify(x => x.GetDecksAsync(It.IsAny<string>()), Times.Once);
             Assert.IsNotNull(model);
         }
 
@@ -105,7 +110,7 @@ namespace Memento.Tests.Controllers
 
             // Assert
             mockRepository.Verify(x => x.FindDeckAsync(id), Times.Once);
-            mockRepository.Verify(x => x.GetAnswersForDeck(id), Times.Once);
+            mockDecksService.Verify(x => x.GetAnswersAsync(id, It.IsAny<DateTime>()), Times.Once);
             Assert.IsNotNull(model);
             Assert.AreEqual(id, model.ID);
         }

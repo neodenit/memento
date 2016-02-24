@@ -432,13 +432,13 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public void CardsCreateTestWithFakeRepo()
+        public async Task CardsCreateTestWithFakeRepo()
         {
             // Arrange
             var id = 1;
 
             // Act
-            var result = sut.Create(id) as ViewResult;
+            var result = await sut.Create(id) as ViewResult;
             var model = result.Model as EditCardViewModel;
 
             // Assert
@@ -448,13 +448,13 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public void CardsCreateNullDeckIDTestWithFakeRepo()
+        public async Task CardsCreateNullDeckIDTestWithFakeRepo()
         {
             // Arrange
             int? id = null;
 
             // Act
-            var result = sut.Create(id) as ViewResult;
+            var result = await sut.Create(id) as ViewResult;
             var model = result.Model as EditCardViewModel;
 
             // Assert

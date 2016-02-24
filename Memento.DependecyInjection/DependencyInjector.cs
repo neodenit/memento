@@ -5,6 +5,7 @@ using Memento.Core.Evaluators;
 using Memento.Core.Validators;
 using Memento.DomainModel.Repository;
 using Memento.Interfaces;
+using Memento.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace Memento.DependecyInjection
             builder.RegisterControllers(assembly);
 
             builder.RegisterType<EFMementoRepository>().As<IMementoRepository>();
+            builder.RegisterType<DecksService>().As<IDecksService>();
             builder.RegisterType<PhraseEvaluator>().As<IEvaluator>();
             builder.RegisterType<Converter>().As<IConverter>();
             builder.RegisterType<ExistenceValidator>().As<IValidator>().WithParameter("baseValidator", null);
