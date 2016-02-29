@@ -41,11 +41,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAnswer.cs" />
+    <Compile Include="IStatistics.cs" />
     <Compile Include="ICard.cs" />
+    <Compile Include="IChartData.cs" />
     <Compile Include="ICloze.cs" />
     <Compile Include="IConverter.cs" />
     <Compile Include="IDeck.cs" />
+    <Compile Include="IStatisticsService.cs" />
     <Compile Include="IDecksService.cs" />
+    <Compile Include="IDeckWithStatViewModel.cs" />
     <Compile Include="IEditCardViewModel.cs" />
     <Compile Include="IEvaluator.cs" />
     <Compile Include="IMementoRepository.cs" />

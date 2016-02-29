@@ -32,7 +32,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,10 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StatisticsService.cs" />
     <Compile Include="DecksService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Memento.Common\Memento.Common.csproj">
+      <Project>{af08785a-2a1b-47f8-8100-460b69df26be}</Project>
+      <Name>Memento.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Memento.Interfaces\Memento.Interfaces.csproj">
       <Project>{57e544cd-a620-4820-bbf4-dc8c27b4968e}</Project>
       <Name>Memento.Interfaces</Name>

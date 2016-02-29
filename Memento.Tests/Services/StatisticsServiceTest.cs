@@ -7,15 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Memento.Interfaces;
 using Moq;
-using Memento.Models.Models;
-using Memento.Additional;
 
 namespace Memento.Tests.Services
 {
     [TestClass()]
-    public class DecksServiceTest
+    public class StatisticsServiceTest
     {
-        private DecksService sut;
+        private StatisticsService sut;
 
         private Mock<IMementoRepository> mockRepository;
         private Mock<IConverter> mockConverter;
@@ -32,39 +30,35 @@ namespace Memento.Tests.Services
             mockScheduler = new Mock<IScheduler>();
             mockDecksService = new Mock<IDecksService>();
 
-            sut = new DecksService(mockRepository.Object, mockConverter.Object, mockValidator.Object, mockScheduler.Object);
-
-            mockRepository.Setup(x => x.FindDeckAsync(It.IsAny<int>())).ReturnsAsync(new Deck());
+            sut = new StatisticsService(mockRepository.Object, mockConverter.Object, mockValidator.Object, mockScheduler.Object);
         }
 
         [TestMethod()]
-        public async Task DecksServiceGetDecksTest()
-        {
-            // Arrange
-            var userName = "user@server.com";
-
-            // Act
-            var result = await sut.GetDecksAsync(userName);
-
-            // Assert
-            mockRepository.Verify(x => x.GetUserDecksAsync(It.IsAny<string>()), Times.Once);
-            Assert.IsNotNull(result);
-        }
-
-        [TestMethod()]
-        public async Task DecksServiceGetDeckWithStatViewModelTest()
+        public async Task StatServiceGetAnswersTest()
         {
             // Arrange
             var id = 1;
-            var statistics = new Statistics();
+            var startTime = DateTime.UtcNow;
 
             // Act
-            var result = await sut.GetDeckWithStatViewModel(id, statistics);
+            var result = await sut.GetAnswersAsync(id, startTime);
+
+            // Assert
+            mockRepository.Verify(x => x.GetAnswersForDeckAsync(id), Times.Once);
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod()]
+        public void StatServiceGetStatisticsTest()
+        {
+            // Arrange
+            var answers = Enumerable.Empty<IAnswer>();
+            
+            // Act
+            var result = sut.GetStatistics(answers);
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.IsNotNull(result.Deck);
-            Assert.IsNotNull(result.Stat);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Memento.Common;
-using Memento.DomainModel.Repository;
 using Memento.Interfaces;
 using Memento.Models.Models;
+using Memento.Models.ViewModels;
 using Memento.Tests.TestDbAsync;
 using Memento.Web.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -27,6 +27,7 @@ namespace Memento.Tests.Controllers
         private Mock<IValidator> mockValidator;
         private Mock<IScheduler> mockScheduler;
         private Mock<IDecksService> mockDecksService;
+        private Mock<IStatisticsService> mockStatisticsService;
 
         [TestInitialize]
         public void Setup()
@@ -36,17 +37,20 @@ namespace Memento.Tests.Controllers
             mockValidator = new Mock<IValidator>();
             mockScheduler = new Mock<IScheduler>();
             mockDecksService = new Mock<IDecksService>();
+            mockStatisticsService = new Mock<IStatisticsService>();
 
             var mockContext = new Mock<ControllerContext>();
             mockContext.Setup(item => item.HttpContext.User.Identity.Name).Returns("user@server.com");
 
-            sut = new DecksController(mockRepository.Object, mockConverter.Object, mockValidator.Object, mockScheduler.Object, mockDecksService.Object)
+            sut = new DecksController(mockRepository.Object, mockConverter.Object, mockValidator.Object, mockScheduler.Object, mockDecksService.Object, mockStatisticsService.Object)
             {
                 ControllerContext = mockContext.Object
             };
 
-            mockDecksService.Setup(x => x.GetAnswersAsync(It.IsAny<int>(), It.IsAny<DateTime>()))
-                .Returns(Task.FromResult(Enumerable.Empty<IAnswer>()));
+            mockStatisticsService.Setup(x => x.GetAnswersAsync(It.IsAny<int>(), It.IsAny<DateTime>()))
+                .ReturnsAsync(Enumerable.Empty<IAnswer>());
+
+            mockDecksService.Setup(x => x.GetDeckWithStatViewModel(It.IsAny<int>(), It.IsAny<IStatistics>())).ReturnsAsync(new DeckWithStatViewModel());
 
             AddDbSetMocking();
         }
@@ -106,13 +110,14 @@ namespace Memento.Tests.Controllers
 
             // Act
             var result = await sut.Details(id) as ViewResult;
-            var model = result.Model as Deck;
+            var model = result.Model as DeckWithStatViewModel;
 
             // Assert
-            mockRepository.Verify(x => x.FindDeckAsync(id), Times.Once);
-            mockDecksService.Verify(x => x.GetAnswersAsync(id, It.IsAny<DateTime>()), Times.Once);
+            mockStatisticsService.Verify(x => x.GetAnswersAsync(id, It.IsAny<DateTime>()), Times.Once);
+            mockStatisticsService.Verify(x => x.GetStatistics(It.IsAny<IEnumerable<IAnswer>>()), Times.Once);
+            mockDecksService.Verify(x => x.GetDeckWithStatViewModel(id, It.IsAny<IStatistics>()));
+
             Assert.IsNotNull(model);
-            Assert.AreEqual(id, model.ID);
         }
 
         [TestMethod()]

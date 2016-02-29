@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Additional\ChartData.cs" />
+    <Compile Include="Additional\Statistics.cs" />
+    <Compile Include="ViewModels\DeckWithStatViewModel.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Card.cs" />
     <Compile Include="Models\Cloze.cs" />

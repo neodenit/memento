@@ -1,19 +1,19 @@
-﻿@model Memento.Models.Models.Deck
+﻿@model Memento.Models.ViewModels.DeckWithStatViewModel
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>@Html.DisplayFor(model => model.Title)</h2>
+<h2>@Html.DisplayFor(model => model.Deck.Title)</h2>
 
 @section Scripts {
     <script src="https://code.highcharts.com/highcharts.js"></script>
 
     <script>
         var chartData = {
-            answers: @Html.Raw(Json.Encode(ViewBag.Answers)),
-            correctAnswers: @Html.Raw(Json.Encode(ViewBag.CorrectAnswers)),
-            cards: @Html.Raw(Json.Encode(ViewBag.Cards)),
+            answers: @Html.Raw(Json.Encode(Model.Stat.Answers)),
+            correctAnswers: @Html.Raw(Json.Encode(Model.Stat.CorrectAnswers)),
+            cards: @Html.Raw(Json.Encode(Model.Stat.Cards)),
         }
     </script>
 
@@ -21,13 +21,13 @@
 }
 
 <div>
-    @Html.ActionLink("Create New Card", "Create", "Cards", new { DeckID = Model.ID }, null) |
-    @Html.ActionLink("Clozes Index", "ClozesIndex", "Cards", new { DeckID = Model.ID }, null) |
-    @Html.ActionLink("Cards Index", "CardsIndex", "Cards", new { DeckID = Model.ID }, null) |
-    @Html.ActionLink("Import", "Import", new { DeckID = Model.ID }) |
-    @Html.ActionLink("Export", "Export", new { DeckID = Model.ID }) |
-    @Html.ActionLink("Deleted cards", "DeletedIndex", "Cards", new { DeckID = Model.ID }, null) |
-    @Html.ActionLink("Draft cards", "DraftIndex", "Cards", new { DeckID = Model.ID }, null)
+    @Html.ActionLink("Create New Card", "Create", "Cards", new { DeckID = Model.Deck.ID }, null) |
+    @Html.ActionLink("Clozes Index", "ClozesIndex", "Cards", new { DeckID = Model.Deck.ID }, null) |
+    @Html.ActionLink("Cards Index", "CardsIndex", "Cards", new { DeckID = Model.Deck.ID }, null) |
+    @Html.ActionLink("Import", "Import", new { DeckID = Model.Deck.ID }) |
+    @Html.ActionLink("Export", "Export", new { DeckID = Model.Deck.ID }) |
+    @Html.ActionLink("Deleted cards", "DeletedIndex", "Cards", new { DeckID = Model.Deck.ID }, null) |
+    @Html.ActionLink("Draft cards", "DraftIndex", "Cards", new { DeckID = Model.Deck.ID }, null)
 </div>
 
 <div class="col-md-offset-2 col-md-10">

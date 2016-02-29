@@ -29,14 +29,16 @@ namespace Memento.Web.Controllers
         private readonly IValidator validator;
         private readonly IScheduler scheduler;
         private readonly IDecksService decksService;
+        private readonly IStatisticsService answersService;
 
-        public DecksController(IMementoRepository repository, IConverter converter, IValidator validator, IScheduler scheduler, IDecksService decksService)
+        public DecksController(IMementoRepository repository, IConverter converter, IValidator validator, IScheduler scheduler, IDecksService decksService, IStatisticsService answersService)
         {
             this.repository = repository;
             this.converter = converter;
             this.validator = validator;
             this.scheduler = scheduler;
             this.decksService = decksService;
+            this.answersService = answersService;
         }
 
         // GET: Decks
@@ -49,29 +51,15 @@ namespace Memento.Web.Controllers
         // GET: Decks/Details/5
         public async Task<ActionResult> Details([CheckDeckExistence, CheckDeckOwner] int id)
         {
-            var deck = await repository.FindDeckAsync(id);
             var startTime = DateTime.Now.AddDays(-10);
 
-            var answers = await decksService.GetAnswersAsync(deck.ID, startTime);
+            var answers = await answersService.GetAnswersAsync(id, startTime);
 
-            var groupedAnswers = from answer in answers group answer by answer.Time.Date;
+            var statistics = answersService.GetStatistics(answers);
 
-            var answerLabels = from item in groupedAnswers select item.Key.ToShortDateString();
-            var answerValues = from item in groupedAnswers select item.Count();
+            var viewModel = await decksService.GetDeckWithStatViewModel(id, statistics);
 
-            var groupedCorrectAnswers = from answer in answers where answer.IsCorrect group answer by answer.Time.Date;
-
-            var correctAnswerLabels = from item in groupedCorrectAnswers select item.Key.ToShortDateString();
-            var correctAnswerValues = from item in groupedCorrectAnswers select item.Count();
-
-            var cardsLabels = answerLabels;
-            var cardsValues = from item in groupedAnswers select item.GetMaxElement(x => x.Time).CardsInRepetition;
-
-            ViewBag.Answers = new { labels = answerLabels, values = answerValues };
-            ViewBag.CorrectAnswers = new { labels = correctAnswerLabels, values = correctAnswerValues };
-            ViewBag.Cards = new { labels = cardsLabels, values = cardsValues };
-
-            return View(deck);
+            return View(viewModel);
         }
 
         // POST: Decks/Details

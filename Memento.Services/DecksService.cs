@@ -1,5 +1,5 @@
 ﻿using Memento.Interfaces;
-using Memento.Models.Models;
+using Memento.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,10 +30,12 @@ namespace Memento.Services
             return orderedDecks;
         }
 
-        public async Task<IEnumerable<IAnswer>> GetAnswersAsync(int deckID, DateTime startTime)
+        public async Task<IDeckWithStatViewModel> GetDeckWithStatViewModel(int deckID, IStatistics statistics)
         {
-            var answers = await repository.GetAnswersForDeckAsync(deckID);
-            return answers.Where(answer => answer.Time >= startTime);
+            var deck = await repository.FindDeckAsync(deckID);
+            var viewModel = new DeckWithStatViewModel { Deck = deck, Stat = statistics };
+
+            return viewModel;
         }
     }
 }
