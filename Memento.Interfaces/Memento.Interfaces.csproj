@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAnswer.cs" />
+    <Compile Include="ICardsService.cs" />
     <Compile Include="IStatistics.cs" />
     <Compile Include="ICard.cs" />
     <Compile Include="IChartData.cs" />
