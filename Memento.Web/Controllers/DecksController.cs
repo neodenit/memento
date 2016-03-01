@@ -29,16 +29,18 @@ namespace Memento.Web.Controllers
         private readonly IValidator validator;
         private readonly IScheduler scheduler;
         private readonly IDecksService decksService;
-        private readonly IStatisticsService answersService;
+        private readonly IStatisticsService statService;
+        private readonly ICardsService cardsService;
 
-        public DecksController(IMementoRepository repository, IConverter converter, IValidator validator, IScheduler scheduler, IDecksService decksService, IStatisticsService answersService)
+        public DecksController(IMementoRepository repository, IConverter converter, IValidator validator, IScheduler scheduler, IDecksService decksService, IStatisticsService statService, ICardsService cardsService)
         {
             this.repository = repository;
             this.converter = converter;
             this.validator = validator;
             this.scheduler = scheduler;
             this.decksService = decksService;
-            this.answersService = answersService;
+            this.statService = statService;
+            this.cardsService = cardsService;
         }
 
         // GET: Decks
@@ -53,9 +55,9 @@ namespace Memento.Web.Controllers
         {
             var startTime = DateTime.Now.AddDays(-10);
 
-            var answers = await answersService.GetAnswersAsync(id, startTime);
+            var answers = await statService.GetAnswersAsync(id, startTime);
 
-            var statistics = answersService.GetStatistics(answers);
+            var statistics = statService.GetStatistics(answers);
 
             var viewModel = await decksService.GetDeckWithStatViewModel(id, statistics);
 
@@ -67,24 +69,26 @@ namespace Memento.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Details([Bind(Include = "ID")] Deck deck)
         {
-            var dbDeck = await repository.FindDeckAsync(deck.ID);
+            var card = await cardsService.GetNextCardAsync(deck.ID);
 
-            if (dbDeck.GetValidCards().Any())
+            if (card != null)
             {
-                var card = dbDeck.GetNextCard();
-
                 return RedirectToAction("Details", "Cards", new { id = card.ID });
             }
             else
             {
-                return RedirectToAction("DetailsEmpty", "Cards", new { deckID = dbDeck.ID });
+                return RedirectToAction("DetailsEmpty", "Cards", new { deckID = deck.ID });
             }
         }
 
         // GET: Decks/Create
         public ActionResult Create()
         {
-            var deck = new Deck { Coeff = Settings.Default.Coeff, StartDelay = Settings.Default.StartDelay };
+            var deck = new Deck
+            {
+                Coeff = Settings.Default.Coeff,
+                StartDelay = Settings.Default.StartDelay,
+            };
 
             return View(deck);
         }
@@ -100,12 +104,7 @@ namespace Memento.Web.Controllers
             }
             else if (ModelState.IsValid)
             {
-
-                deck.Owner = User.Identity.Name;
-
-                repository.AddDeck(deck);
-
-                await repository.SaveChangesAsync();
+                await decksService.CreateDeck(deck, User.Identity.Name);
 
                 return RedirectToAction("Index");
             }
@@ -118,7 +117,7 @@ namespace Memento.Web.Controllers
         // GET: Decks/Edit/5
         public async Task<ActionResult> Edit([CheckDeckExistence, CheckDeckOwner] int id)
         {
-            var deck = await repository.FindDeckAsync(id);
+            var deck = await decksService.FindDeckAsync(id);
 
             return View(deck);
         }
@@ -130,13 +129,7 @@ namespace Memento.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var dbDeck = await repository.FindDeckAsync(deck.ID);
-
-                dbDeck.Title = deck.Title;
-                dbDeck.StartDelay = deck.StartDelay;
-                dbDeck.Coeff = deck.Coeff;
-
-                await repository.SaveChangesAsync();
+                await decksService.UpdateDeck(deck.ID, deck.Title, deck.StartDelay, deck.Coeff);
 
                 return RedirectToAction("Index");
             }
@@ -148,7 +141,7 @@ namespace Memento.Web.Controllers
 
         public async Task<ActionResult> Delete([CheckDeckExistence, CheckDeckOwner] int id)
         {
-            var deck = await repository.FindDeckAsync(id);
+            var deck = await decksService.FindDeckAsync(id);
 
             return View(deck);
         }
@@ -158,11 +151,7 @@ namespace Memento.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed([CheckDeckExistence, CheckDeckOwner] int id)
         {
-            var deck = await repository.FindDeckAsync(id);
-            
-            repository.RemoveDeck(deck);
-
-            await repository.SaveChangesAsync();
+            await decksService.DeleteDeck(id);
 
             return RedirectToAction("Index");
         }

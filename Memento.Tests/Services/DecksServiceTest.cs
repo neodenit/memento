@@ -66,5 +66,65 @@ namespace Memento.Tests.Services
             Assert.IsNotNull(result.Deck);
             Assert.IsNotNull(result.Stat);
         }
+
+        [TestMethod()]
+        public async Task DecksServiceFindDeckTest()
+        {
+            // Arrange
+            var id = 1;
+
+            // Act
+            var result = await sut.FindDeckAsync(id);
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod()]
+        public async Task DecksServiceCreateDeckTest()
+        {
+            // Arrange
+            var deck = new Deck();
+            var userName = "user@server.com";
+
+            // Act
+            await sut.CreateDeck(deck, userName);
+
+            // Assert
+            mockRepository.Verify(x => x.AddDeck(deck), Times.Once);
+            mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
+        }
+
+        [TestMethod()]
+        public async Task DecksServiceUpdateDeckTest()
+        {
+            // Arrange
+            var id = 1;
+            var title = "Title";
+            var startDelay = 8;
+            var coeff = 2.0;
+
+            // Act
+            await sut.UpdateDeck(id, title, startDelay, coeff);
+
+            // Assert
+            mockRepository.Verify(x => x.FindDeckAsync(id), Times.Once);
+            mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
+        }
+
+        [TestMethod()]
+        public async Task DecksServiceDeleteDeckTest()
+        {
+            // Arrange
+            var id = 1;
+
+            // Act
+            await sut.DeleteDeck(id);
+
+            // Assert
+            mockRepository.Verify(x => x.FindDeckAsync(id), Times.Once);
+            mockRepository.Verify(x => x.RemoveDeck(It.IsAny<IDeck>()), Times.Once);
+            mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
+        }
     }
 }

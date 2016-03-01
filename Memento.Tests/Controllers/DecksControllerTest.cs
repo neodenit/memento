@@ -28,6 +28,7 @@ namespace Memento.Tests.Controllers
         private Mock<IScheduler> mockScheduler;
         private Mock<IDecksService> mockDecksService;
         private Mock<IStatisticsService> mockStatisticsService;
+        private Mock<ICardsService> mockCardsService;
 
         [TestInitialize]
         public void Setup()
@@ -38,11 +39,12 @@ namespace Memento.Tests.Controllers
             mockScheduler = new Mock<IScheduler>();
             mockDecksService = new Mock<IDecksService>();
             mockStatisticsService = new Mock<IStatisticsService>();
+            mockCardsService = new Mock<ICardsService>();
 
             var mockContext = new Mock<ControllerContext>();
             mockContext.Setup(item => item.HttpContext.User.Identity.Name).Returns("user@server.com");
 
-            sut = new DecksController(mockRepository.Object, mockConverter.Object, mockValidator.Object, mockScheduler.Object, mockDecksService.Object, mockStatisticsService.Object)
+            sut = new DecksController(mockRepository.Object, mockConverter.Object, mockValidator.Object, mockScheduler.Object, mockDecksService.Object, mockStatisticsService.Object, mockCardsService.Object)
             {
                 ControllerContext = mockContext.Object
             };
@@ -51,6 +53,8 @@ namespace Memento.Tests.Controllers
                 .ReturnsAsync(Enumerable.Empty<IAnswer>());
 
             mockDecksService.Setup(x => x.GetDeckWithStatViewModel(It.IsAny<int>(), It.IsAny<IStatistics>())).ReturnsAsync(new DeckWithStatViewModel());
+
+            mockDecksService.Setup(x => x.FindDeckAsync(It.IsAny<int>())).Returns<int>(async x => await Task.FromResult(new Deck { ID = x }));
 
             AddDbSetMocking();
         }
@@ -99,6 +103,7 @@ namespace Memento.Tests.Controllers
 
             // Assert
             mockDecksService.Verify(x => x.GetDecksAsync(It.IsAny<string>()), Times.Once);
+            Assert.IsNotNull(result);
             Assert.IsNotNull(model);
         }
 
@@ -117,6 +122,7 @@ namespace Memento.Tests.Controllers
             mockStatisticsService.Verify(x => x.GetStatistics(It.IsAny<IEnumerable<IAnswer>>()), Times.Once);
             mockDecksService.Verify(x => x.GetDeckWithStatViewModel(id, It.IsAny<IStatistics>()));
 
+            Assert.IsNotNull(result);
             Assert.IsNotNull(model);
         }
 
@@ -151,14 +157,14 @@ namespace Memento.Tests.Controllers
         public async Task DecksCreatePostTest()
         {
             // Arrange
-            var deck = new Deck { ID = 4 };
+            var deck = new Deck();
+            var userName = "user@server.com";
 
             // Act
             var result = await sut.Create(deck) as RedirectToRouteResult;
 
             // Assert
-            mockRepository.Verify(x => x.AddDeck(deck), Times.Once);
-            mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
+            mockDecksService.Verify(x => x.CreateDeck(deck, userName), Times.Once);
             Assert.IsNotNull(result);
         }
 
@@ -173,8 +179,9 @@ namespace Memento.Tests.Controllers
             var model = result.Model as Deck;
 
             // Assert
-            mockRepository.Verify(x => x.FindDeckAsync(id), Times.Once);
+            mockDecksService.Verify(x => x.FindDeckAsync(id), Times.Once);
             Assert.IsNotNull(result);
+            Assert.IsNotNull(model);
             Assert.AreEqual(id, model.ID);
         }
 
@@ -182,14 +189,19 @@ namespace Memento.Tests.Controllers
         public async Task DecksEditPostTest()
         {
             // Arrange
-            var deck = new Deck { ID = 1 };
+            var deck = new Deck
+            {
+                ID = 1,
+                Title = "Title",
+                StartDelay = 8,
+                Coeff = 2.0,
+            };
 
             // Act
             var result = await sut.Edit(deck) as RedirectToRouteResult;
 
             // Assert
-            mockRepository.Verify(x => x.FindDeckAsync(deck.ID), Times.Once);
-            mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
+            mockDecksService.Verify(x => x.UpdateDeck(deck.ID, deck.Title, deck.StartDelay, deck.Coeff), Times.Once);
             Assert.IsNotNull(result);
         }
 
@@ -204,8 +216,9 @@ namespace Memento.Tests.Controllers
             var model = result.Model as Deck;
 
             // Assert
-            mockRepository.Verify(x => x.FindDeckAsync(id), Times.Once);
+            mockDecksService.Verify(x => x.FindDeckAsync(id), Times.Once);
             Assert.IsNotNull(result);
+            Assert.IsNotNull(model);
             Assert.AreEqual(id, model.ID);
         }
 
@@ -237,6 +250,7 @@ namespace Memento.Tests.Controllers
 
             // Assert
             Assert.IsNotNull(result);
+            Assert.IsNotNull(model);
             Assert.AreEqual(id, model.ID);
         }
 

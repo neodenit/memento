@@ -37,5 +37,37 @@ namespace Memento.Services
 
             return viewModel;
         }
+
+        public Task<IDeck> FindDeckAsync(int id) =>
+            repository.FindDeckAsync(id);
+
+        public async Task CreateDeck(IDeck deck, string userName)
+        {
+            deck.Owner = userName;
+
+            repository.AddDeck(deck);
+
+            await repository.SaveChangesAsync();
+        }
+
+        public async Task UpdateDeck(int id, string title, int startDelay, double coeff)
+        {
+            var dbDeck = await repository.FindDeckAsync(id);
+
+            dbDeck.Title = title;
+            dbDeck.StartDelay = startDelay;
+            dbDeck.Coeff = coeff;
+
+            await repository.SaveChangesAsync();
+        }
+
+        public async Task DeleteDeck(int id)
+        {
+            var deck = await repository.FindDeckAsync(id);
+
+            repository.RemoveDeck(deck);
+
+            await repository.SaveChangesAsync();
+        }
     }
 }
