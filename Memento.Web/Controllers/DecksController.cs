@@ -24,23 +24,17 @@ namespace Memento.Web.Controllers
 #endif
     public class DecksController : Controller
     {
-        private readonly IMementoRepository repository;
-        private readonly IConverter converter;
-        private readonly IValidator validator;
-        private readonly IScheduler scheduler;
         private readonly IDecksService decksService;
         private readonly IStatisticsService statService;
         private readonly ICardsService cardsService;
+        private readonly IExportImportService exportImportService;
 
-        public DecksController(IMementoRepository repository, IConverter converter, IValidator validator, IScheduler scheduler, IDecksService decksService, IStatisticsService statService, ICardsService cardsService)
+        public DecksController(IDecksService decksService, ICardsService cardsService, IStatisticsService statService, IExportImportService exportImportService)
         {
-            this.repository = repository;
-            this.converter = converter;
-            this.validator = validator;
-            this.scheduler = scheduler;
             this.decksService = decksService;
-            this.statService = statService;
             this.cardsService = cardsService;
+            this.statService = statService;
+            this.exportImportService = exportImportService;
         }
 
         // GET: Decks
@@ -167,49 +161,11 @@ namespace Memento.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Import(Deck deckWithID, HttpPostedFileBase file)
         {
-            var deck = await repository.FindDeckAsync(deckWithID.ID);
-            
             if (file != null && file.ContentLength > 0)
             {
                 var text = await new StreamReader(file.InputStream).ReadToEndAsync();
-                var cards = converter.GetCardsFromDeck(text);
 
-                foreach (var card in cards)
-                {
-                    var cardText = HttpUtility.HtmlDecode(card);
-                    var clozeNames = converter.GetClozeNames(cardText);
-                    var updatedText = converter.ReplaceTextWithWildcards(cardText, clozeNames);
-                    var isValid = clozeNames.Any() && clozeNames.All(clozeName => validator.Validate(cardText, clozeName));
-
-                    if (!isValid)
-                    {
-                        var newCard = new Card
-                        {
-                            DeckID = deckWithID.ID,
-                            Text = cardText,
-                            IsValid = false,
-                        };
-
-                        repository.AddCard(newCard);
-                    }
-                    else
-                    {
-                        var newCard = new Card
-                        {
-                            DeckID = deckWithID.ID,
-                            Text = updatedText,
-                            IsValid = true,
-                        };
-
-                        repository.AddCard(newCard);
-
-                        await repository.SaveChangesAsync();
-
-                        repository.AddClozes(newCard, clozeNames);
-                    }
-
-                    await repository.SaveChangesAsync();
-                }
+                await exportImportService.Import(text, deckWithID.ID);
             }
 
             return RedirectToAction("Index");
@@ -217,22 +173,9 @@ namespace Memento.Web.Controllers
 
         public async Task<ActionResult> Export([CheckDeckExistence, CheckDeckOwner] int deckID)
         {
-            var deck = await repository.FindDeckAsync(deckID);            
-            var cards = deck.GetAllCards();
-            var cardsForExport = from card in cards select converter.FormatForExport(card.Text);
-            var fileContentText = string.Join(Environment.NewLine, cardsForExport);
+            var fileContentText = await exportImportService.Export(deckID);
 
             return File(Encoding.UTF8.GetBytes(fileContentText), MediaTypeNames.Text.Plain, "Export.txt");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                repository.Dispose();
-            }
-
-            base.Dispose(disposing);
         }
     }
 }

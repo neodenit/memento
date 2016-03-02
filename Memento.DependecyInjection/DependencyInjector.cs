@@ -24,9 +24,12 @@ namespace Memento.DependecyInjection
             builder.RegisterControllers(assembly);
 
             builder.RegisterType<EFMementoRepository>().As<IMementoRepository>();
+
             builder.RegisterType<DecksService>().As<IDecksService>();
-            builder.RegisterType<StatisticsService>().As<IStatisticsService>();
             builder.RegisterType<CardsService>().As<ICardsService>();
+            builder.RegisterType<StatisticsService>().As<IStatisticsService>();
+            builder.RegisterType<ExportImportService>().As<IExportImportService>();
+
             builder.RegisterType<PhraseEvaluator>().As<IEvaluator>();
             builder.RegisterType<Converter>().As<IConverter>();
             builder.RegisterType<ExistenceValidator>().As<IValidator>().WithParameter("baseValidator", null);

@@ -16,21 +16,13 @@ namespace Memento.Tests.Services
         private StatisticsService sut;
 
         private Mock<IMementoRepository> mockRepository;
-        private Mock<IConverter> mockConverter;
-        private Mock<IValidator> mockValidator;
-        private Mock<IScheduler> mockScheduler;
-        private Mock<IDecksService> mockDecksService;
 
         [TestInitialize]
         public void Setup()
         {
             mockRepository = new Mock<IMementoRepository>();
-            mockConverter = new Mock<IConverter>();
-            mockValidator = new Mock<IValidator>();
-            mockScheduler = new Mock<IScheduler>();
-            mockDecksService = new Mock<IDecksService>();
 
-            sut = new StatisticsService(mockRepository.Object, mockConverter.Object, mockValidator.Object, mockScheduler.Object);
+            sut = new StatisticsService(mockRepository.Object);
         }
 
         [TestMethod()]
@@ -53,7 +45,7 @@ namespace Memento.Tests.Services
         {
             // Arrange
             var answers = Enumerable.Empty<IAnswer>();
-            
+
             // Act
             var result = sut.GetStatistics(answers);
 

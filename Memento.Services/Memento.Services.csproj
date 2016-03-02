@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CardsService.cs" />
+    <Compile Include="ExportImportService.cs" />
     <Compile Include="StatisticsService.cs" />
     <Compile Include="DecksService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Controllers\CardsControllerTestWithFakeRepo.cs" />
     <Compile Include="Services\CardsServiceTest.cs" />
+    <Compile Include="Services\ExportImportServiceTest.cs" />
     <Compile Include="Services\StatisticsServiceTest.cs" />
     <Compile Include="Services\DecksServiceTest.cs" />
     <Compile Include="FakeRepository.cs" />

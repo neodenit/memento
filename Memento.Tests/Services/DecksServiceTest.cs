@@ -18,21 +18,13 @@ namespace Memento.Tests.Services
         private DecksService sut;
 
         private Mock<IMementoRepository> mockRepository;
-        private Mock<IConverter> mockConverter;
-        private Mock<IValidator> mockValidator;
-        private Mock<IScheduler> mockScheduler;
-        private Mock<IDecksService> mockDecksService;
 
         [TestInitialize]
         public void Setup()
         {
             mockRepository = new Mock<IMementoRepository>();
-            mockConverter = new Mock<IConverter>();
-            mockValidator = new Mock<IValidator>();
-            mockScheduler = new Mock<IScheduler>();
-            mockDecksService = new Mock<IDecksService>();
 
-            sut = new DecksService(mockRepository.Object, mockConverter.Object, mockValidator.Object, mockScheduler.Object);
+            sut = new DecksService(mockRepository.Object);
 
             mockRepository.Setup(x => x.FindDeckAsync(It.IsAny<int>())).ReturnsAsync(new Deck());
         }

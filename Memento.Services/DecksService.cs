@@ -11,16 +11,10 @@ namespace Memento.Services
     public class DecksService : IDecksService
     {
         private readonly IMementoRepository repository;
-        private readonly IConverter converter;
-        private readonly IValidator validator;
-        private readonly IScheduler scheduler;
 
-        public DecksService(IMementoRepository repository, IConverter converter, IValidator validator, IScheduler scheduler)
+        public DecksService(IMementoRepository repository)
         {
             this.repository = repository;
-            this.converter = converter;
-            this.validator = validator;
-            this.scheduler = scheduler;
         }
 
         public async Task<IEnumerable<IDeck>> GetDecksAsync(string username)

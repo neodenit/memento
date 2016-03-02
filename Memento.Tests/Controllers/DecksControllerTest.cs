@@ -23,28 +23,24 @@ namespace Memento.Tests.Controllers
         private DecksController sut;
 
         private Mock<IMementoRepository> mockRepository;
-        private Mock<IConverter> mockConverter;
-        private Mock<IValidator> mockValidator;
-        private Mock<IScheduler> mockScheduler;
         private Mock<IDecksService> mockDecksService;
-        private Mock<IStatisticsService> mockStatisticsService;
         private Mock<ICardsService> mockCardsService;
+        private Mock<IStatisticsService> mockStatisticsService;
+        private Mock<IExportImportService> mockExportImportService;
 
         [TestInitialize]
         public void Setup()
         {
             mockRepository = new Mock<IMementoRepository>();
-            mockConverter = new Mock<IConverter>();
-            mockValidator = new Mock<IValidator>();
-            mockScheduler = new Mock<IScheduler>();
             mockDecksService = new Mock<IDecksService>();
-            mockStatisticsService = new Mock<IStatisticsService>();
             mockCardsService = new Mock<ICardsService>();
+            mockStatisticsService = new Mock<IStatisticsService>();
+            mockExportImportService = new Mock<IExportImportService>();
 
             var mockContext = new Mock<ControllerContext>();
             mockContext.Setup(item => item.HttpContext.User.Identity.Name).Returns("user@server.com");
 
-            sut = new DecksController(mockRepository.Object, mockConverter.Object, mockValidator.Object, mockScheduler.Object, mockDecksService.Object, mockStatisticsService.Object, mockCardsService.Object)
+            sut = new DecksController(mockDecksService.Object, mockCardsService.Object, mockStatisticsService.Object, mockExportImportService.Object)
             {
                 ControllerContext = mockContext.Object
             };
@@ -56,7 +52,7 @@ namespace Memento.Tests.Controllers
 
             mockDecksService.Setup(x => x.FindDeckAsync(It.IsAny<int>())).Returns<int>(async x => await Task.FromResult(new Deck { ID = x }));
 
-            AddDbSetMocking();
+            mockExportImportService.Setup(x => x.Export(It.IsAny<int>())).ReturnsAsync(string.Empty);
         }
 
         private void AddDbSetMocking()
@@ -232,9 +228,8 @@ namespace Memento.Tests.Controllers
             var result = await sut.DeleteConfirmed(id) as RedirectToRouteResult;
 
             // Assert
-            mockRepository.Verify(x => x.FindDeckAsync(id), Times.Once);
-            mockRepository.Verify(x => x.RemoveDeck(It.IsAny<Deck>()), Times.Once);
-            mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
+            mockDecksService.Verify(x => x.DeleteDeck(id), Times.Once);
+
             Assert.IsNotNull(result);
         }
 
@@ -277,7 +272,7 @@ namespace Memento.Tests.Controllers
             var result = await sut.Export(id) as FileContentResult;
 
             // Assert
-            mockRepository.Verify(x => x.FindDeckAsync(id), Times.Once);
+            mockExportImportService.Verify(x => x.Export(id), Times.Once);
             Assert.IsNotNull(result);
         }
     }

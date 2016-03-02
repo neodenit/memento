@@ -13,16 +13,10 @@ namespace Memento.Services
     public class StatisticsService : IStatisticsService
     {
         private readonly IMementoRepository repository;
-        private readonly IConverter converter;
-        private readonly IValidator validator;
-        private readonly IScheduler scheduler;
 
-        public StatisticsService(IMementoRepository repository, IConverter converter, IValidator validator, IScheduler scheduler)
+        public StatisticsService(IMementoRepository repository)
         {
             this.repository = repository;
-            this.converter = converter;
-            this.validator = validator;
-            this.scheduler = scheduler;
         }
 
         public async Task<IEnumerable<IAnswer>> GetAnswersAsync(int deckID, DateTime startTime)
