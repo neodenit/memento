@@ -8,5 +8,6 @@ namespace Memento.Interfaces
     {
         Task<IEnumerable<IAnswer>> GetAnswersAsync(int deckID, DateTime startTime);
         IStatistics GetStatistics(IEnumerable<IAnswer> answers);
+        Task AddAnswer(int cardID, bool isCorrect);
     }
 }

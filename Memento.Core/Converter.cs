@@ -91,7 +91,7 @@ namespace Memento.Core
             return Regex.Replace(text, currentPattern, newPattern);
         }
 
-        public string AddAnswer(string text, string label, string newAnswer)
+        public string AddAltAnswer(string text, string label, string newAnswer)
         {
             var oldAnswers = GetAnswerValue(text, label);
             var newAnswers = $"{oldAnswers}|{newAnswer}";

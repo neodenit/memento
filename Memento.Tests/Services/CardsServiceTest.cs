@@ -17,13 +17,14 @@ namespace Memento.Tests.Services
         private CardsService sut;
 
         private Mock<IMementoRepository> mockRepository;
+        private Mock<IConverter> mockConverter;
 
         [TestInitialize]
         public void Setup()
         {
             mockRepository = new Mock<IMementoRepository>();
 
-            sut = new CardsService(mockRepository.Object);
+            sut = new CardsService(mockRepository.Object, mockConverter.Object);
 
             mockRepository.Setup(x => x.FindDeckAsync(It.IsAny<int>()))
                 .ReturnsAsync(

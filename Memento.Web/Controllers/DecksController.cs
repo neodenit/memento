@@ -25,8 +25,8 @@ namespace Memento.Web.Controllers
     public class DecksController : Controller
     {
         private readonly IDecksService decksService;
-        private readonly IStatisticsService statService;
         private readonly ICardsService cardsService;
+        private readonly IStatisticsService statService;
         private readonly IExportImportService exportImportService;
 
         public DecksController(IDecksService decksService, ICardsService cardsService, IStatisticsService statService, IExportImportService exportImportService)

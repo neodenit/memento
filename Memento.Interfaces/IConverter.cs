@@ -15,7 +15,7 @@ namespace Memento.Interfaces
         string ReplaceAllWildCardsWithText(string text);
         string ReplaceAllWildCardsWithText(string text, IEnumerable<string> labels);
         string ReplaceAnswer(string text, string label, string newAnswers);
-        string AddAnswer(string text, string label, string newAnswer);
+        string AddAltAnswer(string text, string label, string newAnswer);
         string ReplaceTextWithWildcards(string text, string label);
         string ReplaceTextWithWildcards(string text, IEnumerable<string> labels);
         string ReplaceWildCardsWithText(string text, string label);

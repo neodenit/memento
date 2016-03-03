@@ -25,6 +25,10 @@ namespace Memento.Tests.Controllers
         private Mock<IScheduler> mockScheduler;
         private Mock<IEvaluator> mockEvaluator;
 
+        private Mock<IDecksService> mockDecksService;
+        private Mock<ICardsService> mockCardsService;
+        private Mock<IStatisticsService> mockStatService;
+
         private List<Deck> decks;
         private List<Card> validCards;
         private List<Card> deletedCards;
@@ -46,7 +50,7 @@ namespace Memento.Tests.Controllers
             var mockContext = new Mock<ControllerContext>();
             mockContext.Setup(item => item.HttpContext.User.Identity.Name).Returns(userName);
 
-            sut = new CardsController(fakeRepository, mockConverter.Object, mockValidator.Object, mockScheduler.Object, mockEvaluator.Object)
+            sut = new CardsController(fakeRepository, mockConverter.Object, mockValidator.Object, mockScheduler.Object, mockEvaluator.Object, mockDecksService.Object, mockCardsService.Object, mockStatService.Object)
             {
                 ControllerContext = mockContext.Object
             };

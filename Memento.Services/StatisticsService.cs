@@ -19,6 +19,15 @@ namespace Memento.Services
             this.repository = repository;
         }
 
+        public async Task AddAnswer(int cardID, bool isCorrect)
+        {
+            var dbCard = await repository.FindCardAsync(cardID);
+            var cloze = dbCard.GetNextCloze();
+
+            repository.AddAnswer(cloze, isCorrect);
+            await repository.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<IAnswer>> GetAnswersAsync(int deckID, DateTime startTime)
         {
             var answers = await repository.GetAnswersForDeckAsync(deckID);
