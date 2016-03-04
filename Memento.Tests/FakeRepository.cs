@@ -89,7 +89,7 @@ namespace Memento.Tests
         public Task<IEnumerable<IDeck>> GetUserDecksAsync(string userName) =>
             Task.FromResult(decks.Where(d => d.Owner == userName));
 
-        public void PromoteCard(IDeck deck, Delays delay) { }
+        public void PromoteCloze(IDeck deck, Delays delay) { }
 
         public void RemoveCard(ICard card) => cards.Remove(card);
 

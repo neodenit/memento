@@ -21,13 +21,12 @@ namespace Memento.Tests.Controllers
         private FakeRepository fakeRepository;
 
         private Mock<IConverter> mockConverter;
-        private Mock<IValidator> mockValidator;
-        private Mock<IScheduler> mockScheduler;
         private Mock<IEvaluator> mockEvaluator;
 
         private Mock<IDecksService> mockDecksService;
         private Mock<ICardsService> mockCardsService;
         private Mock<IStatisticsService> mockStatService;
+        private Mock<ISchedulerService> mockSchedulerService;
 
         private List<Deck> decks;
         private List<Card> validCards;
@@ -43,14 +42,17 @@ namespace Memento.Tests.Controllers
         {
             AddFakeRepository();
             mockConverter = new Mock<IConverter>();
-            mockValidator = new Mock<IValidator>();
-            mockScheduler = new Mock<IScheduler>();
             mockEvaluator = new Mock<IEvaluator>();
+
+            mockDecksService = new Mock<IDecksService>();
+            mockCardsService = new Mock<ICardsService>();
+            mockStatService = new Mock<IStatisticsService>();
+            mockSchedulerService = new Mock<ISchedulerService>();
 
             var mockContext = new Mock<ControllerContext>();
             mockContext.Setup(item => item.HttpContext.User.Identity.Name).Returns(userName);
 
-            sut = new CardsController(fakeRepository, mockConverter.Object, mockValidator.Object, mockScheduler.Object, mockEvaluator.Object, mockDecksService.Object, mockCardsService.Object, mockStatService.Object)
+            sut = new CardsController(mockConverter.Object, mockEvaluator.Object, mockDecksService.Object, mockCardsService.Object, mockStatService.Object, mockSchedulerService.Object)
             {
                 ControllerContext = mockContext.Object
             };

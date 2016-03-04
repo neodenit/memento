@@ -110,7 +110,7 @@ namespace Memento.DomainModel.Repository
             db.Answers.Add(answer);
         }
 
-        public void PromoteCard(IDeck deck, Delays delay)
+        public void PromoteCloze(IDeck deck, Delays delay)
         {
             var clozes = deck.GetClozes();
 

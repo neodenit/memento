@@ -21,25 +21,21 @@ namespace Memento.Web.Controllers
 #endif
     public class CardsController : Controller
     {
-        private readonly IMementoRepository repository;
         private readonly IEvaluator evaluator;
         private readonly IConverter converter;
-        private readonly IValidator validator;
-        private readonly IScheduler scheduler;
         private readonly IDecksService decksService;
         private readonly ICardsService cardsService;
         private readonly IStatisticsService statService;
+        private readonly ISchedulerService schedulerService;
 
-        public CardsController(IMementoRepository repository, IConverter converter, IValidator validator, IScheduler scheduler, IEvaluator evaluator, IDecksService decksService, ICardsService cardsService, IStatisticsService statService)
+        public CardsController(IConverter converter, IEvaluator evaluator, IDecksService decksService, ICardsService cardsService, IStatisticsService statService, ISchedulerService schedulerService)
         {
-            this.repository = repository;
             this.evaluator = evaluator;
             this.converter = converter;
-            this.validator = validator;
-            this.scheduler = scheduler;
             this.decksService = decksService;
             this.cardsService = cardsService;
             this.statService = statService;
+            this.schedulerService = schedulerService;
         }
 
         public async Task<ActionResult> ClozesIndex([CheckDeckExistence, CheckDeckOwner] int deckID)
@@ -351,12 +347,6 @@ namespace Memento.Web.Controllers
 
         public async Task<ActionResult> ShuffleNew([CheckDeckExistence, CheckDeckOwner] int deckID)
         {
-            var deck = await decksService.FindDeckAsync(deckID);
-            var clozes = deck.GetClozes();
-
-            scheduler.ShuffleNewClozes(clozes);
-
-            await repository.SaveChangesAsync();
 
             return RedirectToAction("ClozesIndex", new { deckID });
         }
@@ -399,23 +389,11 @@ namespace Memento.Web.Controllers
 
         private async Task<ActionResult> PromoteAndRedirect(IDeck deck, Delays delay)
         {
-            repository.PromoteCard(deck, delay);
-
-            await repository.SaveChangesAsync();
+            await schedulerService.PromoteCloze(deck, delay);
 
             var nextCard = deck.GetNextCard();
 
             return RedirectToAction("Details", new { id = nextCard.ID });
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                repository.Dispose();
-            }
-
-            base.Dispose(disposing);
         }
     }
 }
