@@ -14,14 +14,9 @@ using System.Web.Mvc;
 namespace Memento.Tests.Controllers
 {
     [TestClass()]
-    public class CardsControllerTestWithFakeRepo
+    public class CardsControllerTest
     {
         private CardsController sut;
-
-        private FakeRepository fakeRepository;
-
-        private Mock<IConverter> mockConverter;
-        private Mock<IEvaluator> mockEvaluator;
 
         private Mock<IDecksService> mockDecksService;
         private Mock<ICardsService> mockCardsService;
@@ -40,10 +35,6 @@ namespace Memento.Tests.Controllers
         [TestInitialize]
         public void Setup()
         {
-            AddFakeRepository();
-            mockConverter = new Mock<IConverter>();
-            mockEvaluator = new Mock<IEvaluator>();
-
             mockDecksService = new Mock<IDecksService>();
             mockCardsService = new Mock<ICardsService>();
             mockStatService = new Mock<IStatisticsService>();
@@ -52,7 +43,7 @@ namespace Memento.Tests.Controllers
             var mockContext = new Mock<ControllerContext>();
             mockContext.Setup(item => item.HttpContext.User.Identity.Name).Returns(userName);
 
-            sut = new CardsController(mockConverter.Object, mockEvaluator.Object, mockDecksService.Object, mockCardsService.Object, mockStatService.Object, mockSchedulerService.Object)
+            sut = new CardsController(mockDecksService.Object, mockCardsService.Object, mockStatService.Object, mockSchedulerService.Object)
             {
                 ControllerContext = mockContext.Object
             };
@@ -113,12 +104,10 @@ namespace Memento.Tests.Controllers
                  new Answer { ID = 2 },
                  new Answer { ID = 3 },
             };
-
-            fakeRepository = new FakeRepository(decks, validCards, clozes, answers);
         }
 
         [TestMethod()]
-        public async Task CardsClozesIndexTestWithFakeRepo()
+        public async Task CardsClozesIndexTest()
         {
             // Arrange
             var id = 1;
@@ -134,7 +123,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsCardsIndexTestWithFakeRepo()
+        public async Task CardsCardsIndexTest()
         {
             // Arrange
             var id = 1;
@@ -150,7 +139,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsDeletedIndexTestWithFakeRepo()
+        public async Task CardsDeletedIndexTest()
         {
             // Arrange
             var id = 2;
@@ -166,7 +155,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsDraftIndexTestWithFakeRepo()
+        public async Task CardsDraftIndexTest()
         {
             // Arrange
             var id = 3;
@@ -182,7 +171,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public void CardsDetailsEmptyTestWithFakeRepo()
+        public void CardsDetailsEmptyTest()
         {
             // Arrange
             var id = 1;
@@ -199,7 +188,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsDetailsTestWithFakeRepo()
+        public async Task CardsDetailsTest()
         {
             // Arrange
             var id = 1;
@@ -212,7 +201,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsPreviewClosedTestWithFakeRepo()
+        public async Task CardsPreviewClosedTest()
         {
             // Arrange
             var id = 1;
@@ -228,7 +217,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsPreviewOpenedGetTestWithFakeRepo()
+        public async Task CardsPreviewOpenedGetTest()
         {
             // Arrange
             var id = 1;
@@ -244,7 +233,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsPreviewOpenedPostTestWithFakeRepo()
+        public async Task CardsPreviewOpenedPostTest()
         {
             // Arrange
             var card = new Card { ID = 1 };
@@ -257,7 +246,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsRepeatClosedTestWithFakeRepo()
+        public async Task CardsRepeatClosedTest()
         {
             // Arrange
             var id = 1;
@@ -273,7 +262,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsRepeatOpenedTestWithFakeRepo()
+        public async Task CardsRepeatOpenedTest()
         {
             // Arrange
             var id = 1;
@@ -289,7 +278,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsRepeatOpenedAgainButtonPostTestWithFakeRepo()
+        public async Task CardsRepeatOpenedAgainButtonPostTest()
         {
             // Arrange
             var card = new Card { ID = 1 };
@@ -302,7 +291,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsRepeatOpenedBadButtonPostTestWithFakeRepo()
+        public async Task CardsRepeatOpenedBadButtonPostTest()
         {
             // Arrange
             var card = new Card { ID = 1 };
@@ -315,7 +304,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsRepeatOpenedGoodButtonPostTestWithFakeRepo()
+        public async Task CardsRepeatOpenedGoodButtonPostTest()
         {
             // Arrange
             var card = new Card { ID = 1 };
@@ -328,7 +317,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsQuestionTestWithFakeRepo()
+        public async Task CardsQuestionTest()
         {
             // Arrange
             var id = 1;
@@ -344,7 +333,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsQuestionPostTestWithFakeRepo()
+        public async Task CardsQuestionPostTest()
         {
             // Arrange
             var card = new AnswerCardViewModel { ID = 1 };
@@ -360,7 +349,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsRightTestWithFakeRepo()
+        public async Task CardsRightTest()
         {
             // Arrange
             var card = new AnswerCardViewModel { ID = 1 };
@@ -373,7 +362,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsWrongNextButtonPostTestWithFakeRepo()
+        public async Task CardsWrongNextButtonPostTest()
         {
             // Arrange
             var card = new AnswerCardViewModel { ID = 1 };
@@ -386,7 +375,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsWrongAltButtonPostTestWithFakeRepo()
+        public async Task CardsWrongAltButtonPostTest()
         {
             // Arrange
             var card = new AnswerCardViewModel { ID = 1 };
@@ -399,7 +388,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsTypoTypoButtonPostTestWithFakeRepo()
+        public async Task CardsTypoTypoButtonPostTest()
         {
             // Arrange
             var card = new AnswerCardViewModel { ID = 1 };
@@ -412,7 +401,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsTypoWrongButtonPostTestWithFakeRepo()
+        public async Task CardsTypoWrongButtonPostTest()
         {
             // Arrange
             var card = new AnswerCardViewModel { ID = 1 };
@@ -425,7 +414,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsTypoAltButtonPostTestWithFakeRepo()
+        public async Task CardsTypoAltButtonPostTest()
         {
             // Arrange
             var card = new AnswerCardViewModel { ID = 1 };
@@ -438,7 +427,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsCreateTestWithFakeRepo()
+        public async Task CardsCreateTest()
         {
             // Arrange
             var id = 1;
@@ -454,7 +443,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsCreateNullDeckIDTestWithFakeRepo()
+        public async Task CardsCreateNullDeckIDTest()
         {
             // Arrange
             int? id = null;
@@ -470,7 +459,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsCreatePostTestWithFakeRepo()
+        public async Task CardsCreatePostTest()
         {
             // Arrange
             var id = 10;
@@ -481,11 +470,10 @@ namespace Memento.Tests.Controllers
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.IsNotNull(fakeRepository.FindCard(id));
         }
 
         [TestMethod()]
-        public async Task CardsEditTestWithFakeRepo()
+        public async Task CardsEditTest()
         {
             // Arrange
             var id = 1;
@@ -501,7 +489,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsEditPostTestWithFakeRepo()
+        public async Task CardsEditPostTest()
         {
             // Arrange
             var card = new Card { ID = 1 };
@@ -514,7 +502,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsShuffleNewCardsTestWithFakeRepo()
+        public async Task CardsShuffleNewCardsTest()
         {
             // Arrange
             var id = 1;
@@ -527,7 +515,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsShuffleNewTestWithFakeRepo()
+        public async Task CardsShuffleNewTest()
         {
             // Arrange
             var id = 1;
@@ -540,7 +528,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsRestoreTestWithFakeRepo()
+        public async Task CardsRestoreTest()
         {
             // Arrange
             var id = 1;
@@ -556,7 +544,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsRestoreConfirmedTestWithFakeRepo()
+        public async Task CardsRestoreConfirmedTest()
         {
             // Arrange
             var id = 1;
@@ -569,7 +557,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsDeleteTestWithFakeRepo()
+        public async Task CardsDeleteTest()
         {
             // Arrange
             var id = 1;
@@ -585,7 +573,7 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsDeleteConfirmedTestWithFakeRepo()
+        public async Task CardsDeleteConfirmedTest()
         {
             // Arrange
             var id = 1;

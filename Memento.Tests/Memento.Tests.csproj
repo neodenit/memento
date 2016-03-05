@@ -90,7 +90,7 @@
     <Reference Include="System.Net.Http.WebRequest" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\CardsControllerTestWithFakeRepo.cs" />
+    <Compile Include="Controllers\CardsControllerTest.cs" />
     <Compile Include="Services\CardsServiceTest.cs" />
     <Compile Include="Services\ExportImportServiceTest.cs" />
     <Compile Include="Services\SchedulerServiceTest.cs" />

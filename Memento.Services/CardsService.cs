@@ -2,6 +2,7 @@
 using Memento.Common;
 using Memento.Interfaces;
 using Memento.Models.Models;
+using Memento.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +15,13 @@ namespace Memento.Services
     {
         private readonly IMementoRepository repository;
         private readonly IConverter converter;
+        private readonly IEvaluator evaluator;
 
-        public CardsService(IMementoRepository repository, IConverter converter)
+        public CardsService(IMementoRepository repository, IConverter converter, IEvaluator evaluator)
         {
             this.repository = repository;
             this.converter = converter;
+            this.evaluator = evaluator;
         }
 
         public async Task AddAltAnswer(int cardID, string answer)
@@ -29,6 +32,37 @@ namespace Memento.Services
             dbCard.Text = converter.AddAltAnswer(dbCard.Text, cloze.Label, answer);
 
             await repository.SaveChangesAsync();
+        }
+
+        public async Task<IAnswerCardViewModel> GetCardWithQuestion(int cardID)
+        {
+            var card = await FindCardAsync(cardID);
+            var cloze = card.GetNextCloze();
+            var question = converter.GetQuestion(card.Text, cloze.Label);
+
+            var result = new AnswerCardViewModel(card) { Question = question };
+
+            return result;
+        }
+
+        public async Task<IAnswerCardViewModel> GetCardWithAnswer(int cardID)
+        {
+            var card = await FindCardAsync(cardID);
+            var cloze = card.GetNextCloze();
+            var answer = converter.GetAnswer(card.Text, cloze.Label);
+
+            var result = new AnswerCardViewModel(card) { Answer = answer };
+
+            return result;
+        }
+
+        public async Task<IAnswerCardViewModel> EvaluateCard(IAnswerCardViewModel card)
+        {
+            var cardWithAnswer = await GetCardWithAnswer(card.ID);
+
+            cardWithAnswer.Mark = evaluator.Evaluate(cardWithAnswer.Text, card.Answer);
+
+            return cardWithAnswer;
         }
 
         public Task<ICard> FindCardAsync(int id) =>

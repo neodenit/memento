@@ -21,17 +21,13 @@ namespace Memento.Web.Controllers
 #endif
     public class CardsController : Controller
     {
-        private readonly IEvaluator evaluator;
-        private readonly IConverter converter;
         private readonly IDecksService decksService;
         private readonly ICardsService cardsService;
         private readonly IStatisticsService statService;
         private readonly ISchedulerService schedulerService;
 
-        public CardsController(IConverter converter, IEvaluator evaluator, IDecksService decksService, ICardsService cardsService, IStatisticsService statService, ISchedulerService schedulerService)
+        public CardsController(IDecksService decksService, ICardsService cardsService, IStatisticsService statService, ISchedulerService schedulerService)
         {
-            this.evaluator = evaluator;
-            this.converter = converter;
             this.decksService = decksService;
             this.cardsService = cardsService;
             this.statService = statService;
@@ -104,22 +100,14 @@ namespace Memento.Web.Controllers
 
         public async Task<ActionResult> PreviewClosed([CheckCardExistence, CheckCardOwner] int id)
         {
-            var card = await cardsService.FindCardAsync(id);
-            var cloze = card.GetNextCloze();
-            var question = converter.GetQuestion(card.Text, cloze.Label);
-
-            card.Text = question;
+            var card = await cardsService.GetCardWithQuestion(id);
 
             return View(card);
         }
 
         public async Task<ActionResult> PreviewOpened([CheckCardExistence, CheckCardOwner] int id)
         {
-            var card = await cardsService.FindCardAsync(id);
-            var cloze = card.GetNextCloze();
-            var question = converter.GetAnswer(card.Text, cloze.Label);
-
-            card.Text = question;
+            var card = await cardsService.GetCardWithAnswer(id);
 
             return View(card);
         }
@@ -135,22 +123,14 @@ namespace Memento.Web.Controllers
 
         public async Task<ActionResult> RepeatClosed([CheckCardExistence, CheckCardOwner] int id)
         {
-            var card = await cardsService.FindCardAsync(id);
-            var cloze = card.GetNextCloze();
-            var question = converter.GetQuestion(card.Text, cloze.Label);
-
-            card.Text = question;
+            var card = await cardsService.GetCardWithQuestion(id);
 
             return View(card);
         }
 
         public async Task<ActionResult> RepeatOpened([CheckCardExistence, CheckCardOwner] int id)
         {
-            var card = await cardsService.FindCardAsync(id);
-            var cloze = card.GetNextCloze();
-            var question = converter.GetAnswer(card.Text, cloze.Label);
-
-            card.Text = question;
+            var card = await cardsService.GetCardWithAnswer(id);
 
             return View(card);
         }
@@ -178,39 +158,25 @@ namespace Memento.Web.Controllers
 
         public async Task<ActionResult> Question([CheckCardExistence, CheckCardOwner] int id)
         {
-            var card = await cardsService.FindCardAsync(id);
-            var cloze = card.GetNextCloze();
-            var cardViewModel = new AnswerCardViewModel(card);
+            var card = await cardsService.GetCardWithAnswer(id);
 
-            cardViewModel.Text = converter.GetQuestion(card.Text, cloze.Label);
-
-            return View(cardViewModel);
+            return View(card);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Question([Bind(Include = "ID, Answer")] AnswerCardViewModel card)
         {
-            var dbCard = await cardsService.FindCardAsync(card.ID);
-            var cloze = dbCard.GetNextCloze();
-            var cardViewModel = new AnswerCardViewModel(dbCard);
-            var answer = converter.GetAnswerValue(dbCard.Text, cloze.Label);
-            var result = evaluator.Evaluate(answer, card.Answer);
+            var evaluatedCard = await cardsService.EvaluateCard(card);
 
-            switch (result)
+            switch (evaluatedCard.Mark)
             {
                 case Mark.Correct:
-                    cardViewModel.Text = converter.GetAnswer(dbCard.Text, cloze.Label);
-
-                    return View("Right", cardViewModel);
+                    return View("Right", evaluatedCard);
                 case Mark.Incorrect:
-                    cardViewModel.Text = converter.GetAnswer(dbCard.Text, cloze.Label);
-
-                    return View("Wrong", cardViewModel);
+                    return View("Wrong", evaluatedCard);
                 case Mark.Typo:
-                    cardViewModel.Text = converter.GetAnswer(dbCard.Text, cloze.Label);
-
-                    return View("Typo", cardViewModel);
+                    return View("Typo", evaluatedCard);
                 default:
                     throw new Exception();
             }

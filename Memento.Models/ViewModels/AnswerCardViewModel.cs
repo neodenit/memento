@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Memento.Models.ViewModels
 {
-    public class AnswerCardViewModel
+    public class AnswerCardViewModel : IAnswerCardViewModel
     {
         public int ID { get; set; }
 
@@ -20,8 +20,12 @@ namespace Memento.Models.ViewModels
         [DataType(DataType.MultilineText)]
         public string Text { get; set; }
 
+        public string Question { get; set; }
+
         [Required]
         public string Answer { get; set; }
+
+        public Mark Mark { get; set; }
 
         public AnswerCardViewModel() { }
 
