@@ -227,7 +227,6 @@ namespace Memento.Web.Controllers
             return await PromoteAndRedirect(dbCard.GetDeck(), Delays.Next);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Wrong([Bind(Include = "ID, Answer")] AnswerCardViewModel card, string NextButton, string AltButton)
@@ -347,6 +346,7 @@ namespace Memento.Web.Controllers
 
         public async Task<ActionResult> ShuffleNew([CheckDeckExistence, CheckDeckOwner] int deckID)
         {
+            await schedulerService.ShuffleNewClozes(deckID);
 
             return RedirectToAction("ClozesIndex", new { deckID });
         }
