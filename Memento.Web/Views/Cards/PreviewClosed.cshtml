@@ -1,4 +1,4 @@
-﻿@model Memento.Models.Models.Card
+﻿@model Memento.Models.ViewModels.AnswerCardViewModel
 
 @{
     ViewBag.Title = "Preview";
@@ -7,7 +7,7 @@
 <h2>Preview</h2>
 
 <div>
-    <h4>@Html.DisplayFor(model => model.Deck.Title)</h4>
+    <h4>@Html.DisplayFor(model => model.DeckTitle)</h4>
     <hr />
 
     @using (Html.BeginForm("PreviewOpened", "Cards", FormMethod.Get))
@@ -20,7 +20,7 @@
         </div>
         <hr />
         <div class="card-text">
-            @Html.Raw(Model.Text)
+            @Html.Raw(Model.Question)
         </div>
         <hr />
         <input type="submit" value="Show" class="btn btn-default" />

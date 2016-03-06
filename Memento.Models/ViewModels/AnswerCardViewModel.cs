@@ -12,29 +12,30 @@ namespace Memento.Models.ViewModels
     {
         public int ID { get; set; }
 
-        public int DeckID { get; set; }
-
         public string DeckTitle { get; set; }
 
-        [Required]
         [DataType(DataType.MultilineText)]
-        public string Text { get; set; }
-
         public string Question { get; set; }
 
         [Required]
-        public string Answer { get; set; }
+        [DataType(DataType.MultilineText)]
+        public string CorrectAnswer { get; set; }
+
+        public string UserAnswer { get; set; }
 
         public Mark Mark { get; set; }
+
+        public DelayModes DelayMode { get; set; }
 
         public AnswerCardViewModel() { }
 
         public AnswerCardViewModel(ICard card)
         {
             ID = card.ID;
-            DeckID = card.DeckID;
-            Text = card.Text;
-            DeckTitle = card.GetDeck().Title;
+
+            var deck = card.GetDeck();
+            DeckTitle = deck.Title;
+            DelayMode = deck.DelayMode;
         }
     }
 }

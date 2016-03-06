@@ -5,7 +5,7 @@ namespace Memento.Interfaces
     public interface IConverter
     {
         string FormatForExport(string text);
-        string GetAnswer(string card, string clozeName, bool stripWildCards = true);
+        string GetFullAnswer(string card, string clozeName, bool stripWildCards = true);
         string GetAnswerValue(string field, string clozeName);
         IEnumerable<string> GetCardsFromDeck(string deckText);
         IEnumerable<string> GetClozeNames(string field);

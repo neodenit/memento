@@ -171,23 +171,6 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public void CardsDetailsEmptyTest()
-        {
-            // Arrange
-            var id = 1;
-
-            // Act
-            var result = sut.DetailsEmpty(id) as ViewResult;
-            var model = result.Model as Card;
-
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.IsNotNull(model);
-            Assert.AreEqual(id, model.DeckID);
-            Assert.AreEqual(-1, model.ID);
-        }
-
-        [TestMethod()]
         public async Task CardsDetailsTest()
         {
             // Arrange
@@ -236,7 +219,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsPreviewOpenedPostTest()
         {
             // Arrange
-            var card = new Card { ID = 1 };
+            var card = new ViewCardViewModel { ID = 1 };
 
             // Act
             var result = await sut.PreviewOpened(card) as RedirectToRouteResult;
@@ -281,7 +264,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsRepeatOpenedAgainButtonPostTest()
         {
             // Arrange
-            var card = new Card { ID = 1 };
+            var card = new ViewCardViewModel { ID = 1 };
 
             // Act
             var result = await sut.RepeatOpened(card, "againButton", null, null) as RedirectToRouteResult;
@@ -294,7 +277,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsRepeatOpenedBadButtonPostTest()
         {
             // Arrange
-            var card = new Card { ID = 1 };
+            var card = new ViewCardViewModel { ID = 1 };
 
             // Act
             var result = await sut.RepeatOpened(card, null, "badButton", null) as RedirectToRouteResult;
@@ -307,7 +290,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsRepeatOpenedGoodButtonPostTest()
         {
             // Arrange
-            var card = new Card { ID = 1 };
+            var card = new ViewCardViewModel { ID = 1 };
 
             // Act
             var result = await sut.RepeatOpened(card, null, null, "goodButton") as RedirectToRouteResult;
@@ -492,7 +475,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsEditPostTest()
         {
             // Arrange
-            var card = new Card { ID = 1 };
+            var card = new EditCardViewModel { ID = 1 };
 
             // Act
             var result = await sut.Edit(card) as RedirectToRouteResult;

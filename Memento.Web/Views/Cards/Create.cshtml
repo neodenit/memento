@@ -1,4 +1,6 @@
-﻿@model Memento.Models.ViewModels.EditCardViewModel
+﻿@using Memento.Models.ViewModels
+
+@model EditCardViewModel
 
 @{
     ViewBag.Title = "Create Card";
@@ -49,7 +51,7 @@
     }
     else
     {
-    @Html.ActionLink("Back", "Details", "Decks", new { id = Model.DeckID }, null);
+    @Html.ActionLink("Back", "Details", "Decks", new DeckViewModel { ID = Model.DeckID }, null);
     }
 </div>
 

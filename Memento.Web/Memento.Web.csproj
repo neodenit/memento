@@ -288,7 +288,7 @@
     <Content Include="Views\Decks\Delete.cshtml" />
     <Content Include="Views\Cards\Create.cshtml" />
     <Content Include="Views\Cards\Delete.cshtml" />
-    <Content Include="Views\Cards\Details.cshtml" />
+    <Content Include="Views\Decks\EmptyDeck.cshtml" />
     <Content Include="Views\Cards\Edit.cshtml" />
     <Content Include="Views\Cards\ClozesIndex.cshtml" />
     <Content Include="Views\Decks\Edit.cshtml" />

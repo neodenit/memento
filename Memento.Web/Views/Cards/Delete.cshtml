@@ -1,4 +1,6 @@
-﻿@model Memento.Models.Models.Card
+﻿@using Memento.Models.ViewModels
+
+@model ViewCardViewModel
 
 @{
     ViewBag.Title = "Delete";
@@ -12,11 +14,11 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Deck.Title)
+            @Html.DisplayNameFor(model => model.DeckTitle)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Deck.Title)
+            @Html.DisplayFor(model => model.DeckTitle)
         </dd>
 
         <dt>
@@ -34,7 +36,7 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back", "Details", "Decks", new { ID = Model.DeckID }, null)
+            @Html.ActionLink("Back", "Details", "Decks", new DeckViewModel { ID = Model.DeckID }, null)
         </div>
     }
 </div>

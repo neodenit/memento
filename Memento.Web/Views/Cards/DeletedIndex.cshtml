@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Memento.Models.Models.EditCardViewModel>
+﻿@using Memento.Models.ViewModels
+
+@model IEnumerable<ViewCardViewModel>
 
 @{
     ViewBag.Title = "Deleted cards";
@@ -27,8 +29,8 @@
             @Html.DisplayFor(modelItem => item.Text)
         </td>
         <td>
-            @Html.ActionLink("Delete", "Delete", new { item.ID }) |
-            @Html.ActionLink("Restore", "Restore", new { item.ID })
+            @Html.ActionLink("Delete", "Delete", Model) |
+            @Html.ActionLink("Restore", "Restore", Model)
         </td>
     </tr>
 }

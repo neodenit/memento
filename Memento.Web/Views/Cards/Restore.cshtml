@@ -1,4 +1,4 @@
-﻿@model Memento.Models.Models.Card
+﻿@model Memento.Models.ViewModels.ViewCardViewModel
 
 @{
     ViewBag.Title = "Restore";
@@ -13,11 +13,11 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Deck.Title)
+            @Html.DisplayNameFor(model => model.DeckTitle)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Deck.Title)
+            @Html.DisplayFor(model => model.DeckTitle)
         </dd>
 
         <dt>

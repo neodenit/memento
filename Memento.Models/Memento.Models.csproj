@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Additional\ChartData.cs" />
     <Compile Include="Additional\Statistics.cs" />
+    <Compile Include="ViewModels\DeckViewModel.cs" />
     <Compile Include="ViewModels\DeckWithStatViewModel.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Card.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="ViewModels\AnswerCardViewModel.cs" />
     <Compile Include="ViewModels\ClozeViewModel.cs" />
     <Compile Include="ViewModels\EditCardViewModel.cs" />
+    <Compile Include="ViewModels\ViewCardViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Memento.Attributes\Memento.Attributes.csproj">

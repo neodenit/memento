@@ -71,7 +71,7 @@ namespace Memento.Web.Controllers
             }
             else
             {
-                return RedirectToAction("DetailsEmpty", "Cards", new { deckID = deck.ID });
+                return View("EmptyDeck", "Cards", new { deckID = deck.ID });
             }
         }
 

@@ -1,4 +1,4 @@
-﻿@model Memento.Models.Models.AnswerCardViewModel
+﻿@model Memento.Models.ViewModels.AnswerCardViewModel
 
 @{
     ViewBag.Title = "Typo";
@@ -15,7 +15,6 @@
         @Html.AntiForgeryToken()
 
         @Html.HiddenFor(model => model.ID)
-        @Html.HiddenFor(model => model.Answer)
 
         <div class="topactions">
             @Html.ActionLink("Edit card", "Edit", new { id = Model.ID }) |
@@ -23,11 +22,11 @@
         </div>
         <hr />
         <div class="card-text">
-            @Html.Raw(Model.Text)
+            @Html.Raw(Model.CorrectAnswer)
         </div>
         <hr />
         <p>
-            Your answer: <text>Model.Answer</text>
+            Your answer: @Html.DisplayFor(model => model.UserAnswer)
         </p>
 
         <div>Your answer looks like a typo!</div>

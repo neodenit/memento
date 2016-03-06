@@ -49,18 +49,28 @@ namespace Memento.Services
         {
             var card = await FindCardAsync(cardID);
             var cloze = card.GetNextCloze();
-            var answer = converter.GetAnswer(card.Text, cloze.Label);
+            var answer = converter.GetFullAnswer(card.Text, cloze.Label);
 
-            var result = new AnswerCardViewModel(card) { Answer = answer };
+            var result = new AnswerCardViewModel(card) { CorrectAnswer = answer };
 
             return result;
         }
 
         public async Task<IAnswerCardViewModel> EvaluateCard(IAnswerCardViewModel card)
         {
-            var cardWithAnswer = await GetCardWithAnswer(card.ID);
+            var dbCard = await FindCardAsync(card.ID);
+            var cloze = dbCard.GetNextCloze();
+            var correctAnswer = converter.GetAnswerValue(dbCard.Text, cloze.Label);
 
-            cardWithAnswer.Mark = evaluator.Evaluate(cardWithAnswer.Text, card.Answer);
+            var mark = evaluator.Evaluate(correctAnswer, card.UserAnswer);
+
+            var cardWithAnswer = new AnswerCardViewModel(dbCard)
+            {
+                Mark = mark,
+                Question = card.Question,
+                CorrectAnswer = correctAnswer,
+                UserAnswer = card.UserAnswer,
+            };
 
             return cardWithAnswer;
         }

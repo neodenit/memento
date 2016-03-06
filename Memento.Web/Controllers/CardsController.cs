@@ -56,7 +56,7 @@ namespace Memento.Web.Controllers
         {
             var deck = await decksService.FindDeckAsync(deckID);
             var cards = deck.GetDeletedCards();
-            var viewModel = from card in cards select new EditCardViewModel(card);
+            var viewModel = from card in cards select new ViewCardViewModel(card);
 
             return View(viewModel);
         }
@@ -65,14 +65,9 @@ namespace Memento.Web.Controllers
         {
             var deck = await decksService.FindDeckAsync(deckID);
             var cards = deck.GetDraftCards();
-            var viewModel = from card in cards select new EditCardViewModel(card);
+            var viewModel = from card in cards select new ViewCardViewModel(card);
 
             return View(viewModel);
-        }
-
-        public ActionResult DetailsEmpty([CheckDeckExistence, CheckDeckOwner] int deckID)
-        {
-            return View("Details", new Card { DeckID = deckID, ID = -1 });
         }
 
         public async Task<ActionResult> Details([CheckCardExistence, CheckCardOwner] int id)
@@ -114,7 +109,7 @@ namespace Memento.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> PreviewOpened([Bind(Include = "ID")] Card card)
+        public async Task<ActionResult> PreviewOpened([Bind(Include = "ID")] ViewCardViewModel card)
         {
             var dbCard = await cardsService.FindCardAsync(card.ID);
 
@@ -137,7 +132,7 @@ namespace Memento.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RepeatOpened([Bind(Include = "ID")] Card card, string againButton, string badButton, string goodButton)
+        public async Task<ActionResult> RepeatOpened([Bind(Include = "ID")] ViewCardViewModel card, string againButton, string badButton, string goodButton)
         {
             var isCorrect = goodButton != null;
 
@@ -207,7 +202,7 @@ namespace Memento.Web.Controllers
             }
             else if (AltButton != null)
             {
-                await cardsService.AddAltAnswer(card.ID, card.Answer);
+                await cardsService.AddAltAnswer(card.ID, card.UserAnswer);
 
                 return RedirectToAction("Details", new { id = card.ID });
             }
@@ -233,7 +228,7 @@ namespace Memento.Web.Controllers
             }
             else if (AltButton != null)
             {
-                await cardsService.AddAltAnswer(card.ID, card.Answer);
+                await cardsService.AddAltAnswer(card.ID, card.UserAnswer);
 
                 return RedirectToAction("Details", new { id = card.ID });
             }
@@ -287,7 +282,7 @@ namespace Memento.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID, Text")] Card card)
+        public async Task<ActionResult> Edit([Bind(Include = "ID, Text")] EditCardViewModel card)
         {
             if (ModelState.IsValid)
             {

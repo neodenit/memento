@@ -1,4 +1,4 @@
-﻿@model Memento.Models.Models.AnswerCardViewModel
+﻿@model Memento.Models.ViewModels.AnswerCardViewModel
 
 @{
     ViewBag.Title = "Question";
@@ -20,15 +20,15 @@
         </div>
         <hr />
         <div class="card-text">
-            @Html.Raw(Model.Text)
+            @Html.Raw(Model.Question)
         </div>
         <hr />
-        @Html.EditorFor(model => model.Answer)
+        @Html.EditorFor(model => model.UserAnswer)
 
         <input type="submit" value="Answer" class="btn btn-default" />
 
         <div>
-            @Html.ValidationMessageFor(model => model.Answer, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.UserAnswer, "", new { @class = "text-danger" })
         </div>
     }
 </div>

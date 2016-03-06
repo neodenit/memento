@@ -1,4 +1,4 @@
-﻿@model Memento.Models.Models.AnswerCardViewModel
+﻿@model Memento.Models.ViewModels.AnswerCardViewModel
 
 @{
     ViewBag.Title = "Right";
@@ -22,7 +22,7 @@
         </div>
         <hr />
         <div class="card-text">
-            @Html.Raw(Model.Text)
+            @Html.Raw(Model.CorrectAnswer)
         </div>
         <hr />
         <div>You are right!</div>

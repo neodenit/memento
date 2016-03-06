@@ -61,6 +61,7 @@
     <Compile Include="IScheduler.cs" />
     <Compile Include="ISiblingsManager.cs" />
     <Compile Include="IValidator.cs" />
+    <Compile Include="IViewCardViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

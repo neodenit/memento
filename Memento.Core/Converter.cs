@@ -68,7 +68,7 @@ namespace Memento.Core
             }
         }
 
-        public string GetAnswer(string card, string clozeName, bool stripWildCards = true)
+        public string GetFullAnswer(string card, string clozeName, bool stripWildCards = true)
         {
             var text = stripWildCards ? ReplaceAllWildCardsWithText(card) : card;
 
