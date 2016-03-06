@@ -16,7 +16,6 @@ namespace Memento.Models.Models
         public Card()
         {
             Clozes = new List<Cloze>();
-            Deck = new Deck();
         }
 
         [CheckCardOwner]
