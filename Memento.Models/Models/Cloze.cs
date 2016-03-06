@@ -11,6 +11,7 @@ namespace Memento.Models.Models
     {
         public Cloze()
         {
+            Card = new Card();
         }
 
         public Cloze(int cardID, string label)

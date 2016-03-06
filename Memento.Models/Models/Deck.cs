@@ -11,6 +11,11 @@ namespace Memento.Models.Models
 {
     public class Deck : IDeck
     {
+        public Deck()
+        {
+            Cards = new List<Card>();
+        }
+
         [CheckDeckOwner]
         public int ID { get; set; }
 

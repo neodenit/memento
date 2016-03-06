@@ -99,10 +99,8 @@ namespace Memento.Services
             var newCard = new Card
             {
                 ID = cardID,
-                DeckID = deckID,
                 Deck = await repository.FindDeckAsync(deckID) as Deck,
                 Text = converter.ReplaceTextWithWildcards(text, clozeNames),
-                Clozes = new List<Cloze>(),
                 IsValid = true,
                 IsDeleted = false,
             };

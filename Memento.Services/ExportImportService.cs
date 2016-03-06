@@ -46,7 +46,7 @@ namespace Memento.Services
                 {
                     var newCard = new Card
                     {
-                        DeckID = deckID,
+                        Deck = await repository.FindDeckAsync(deckID) as Deck,
                         Text = cardText,
                         IsValid = false,
                     };
@@ -57,7 +57,7 @@ namespace Memento.Services
                 {
                     var newCard = new Card
                     {
-                        DeckID = deckID,
+                        Deck = await repository.FindDeckAsync(deckID) as Deck,
                         Text = updatedText,
                         IsValid = true,
                     };
