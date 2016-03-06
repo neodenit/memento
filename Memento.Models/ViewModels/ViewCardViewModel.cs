@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace Memento.Models.ViewModels
 {
-    [CheckClozes]
     public class ViewCardViewModel : IViewCardViewModel
     {
         public int ID { get; set; }
