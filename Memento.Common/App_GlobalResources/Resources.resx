@@ -129,6 +129,9 @@
   <data name="ManualModeHint" xml:space="preserve">
     <value>You will tell the app if you were right or wrong after seeing the correct answer.</value>
   </data>
+  <data name="PleaseEnterYourAnswer" xml:space="preserve">
+    <value>Please enter your answer.</value>
+  </data>
   <data name="SharpDelayModeHint" xml:space="preserve">
     <value>Wrong answer will change delay to the initial value.</value>
   </data>

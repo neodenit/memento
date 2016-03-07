@@ -158,11 +158,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_GlobalResources\Resources.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\DependenciesConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -343,10 +338,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_GlobalResources\Resources.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Resources.designer.cs</LastGenOutput>
-    </Content>
     <EmbeddedResource Include="Migrations\201506291851096_InitialCreate.resx">
       <DependentUpon>201506291851096_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>

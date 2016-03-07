@@ -1,4 +1,5 @@
-﻿using Memento.Interfaces;
+﻿using Memento.Common.App_GlobalResources;
+using Memento.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,10 +18,12 @@ namespace Memento.Models.ViewModels
         [DataType(DataType.MultilineText)]
         public string Question { get; set; }
 
-        [Required]
         [DataType(DataType.MultilineText)]
+        public string FullAnswer { get; set; }
+
         public string CorrectAnswer { get; set; }
 
+        [Required(ErrorMessageResourceName = "PleaseEnterYourAnswer", ErrorMessageResourceType = typeof(Resources))]
         public string UserAnswer { get; set; }
 
         public Mark Mark { get; set; }
