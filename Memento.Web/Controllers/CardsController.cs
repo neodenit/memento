@@ -153,14 +153,14 @@ namespace Memento.Web.Controllers
 
         public async Task<ActionResult> Question([CheckCardExistence, CheckCardOwner] int id)
         {
-            var card = await cardsService.GetCardWithAnswer(id);
+            var card = await cardsService.GetCardWithQuestion(id);
 
             return View(card);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Question([Bind(Include = "ID, Answer")] AnswerCardViewModel card)
+        public async Task<ActionResult> Question([Bind(Include = "ID, UserAnswer")] AnswerCardViewModel card)
         {
             var evaluatedCard = await cardsService.EvaluateCard(card);
 
