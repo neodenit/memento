@@ -10,19 +10,15 @@
     <h4>@Html.DisplayFor(model => model.DeckTitle)</h4>
     <hr />
 
-    @using (Html.BeginForm("RepeatOpened", "Cards", FormMethod.Get))
-    {
-        @Html.HiddenFor(model => model.ID)
+    @{Html.RenderPartial("_TopActionsView");}
 
-        <div class="topactions">
-            @Html.ActionLink("Edit card", "Edit", new { id = Model.ID }) |
-            @Html.ActionLink("Delete card", "Delete", new { id = Model.ID })
-        </div>
-        <hr />
-        <div class="card-text">
-            @Html.Raw(Model.Question)
-        </div>
-        <hr />
+    @using (Html.BeginForm("RepeatClosed", "Cards", FormMethod.Get))
+    {
+
+    @Html.HiddenFor(model => model.ID);
+
+        Html.RenderPartial("_Question");
+
         <input type="submit" value="Show" class="btn btn-default" />
     }
 </div>

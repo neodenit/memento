@@ -30,4 +30,5 @@ textarea {
 
 .card-text {
     font-size: large;
+    white-space: pre-wrap;
 }

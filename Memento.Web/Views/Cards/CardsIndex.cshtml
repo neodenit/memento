@@ -1,17 +1,15 @@
-﻿@model IEnumerable<Memento.Models.ViewModels.ViewCardViewModel>
+﻿@using Memento.Models.ViewModels;
+
+@model IEnumerable<ViewCardViewModel>
 
 @{
     ViewBag.Title = "Cards Index";
 }
 
 <h2>Index</h2>
-
 <hr />
 
 @foreach (var item in Model)
 {
-    <div class="card-text">
-        @Html.Raw(item.Text)
-    </div>
-    <hr />
+    Html.RenderPartial("_Question", new AnswerCardViewModel { Question = item.Text });
 }

@@ -10,26 +10,25 @@
     <h4>@Html.DisplayFor(model => model.DeckTitle)</h4>
     <hr />
 
+    @{Html.RenderPartial("_TopActionsView");}
+
+
     @using (Html.BeginForm("Typo", "Cards"))
     {
-        @Html.AntiForgeryToken()
+
+    @Html.AntiForgeryToken()
 
         @Html.HiddenFor(model => model.ID)
 
-        <div class="topactions">
-            @Html.ActionLink("Edit card", "Edit", new { id = Model.ID }) |
-            @Html.ActionLink("Delete card", "Delete", new { id = Model.ID })
-        </div>
-        <hr />
-        <div class="card-text">
-            @Html.Raw(Model.CorrectAnswer)
-        </div>
-        <hr />
+        Html.RenderPartial("_Answer");
+
         <p>
-            Your answer: @Html.DisplayFor(model => model.UserAnswer)
+            Your answer:
+            @Html.DisplayFor(model => model.UserAnswer)
         </p>
 
         <div>Your answer looks like a typo!</div>
+
         <input type="submit" name="TypoButton" value="It's a typo!" class="btn btn-default" />
         <input type="submit" name="WrongButton" value="It's a wrong answer!" class="btn btn-default" />
         <input type="submit" name="AltButton" value="It's an alternative answer!" class="btn btn-default" />

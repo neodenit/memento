@@ -10,21 +10,17 @@
     <h4>@Html.DisplayFor(model => model.DeckTitle)</h4>
     <hr />
 
+    @{Html.RenderPartial("_TopActionsView");}
+
     @using (Html.BeginForm("Right", "Cards"))
     {
-        @Html.AntiForgeryToken()
+
+    @Html.AntiForgeryToken()
 
         @Html.HiddenFor(model => model.ID)
 
-        <div class="topactions">
-            @Html.ActionLink("Edit card", "Edit", new { id = Model.ID }) |
-            @Html.ActionLink("Delete card", "Delete", new { id = Model.ID })
-        </div>
-        <hr />
-        <div class="card-text">
-            @Html.Raw(Model.CorrectAnswer)
-        </div>
-        <hr />
+        Html.RenderPartial("_Answer");
+
         <div>You are right!</div>
 
         <input type="submit" value="Next" class="btn btn-default" />

@@ -49,7 +49,9 @@ namespace Memento.Web.Controllers
             var deck = await decksService.FindDeckAsync(deckID);
             var cards = deck.GetValidCards();
 
-            return View(cards);
+            var viewModel = from card in cards select new ViewCardViewModel(card);
+
+            return View(viewModel);
         }
 
         public async Task<ActionResult> DeletedIndex([CheckDeckExistence, CheckDeckOwner] int deckID)
