@@ -7,8 +7,10 @@ namespace Memento.Interfaces
         int ID { get; set; }
 
         string Question { get; set; }
-        string CorrectAnswer { get; set; }
+        string FullAnswer { get; set; }
+        string ShortAnswer { get; set; }
         string UserAnswer { get; set; }
+        string Comment { get; set; }
 
         Mark Mark { get; set; }
         DelayModes DelayMode { get; set; }

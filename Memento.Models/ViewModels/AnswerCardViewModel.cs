@@ -26,6 +26,8 @@ namespace Memento.Models.ViewModels
         [Required(ErrorMessageResourceName = "PleaseEnterYourAnswer", ErrorMessageResourceType = typeof(Resources))]
         public string UserAnswer { get; set; }
 
+        public string Comment { get; set; }
+
         public Mark Mark { get; set; }
 
         public DelayModes DelayMode { get; set; }

@@ -43,29 +43,5 @@ namespace Memento.Tests
             // Assert
             Assert.AreEqual("Test text with {{c1::cloze|alt::hint}}.", result);
         }
-
-        [TestMethod]
-        public void ReplaceTwoClozesWithWildcardsTest()
-        {
-            // Arrange
-
-            // Act
-            var result = sut.ReplaceTextWithWildcards("Test text with {{c1::cloze}} and another {{c1::cloze}}.", "c1");
-
-            // Assert
-            Assert.AreEqual("Test text with {{c1::cloze}} and another {{c1::*}}.", result);
-        }
-
-        [TestMethod]
-        public void ReplaceThreeClozesWithWildcardTest()
-        {
-            // Arrange
-
-            // Act
-            var result = sut.ReplaceTextWithWildcards("Test text with {{c1::cloze}}, another {{c1::cloze}} and another {{c1::cloze}}.", "c1");
-
-            // Assert
-            Assert.AreEqual("Test text with {{c1::cloze}}, another {{c1::*}} and another {{c1::*}}.", result);
-        }
     }
 }

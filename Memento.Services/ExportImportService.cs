@@ -21,7 +21,7 @@ namespace Memento.Services
             this.converter = converter;
             this.validator = validator;
         }
-        
+
         public async Task<string> Export(int deckID)
         {
             var deck = await repository.FindDeckAsync(deckID);
@@ -39,7 +39,7 @@ namespace Memento.Services
             foreach (var cardText in cards)
             {
                 var clozeNames = converter.GetClozeNames(cardText);
-                var updatedText = converter.ReplaceTextWithWildcards(cardText, clozeNames);
+
                 var isValid = clozeNames.Any() && clozeNames.All(clozeName => validator.Validate(cardText, clozeName));
 
                 if (!isValid)
@@ -58,7 +58,7 @@ namespace Memento.Services
                     var newCard = new Card
                     {
                         Deck = await repository.FindDeckAsync(deckID) as Deck,
-                        Text = updatedText,
+                        Text = cardText,
                         IsValid = true,
                     };
 

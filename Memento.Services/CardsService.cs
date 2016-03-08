@@ -49,9 +49,10 @@ namespace Memento.Services
         {
             var card = await FindCardAsync(cardID);
             var cloze = card.GetNextCloze();
-            var answer = converter.GetFullAnswer(card.Text, cloze.Label);
+            var fullAnswer = converter.GetFullAnswer(card.Text, cloze.Label);
+            var comment = converter.GetComment(card.Text);
 
-            var result = new AnswerCardViewModel(card) { CorrectAnswer = answer };
+            var result = new AnswerCardViewModel(card) { FullAnswer = fullAnswer, Comment = comment };
 
             return result;
         }
@@ -60,7 +61,9 @@ namespace Memento.Services
         {
             var dbCard = await FindCardAsync(card.ID);
             var cloze = dbCard.GetNextCloze();
-            var correctAnswer = converter.GetAnswerValue(dbCard.Text, cloze.Label);
+            var correctAnswer = converter.GetShortAnswer(dbCard.Text, cloze.Label);
+            var fullAnswer = converter.GetFullAnswer(dbCard.Text, cloze.Label);
+            var comment = converter.GetComment(dbCard.Text);
 
             var mark = evaluator.Evaluate(correctAnswer, card.UserAnswer);
 
@@ -68,8 +71,10 @@ namespace Memento.Services
             {
                 Mark = mark,
                 Question = card.Question,
-                CorrectAnswer = correctAnswer,
+                FullAnswer = fullAnswer,
+                ShortAnswer = correctAnswer,
                 UserAnswer = card.UserAnswer,
+                Comment = comment,
             };
 
             return cardWithAnswer;
@@ -100,7 +105,7 @@ namespace Memento.Services
             {
                 ID = cardID,
                 Deck = await repository.FindDeckAsync(deckID) as Deck,
-                Text = converter.ReplaceTextWithWildcards(text, clozeNames),
+                Text = text,
                 IsValid = true,
                 IsDeleted = false,
             };
@@ -119,7 +124,7 @@ namespace Memento.Services
             var dbCard = await FindCardAsync(cardID);
             var clozes = converter.GetClozeNames(dbCard.Text);
 
-            dbCard.Text = converter.ReplaceTextWithWildcards(text, clozes);
+            dbCard.Text = text;
 
             var oldClozes = from cloze in dbCard.GetClozes() select cloze.Label;
             var newClozes = clozes;

@@ -24,7 +24,7 @@ namespace Memento.Core.Validators
         {
             var maxValidLength = Settings.Default.DefaultValidLength;
 
-            var value = converter.GetAnswerValue(field, clozeName);
+            var value = converter.GetShortAnswer(field, clozeName);
 
             var wordsNumber = Helpers.GetWordsNumber(value);
 
