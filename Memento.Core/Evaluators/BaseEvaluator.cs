@@ -18,7 +18,7 @@ namespace Memento.Core.Evaluators
         {
             var words = GetWords(answer);
 
-            return String.Join(" ", words);
+            return string.Join(" ", words);
         }
 
         protected IEnumerable<string> GetVariants(string correctAnswer)
@@ -26,10 +26,10 @@ namespace Memento.Core.Evaluators
             return correctAnswer.Split('|');
         }
 
-        protected IEnumerable<string> GetWords(string correctAnswer)
-        {
-            return from word in Regex.Split(correctAnswer, @"\W") select word.ToUpper();
-        }
+        protected IEnumerable<string> GetWords(string correctAnswer) =>
+            from word in Regex.Split(correctAnswer, @"\W+")
+            where !string.IsNullOrEmpty(word)
+            select word.ToUpper();
 
         protected Mark Check(IEnumerable<string> correctWords, IEnumerable<string> answerWords)
         {
