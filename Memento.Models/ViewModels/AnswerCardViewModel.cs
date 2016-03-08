@@ -21,7 +21,7 @@ namespace Memento.Models.ViewModels
         [DataType(DataType.MultilineText)]
         public string FullAnswer { get; set; }
 
-        public string CorrectAnswer { get; set; }
+        public string ShortAnswer { get; set; }
 
         [Required(ErrorMessageResourceName = "PleaseEnterYourAnswer", ErrorMessageResourceType = typeof(Resources))]
         public string UserAnswer { get; set; }
@@ -31,6 +31,7 @@ namespace Memento.Models.ViewModels
         public Mark Mark { get; set; }
 
         public DelayModes DelayMode { get; set; }
+
 
         public AnswerCardViewModel() { }
 
