@@ -34,7 +34,7 @@ namespace Memento.Common {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        [global::System.Configuration.DefaultSettingValueAttribute("4")]
         public int StartDelay {
             get {
                 return ((int)(this["StartDelay"]));

@@ -6,7 +6,7 @@
       <Value Profile="(Default)">2</Value>
     </Setting>
     <Setting Name="StartDelay" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">8</Value>
+      <Value Profile="(Default)">4</Value>
     </Setting>
     <Setting Name="CommentDelimeter" Type="System.String" Scope="Application">
       <Value Profile="(Default)">---</Value>
