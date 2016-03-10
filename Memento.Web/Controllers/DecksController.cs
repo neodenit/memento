@@ -3,6 +3,7 @@ using Memento.Attributes;
 using Memento.Common;
 using Memento.Interfaces;
 using Memento.Models.Models;
+using Memento.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -63,15 +64,16 @@ namespace Memento.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Details([Bind(Include = "ID")] Deck deck)
         {
-            var card = await cardsService.GetNextCardAsync(deck.ID);
+            var dbDeck = await decksService.FindDeckAsync(deck.ID);
+            var card = dbDeck.GetNextCard();
 
             if (card != null)
             {
-                return RedirectToAction("Details", "Cards", new { id = card.ID });
+                return RedirectToAction("Details", "Cards", new { card.ID });
             }
             else
             {
-                return View("EmptyDeck", "Cards", new { deckID = deck.ID });
+                return View("EmptyDeck", new DeckViewModel(dbDeck));
             }
         }
 

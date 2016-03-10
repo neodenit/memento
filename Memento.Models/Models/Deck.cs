@@ -51,7 +51,7 @@ namespace Memento.Models.Models
         {
             var validCards = GetValidCards();
 
-            var nextCard = validCards.GetMinElement(item => item.GetClozes().Min(c => c.Position));
+            var nextCard = validCards.GetMinElement(item => item.GetNextCloze().Position);
 
             return nextCard;
         }

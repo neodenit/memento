@@ -10,12 +10,12 @@ namespace Memento.Common
     {
         public static TSource GetMaxElement<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
-            return source.OrderByDescending(keySelector).First();
+            return source.OrderByDescending(keySelector).FirstOrDefault();
         }
 
         public static TSource GetMinElement<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
-            return source.OrderBy(keySelector).First();
+            return source.OrderBy(keySelector).FirstOrDefault();
         }
 
         public static IEnumerable<TSource> ToEnumerable<TSource>(this TSource source)

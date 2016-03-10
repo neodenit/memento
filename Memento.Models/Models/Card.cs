@@ -36,26 +36,17 @@ namespace Memento.Models.Models
 
         public virtual ICollection<Cloze> Clozes { get; set; }
 
-        public IEnumerable<ICloze> GetClozes()
-        {
-            return Clozes;
-        }
+        public IEnumerable<ICloze> GetClozes() => Clozes;
 
-        public void AddCloze(ICloze cloze)
-        {
+        public ICloze GetNextCloze() =>
+            Clozes.GetMinElement(c => c.Position);
+
+        public void AddCloze(ICloze cloze) =>
             Clozes.Add(cloze as Cloze);
-        }
 
         public bool IsValid { get; set; }
 
         public bool IsDeleted { get; set; }
-
-        public ICloze GetNextCloze()
-        {
-            var cloze = Clozes.GetMinElement(item => item.Position);
-
-            return cloze;
-        }
 
         public bool IsAuthorized(IPrincipal user)
         {
