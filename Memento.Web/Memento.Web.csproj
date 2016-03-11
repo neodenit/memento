@@ -212,7 +212,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\App\CardCreate.js" />
     <Content Include="Scripts\App\Charts.js" />
-    <Content Include="Scripts\App\Common.js">
+    <Content Include="Scripts\App\Focus.js">
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Content>
     <Content Include="Scripts\App\DeckCreate.js" />
