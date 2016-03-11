@@ -302,7 +302,7 @@
     <Content Include="Views\Cards\DraftIndex.cshtml" />
     <Content Include="Views\Cards\RepeatOpened.cshtml" />
     <Content Include="Views\Cards\RepeatClosed.cshtml" />
-    <Content Include="Views\Shared\_TopActionsView.cshtml" />
+    <Content Include="Views\Shared\_TopActions.cshtml" />
     <Content Include="Views\Shared\_Question.cshtml" />
     <Content Include="Views\Shared\_Answer.cshtml" />
   </ItemGroup>
