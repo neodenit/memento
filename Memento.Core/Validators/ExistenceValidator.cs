@@ -27,7 +27,7 @@ namespace Memento.Core.Validators
 
             var values = from Match m in Regex.Matches(field, currentPattern) select m.Groups[2].Value;
 
-            var result = values.All(item => item == firstValue || item == "*");
+            var result = values.All(item => item == firstValue);
 
             return result;
         }

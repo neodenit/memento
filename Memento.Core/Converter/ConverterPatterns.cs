@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Memento.Core
+namespace Memento.Core.Converter
 {
     public static class ConverterPatterns
     {

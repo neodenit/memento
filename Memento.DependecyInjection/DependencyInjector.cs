@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
 using Memento.Core;
+using Memento.Core.Converter;
 using Memento.Core.Evaluators;
 using Memento.Core.Validators;
 using Memento.DomainModel.Repository;

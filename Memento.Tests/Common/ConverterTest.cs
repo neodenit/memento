@@ -5,7 +5,7 @@ using System.Text;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Memento.Interfaces;
-using Memento.Core;
+using Memento.Core.Converter;
 
 namespace Memento.Tests
 {
