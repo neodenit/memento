@@ -199,8 +199,10 @@ namespace Memento.Web.Controllers
                 await statService.AddAnswer(card.ID, false);
 
                 var dbCard = await cardsService.FindCardAsync(card.ID);
+                var deck = dbCard.GetDeck();
+                var delay = schedulerService.GetDelayForWrongAnswer(deck.DelayMode);
 
-                return await PromoteAndRedirect(dbCard.GetDeck(), Delays.Previous);
+                return await PromoteAndRedirect(deck, delay);
             }
             else if (AltButton != null)
             {
@@ -226,7 +228,10 @@ namespace Memento.Web.Controllers
             }
             else if (WrongButton != null)
             {
-                return await PromoteAndRedirect(dbCard.GetDeck(), Delays.Previous);
+                var deck = dbCard.GetDeck();
+                var delay = schedulerService.GetDelayForWrongAnswer(deck.DelayMode);
+
+                return await PromoteAndRedirect(deck, delay);
             }
             else if (AltButton != null)
             {
