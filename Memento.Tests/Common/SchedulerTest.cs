@@ -6,8 +6,8 @@ using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Memento.Interfaces;
 using Memento.Common;
-using Memento.Core;
 using Memento.Models.Models;
+using Memento.Core.Scheduler;
 
 namespace Memento.Tests
 {

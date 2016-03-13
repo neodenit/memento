@@ -51,10 +51,11 @@
     <Compile Include="Evaluators\BaseEvaluator.cs" />
     <Compile Include="Evaluators\PhraseEvaluator.cs" />
     <Compile Include="Evaluators\WordsEvaluator.cs" />
+    <Compile Include="Scheduler\SchedulerUtils.cs" />
     <Compile Include="Validators\BaseValidator.cs" />
     <Compile Include="NewClozesManager.cs" />
     <Compile Include="Converter\Converter.cs" />
-    <Compile Include="Scheduler.cs" />
+    <Compile Include="Scheduler\Scheduler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SiblingsManager.cs" />
     <Compile Include="Utils.cs" />
