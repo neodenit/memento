@@ -44,7 +44,7 @@
         });
     };
 
-    drawChart('#answersPlaceholder', chartData.answers.labels, chartData.answers.values, 'Answers');
-    drawChart('#correctAnswersPlaceholder', chartData.correctAnswers.labels, chartData.correctAnswers.values, 'Correct answers');
-    drawChart('#cardsNumberPlaceholder', chartData.cards.labels, chartData.cards.values, 'Active cards');
+    drawChart('#answersPlaceholder', chartData.answers.Labels, chartData.answers.Values, 'Answers');
+    drawChart('#correctAnswersPlaceholder', chartData.correctAnswers.Labels, chartData.correctAnswers.Values, 'Correct answers');
+    drawChart('#cardsNumberPlaceholder', chartData.cards.Labels, chartData.cards.Values, 'Active cards');
 });
