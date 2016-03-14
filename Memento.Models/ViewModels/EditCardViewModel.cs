@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace Memento.Models.ViewModels
 {
@@ -17,6 +18,7 @@ namespace Memento.Models.ViewModels
         public int DeckID { get; set; }
 
         [Required]
+        [AllowHtml]
         [DataType(DataType.MultilineText)]
         public string Text { get; set; }
 
