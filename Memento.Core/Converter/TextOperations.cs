@@ -26,6 +26,9 @@ namespace Memento.Core.Converter
         internal static string DelimeterToRaw(string text) =>
             Regex.Replace(text, Delimeter, RawDelimeter);
 
+        internal static string TabsToSpaces(string text) =>
+            Regex.Replace(text, Tab, TabReplacement);
+
         internal static string TrimNewLines(string text) =>
             text.Trim(Environment.NewLine.ToCharArray());
 

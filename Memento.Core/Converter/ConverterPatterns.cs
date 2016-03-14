@@ -16,6 +16,8 @@ namespace Memento.Core.Converter
         public const string AltLineBreakTag = "<div></div>";
         public const string DelimeterTag = "<hr />";
         public const string Mask = "...";
+        public const string Tab = "\t";
+        public const string TabReplacement = "    ";
 
         public static string EmptyLine { get; } = Environment.NewLine + Environment.NewLine;
         public static string Delimeter { get; } = EmptyLine + Settings.Default.CommentDelimeter + EmptyLine;

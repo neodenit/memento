@@ -74,7 +74,8 @@ namespace Memento.Core.Converter
 
         public string FormatForExport(string text)
         {
-            var text2 = TextOperations.DelimeterToRaw(text);
+            var text1 = TextOperations.TabsToSpaces(text);
+            var text2 = TextOperations.DelimeterToRaw(text1);
             var text3 = TextOperations.LineBreaksToTagsAlt(text2);
             var result = TextOperations.AddEndingDelimeter(text3);
             return result;
