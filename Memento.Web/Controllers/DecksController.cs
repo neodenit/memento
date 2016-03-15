@@ -176,8 +176,10 @@ namespace Memento.Web.Controllers
         public async Task<ActionResult> Export([CheckDeckExistence, CheckDeckOwner] int deckID)
         {
             var fileContentText = await exportImportService.Export(deckID);
+            var deck = await decksService.FindDeckAsync(deckID);
+            var deckTitle = deck.Title;
 
-            return File(Encoding.UTF8.GetBytes(fileContentText), MediaTypeNames.Text.Plain, "Export.txt");
+            return File(Encoding.UTF8.GetBytes(fileContentText), MediaTypeNames.Text.Plain, $"{fileName}.txt");
         }
     }
 }
