@@ -178,6 +178,7 @@ namespace Memento.Web.Controllers
             var fileContentText = await exportImportService.Export(deckID);
             var deck = await decksService.FindDeckAsync(deckID);
             var deckTitle = deck.Title;
+            var fileName = string.Join(string.Empty, deckTitle.Split(Path.GetInvalidFileNameChars()));
 
             return File(Encoding.UTF8.GetBytes(fileContentText), MediaTypeNames.Text.Plain, $"{fileName}.txt");
         }
