@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Security.Principal;
 
 namespace Memento.Interfaces
 {
@@ -33,6 +32,5 @@ namespace Memento.Interfaces
         IEnumerable<ICard> GetDraftCards();
         ICard GetNextCard();
         IEnumerable<ICard> GetValidCards();
-        bool IsAuthorized(IPrincipal user);
     }
 }

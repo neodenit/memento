@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -47,12 +46,5 @@ namespace Memento.Models.Models
         public bool IsValid { get; set; }
 
         public bool IsDeleted { get; set; }
-
-        public bool IsAuthorized(IPrincipal user)
-        {
-            var userName = user.Identity.Name;
-
-            return Deck.Owner == userName;
-        }
     }
 }

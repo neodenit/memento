@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Security.Principal;
 
 namespace Memento.Models.Models
 {
@@ -74,13 +73,6 @@ namespace Memento.Models.Models
         public IEnumerable<ICard> GetDeletedCards()
         {
             return Cards.Where(card => card.IsDeleted);
-        }
-
-        public bool IsAuthorized(IPrincipal user)
-        {
-            var userName = user.Identity.Name;
-
-            return Owner == userName;
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Security.Principal;
 
 namespace Memento.Interfaces
 {
@@ -15,6 +14,5 @@ namespace Memento.Interfaces
         IEnumerable<ICloze> GetClozes();
         void AddCloze(ICloze cloze);
         ICloze GetNextCloze();
-        bool IsAuthorized(IPrincipal user);
     }
 }
