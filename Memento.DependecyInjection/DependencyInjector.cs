@@ -7,6 +7,7 @@ using Memento.Core.Scheduler;
 using Memento.Core.Validators;
 using Memento.DomainModel.Repository;
 using Memento.Interfaces;
+using Memento.Models;
 using Memento.Services;
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,8 @@ namespace Memento.DependecyInjection
             builder.RegisterType<Scheduler>().As<IScheduler>();
             builder.RegisterType<NewClozesManager>().As<INewClozesManager>();
             builder.RegisterType<SiblingsManager>().As<ISiblingsManager>();
+
+            builder.RegisterType<Factory>().As<IFactory>();
 
             var container = builder.Build();
 

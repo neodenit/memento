@@ -29,13 +29,15 @@ namespace Memento.Web.Controllers
         private readonly ICardsService cardsService;
         private readonly IStatisticsService statService;
         private readonly IExportImportService exportImportService;
+        private readonly IFactory factory;
 
-        public DecksController(IDecksService decksService, ICardsService cardsService, IStatisticsService statService, IExportImportService exportImportService)
+        public DecksController(IDecksService decksService, ICardsService cardsService, IStatisticsService statService, IExportImportService exportImportService, IFactory factory)
         {
             this.decksService = decksService;
             this.cardsService = cardsService;
             this.statService = statService;
             this.exportImportService = exportImportService;
+            this.factory = factory;
         }
 
         // GET: Decks
@@ -80,11 +82,7 @@ namespace Memento.Web.Controllers
         // GET: Decks/Create
         public ActionResult Create()
         {
-            var deck = new Deck
-            {
-                Coeff = Settings.Default.Coeff,
-                StartDelay = Settings.Default.StartDelay,
-            };
+            var deck = factory.CreateDeck(Settings.Default.Coeff, Settings.Default.StartDelay);
 
             return View(deck);
         }
@@ -154,7 +152,7 @@ namespace Memento.Web.Controllers
 
         public ActionResult Import([CheckDeckExistence, CheckDeckOwner] int deckID)
         {
-            var deckWithID = new Deck { ID = deckID };
+            var deckWithID = factory.CreateDeck(deckID);
 
             return View(deckWithID);
         }

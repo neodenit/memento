@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="Additional\ChartData.cs" />
     <Compile Include="Additional\Statistics.cs" />
+    <Compile Include="Factory.cs" />
     <Compile Include="ViewModels\DeckViewModel.cs" />
     <Compile Include="ViewModels\DeckWithStatViewModel.cs" />
     <Compile Include="Models\Answer.cs" />

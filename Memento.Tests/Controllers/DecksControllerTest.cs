@@ -28,19 +28,24 @@ namespace Memento.Tests.Controllers
         private Mock<IStatisticsService> mockStatisticsService;
         private Mock<IExportImportService> mockExportImportService;
 
+        private Mock<IFactory> mockFactory;
+
         [TestInitialize]
         public void Setup()
         {
             mockRepository = new Mock<IMementoRepository>();
+
             mockDecksService = new Mock<IDecksService>();
             mockCardsService = new Mock<ICardsService>();
             mockStatisticsService = new Mock<IStatisticsService>();
             mockExportImportService = new Mock<IExportImportService>();
 
+            mockFactory = new Mock<IFactory>();
+
             var mockContext = new Mock<ControllerContext>();
             mockContext.Setup(item => item.HttpContext.User.Identity.Name).Returns("user@server.com");
 
-            sut = new DecksController(mockDecksService.Object, mockCardsService.Object, mockStatisticsService.Object, mockExportImportService.Object)
+            sut = new DecksController(mockDecksService.Object, mockCardsService.Object, mockStatisticsService.Object, mockExportImportService.Object, mockFactory.Object)
             {
                 ControllerContext = mockContext.Object
             };
