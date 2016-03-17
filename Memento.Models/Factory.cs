@@ -21,5 +21,8 @@ namespace Memento.Models
 
         public ICard CreateCard() =>
             new Card();
+
+        public ICard CreateCard(IDeck deck, string text, bool isValid) =>
+            new Card(deck, text, isValid);
     }
 }

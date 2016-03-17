@@ -16,12 +16,14 @@ namespace Memento.Services
         private readonly IMementoRepository repository;
         private readonly IConverter converter;
         private readonly IEvaluator evaluator;
+        private readonly IFactory factory;
 
-        public CardsService(IMementoRepository repository, IConverter converter, IEvaluator evaluator)
+        public CardsService(IMementoRepository repository, IConverter converter, IEvaluator evaluator, IFactory factory)
         {
             this.repository = repository;
             this.converter = converter;
             this.evaluator = evaluator;
+            this.factory = factory;
         }
 
         public async Task AddAltAnswer(int cardID, string answer)
@@ -100,15 +102,9 @@ namespace Memento.Services
         public async Task AddCard(int cardID, int deckID, string text)
         {
             var clozeNames = converter.GetClozeNames(text);
+            var deck = await repository.FindDeckAsync(deckID);
 
-            var newCard = new Card
-            {
-                ID = cardID,
-                Deck = await repository.FindDeckAsync(deckID) as Deck,
-                Text = text,
-                IsValid = true,
-                IsDeleted = false,
-            };
+            var newCard = factory.CreateCard(deck, text, true);
 
             repository.AddCard(newCard);
 

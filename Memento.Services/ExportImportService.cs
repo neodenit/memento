@@ -14,12 +14,14 @@ namespace Memento.Services
         private readonly IMementoRepository repository;
         private readonly IConverter converter;
         private readonly IValidator validator;
+        private readonly IFactory factory;
 
-        public ExportImportService(IMementoRepository repository, IConverter converter, IValidator validator)
+        public ExportImportService(IMementoRepository repository, IConverter converter, IValidator validator, IFactory factory)
         {
             this.repository = repository;
             this.converter = converter;
             this.validator = validator;
+            this.factory = factory;
         }
 
         public async Task<string> Export(int deckID)
@@ -39,37 +41,20 @@ namespace Memento.Services
             foreach (var cardText in cards)
             {
                 var clozeNames = converter.GetClozeNames(cardText);
-
                 var isValid = clozeNames.Any() && clozeNames.All(clozeName => validator.Validate(cardText, clozeName));
+                var deck = await repository.FindDeckAsync(deckID);
+                var newCard = factory.CreateCard(deck, cardText, isValid);
 
-                if (!isValid)
-                {
-                    var newCard = new Card
-                    {
-                        Deck = await repository.FindDeckAsync(deckID) as Deck,
-                        Text = cardText,
-                        IsValid = false,
-                    };
-
-                    repository.AddCard(newCard);
-                }
-                else
-                {
-                    var newCard = new Card
-                    {
-                        Deck = await repository.FindDeckAsync(deckID) as Deck,
-                        Text = cardText,
-                        IsValid = true,
-                    };
-
-                    repository.AddCard(newCard);
-
-                    await repository.SaveChangesAsync();
-
-                    repository.AddClozes(newCard, clozeNames);
-                }
+                repository.AddCard(newCard);
 
                 await repository.SaveChangesAsync();
+
+                if (isValid)
+                {
+                    repository.AddClozes(newCard, clozeNames);
+
+                    await repository.SaveChangesAsync();
+                }
             }
         }
     }

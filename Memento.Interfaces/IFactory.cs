@@ -13,5 +13,6 @@ namespace Memento.Interfaces
         IDeck CreateDeck(double coeff, int startDelay);
 
         ICard CreateCard();
+        ICard CreateCard(IDeck deck, string text, bool isValid);
     }
 }

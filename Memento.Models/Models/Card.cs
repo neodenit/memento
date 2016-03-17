@@ -17,6 +17,13 @@ namespace Memento.Models.Models
             Clozes = new List<Cloze>();
         }
 
+        public Card(IDeck deck, string text, bool isValid) : this()
+        {
+            Deck = deck as Deck;
+            Text = text;
+            IsValid = isValid;
+        }
+
         [CheckCardOwner]
         public int ID { get; set; }
 
