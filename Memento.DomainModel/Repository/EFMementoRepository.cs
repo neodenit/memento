@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Memento.DomainModel.Repository
 {
-    public class EFMementoRepository : IMementoRepository
+    public class EFMementoRepository : IMementoRepository, IDisposable
     {
         private MementoContext db = new MementoContext();
         private readonly IScheduler scheduler;
@@ -130,7 +130,27 @@ namespace Memento.DomainModel.Repository
         public Task SaveChangesAsync() =>
             db.SaveChangesAsync();
 
+        #region IDisposable Support
+
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    db?.Dispose();
+                }
+
+                disposed = true;
+            }
+        }
+
         public void Dispose() =>
-            db.Dispose();
+            Dispose(true);
+
+        #endregion
+
     }
 }

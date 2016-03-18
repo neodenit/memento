@@ -27,6 +27,5 @@ namespace Memento.Interfaces
         void AddAnswer(ICloze cloze, bool isCorrect);
         void PromoteCloze(IDeck deck, Delays delay);
         Task SaveChangesAsync();
-        void Dispose();
     }
 }
