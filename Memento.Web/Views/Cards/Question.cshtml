@@ -6,28 +6,29 @@
 
 <h2>Question</h2>
 
-<div>
-    <h4>@Html.DisplayFor(model => model.DeckTitle)</h4>
-    <hr />
+<h4>@Html.DisplayFor(model => model.DeckTitle)</h4>
+<hr />
 
-    @{Html.RenderPartial("_TopActions");}
+@{Html.RenderPartial("_TopActions");}
+@{Html.RenderPartial("_Question");}
 
-    @using (Html.BeginForm())
-    {
+@using (Html.BeginForm())
+{
 
     @Html.AntiForgeryToken()
 
-        Html.RenderPartial("_Question");
-
-        <div>
-            @Html.ValidationMessageFor(model => model.UserAnswer, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-6">
+                @Html.ValidationMessageFor(model => model.UserAnswer, "", new { @class = "text-danger" })
+                @Html.TextBoxFor(model => model.UserAnswer, new { @class = "form-control focused", autocomplete = "off" })
+            </div>
+            <div class="col-md-2">
+                <input type="submit" value="Answer" class="btn btn-default" />
+            </div>
         </div>
-
-        @Html.TextBoxFor(model => model.UserAnswer, new { @class = "focused", autocomplete = "off" })
-
-        <input type="submit" value="Answer" class="btn btn-default" />
-    }
-</div>
+    </div>
+}
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
