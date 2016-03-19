@@ -23,7 +23,7 @@
             @Html.ValidationMessageFor(model => model.UserAnswer, "", new { @class = "text-danger" })
         </div>
 
-        @Html.TextBoxFor(model => model.UserAnswer, new { @class = "focused" })
+        @Html.TextBoxFor(model => model.UserAnswer, new { @class = "focused", autocomplete = "off" })
 
         <input type="submit" value="Answer" class="btn btn-default" />
     }
