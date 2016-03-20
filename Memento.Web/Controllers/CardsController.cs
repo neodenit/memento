@@ -114,8 +114,11 @@ namespace Memento.Web.Controllers
         public async Task<ActionResult> PreviewOpened([Bind(Include = "ID")] ViewCardViewModel card)
         {
             var dbCard = await cardsService.FindCardAsync(card.ID);
+            var deck = dbCard.GetDeck();
 
-            return await PromoteAndRedirect(dbCard.GetDeck(), Delays.Same);
+            await schedulerService.PromoteCloze(deck, Delays.Same);
+
+            return RedirectToNextCard(deck);
         }
 
         public async Task<ActionResult> RepeatClosed([CheckCardExistence, CheckCardOwner] int id)
@@ -149,8 +152,11 @@ namespace Memento.Web.Controllers
                         Delays.Same;
 
             var dbCard = await cardsService.FindCardAsync(card.ID);
+            var deck = dbCard.GetDeck();
 
-            return await PromoteAndRedirect(dbCard.GetDeck(), delay);
+            await schedulerService.PromoteCloze(deck, delay);
+
+            return RedirectToNextCard(deck);
         }
 
         public async Task<ActionResult> Question([CheckCardExistence, CheckCardOwner] int id)
@@ -186,8 +192,11 @@ namespace Memento.Web.Controllers
             await statService.AddAnswer(card.ID, true);
 
             var dbCard = await cardsService.FindCardAsync(card.ID);
+            var deck = dbCard.GetDeck();
 
-            return await PromoteAndRedirect(dbCard.GetDeck(), Delays.Next);
+            await schedulerService.PromoteCloze(deck, Delays.Next);
+
+            return RedirectToNextCard(deck);
         }
 
         [HttpPost]
@@ -202,7 +211,9 @@ namespace Memento.Web.Controllers
                 var deck = dbCard.GetDeck();
                 var delay = schedulerService.GetDelayForWrongAnswer(deck.DelayMode);
 
-                return await PromoteAndRedirect(deck, delay);
+                await schedulerService.PromoteCloze(deck, delay);
+
+                return RedirectToNextCard(deck);
             }
             else if (AltButton != null)
             {
@@ -231,7 +242,9 @@ namespace Memento.Web.Controllers
                 var deck = dbCard.GetDeck();
                 var delay = schedulerService.GetDelayForWrongAnswer(deck.DelayMode);
 
-                return await PromoteAndRedirect(deck, delay);
+                await schedulerService.PromoteCloze(deck, delay);
+
+                return RedirectToNextCard(deck);
             }
             else if (AltButton != null)
             {
@@ -355,13 +368,16 @@ namespace Memento.Web.Controllers
             return RedirectToAction("Details", "Decks", new { id = card.DeckID });
         }
 
-        private async Task<ActionResult> PromoteAndRedirect(IDeck deck, Delays delay)
+        private ActionResult RedirectToNextCard(IDeck deck)
         {
-            await schedulerService.PromoteCloze(deck, delay);
-
             var nextCard = deck.GetNextCard();
 
-            return RedirectToAction("Details", new { id = nextCard.ID });
+            return RedirectToCard(nextCard.ID);
+        }
+
+        private ActionResult RedirectToCard(int cardID)
+        {
+            return RedirectToAction("Details", new { id = cardID });
         }
     }
 }
