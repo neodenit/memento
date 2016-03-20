@@ -239,6 +239,8 @@ namespace Memento.Web.Controllers
             }
             else if (WrongButton != null)
             {
+                await statService.AddAnswer(card.ID, false);
+
                 var deck = dbCard.GetDeck();
                 var delay = schedulerService.GetDelayForWrongAnswer(deck.DelayMode);
 
