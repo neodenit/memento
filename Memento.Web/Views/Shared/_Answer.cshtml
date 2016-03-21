@@ -1,7 +1,8 @@
 ﻿@model Memento.Models.ViewModels.AnswerCardViewModel
 
-<hr />
 <div class="card-text">@Model.FullAnswer</div>
-<hr />
-<div class="card-text">@Model.Comment</div>
-<hr />
+@if (!string.IsNullOrWhiteSpace(Model.Comment))
+{
+    <hr />
+    <div class="card-text">@Model.Comment</div>
+}
