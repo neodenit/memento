@@ -13,8 +13,8 @@ namespace Memento.Interfaces
         Task<IAnswerCardViewModel> GetCardWithAnswer(int cardID);
         Task<IAnswerCardViewModel> EvaluateCard(IAnswerCardViewModel card);
 
-        Task AddCard(int cardID, int deckID, string text);
-        Task UpdateCard(int cardID, string text);
+        Task AddCard(int cardID, int deckID, string text, string comment);
+        Task UpdateCard(int cardID, string text, string comment);
         Task DeleteCard(int id);
         Task RestoreCard(int id);
     }

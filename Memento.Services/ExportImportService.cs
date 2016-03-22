@@ -43,7 +43,7 @@ namespace Memento.Services
                 var clozeNames = converter.GetClozeNames(cardText);
                 var isValid = clozeNames.Any() && clozeNames.All(clozeName => validator.Validate(cardText, clozeName));
                 var deck = await repository.FindDeckAsync(deckID);
-                var newCard = factory.CreateCard(deck, cardText, isValid);
+                var newCard = factory.CreateCard(deck, cardText, string.Empty, isValid);
 
                 repository.AddCard(newCard);
 

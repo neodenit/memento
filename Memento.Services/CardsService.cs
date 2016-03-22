@@ -99,12 +99,12 @@ namespace Memento.Services
             }
         }
 
-        public async Task AddCard(int cardID, int deckID, string text)
+        public async Task AddCard(int cardID, int deckID, string text, string comment)
         {
             var clozeNames = converter.GetClozeNames(text);
             var deck = await repository.FindDeckAsync(deckID);
 
-            var newCard = factory.CreateCard(deck, text, true);
+            var newCard = factory.CreateCard(deck, text, comment, true);
 
             repository.AddCard(newCard);
 
@@ -115,12 +115,13 @@ namespace Memento.Services
             await repository.SaveChangesAsync();
         }
 
-        public async Task UpdateCard(int cardID, string text)
+        public async Task UpdateCard(int cardID, string text, string comment)
         {
             var dbCard = await FindCardAsync(cardID);
             var clozes = converter.GetClozeNames(dbCard.Text);
 
             dbCard.Text = text;
+            dbCard.Comment = comment;
 
             var oldClozes = from cloze in dbCard.GetClozes() select cloze.Label;
             var newClozes = clozes;

@@ -17,11 +17,12 @@ namespace Memento.Models.Models
             Clozes = new List<Cloze>();
         }
 
-        public Card(IDeck deck, string text, bool isValid) : this()
+        public Card(IDeck deck, string text, string comment, bool isValid) : this()
         {
             Deck = deck as Deck;
             Text = text;
             IsValid = isValid;
+            Comment = comment;
         }
 
         [CheckCardOwner]
@@ -39,6 +40,8 @@ namespace Memento.Models.Models
         [Required]
         [DataType(DataType.MultilineText)]
         public string Text { get; set; }
+
+        public string Comment { get; set; }
 
         public virtual ICollection<Cloze> Clozes { get; set; }
 

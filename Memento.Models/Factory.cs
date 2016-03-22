@@ -22,7 +22,7 @@ namespace Memento.Models
         public ICard CreateCard() =>
             new Card();
 
-        public ICard CreateCard(IDeck deck, string text, bool isValid) =>
-            new Card(deck, text, isValid);
+        public ICard CreateCard(IDeck deck, string text, string comment, bool isValid) =>
+            new Card(deck, text, comment, isValid);
     }
 }

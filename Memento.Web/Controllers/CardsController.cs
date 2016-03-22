@@ -280,11 +280,11 @@ namespace Memento.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID, DeckID, Text")] EditCardViewModel card)
+        public async Task<ActionResult> Create([Bind(Include = "ID, DeckID, Text, Comment")] EditCardViewModel card)
         {
             if (ModelState.IsValid)
             {
-                await cardsService.AddCard(card.ID, card.DeckID, card.Text);
+                await cardsService.AddCard(card.ID, card.DeckID, card.Text, card.Comment);
 
                 return RedirectToAction("Create", "Cards", new { DeckID = card.DeckID });
             }
@@ -304,11 +304,11 @@ namespace Memento.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID, Text")] EditCardViewModel card)
+        public async Task<ActionResult> Edit([Bind(Include = "ID, Text, Comment")] EditCardViewModel card)
         {
             if (ModelState.IsValid)
             {
-                await cardsService.UpdateCard(card.ID, card.Text);
+                await cardsService.UpdateCard(card.ID, card.Text, card.Comment);
 
                 var dbCard = await cardsService.FindCardAsync(card.ID);
 

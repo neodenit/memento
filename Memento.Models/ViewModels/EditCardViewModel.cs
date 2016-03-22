@@ -22,6 +22,10 @@ namespace Memento.Models.ViewModels
         [DataType(DataType.MultilineText)]
         public string Text { get; set; }
 
+        [AllowHtml]
+        [DataType(DataType.MultilineText)]
+        public string Comment { get; set; }
+
         public EditCardViewModel() { }
 
         public EditCardViewModel(ICard card)
@@ -29,6 +33,7 @@ namespace Memento.Models.ViewModels
             ID = card.ID;
             DeckID = card.DeckID;
             Text = card.Text;
+            Comment = card.Comment;
         }
     }
 }

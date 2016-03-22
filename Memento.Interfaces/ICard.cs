@@ -9,6 +9,7 @@ namespace Memento.Interfaces
         bool IsDeleted { get; set; }
         bool IsValid { get; set; }
         string Text { get; set; }
+        string Comment { get; set; }
 
         IDeck GetDeck();
         IEnumerable<ICloze> GetClozes();
