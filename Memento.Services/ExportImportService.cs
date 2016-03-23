@@ -38,12 +38,12 @@ namespace Memento.Services
         {
             var cards = converter.GetCardsFromDeck(text);
 
-            foreach (var cardText in cards)
+            foreach (var card in cards)
             {
-                var clozeNames = converter.GetClozeNames(cardText);
-                var isValid = clozeNames.Any() && clozeNames.All(clozeName => validator.Validate(cardText, clozeName));
+                var clozeNames = converter.GetClozeNames(card.Item1);
+                var isValid = clozeNames.Any() && clozeNames.All(clozeName => validator.Validate(card.Item1, clozeName));
                 var deck = await repository.FindDeckAsync(deckID);
-                var newCard = factory.CreateCard(deck, cardText, string.Empty, isValid);
+                var newCard = factory.CreateCard(deck, card.Item1, card.Item2, isValid);
 
                 repository.AddCard(newCard);
 

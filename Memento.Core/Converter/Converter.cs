@@ -12,7 +12,7 @@ namespace Memento.Core.Converter
 {
     public class Converter : IConverter
     {
-        public IEnumerable<string> GetCardsFromDeck(string deckText)
+        public IEnumerable<Tuple<string, string>> GetCardsFromDeck(string deckText)
         {
             var cards = RawCardOperations.GetCards(deckText);
             var clozes = RawCardOperations.RawCardsToClozes(cards);

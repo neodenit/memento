@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Memento.Interfaces
 {
@@ -9,7 +10,7 @@ namespace Memento.Interfaces
         string GetShortAnswer(string field, string clozeName);
         string GetComment(string text);
 
-        IEnumerable<string> GetCardsFromDeck(string deckText);
+        IEnumerable<Tuple<string, string>> GetCardsFromDeck(string deckText);
         IEnumerable<string> GetClozeNames(string field);
 
         string ReplaceAnswer(string text, string label, string newAnswers);

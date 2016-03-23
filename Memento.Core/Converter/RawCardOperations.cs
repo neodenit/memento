@@ -14,12 +14,8 @@ namespace Memento.Core.Converter
         internal static IEnumerable<string> GetCards(string deckText) =>
            deckText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
 
-        internal static IEnumerable<string> RawCardsToClozes(IEnumerable<string> cards)
-        {
-            var clozes = from card in cards select CardToCloze(card);
-            var notEmptyClozeCards = from card in clozes where !string.IsNullOrEmpty(card) select card;
-            return notEmptyClozeCards;
-        }
+        internal static IEnumerable<Tuple<string, string>> RawCardsToClozes(IEnumerable<string> cards) =>
+            from card in cards select CardToCloze(card);
 
         internal static string GetFirstField(string card) => GetField(card, 0);
 
@@ -40,7 +36,7 @@ namespace Memento.Core.Converter
             return isCloze;
         }
 
-        private static string CardToCloze(string card)
+        private static Tuple<string, string> CardToCloze(string card)
         {
             var unescapedCard = TextOperations.IsInQuotationMarks(card) ? TextOperations.UnescapeQuotationMarks(card) : card;
             var cardWithoutTags = TextOperations.TagsToLineBreaks(unescapedCard);
@@ -49,7 +45,7 @@ namespace Memento.Core.Converter
             return result;
         }
 
-        private static string ConvertToCloze(string card)
+        private static Tuple<string, string> ConvertToCloze(string card)
         {
             var isCloze = RawCardOperations.IsClozeCard(card);
 
@@ -58,13 +54,9 @@ namespace Memento.Core.Converter
                 var cloze = RawCardOperations.GetFirstField(card);
                 var comment = RawCardOperations.GetSecondField(card);
 
-                var result = string.IsNullOrWhiteSpace(comment) ?
-                    cloze :
-                    cloze + Delimeter + comment;
-
-                return result;
+                return Tuple.Create(cloze, comment);
             }
-            else if (RawCardOperations.CountFields(card) >= 2)
+            else if (RawCardOperations.CountFields(card) == 3)
             {
                 var question = RawCardOperations.GetFirstField(card);
                 var answer = RawCardOperations.GetSecondField(card);
@@ -77,16 +69,13 @@ namespace Memento.Core.Converter
                     $"{{{{c1::{answer}}}}}" :
                     answer;
 
-                var result =
-                    string.IsNullOrWhiteSpace(comment) ?
-                    question + EmptyLine + correctedAnswer :
-                    question + EmptyLine + correctedAnswer + Delimeter + comment;
+                var result = question + EmptyLine + correctedAnswer;
 
-                return result;
+                return Tuple.Create(result, comment);
             }
             else
             {
-                return TextOperations.ReplaceDelimeters(card);
+                return Tuple.Create(TextOperations.ReplaceDelimeters(card), string.Empty);
             }
         }
 
