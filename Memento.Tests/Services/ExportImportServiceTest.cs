@@ -60,7 +60,7 @@ namespace Memento.Tests.Services
 
             // Assert
             mockRepository.Verify(x => x.FindDeckAsync(id));
-            mockConverter.Verify(x => x.FormatForExport(It.IsAny<string>()));
+            mockConverter.Verify(x => x.FormatForExport(It.IsAny<string>(), It.IsAny<string>()));
             Assert.IsNotNull(result);
         }
 

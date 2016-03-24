@@ -16,7 +16,7 @@ namespace Memento.Interfaces
         string ReplaceAnswer(string text, string label, string newAnswers);
         string AddAltAnswer(string text, string label, string newAnswer);
 
-        string FormatForExport(string text);
+        string FormatForExport(string text, string comment);
 
         string GetCurrentClozePattern(string clozeName);
     }

@@ -28,7 +28,7 @@ namespace Memento.Services
         {
             var deck = await repository.FindDeckAsync(deckID);
             var cards = deck.GetAllCards();
-            var cardsForExport = from card in cards select converter.FormatForExport(card.Text);
+            var cardsForExport = from card in cards select converter.FormatForExport(card.Text, card.Comment);
             var result = string.Join(Environment.NewLine, cardsForExport);
 
             return result;

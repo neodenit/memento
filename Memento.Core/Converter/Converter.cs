@@ -72,12 +72,11 @@ namespace Memento.Core.Converter
             return ReplaceAnswer(text, label, newAnswers);
         }
 
-        public string FormatForExport(string text)
+        public string FormatForExport(string text, string comment)
         {
-            var text1 = TextOperations.TabsToSpaces(text);
-            var text2 = TextOperations.DelimeterToRaw(text1);
-            var text3 = TextOperations.LineBreaksToTagsAlt(text2);
-            var result = TextOperations.AddEndingDelimeter(text3);
+            var normText = TextOperations.TabsToSpaces(text);
+            var normComment = TextOperations.TabsToSpaces(comment);
+            var result = normText + RawDelimeter + normComment;
             return result;
         }
 
