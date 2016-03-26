@@ -47,6 +47,8 @@ namespace Memento.Tests.Controllers
             mockCardsService.Setup(x => x.GetCardWithQuestion(It.IsAny<int>())).ReturnsAsync(mockAnswerCardViewModel.Object);
             mockCardsService.Setup(x => x.GetCardWithAnswer(It.IsAny<int>())).ReturnsAsync(mockAnswerCardViewModel.Object);
             mockCardsService.Setup(x => x.EvaluateCard(It.IsAny<IAnswerCardViewModel>())).ReturnsAsync(mockAnswerCardViewModel.Object);
+            mockSchedulerService.Setup(x => x.GetDelayForWrongAnswer(It.IsAny<DelayModes>()));
+
 
             mockDeck.Setup(x => x.GetNextCard()).Returns(mockCard.Object);
 
@@ -322,9 +324,10 @@ namespace Memento.Tests.Controllers
             var result = await sut.Wrong(card, "NextButton", null) as RedirectToRouteResult;
 
             // Assert
-            mockStatService.Verify(x => x.AddAnswer(card.ID, It.IsAny<bool>()));
+            mockStatService.Verify(x => x.AddAnswer(card.ID, false));
+            mockSchedulerService.Verify(x => x.GetDelayForWrongAnswer(It.IsAny<DelayModes>()));
             mockCardsService.Verify(x => x.FindCardAsync(card.ID));
-            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<IDeck>(), Delays.Previous));
+            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<IDeck>(), It.IsAny<Delays>()));
             Assert.IsNotNull(result);
         }
 
@@ -366,8 +369,10 @@ namespace Memento.Tests.Controllers
             var result = await sut.Typo(card, null, "WrongButton", null) as RedirectToRouteResult;
 
             // Assert
+            mockStatService.Verify(x => x.AddAnswer(card.ID, false));
+            mockSchedulerService.Verify(x => x.GetDelayForWrongAnswer(It.IsAny<DelayModes>()));
             mockCardsService.Verify(x => x.FindCardAsync(card.ID));
-            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<IDeck>(), Delays.Previous));
+            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<IDeck>(), It.IsAny<Delays>()));
             Assert.IsNotNull(result);
         }
 
@@ -452,13 +457,13 @@ namespace Memento.Tests.Controllers
         public async Task CardsEditPostTest()
         {
             // Arrange
-            var card = new EditCardViewModel { ID = 1, Text = "text" };
+            var card = new EditCardViewModel { ID = 1, Text = "text", Comment = "comment" };
 
             // Act
             var result = await sut.Edit(card) as RedirectToRouteResult;
 
             // Assert
-            mockCardsService.Verify(x => x.UpdateCard(card.ID, card.Text));
+            mockCardsService.Verify(x => x.UpdateCard(card.ID, card.Text, card.Comment));
             mockCardsService.Verify(x => x.FindCardAsync(card.ID));
             Assert.IsNotNull(result);
         }

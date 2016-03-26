@@ -44,7 +44,7 @@ namespace Memento.Tests.Services
                                 {
                                     new Cloze()
                                 }
-                            },
+                            }
                         }
                     });
         }

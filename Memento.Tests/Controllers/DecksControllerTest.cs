@@ -55,9 +55,29 @@ namespace Memento.Tests.Controllers
 
             mockDecksService.Setup(x => x.GetDeckWithStatViewModel(It.IsAny<int>(), It.IsAny<IStatistics>())).ReturnsAsync(new DeckWithStatViewModel());
 
-            mockDecksService.Setup(x => x.FindDeckAsync(It.IsAny<int>())).Returns<int>(async x => await Task.FromResult(new Deck { ID = x }));
+            mockDecksService.Setup(x => x.FindDeckAsync(It.IsAny<int>())).Returns<int>(async x => await Task.FromResult(
+                new Deck
+                {
+                    ID = x,
+                    Title = "title",
+                    Cards = new List<Card> 
+                    {
+                        new Card
+                        {
+                            IsValid = true,
+                            Clozes = new List<Cloze>
+                            {
+                                new Cloze()
+                            }
+                        }
+                    }
+                }));
 
             mockExportImportService.Setup(x => x.Export(It.IsAny<int>())).ReturnsAsync(string.Empty);
+
+            mockFactory.Setup(x => x.CreateDeck(It.IsAny<double>(), It.IsAny<int>())).Returns<double, int>((x, y) => new Deck { Coeff = x, StartDelay = y });
+
+            mockFactory.Setup(x => x.CreateDeck(It.IsAny<int>())).Returns<int>((x) => new Deck { ID = x });
         }
 
         private void AddDbSetMocking()
@@ -137,6 +157,7 @@ namespace Memento.Tests.Controllers
             var result = await sut.Details(deck) as RedirectToRouteResult;
 
             // Assert
+            mockDecksService.Verify(x => x.FindDeckAsync(deck.ID), Times.Once);
             Assert.IsNotNull(result);
         }
 
@@ -150,6 +171,7 @@ namespace Memento.Tests.Controllers
             var model = result.Model as Deck;
 
             // Assert
+            Assert.IsNotNull(model);
             Assert.AreEqual(Settings.Default.StartDelay, model.StartDelay);
             Assert.AreEqual(Settings.Default.Coeff, model.Coeff, double.Epsilon);
         }
@@ -278,6 +300,7 @@ namespace Memento.Tests.Controllers
 
             // Assert
             mockExportImportService.Verify(x => x.Export(id), Times.Once);
+            mockDecksService.Verify(x => x.FindDeckAsync(id), Times.Once);
             Assert.IsNotNull(result);
         }
     }
