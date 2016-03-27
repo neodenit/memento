@@ -88,6 +88,15 @@ namespace Memento.Common.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shuffle cards.
+        /// </summary>
+        public static string IsShuffled {
+            get {
+                return ResourceManager.GetString("IsShuffled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You will tell the app if you were right or wrong after seeing the correct answer..
         /// </summary>
         public static string ManualModeHint {

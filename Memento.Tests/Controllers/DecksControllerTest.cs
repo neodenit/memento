@@ -27,6 +27,7 @@ namespace Memento.Tests.Controllers
         private Mock<ICardsService> mockCardsService;
         private Mock<IStatisticsService> mockStatisticsService;
         private Mock<IExportImportService> mockExportImportService;
+        private Mock<ISchedulerService> mockSchedulerService;
 
         private Mock<IFactory> mockFactory;
 
@@ -39,13 +40,14 @@ namespace Memento.Tests.Controllers
             mockCardsService = new Mock<ICardsService>();
             mockStatisticsService = new Mock<IStatisticsService>();
             mockExportImportService = new Mock<IExportImportService>();
+            mockSchedulerService = new Mock<ISchedulerService>();
 
             mockFactory = new Mock<IFactory>();
 
             var mockContext = new Mock<ControllerContext>();
             mockContext.Setup(item => item.HttpContext.User.Identity.Name).Returns("user@server.com");
 
-            sut = new DecksController(mockDecksService.Object, mockCardsService.Object, mockStatisticsService.Object, mockExportImportService.Object, mockFactory.Object)
+            sut = new DecksController(mockDecksService.Object, mockCardsService.Object, mockStatisticsService.Object, mockExportImportService.Object, mockSchedulerService.Object, mockFactory.Object)
             {
                 ControllerContext = mockContext.Object
             };
@@ -268,19 +270,20 @@ namespace Memento.Tests.Controllers
 
             // Act
             var result = sut.Import(id) as ViewResult;
-            var model = result.Model as Deck;
+            var model = result.Model as ImportViewModel;
 
             // Assert
             Assert.IsNotNull(result);
             Assert.IsNotNull(model);
-            Assert.AreEqual(id, model.ID);
+            Assert.AreEqual(id, model.DeckID);
+            Assert.IsTrue(model.IsShuffled);
         }
 
         [TestMethod()]
         public async Task DecksImportPostTest()
         {
             // Arrange
-            var deck = new Deck { ID = 1 };
+            var deck = new ImportViewModel { DeckID = 1 };
 
             // Act
             var result = await sut.Import(deck, null) as RedirectToRouteResult;

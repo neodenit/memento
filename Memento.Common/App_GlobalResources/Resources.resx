@@ -126,6 +126,9 @@
   <data name="CombinedDelayModeHint" xml:space="preserve">
     <value>You will choose between smooth or sharp penalty.</value>
   </data>
+  <data name="IsShuffled" xml:space="preserve">
+    <value>Shuffle cards</value>
+  </data>
   <data name="ManualModeHint" xml:space="preserve">
     <value>You will tell the app if you were right or wrong after seeing the correct answer.</value>
   </data>

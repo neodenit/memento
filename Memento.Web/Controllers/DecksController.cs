@@ -1,5 +1,4 @@
-﻿using Ionic.Zip;
-using Memento.Attributes;
+﻿using Memento.Attributes;
 using Memento.Common;
 using Memento.Interfaces;
 using Memento.Models.Models;
@@ -29,14 +28,16 @@ namespace Memento.Web.Controllers
         private readonly ICardsService cardsService;
         private readonly IStatisticsService statService;
         private readonly IExportImportService exportImportService;
+        private readonly ISchedulerService schedulerService;
         private readonly IFactory factory;
 
-        public DecksController(IDecksService decksService, ICardsService cardsService, IStatisticsService statService, IExportImportService exportImportService, IFactory factory)
+        public DecksController(IDecksService decksService, ICardsService cardsService, IStatisticsService statService, IExportImportService exportImportService, ISchedulerService schedulerService, IFactory factory)
         {
             this.decksService = decksService;
             this.cardsService = cardsService;
             this.statService = statService;
             this.exportImportService = exportImportService;
+            this.schedulerService = schedulerService;
             this.factory = factory;
         }
 
@@ -152,20 +153,25 @@ namespace Memento.Web.Controllers
 
         public ActionResult Import([CheckDeckExistence, CheckDeckOwner] int deckID)
         {
-            var deckWithID = factory.CreateDeck(deckID);
+            var viewModel = new ImportViewModel { DeckID = deckID, IsShuffled = true };
 
-            return View(deckWithID);
+            return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Import(Deck deckWithID, HttpPostedFileBase file)
+        public async Task<ActionResult> Import(ImportViewModel viewModel, HttpPostedFileBase file)
         {
-            if (file != null && file.ContentLength > 0)
+            if (file?.ContentLength > 0)
             {
                 var text = await new StreamReader(file.InputStream).ReadToEndAsync();
 
-                await exportImportService.Import(text, deckWithID.ID);
+                await exportImportService.Import(text, viewModel.DeckID);
+
+                if (viewModel.IsShuffled)
+                {
+                    await schedulerService.ShuffleNewClozes(viewModel.DeckID);
+                }
             }
 
             return RedirectToAction("Index");

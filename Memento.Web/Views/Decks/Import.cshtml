@@ -1,4 +1,5 @@
-﻿@model Memento.Models.Models.Deck
+﻿@model Memento.Models.ViewModels.ImportViewModel
+@*todo import view model*@
 
 @{
     ViewBag.Title = "Import";
@@ -9,9 +10,28 @@
 @using (Html.BeginForm("Import", "Decks", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(model => model.ID);
-    
-    <input type="file" name="file" accept=".txt" />
+    @Html.HiddenFor(model => model.DeckID)
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="file" name="file" accept=".txt" />
+        </div>
+    </div>
+
     <br />
-    <input type="submit" value="Import" onclick="this.disabled = true; this.value = 'Loading...';" />
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <div class="checkbox">
+                @Html.CheckBoxFor(x => x.IsShuffled)
+                @Html.LabelFor(x => x.IsShuffled)
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Import" onclick="this.disabled = true; this.value = 'Loading...';" />
+        </div>
+    </div>
 }
