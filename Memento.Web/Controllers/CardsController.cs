@@ -355,8 +355,9 @@ namespace Memento.Web.Controllers
         public async Task<ActionResult> Delete([CheckCardExistence, CheckCardOwner] int id)
         {
             var card = await cardsService.FindCardAsync(id);
+            var viewModel = new ViewCardViewModel(card);
 
-            return View(card);
+            return View(viewModel);
         }
 
         [HttpPost, ActionName("Delete")]
