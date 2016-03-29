@@ -32,3 +32,18 @@ textarea {
     font-size: large;
     white-space: pre-wrap;
 }
+
+.right-answer {
+    color: lime;
+    font-size: x-large;
+}
+
+.typo-answer {
+    color: orange;
+    font-size: x-large;
+}
+
+.wrong-answer {
+    color: red;
+    font-size: x-large;
+}
