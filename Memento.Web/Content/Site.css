@@ -33,6 +33,10 @@ textarea {
     white-space: pre-wrap;
 }
 
+.short-answer-text {
+    font-family: monospace;
+}
+
 .right-answer {
     color: lime;
     font-size: x-large;

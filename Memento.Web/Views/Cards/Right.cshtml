@@ -20,6 +20,26 @@
 
         Html.RenderPartial("_Answer");
 
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-2">
+                    Correct answer:
+                </div>
+                <div class="col-md-10 short-answer-text">
+                    @Html.DisplayFor(model => model.ShortAnswer)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-2">
+                    Your answer:
+                </div>
+                <div class="col-md-10 short-answer-text">
+                    @Html.DisplayFor(model => model.UserAnswer)
+                </div>
+            </div>
+        </div>
+
         <div class="right-answer">You are right!</div>
 
         <input type="submit" value="Next" class="btn btn-default focused" />

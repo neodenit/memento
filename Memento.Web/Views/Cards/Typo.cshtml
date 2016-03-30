@@ -20,10 +20,25 @@
 
         Html.RenderPartial("_Answer");
 
-        <p>
-            Your answer:
-            @Html.DisplayFor(model => model.UserAnswer)
-        </p>
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-2">
+                    Correct answer:
+                </div>
+                <div class="col-md-10 short-answer-text">
+                    @Html.DisplayFor(model => model.ShortAnswer)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-2">
+                    Your answer:
+                </div>
+                <div class="col-md-10 short-answer-text">
+                    @Html.DisplayFor(model => model.UserAnswer)
+                </div>
+            </div>
+        </div>
 
         <div class="typo-answer">Your answer looks like a typo!</div>
 
