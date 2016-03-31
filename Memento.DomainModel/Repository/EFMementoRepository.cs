@@ -27,22 +27,22 @@ namespace Memento.DomainModel.Repository
         public async Task<IEnumerable<IDeck>> GetUserDecksAsync(string userName) =>
             await db.Decks.Where(item => item.Owner == userName).ToListAsync();
 
-        public IDeck FindDeck(int? id) =>
+        public IDeck FindDeck(int id) =>
             db.Decks.Find(id);
 
-        public ICard FindCard(int? id) =>
+        public ICard FindCard(int id) =>
             db.Cards.Find(id);
 
-        public ICloze FindCloze(int? id) =>
+        public ICloze FindCloze(int id) =>
             db.Clozes.Find(id);
 
-        public async Task<IDeck> FindDeckAsync(int? id) =>
+        public async Task<IDeck> FindDeckAsync(int id) =>
             await db.Decks.FindAsync(id);
 
-        public async Task<ICard> FindCardAsync(int? id) =>
+        public async Task<ICard> FindCardAsync(int id) =>
             await db.Cards.FindAsync(id);
 
-        public async Task<ICloze> FindClozeAsync(int? id) =>
+        public async Task<ICloze> FindClozeAsync(int id) =>
             await db.Clozes.FindAsync(id);
 
         public async Task<IEnumerable<IAnswer>> GetAnswersForDeckAsync(int deckID) =>
