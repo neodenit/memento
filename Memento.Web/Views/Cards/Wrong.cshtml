@@ -4,49 +4,42 @@
     ViewBag.Title = "Wrong";
 }
 
-<h2>Wrong</h2>
+<h2>@Html.DisplayFor(model => model.DeckTitle)</h2>
 
-<div>
-    <h4>@Html.DisplayFor(model => model.DeckTitle)</h4>
+@{Html.RenderPartial("_TopActions");}
 
-    @{Html.RenderPartial("_TopActions");}
-
-    @using (Html.BeginForm("Wrong", "Cards"))
-    {
-
+@using (Html.BeginForm("Wrong", "Cards", FormMethod.Post, new { @class = "form-horizontal" }))
+{
     @Html.AntiForgeryToken()
 
-        @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(model => model.ID)
 
-        Html.RenderPartial("_Answer");
+    Html.RenderPartial("_Answer");
+    Html.RenderPartial("_Comparison");
 
-        <div class="form-horizontal">
-            <div class="form-group">
-                <div class="col-md-2">
-                    Correct answer:
-                </div>
-                <div class="col-md-10 short-answer-text">
-                    @Html.DisplayFor(model => model.ShortAnswer)
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-2">
-                    Your answer:
-                </div>
-                <div class="col-md-10 short-answer-text">
-                    @Html.DisplayFor(model => model.UserAnswer)
-                </div>
-            </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-8">
+            <div class="wrong-answer">You are wrong!</div>
         </div>
+    </div>
 
-        <div class="wrong-answer">You are wrong!</div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-8">
+            <input type="submit" name="NextButton" value="Next" class="btn btn-primary focused" />
+        </div>
+    </div>
 
-        <input type="submit" name="NextButton" value="Next" class="btn btn-default focused" />
+    <hr />
 
-        <hr />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-8">
+            Is it an alternative answer?
+        </div>
+    </div>
 
-        <p>Is it an alternative answer?</p>
-        <input type="submit" name="AltButton" value="Add it" class="btn btn-default" />
-    }
-</div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-8">
+            <input type="submit" name="AltButton" value="Add it" class="btn btn-default" />
+        </div>
+    </div>
+}
