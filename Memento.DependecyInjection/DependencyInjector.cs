@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
+using Autofac.Integration.WebApi;
 using Memento.Core;
 using Memento.Core.Converter;
 using Memento.Core.Evaluators;
@@ -15,16 +16,18 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace Memento.DependecyInjection
 {
     public static class DependencyInjector
     {
-        public static IDependencyResolver GetResolver(Assembly assembly)
+        private static IContainer container;
+
+        public static void Initialize(Assembly assembly)
         {
             var builder = new ContainerBuilder();
             builder.RegisterControllers(assembly);
+            builder.RegisterApiControllers(assembly);
 
             builder.RegisterType<EFMementoRepository>().As<IMementoRepository>().SingleInstance();
 
@@ -43,9 +46,13 @@ namespace Memento.DependecyInjection
 
             builder.RegisterType<Factory>().As<IFactory>();
 
-            var container = builder.Build();
-
-            return new AutofacDependencyResolver(container);
+            container = builder.Build();
         }
+
+        public static System.Web.Mvc.IDependencyResolver GetMvcResolver() =>
+            new AutofacDependencyResolver(container);
+
+        public static System.Web.Http.Dependencies.IDependencyResolver GetWebApiResolver() =>
+            new AutofacWebApiDependencyResolver(container);
     }
 }

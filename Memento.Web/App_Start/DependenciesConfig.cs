@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Memento.DependecyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
-using Memento.DependecyInjection;
 
 namespace Memento
 {
@@ -12,9 +13,13 @@ namespace Memento
         public static void RegisterDependencies()
         {
             var assembly = typeof(MvcApplication).Assembly;
-            var resolver = DependencyInjector.GetResolver(assembly);
+            DependencyInjector.Initialize(assembly);
 
-            DependencyResolver.SetResolver(resolver);
+            var mvcResolver = DependencyInjector.GetMvcResolver();
+            var webApiResolver = DependencyInjector.GetWebApiResolver();
+
+            DependencyResolver.SetResolver(mvcResolver);
+            GlobalConfiguration.Configuration.DependencyResolver = webApiResolver;
         }
     }
 }
