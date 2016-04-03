@@ -65,23 +65,23 @@ namespace Memento.Tests
 
         public void Dispose() { }
 
-        public ICard FindCard(int? id) =>
-            cards.FirstOrDefault(c => c.ID == id.Value);
+        public ICard FindCard(int id) =>
+            cards.FirstOrDefault(c => c.ID == id);
 
-        public Task<ICard> FindCardAsync(int? id) =>
-            Task.FromResult(cards.FirstOrDefault(c => c.ID == id.Value));
+        public Task<ICard> FindCardAsync(int id) =>
+            Task.FromResult(cards.FirstOrDefault(c => c.ID == id));
 
-        public ICloze FindCloze(int? id) =>
-            clozes.FirstOrDefault(c => c.ID == id.Value);
+        public ICloze FindCloze(int id) =>
+            clozes.FirstOrDefault(c => c.ID == id);
 
-        public Task<ICloze> FindClozeAsync(int? id) =>
-            Task.FromResult(clozes.FirstOrDefault(c => c.ID == id.Value));
+        public Task<ICloze> FindClozeAsync(int id) =>
+            Task.FromResult(clozes.FirstOrDefault(c => c.ID == id));
 
-        public IDeck FindDeck(int? id) =>
-            decks.FirstOrDefault(d => d.ID == id.Value);
+        public IDeck FindDeck(int id) =>
+            decks.FirstOrDefault(d => d.ID == id);
 
-        public Task<IDeck> FindDeckAsync(int? id) =>
-            Task.FromResult(decks.FirstOrDefault(d => d.ID == id.Value));
+        public Task<IDeck> FindDeckAsync(int id) =>
+            Task.FromResult(decks.FirstOrDefault(d => d.ID == id));
 
         public Task<IEnumerable<IAnswer>> GetAnswersForDeckAsync(int deckID) =>
             Task.FromResult(answers.Where(a => a.DeckID == deckID));
