@@ -8,7 +8,7 @@
 
 @{Html.RenderPartial("_TopActions");}
 
-@using (Html.BeginForm("Right", "Cards", FormMethod.Post, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("Question", "Cards", FormMethod.Post, new { @class = "form-horizontal" }))
 {
     @Html.AntiForgeryToken()
 
