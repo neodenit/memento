@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Memento.Models.Models
 {
+    [Serializable]
     public class Card : ICard
     {
         public Card()

@@ -8,6 +8,7 @@ using System.Linq;
 
 namespace Memento.Models.Models
 {
+    [Serializable]
     public class Deck : IDeck
     {
         public Deck()

@@ -1,4 +1,6 @@
-﻿using Memento.Interfaces;
+﻿using Memento.Bot;
+using Memento.Interfaces;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Connector.Utilities;
 using System;
@@ -26,11 +28,19 @@ namespace Memento.Web.Controllers.Api
         {
             if (message.Type == "Message")
             {
-                var decks = await decksService.GetDecksAsync(message.From.Name);
-                var titles = decks.Select((d, i) => $"{i + 1}) {d.Title}");
-                var decksList = string.Join(Environment.NewLine, titles);
+                if (message.From.ChannelId == "skype" || true)
+                {
+                    var decks = await decksService.GetDecksAsync(message.Text);
+                    var dialog = new Dialog { Decks = decks.ToList() };
 
-                return message.CreateReplyMessage(decksList);
+                    message.BotConversationData = decks;
+
+                    return await Conversation.SendAsync(message, () => dialog);
+                }
+                else
+                {
+                    return message.CreateReplyMessage("Only Skype accounts are currently supported.");
+                }
             }
             else
             {
@@ -42,7 +52,7 @@ namespace Memento.Web.Controllers.Api
         {
             if (message.Type == "Ping")
             {
-                Message reply = message.CreateReplyMessage();
+                var reply = message.CreateReplyMessage();
                 reply.Type = "Ping";
                 return reply;
             }
