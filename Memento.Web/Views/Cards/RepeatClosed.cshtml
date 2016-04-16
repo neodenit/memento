@@ -11,7 +11,7 @@
 
     @{Html.RenderPartial("_TopActions");}
 
-    @using (Html.BeginForm("RepeatClosed", "Cards", FormMethod.Get))
+    @using (Html.BeginForm("RepeatOpened", "Cards", FormMethod.Get))
     {
 
     @Html.HiddenFor(model => model.ID);
