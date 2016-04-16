@@ -88,6 +88,15 @@ namespace Memento.Common.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number of steps the card will move the first time. Corresponds to lower bound of memory span..
+        /// </summary>
+        public static string FirstDelayHint {
+            get {
+                return ResourceManager.GetString("FirstDelayHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shuffle cards.
         /// </summary>
         public static string IsShuffled {
@@ -111,6 +120,15 @@ namespace Memento.Common.App_GlobalResources {
         public static string PleaseEnterYourAnswer {
             get {
                 return ResourceManager.GetString("PleaseEnterYourAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of steps the card will move the second time. Corresponds to upper bound of memory span..
+        /// </summary>
+        public static string SecondDelayHint {
+            get {
+                return ResourceManager.GetString("SecondDelayHint", resourceCulture);
             }
         }
         

@@ -112,5 +112,32 @@ namespace Memento.Common {
                 return ((bool)(this["AllowSmallDelays"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EnableTwoStepsConfig {
+            get {
+                return ((bool)(this["EnableTwoStepsConfig"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int FirstDelay {
+            get {
+                return ((int)(this["FirstDelay"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("9")]
+        public int SecondDelay {
+            get {
+                return ((int)(this["SecondDelay"]));
+            }
+        }
     }
 }

@@ -51,3 +51,8 @@ textarea {
     color: red;
     font-size: x-large;
 }
+
+.tooltip-inner {
+    min-width: 300px;
+    max-width: 300px;
+}

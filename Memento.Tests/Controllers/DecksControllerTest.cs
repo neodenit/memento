@@ -62,7 +62,7 @@ namespace Memento.Tests.Controllers
                 {
                     ID = x,
                     Title = "title",
-                    Cards = new List<Card> 
+                    Cards = new List<Card>
                     {
                         new Card
                         {
@@ -170,26 +170,35 @@ namespace Memento.Tests.Controllers
 
             // Act
             var result = sut.Create() as ViewResult;
-            var model = result.Model as Deck;
+            var model = result.Model as DeckViewModel;
 
             // Assert
             Assert.IsNotNull(model);
-            Assert.AreEqual(Settings.Default.StartDelay, model.StartDelay);
-            Assert.AreEqual(Settings.Default.Coeff, model.Coeff, double.Epsilon);
+
+            if (Settings.Default.EnableTwoStepsConfig)
+            {
+                Assert.AreEqual(Settings.Default.FirstDelay, model.FirstDelay);
+                Assert.AreEqual(Settings.Default.SecondDelay, model.SecondDelay);
+            }
+            else
+            {
+                Assert.AreEqual(Settings.Default.StartDelay, model.StartDelay);
+                Assert.AreEqual(Settings.Default.Coeff, model.Coeff, double.Epsilon);
+            }
         }
 
         [TestMethod()]
         public async Task DecksCreatePostTest()
         {
             // Arrange
-            var deck = new Deck();
+            var deck = new DeckViewModel();
             var userName = "user@server.com";
 
             // Act
             var result = await sut.Create(deck) as RedirectToRouteResult;
 
             // Assert
-            mockDecksService.Verify(x => x.CreateDeck(deck, userName), Times.Once);
+            mockDecksService.Verify(x => x.CreateDeck(It.IsAny<Deck>(), userName), Times.Once);
             Assert.IsNotNull(result);
         }
 
