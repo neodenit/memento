@@ -94,5 +94,23 @@ namespace Memento.Common {
                 return ((bool)(this["AddRandomization"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AllowSmoothDelayModes {
+            get {
+                return ((bool)(this["AllowSmoothDelayModes"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AllowSmallDelays {
+            get {
+                return ((bool)(this["AllowSmallDelays"]));
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Memento.Attributes;
+using Memento.Common;
 using Memento.Interfaces;
 using Memento.Models.Models;
 using Memento.Models.ViewModels;
@@ -139,6 +140,11 @@ namespace Memento.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RepeatOpened([Bind(Include = "ID")] ViewCardViewModel card, string againButton, string badButton, string goodButton)
         {
+            if (!Settings.Default.AllowSmoothDelayModes && badButton != null)
+            {
+                throw new Exception();
+            }
+
             var isCorrect = goodButton != null;
 
             await statService.AddAnswer(card.ID, isCorrect);

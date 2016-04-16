@@ -93,12 +93,15 @@ namespace Memento.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Title, ControlMode, DelayMode, StartDelay, Coeff")] Deck deck)
         {
-            if (deck.ControlMode == ControlModes.Automatic && deck.DelayMode == DelayModes.Combined)
+            if (ModelState.IsValid)
             {
-                throw new Exception();
-            }
-            else if (ModelState.IsValid)
-            {
+                deck.AllowSmallDelays = Settings.Default.AllowSmallDelays;
+
+                if (!Settings.Default.AllowSmoothDelayModes)
+                {
+                    deck.DelayMode = DelayModes.Sharp;
+                }
+
                 await decksService.CreateDeck(deck, User.Identity.Name);
 
                 return RedirectToAction("Index");
