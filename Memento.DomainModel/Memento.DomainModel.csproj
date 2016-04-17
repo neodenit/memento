@@ -91,6 +91,10 @@
     <Compile Include="Migrations\201603221812014_Add comments to cards.Designer.cs">
       <DependentUpon>201603221812014_Add comments to cards.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604171201041_Make text field required.cs" />
+    <Compile Include="Migrations\201604171201041_Make text field required.Designer.cs">
+      <DependentUpon>201604171201041_Make text field required.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MementoContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -131,6 +135,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201603221812014_Add comments to cards.resx">
       <DependentUpon>201603221812014_Add comments to cards.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604171201041_Make text field required.resx">
+      <DependentUpon>201604171201041_Make text field required.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
