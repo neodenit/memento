@@ -226,6 +226,10 @@
     <Compile Include="Migrations\201506291851096_InitialCreate.Designer.cs">
       <DependentUpon>201506291851096_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604231554011_Add Skype to user profile.cs" />
+    <Compile Include="Migrations\201604231554011_Add Skype to user profile.Designer.cs">
+      <DependentUpon>201604231554011_Add Skype to user profile.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
@@ -386,6 +390,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201506291851096_InitialCreate.resx">
       <DependentUpon>201506291851096_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604231554011_Add Skype to user profile.resx">
+      <DependentUpon>201604231554011_Add Skype to user profile.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
