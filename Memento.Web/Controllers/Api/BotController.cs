@@ -1,10 +1,12 @@
 ﻿using Memento.Bot;
 using Memento.Interfaces;
+using Memento.Models;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Connector.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -17,10 +19,12 @@ namespace Memento.Web.Controllers.Api
     public class BotController : ApiController
     {
         private readonly IDecksService decksService;
+        private readonly ApplicationDbContext context;
 
         public BotController(IDecksService decksService)
         {
             this.decksService = decksService;
+            context = ApplicationDbContext.Create();
         }
 
         // POST: api/Bot
@@ -28,14 +32,26 @@ namespace Memento.Web.Controllers.Api
         {
             if (message.Type == "Message")
             {
-                if (message.From.ChannelId == "skype" || true)
+                if (message.From.ChannelId == "skype" || message.From.ChannelId == "emulator")
                 {
-                    var decks = await decksService.GetDecksAsync(message.Text);
-                    var dialog = new Dialog { Decks = decks.ToList() };
+                    var skypeName = message.From.Address.Split(':').Last();
 
-                    message.BotConversationData = decks;
+                    var user = await context.Users.SingleOrDefaultAsync(x => x.Skype == skypeName);
 
-                    return await Conversation.SendAsync(message, () => dialog);
+                    if (user != null)
+                    {
+                        var userName = user.UserName;
+                        var decks = await decksService.GetDecksAsync(userName);
+                        var data = decks.Select(x => Tuple.Create(x.ID, x.Title)).ToArray();
+
+                        message.SetBotPerUserInConversationData("decks", data);
+
+                        return await Conversation.SendAsync(message, () => new Dialog());
+                    }
+                    else
+                    {
+                        return message.CreateReplyMessage($"Your Skype account is '{message.From.Address}'. You are not registered yet.");
+                    }
                 }
                 else
                 {
