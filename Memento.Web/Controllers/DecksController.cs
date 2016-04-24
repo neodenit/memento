@@ -104,6 +104,7 @@ namespace Memento.Web.Controllers
                     DelayMode = Settings.Default.AllowSmoothDelayModes ? deck.DelayMode : DelayModes.Sharp,
                     ControlMode = deck.ControlMode,
                     StartDelay = Settings.Default.EnableTwoStepsConfig ? deck.FirstDelay : deck.StartDelay,
+                    Coeff = Settings.Default.EnableTwoStepsConfig ? deck.SecondDelay / (double)deck.FirstDelay : deck.Coeff,
                 };
 
                 await decksService.CreateDeck(newDeck, User.Identity.Name);
