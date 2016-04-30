@@ -51,28 +51,28 @@ namespace Memento.Tests.Services
         }
 
         [TestMethod()]
-        public Task ExportImportServiceImportApkgTest1()
+        public Task ExportImportServiceConvertApkgTest1()
         {
             var filePath = @"Decks\Deck1.apkg";
             var expected = new[] { "Test text with {{c1::cloze}}." };
-            return TestApkgImport(filePath, expected);
+            return TestApkgConvertion(filePath, expected);
         }
 
         [TestMethod()]
-        public async Task ExportImportServiceImportApkgTest2()
+        public async Task ExportImportServiceConvertApkgTest2()
         {
             var filePath = @"Decks\Deck2.apkg";
             var expected = new[] { "First card with {{c1::cloze}}.", "Second card with {{c1::cloze}}." };
-            await TestApkgImport(filePath, expected);
+            await TestApkgConvertion(filePath, expected);
         }
 
-        private async Task TestApkgImport(string filePath, IEnumerable<string> expected)
+        private async Task TestApkgConvertion(string filePath, IEnumerable<string> expected)
         {
             // Arrange
             var file = File.OpenRead(filePath);
 
             // Act
-            var cards = await sut.ImportApkg(file);
+            var cards = await sut.ConvertApkg(file);
 
             // Assert
             var orderedCards = cards.OrderBy(x => x);
