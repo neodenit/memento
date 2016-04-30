@@ -9,6 +9,7 @@ using Memento.Interfaces;
 using Moq;
 using Memento.Models.Models;
 using Memento.Additional;
+using System.IO;
 
 namespace Memento.Tests.Services
 {
@@ -30,7 +31,7 @@ namespace Memento.Tests.Services
             mockValidator = new Mock<IValidator>();
             mockFactory = new Mock<IFactory>();
 
-            sut = new ExportImportService(mockRepository.Object, mockConverter.Object, mockValidator.Object , mockFactory.Object);
+            sut = new ExportImportService(mockRepository.Object, mockConverter.Object, mockValidator.Object, mockFactory.Object);
 
             mockRepository.Setup(x => x.FindDeckAsync(It.IsAny<int>())).ReturnsAsync(new Deck { Cards = new List<Card> { new Card() } });
         }
@@ -47,6 +48,37 @@ namespace Memento.Tests.Services
 
             // Assert
             mockConverter.Verify(x => x.GetCardsFromDeck(text));
+        }
+
+        [TestMethod()]
+        public Task ExportImportServiceImportApkgTest1()
+        {
+            var filePath = @"Decks\Deck1.apkg";
+            var expected = new[] { "Test text with {{c1::cloze}}." };
+            return TestApkgImport(filePath, expected);
+        }
+
+        [TestMethod()]
+        public async Task ExportImportServiceImportApkgTest2()
+        {
+            var filePath = @"Decks\Deck2.apkg";
+            var expected = new[] { "First card with {{c1::cloze}}.", "Second card with {{c1::cloze}}." };
+            await TestApkgImport(filePath, expected);
+        }
+
+        private async Task TestApkgImport(string filePath, IEnumerable<string> expected)
+        {
+            // Arrange
+            var file = File.OpenRead(filePath);
+
+            // Act
+            var cards = await sut.ImportApkg(file);
+
+            // Assert
+            var orderedCards = cards.OrderBy(x => x);
+            var orderedExpectedCards = expected.OrderBy(x => x);
+
+            Assert.IsTrue(orderedExpectedCards.SequenceEqual(orderedCards));
         }
 
         [TestMethod()]

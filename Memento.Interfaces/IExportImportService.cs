@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Memento.Interfaces
 {
@@ -6,5 +8,6 @@ namespace Memento.Interfaces
     {
         Task<string> Export(int deckID);
         Task Import(string text, int deckID);
+        Task<IEnumerable<string>> ConvertApkg(Stream inputStream);
     }
 }
