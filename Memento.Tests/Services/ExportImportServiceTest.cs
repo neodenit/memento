@@ -51,11 +51,11 @@ namespace Memento.Tests.Services
         }
 
         [TestMethod()]
-        public Task ExportImportServiceConvertApkgTest1()
+        public async Task ExportImportServiceConvertApkgTest1()
         {
             var filePath = @"Decks\Deck1.apkg";
             var expected = new[] { "Test text with {{c1::cloze}}." };
-            return TestApkgConvertion(filePath, expected);
+            await TestApkgConvertion(filePath, expected);
         }
 
         [TestMethod()]
