@@ -12,8 +12,6 @@ namespace Memento.Bot
     [Serializable]
     public class Dialog : IDialog
     {
-        private Tuple<int, string>[] decksCache;
-
         public async Task StartAsync(IDialogContext context)
         {
             await Task.Run(() => context.Wait(MessageReceivedAsync));
@@ -23,15 +21,9 @@ namespace Memento.Bot
         {
             var message = await argument;
 
-            decksCache = message.GetBotPerUserInConversationData<Tuple<int, string>[]>("decks");
-            
-            var titles = from x in decksCache select x.Item2;
-            var menuItems = titles.Select((d, i) => $"{i + 1}) {d}");
+            var response = message.GetBotPerUserInConversationData<string>("response");
 
-            var delimeter = Environment.NewLine + Environment.NewLine;
-            var decksList = string.Join(delimeter, menuItems);
-
-            await context.PostAsync(decksList);
+            await context.PostAsync(response);
 
             context.Wait(MessageReceivedAsync);
         }

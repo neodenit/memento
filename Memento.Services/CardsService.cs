@@ -65,7 +65,6 @@ namespace Memento.Services
             var cloze = dbCard.GetNextCloze();
             var correctAnswer = converter.GetShortAnswer(dbCard.Text, cloze.Label);
             var fullAnswer = converter.GetFullAnswer(dbCard.Text, cloze.Label);
-            var comment = converter.GetComment(dbCard.Text);
 
             var mark = evaluator.Evaluate(correctAnswer, card.UserAnswer);
 
@@ -76,7 +75,7 @@ namespace Memento.Services
                 FullAnswer = fullAnswer,
                 ShortAnswer = correctAnswer,
                 UserAnswer = card.UserAnswer,
-                Comment = comment,
+                Comment = dbCard.Comment,
             };
 
             return cardWithAnswer;
