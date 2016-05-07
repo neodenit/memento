@@ -104,7 +104,9 @@ namespace Memento.Web.Controllers
                     DelayMode = Settings.Default.AllowSmoothDelayModes ? deck.DelayMode : DelayModes.Sharp,
                     ControlMode = deck.ControlMode,
                     StartDelay = Settings.Default.EnableTwoStepsConfig ? deck.FirstDelay : deck.StartDelay,
-                    Coeff = Settings.Default.EnableTwoStepsConfig ? deck.SecondDelay / (double)deck.FirstDelay : deck.Coeff,
+                    Coeff = Settings.Default.EnableTwoStepsConfig ?
+                        (double)deck.SecondDelay / deck.FirstDelay :
+                        deck.Coeff,
                 };
 
                 await decksService.CreateDeck(newDeck, User.Identity.Name);
@@ -121,18 +123,24 @@ namespace Memento.Web.Controllers
         public async Task<ActionResult> Edit([CheckDeckExistence, CheckDeckOwner] int id)
         {
             var deck = await decksService.FindDeckAsync(id);
+            var viewModel = new DeckViewModel(deck);
 
-            return View(deck);
+            return View(viewModel);
         }
 
         // POST: Decks/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID, Title, StartDelay, Coeff")] Deck deck)
+        public async Task<ActionResult> Edit([Bind(Include = "ID, Title, StartDelay, Coeff, FirstDelay, SecondDelay")] DeckViewModel deck)
         {
             if (ModelState.IsValid)
             {
-                await decksService.UpdateDeck(deck.ID, deck.Title, deck.StartDelay, deck.Coeff);
+                var delay = Settings.Default.EnableTwoStepsConfig ? deck.FirstDelay : deck.StartDelay;
+                var coeff = Settings.Default.EnableTwoStepsConfig ?
+                        (double)deck.SecondDelay / deck.FirstDelay :
+                        deck.Coeff;
+
+                await decksService.UpdateDeck(deck.ID, deck.Title, delay, coeff);
 
                 return RedirectToAction("Index");
             }

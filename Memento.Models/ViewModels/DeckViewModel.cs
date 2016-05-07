@@ -42,6 +42,8 @@ namespace Memento.Models.ViewModels
             DelayMode = deck.DelayMode;
             StartDelay = deck.StartDelay;
             Coeff = deck.Coeff;
+            FirstDelay = deck.StartDelay;
+            SecondDelay = (int)Math.Round(deck.StartDelay * deck.Coeff);
         }
     }
 }
