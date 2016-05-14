@@ -21,19 +21,13 @@
 }
 
 <div>
-    @Html.ActionLink("Create New Card", "Create", "Cards", new { DeckID = Model.Deck.ID }, null) |
-    @Html.ActionLink("Clozes Index", "ClozesIndex", "Cards", new { DeckID = Model.Deck.ID }, null) |
-    @Html.ActionLink("Cards Index", "CardsIndex", "Cards", new { DeckID = Model.Deck.ID }, null) |
-    @Html.ActionLink("Import", "Import", new { DeckID = Model.Deck.ID }) |
-    @Html.ActionLink("Export", "Export", new { DeckID = Model.Deck.ID }) |
-    @Html.ActionLink("Deleted cards", "DeletedIndex", "Cards", new { DeckID = Model.Deck.ID }, null) |
-    @Html.ActionLink("Draft cards", "DraftIndex", "Cards", new { DeckID = Model.Deck.ID }, null)
+    @Html.ActionLink("Create New Card", "Create", "Cards", new { DeckID = Model.Deck.ID }, null)
 </div>
 
-<div class="col-md-offset-2 col-md-10">
-    <div id="answersPlaceholder" class="chart"></div>
-    <div id="correctAnswersPlaceholder" class="chart"></div>
-    <div id="cardsNumberPlaceholder" class="chart"></div>
+<div class="col-md-12">
+    <div id="answersPlaceholder" class="chart col-md-5"></div>
+    <div id="correctAnswersPlaceholder" class="chart col-md-5"></div>
+    <div id="cardsNumberPlaceholder" class="chart col-md-2"></div>
 </div>
 
 @using (Html.BeginForm())
@@ -41,9 +35,10 @@
     @Html.AntiForgeryToken()
 
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Start" class="btn btn-default focused" />
+        <div class="col-md-offset-4 col-md-4">
+            <input type="submit" value="Start" class="btn btn-default btn-block focused" />
         </div>
+        <div class="col-md-4"></div>
     </div>
 }
 
