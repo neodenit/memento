@@ -170,10 +170,11 @@ namespace Memento.Web.Controllers.Api
         private async Task<string> GetResponseForRightAnswer(Message message, IDeck deck, IAnswerCardViewModel card)
         {
             var rightMessage = "**You are right!**";
+            var commentMessage = "Comment:";
             var fullAnswerMessage = "Full answer:";
             var answer = string.IsNullOrWhiteSpace(card.Comment) ?
                 card.FullAnswer :
-                string.Join(delimeter, card.FullAnswer, card.Comment);
+                string.Join(delimeter, card.FullAnswer, commentMessage, card.Comment);
 
             var correctAnswerMessage = "Correct answer: " + card.ShortAnswer;
             var userAnswerMessage = "Your answer: " + card.UserAnswer;
@@ -192,9 +193,11 @@ namespace Memento.Web.Controllers.Api
         {
             var wrongMessage = "**You are wrong!**";
             var fullAnswerMessage = "Full answer:";
+            var commentMessage = "Comment:";
+
             var answer = string.IsNullOrWhiteSpace(card.Comment) ?
                 card.FullAnswer :
-                string.Join(delimeter, card.FullAnswer, card.Comment);
+                string.Join(delimeter, card.FullAnswer, commentMessage, card.Comment);
 
             var correctAnswerMessage = "Correct answer: " + card.ShortAnswer;
             var userAnswerMessage = "Your answer: " + card.UserAnswer;
