@@ -104,7 +104,6 @@ namespace Memento.DomainModel.Repository
                 CardID = card.ID,
                 DeckID = deck.ID,
                 IsCorrect = isCorrect,
-                CardsInRepetition = deck.GetClozes().Count(item => !item.IsNew)
             };
 
             db.Answers.Add(answer);

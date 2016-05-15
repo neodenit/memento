@@ -27,7 +27,16 @@ namespace Memento.Services
         public async Task<IDeckWithStatViewModel> GetDeckWithStatViewModel(int deckID, IStatistics statistics)
         {
             var deck = await repository.FindDeckAsync(deckID);
-            var viewModel = new DeckWithStatViewModel { Deck = deck, Stat = statistics };
+
+            var clozes = deck.GetClozes();
+            statistics.NewQuestionsCount = clozes.Count(c => c.IsNew);
+            statistics.OldQuestionsCount = clozes.Count(c => !c.IsNew);
+
+            var viewModel = new DeckWithStatViewModel
+            {
+                Deck = deck,
+                Stat = statistics,
+            };
 
             return viewModel;
         }

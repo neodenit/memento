@@ -1,11 +1,11 @@
 ﻿$(function () {
-    var drawChart = function (placeholder, labels, values, text) {
+    var drawChart = function (placeholder, labels, values, title, label) {
         $(placeholder).highcharts({
             chart: {
                 type: 'column'
             },
             title: {
-                text: text
+                text: title
             },
             xAxis: {
                 categories: labels,
@@ -14,7 +14,7 @@
             yAxis: {
                 min: 0,
                 title: {
-                    text: text
+                    text: label
                 }
             },
             tooltip: {
@@ -32,7 +32,7 @@
                 }
             },
             series: [{
-                name: text,
+                name: title,
                 data: values
             }],
             legend: {
@@ -44,7 +44,46 @@
         });
     };
 
-    drawChart('#answersPlaceholder', chartData.answers.Labels, chartData.answers.Values, 'Answers');
-    drawChart('#correctAnswersPlaceholder', chartData.correctAnswers.Labels, chartData.correctAnswers.Values, 'Correct answers');
-    drawChart('#cardsNumberPlaceholder', chartData.cards.Labels, chartData.cards.Values, 'Active cards');
+    var drawPieChart = function (placeholder, oldQuestionsCount, newQuestionsCount) {
+        $(placeholder).highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie',
+            },
+            title: {
+                text: 'Progress'
+            },
+            tooltip: {
+                pointFormat: '<b>{point.y}</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false,
+                    },
+                    showInLegend: true,
+                }
+            },
+            series: [{
+                name: 'Cards',
+                colorByPoint: true,
+                data: [{
+                    name: 'Active questions',
+                    y: oldQuestionsCount,
+                }, {
+                    name: 'New questions',
+                    y: newQuestionsCount,
+                }
+                ]
+            }]
+        });
+    }
+
+    drawChart('#answersPlaceholder', chartData.answers.Labels, chartData.answers.Values, 'Total answers', 'Answers');
+    drawChart('#correctAnswersPlaceholder', chartData.correctAnswers.Labels, chartData.correctAnswers.Values, 'Correct answers', 'Answers');
+    drawPieChart('#cardsNumberPlaceholder', chartData.oldQuestionsCount, chartData.newQuestionsCount);
 });

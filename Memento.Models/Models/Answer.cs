@@ -22,7 +22,5 @@ namespace Memento.Models.Models
         public int CardID { get; set; }
 
         public int DeckID { get; set; }
-
-        public int CardsInRepetition { get; set; }
     }
 }

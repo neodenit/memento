@@ -46,14 +46,10 @@ namespace Memento.Services
             var correctAnswerLabels = from item in groupedCorrectAnswers select item.Key.ToShortDateString();
             var correctAnswerValues = from item in groupedCorrectAnswers select item.Count();
 
-            var cardsLabels = answerLabels;
-            var cardsValues = from item in groupedAnswers select item.GetMaxElement(x => x.Time).CardsInRepetition;
-
             var statistics = new Statistics
             {
                 Answers = new ChartData(answerLabels, answerValues),
                 CorrectAnswers = new ChartData(correctAnswerLabels, correctAnswerValues),
-                Cards = new ChartData(cardsLabels, cardsValues),
             };
 
             return statistics;

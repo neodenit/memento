@@ -95,6 +95,10 @@
     <Compile Include="Migrations\201604171201041_Make text field required.Designer.cs">
       <DependentUpon>201604171201041_Make text field required.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605151602446_Remove clozes count.cs" />
+    <Compile Include="Migrations\201605151602446_Remove clozes count.Designer.cs">
+      <DependentUpon>201605151602446_Remove clozes count.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MementoContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -138,6 +142,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604171201041_Make text field required.resx">
       <DependentUpon>201604171201041_Make text field required.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605151602446_Remove clozes count.resx">
+      <DependentUpon>201605151602446_Remove clozes count.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
