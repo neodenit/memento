@@ -1,17 +1,16 @@
-﻿@{
+﻿@model  Memento.Models.ViewModels.HomeViewModel
+
+@{
     ViewBag.Title = "Memento";
 }
 
 <div class="jumbotron">
     <h1>Memento</h1>
-    <p class="lead">Please log in.</p>
+    <p class="lead">Please log in to start.</p>
 </div>
 
 <div class="row">
-    <div class="col-md-12">
-        <h2>Getting started</h2>
-        <p>
-            Memento description.
-        </p>
+    <div class="col-md-offset-1 col-md-10 help-text">
+        @Html.Raw(Model.HelpText)
     </div>
 </div>
