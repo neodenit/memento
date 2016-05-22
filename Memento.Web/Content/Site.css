@@ -23,6 +23,10 @@ textarea {
     max-width: 600px;
 }
 
+.help-text p {
+    font-size: large;
+}
+
 .chart {
     height: 250px;
 }
