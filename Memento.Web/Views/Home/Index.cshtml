@@ -6,7 +6,21 @@
 
 <div class="jumbotron">
     <h1>Memento</h1>
-    <p class="lead">Please log in to start.</p>
+
+    <div class="row">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="col-md-3">
+                @Html.ActionLink("Start", "Index", "Decks", null, new { @class = "btn btn-primary btn-lg active btn-block", role = "button" })
+            </div>
+        }
+        else
+        {
+            <div class="col-md-12">
+                <p class="lead">Please log in to start.</p>
+            </div>
+        }
+    </div>
 </div>
 
 <div class="row">
