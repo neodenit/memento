@@ -14,23 +14,23 @@
 
     @Html.HiddenFor(model => model.ID)
 
-    Html.RenderPartial("_Answer");
-    Html.RenderPartial("_Comparison");
+    <div class="form-group">
+        <div class="col-md-2 text-right">
+            Your answer:
+        </div>
+        <div class="col-md-8 short-answer-text">
+            @Html.DisplayFor(model => model.UserAnswer)
+        </div>
+    </div>
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-8">
-            <div class="typo-answer">Your answer looks like a typo!</div>
+            <div class="typo-answer">There is a typo in your answer!</div>
         </div>
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-2">
-            <input type="submit" name="TypoButton" value="It's a typo!" class="btn btn-primary focused btn-block" />
-        </div>
-        <div class="col-md-2">
-            <input type="submit" name="WrongButton" value="It's a wrong answer!" class="btn btn-default btn-block" />
-        </div>
-        <div class="col-md-2">
-            <input type="submit" name="AltButton" value="It's an alt answer!" class="btn btn-default btn-block" />
+            <input type="submit" value="Try again" class="btn btn-primary focused btn-block" />
         </div>
     </div>
 }

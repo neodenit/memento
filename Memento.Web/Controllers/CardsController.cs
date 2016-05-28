@@ -235,35 +235,9 @@ namespace Memento.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Typo([Bind(Include = "ID, Answer")] AnswerCardViewModel card, string TypoButton, string WrongButton, string AltButton)
+        public async Task<ActionResult> Typo([Bind(Include = "ID")] AnswerCardViewModel card)
         {
-            var dbCard = await cardsService.FindCardAsync(card.ID);
-
-            if (TypoButton != null)
-            {
-                return RedirectToAction("Details", new { id = card.ID });
-            }
-            else if (WrongButton != null)
-            {
-                await statService.AddAnswer(card.ID, false);
-
-                var deck = dbCard.GetDeck();
-                var delay = schedulerService.GetDelayForWrongAnswer(deck.DelayMode);
-
-                await schedulerService.PromoteCloze(deck, delay);
-
-                return RedirectToNextCard(deck);
-            }
-            else if (AltButton != null)
-            {
-                await cardsService.AddAltAnswer(card.ID, card.UserAnswer);
-
-                return RedirectToAction("Details", new { id = card.ID });
-            }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            return await Task.FromResult(RedirectToAction("Details", new { card.ID }));
         }
 
         public async Task<ActionResult> Create(int? DeckID)
