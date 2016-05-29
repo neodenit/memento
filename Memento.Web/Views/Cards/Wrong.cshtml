@@ -13,6 +13,7 @@
     @Html.AntiForgeryToken()
 
     @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(model => model.UserAnswer)
 
     Html.RenderPartial("_Answer");
     Html.RenderPartial("_Comparison");

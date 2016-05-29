@@ -207,7 +207,7 @@ namespace Memento.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Wrong([Bind(Include = "ID, Answer")] AnswerCardViewModel card, string NextButton, string AltButton)
+        public async Task<ActionResult> Wrong([Bind(Include = "ID, UserAnswer")] AnswerCardViewModel card, string NextButton, string AltButton)
         {
             if (NextButton != null)
             {
