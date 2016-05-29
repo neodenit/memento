@@ -24,12 +24,12 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod]
-        public void HomeIndexTest()
+        public async void HomeIndexTest()
         {
             // Arrange
 
             // Act
-            var result = sut.Index() as RedirectToRouteResult;
+            var result = await sut.Index() as RedirectToRouteResult;
 
             // Assert
             Assert.IsNotNull(result);

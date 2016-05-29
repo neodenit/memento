@@ -210,7 +210,7 @@ namespace Memento.Tests.Controllers
 
             // Act
             var result = await sut.Edit(id) as ViewResult;
-            var model = result.Model as Deck;
+            var model = result.Model as DeckViewModel;
 
             // Assert
             mockDecksService.Verify(x => x.FindDeckAsync(id), Times.Once);
@@ -223,7 +223,7 @@ namespace Memento.Tests.Controllers
         public async Task DecksEditPostTest()
         {
             // Arrange
-            var deck = new Deck
+            var deck = new DeckViewModel
             {
                 ID = 1,
                 Title = "Title",
@@ -235,7 +235,15 @@ namespace Memento.Tests.Controllers
             var result = await sut.Edit(deck) as RedirectToRouteResult;
 
             // Assert
-            mockDecksService.Verify(x => x.UpdateDeck(deck.ID, deck.Title, deck.StartDelay, deck.Coeff), Times.Once);
+            if (Settings.Default.EnableTwoStepsConfig)
+            {
+                mockDecksService.Verify(x => x.UpdateDeck(deck.ID, deck.Title, It.IsAny<int>(), It.IsAny<double>()), Times.Once);
+            }
+            else
+            {
+                mockDecksService.Verify(x => x.UpdateDeck(deck.ID, deck.Title, deck.StartDelay, deck.Coeff), Times.Once);
+            }
+
             Assert.IsNotNull(result);
         }
 

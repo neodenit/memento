@@ -1,4 +1,5 @@
-﻿using Memento.Interfaces;
+﻿using Memento.Common;
+using Memento.Interfaces;
 using Memento.Models.Models;
 using Memento.Models.ViewModels;
 using Memento.Web.Controllers;
@@ -237,17 +238,35 @@ namespace Memento.Tests.Controllers
         [TestMethod()]
         public async Task CardsRepeatOpenedBadButtonPostTest()
         {
-            // Arrange
-            var card = new ViewCardViewModel { ID = 1 };
+            if (Settings.Default.AllowSmoothDelayModes)
+            {
 
-            // Act
-            var result = await sut.RepeatOpened(card, null, "badButton", null) as RedirectToRouteResult;
+                // Arrange
+                var card = new ViewCardViewModel { ID = 1 };
 
-            // Assert
-            mockStatService.Verify(x => x.AddAnswer(card.ID, It.IsAny<bool>()));
-            mockCardsService.Verify(x => x.FindCardAsync(card.ID));
-            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<IDeck>(), Delays.Previous));
-            Assert.IsNotNull(result);
+                // Act
+                var result = await sut.RepeatOpened(card, null, "badButton", null) as RedirectToRouteResult;
+
+                // Assert
+                mockStatService.Verify(x => x.AddAnswer(card.ID, It.IsAny<bool>()));
+                mockCardsService.Verify(x => x.FindCardAsync(card.ID));
+                mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<IDeck>(), Delays.Previous));
+                Assert.IsNotNull(result);
+            }
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(Exception))]
+        public async Task CardsRepeatOpenedBadButtonPostExceptionTest()
+        {
+            if (!Settings.Default.AllowSmoothDelayModes)
+            {
+                // Arrange
+                var card = new ViewCardViewModel { ID = 1 };
+
+                // Act
+                var result = await sut.RepeatOpened(card, null, "badButton", null) as RedirectToRouteResult;
+            }
         }
 
         [TestMethod()]
@@ -503,7 +522,7 @@ namespace Memento.Tests.Controllers
 
             // Act
             var result = await sut.Delete(id) as ViewResult;
-            var model = result.Model as ICard;
+            var model = result.Model as ViewCardViewModel;
 
             // Assert
             mockCardsService.Verify(x => x.FindCardAsync(id));
