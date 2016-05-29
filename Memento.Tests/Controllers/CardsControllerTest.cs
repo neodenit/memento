@@ -346,48 +346,15 @@ namespace Memento.Tests.Controllers
         }
 
         [TestMethod()]
-        public async Task CardsTypoTypoButtonPostTest()
+        public async Task CardsTypoPostTest()
         {
             // Arrange
             var card = new AnswerCardViewModel { ID = 1 };
 
             // Act
-            var result = await sut.Typo(card, "TypoButton", null, null) as RedirectToRouteResult;
+            var result = await sut.Typo(card) as RedirectToRouteResult;
 
             // Assert
-            mockCardsService.Verify(x => x.FindCardAsync(card.ID));
-            Assert.IsNotNull(result);
-        }
-
-        [TestMethod()]
-        public async Task CardsTypoWrongButtonPostTest()
-        {
-            // Arrange
-            var card = new AnswerCardViewModel { ID = 1 };
-
-            // Act
-            var result = await sut.Typo(card, null, "WrongButton", null) as RedirectToRouteResult;
-
-            // Assert
-            mockStatService.Verify(x => x.AddAnswer(card.ID, false));
-            mockSchedulerService.Verify(x => x.GetDelayForWrongAnswer(It.IsAny<DelayModes>()));
-            mockCardsService.Verify(x => x.FindCardAsync(card.ID));
-            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<IDeck>(), It.IsAny<Delays>()));
-            Assert.IsNotNull(result);
-        }
-
-        [TestMethod()]
-        public async Task CardsTypoAltButtonPostTest()
-        {
-            // Arrange
-            var card = new AnswerCardViewModel { ID = 1, UserAnswer = "text" };
-
-            // Act
-            var result = await sut.Typo(card, null, null, "AltButton") as RedirectToRouteResult;
-
-            // Assert
-            mockCardsService.Verify(x => x.AddAltAnswer(card.ID, card.UserAnswer));
-            mockCardsService.Verify(x => x.FindCardAsync(card.ID));
             Assert.IsNotNull(result);
         }
 
