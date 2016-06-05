@@ -99,6 +99,10 @@
     <Compile Include="Migrations\201605151602446_Remove clozes count.Designer.cs">
       <DependentUpon>201605151602446_Remove clozes count.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201606051922323_Add column for shared decks.cs" />
+    <Compile Include="Migrations\201606051922323_Add column for shared decks.Designer.cs">
+      <DependentUpon>201606051922323_Add column for shared decks.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MementoContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -145,6 +149,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605151602446_Remove clozes count.resx">
       <DependentUpon>201605151602446_Remove clozes count.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606051922323_Add column for shared decks.resx">
+      <DependentUpon>201606051922323_Add column for shared decks.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
