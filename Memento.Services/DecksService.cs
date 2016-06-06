@@ -24,6 +24,13 @@ namespace Memento.Services
             return orderedDecks;
         }
 
+        public async Task<IEnumerable<IDeck>> GetSharedDecksAsync()
+        {
+            var decks = await repository.GetSharedDecksAsync();
+            var orderedDecks = decks.OrderBy(deck => deck.Title);
+            return orderedDecks;
+        }
+
         public async Task<IDeckWithStatViewModel> GetDeckWithStatViewModel(int deckID, IStatistics statistics)
         {
             var deck = await repository.FindDeckAsync(deckID);

@@ -87,7 +87,10 @@ namespace Memento.Tests
             Task.FromResult(answers.Where(a => a.DeckID == deckID));
 
         public Task<IEnumerable<IDeck>> GetUserDecksAsync(string userName) =>
-            Task.FromResult(decks.Where(d => d.Owner == userName));
+            Task.FromResult(decks.Where(d => d.Owner == userName  && !d.IsShared));
+
+        public Task<IEnumerable<IDeck>> GetSharedDecksAsync() =>
+            Task.FromResult(decks.Where(d => d.IsShared));
 
         public void PromoteCloze(IDeck deck, Delays delay) { }
 

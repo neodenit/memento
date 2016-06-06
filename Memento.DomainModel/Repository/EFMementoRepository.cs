@@ -24,8 +24,11 @@ namespace Memento.DomainModel.Repository
             this.newCardsManager = newCardsManager;
         }
 
+        public async Task<IEnumerable<IDeck>> GetSharedDecksAsync() =>
+            await db.Decks.Where(item => item.IsShared).ToListAsync();
+
         public async Task<IEnumerable<IDeck>> GetUserDecksAsync(string userName) =>
-            await db.Decks.Where(item => item.Owner == userName).ToListAsync();
+            await db.Decks.Where(item => item.Owner == userName && !item.IsShared).ToListAsync();
 
         public IDeck FindDeck(int id) =>
             db.Decks.Find(id);

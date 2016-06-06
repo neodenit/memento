@@ -22,6 +22,7 @@ namespace Memento.Interfaces
         ControlModes ControlMode { get; set; }
         DelayModes DelayMode { get; set; }
         int ID { get; set; }
+        bool IsShared { get; set; }
         string Owner { get; set; }
         int StartDelay { get; set; }
         string Title { get; set; }

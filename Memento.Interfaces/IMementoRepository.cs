@@ -8,6 +8,7 @@ namespace Memento.Interfaces
 {
     public interface IMementoRepository
     {
+        Task<IEnumerable<IDeck>> GetSharedDecksAsync();
         Task<IEnumerable<IDeck>> GetUserDecksAsync(string userName);
         Task<IEnumerable<IAnswer>> GetAnswersForDeckAsync(int deckID);
         IDeck FindDeck(int id);
