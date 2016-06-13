@@ -43,6 +43,7 @@
     <Compile Include="IAnswer.cs" />
     <Compile Include="IAnswerCardViewModel.cs" />
     <Compile Include="ICardsService.cs" />
+    <Compile Include="IDecksViewModel.cs" />
     <Compile Include="IExportImportService.cs" />
     <Compile Include="IFactory.cs" />
     <Compile Include="ISchedulerService.cs" />

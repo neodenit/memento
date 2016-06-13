@@ -45,7 +45,14 @@ namespace Memento.Web.Controllers
         public async Task<ActionResult> Index()
         {
             var decks = await decksService.GetDecksAsync(User.Identity.Name);
-            return View(decks.Cast<Deck>());
+            var sharedDecks = await decksService.GetSharedDecksAsync();
+            var viewModel = new DecksViewModel
+            {
+                UserDecks = decks,
+                SharedDecks = sharedDecks,
+            };
+
+            return View(viewModel);
         }
 
         // GET: Decks/Details/5

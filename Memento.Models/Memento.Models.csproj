@@ -83,6 +83,7 @@
     <Compile Include="ViewModels\ClozeViewModel.cs" />
     <Compile Include="ViewModels\EditCardViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
+    <Compile Include="ViewModels\DecksViewModel.cs" />
     <Compile Include="ViewModels\ImportViewModel.cs" />
     <Compile Include="ViewModels\ViewCardViewModel.cs" />
   </ItemGroup>
