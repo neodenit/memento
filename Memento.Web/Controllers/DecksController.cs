@@ -55,6 +55,13 @@ namespace Memento.Web.Controllers
             return View(viewModel);
         }
 
+        public async Task<ActionResult> Share([CheckDeckExistence, CheckDeckOwner] int id)
+        {
+            await decksService.ShareDeckAsync(id);
+
+            return RedirectToAction("Index");
+        }
+
         // GET: Decks/Details/5
         public async Task<ActionResult> Details([CheckDeckExistence, CheckDeckOwner] int id)
         {

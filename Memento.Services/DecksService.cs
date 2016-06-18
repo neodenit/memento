@@ -79,5 +79,14 @@ namespace Memento.Services
 
             await repository.SaveChangesAsync();
         }
+
+        public async Task ShareDeckAsync(int id)
+        {
+            var deck = await repository.FindDeckAsync(id);
+
+            deck.IsShared = true;
+
+            await repository.SaveChangesAsync();
+        }
     }
 }

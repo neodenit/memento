@@ -13,5 +13,6 @@ namespace Memento.Interfaces
         Task UpdateDeck(int id, string title, int startDelay, double coeff);
         Task CreateDeck(IDeck deck, string userName);
         Task DeleteDeck(int id);
+        Task ShareDeckAsync(int id);
     }
 }
