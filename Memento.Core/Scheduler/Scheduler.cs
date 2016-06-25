@@ -12,92 +12,92 @@ namespace Memento.Core.Scheduler
 {
     public class Scheduler : IScheduler
     {
-        public void PromoteCloze(IDeck deck, IEnumerable<ICloze> clozes, Delays delay)
+        public void PromoteCloze(IDeck deck, IEnumerable<ICloze> clozes, Delays delay, string username)
         {
-            var cloze = GetFirstCloze(clozes);
+            var cloze = GetFirstCloze(clozes, username);
 
-            var step = GetStep(deck, delay, cloze.LastDelay);
+            var step = GetStep(deck, delay, cloze.GetUserRepetition(username).LastDelay);
             var randomPart = GetRandomPart();
             var correctedStep = Settings.Default.AddRandomization ? step + randomPart : step;
 
-            var maxNewPosition = GetMaxPosition(clozes);
+            var maxNewPosition = GetMaxPosition(clozes, username);
             var newPosition = Math.Min(correctedStep, maxNewPosition);
             var newDelay = newPosition > deck.StartDelay || deck.AllowSmallDelays ? newPosition : deck.StartDelay;
 
-            MoveCloze(clozes, cloze.Position, newPosition, newDelay, false, true);
+            MoveCloze(clozes, cloze.GetUserRepetition(username).Position, newPosition, newDelay, false, true, username);
 
-            cloze.IsNew = false;
+            cloze.GetUserRepetition(username).IsNew = false;
         }
 
-        public void AddCloze(IDeck deck, ICollection<ICloze> clozes, ICloze cloze)
+        public void AddCloze(IDeck deck, ICollection<ICloze> clozes, ICloze cloze, string username)
         {
-            PrepareForAdding(deck, clozes, cloze);
+            PrepareForAdding(deck, clozes, cloze, username);
             clozes.Add(cloze);
         }
 
-        public void PrepareForAdding(IDeck deck, IEnumerable<ICloze> clozes, ICloze cloze)
+        public void PrepareForAdding(IDeck deck, IEnumerable<ICloze> clozes, ICloze cloze, string username)
         {
-            var maxNewPosition = GetMaxNewPosition(clozes);
-            cloze.Position = maxNewPosition;
-            cloze.LastDelay = deck.StartDelay;
-            cloze.IsNew = true;
+            var maxNewPosition = GetMaxNewPosition(clozes, username);
+            cloze.GetUserRepetition(username).Position = maxNewPosition;
+            cloze.GetUserRepetition(username).LastDelay = deck.StartDelay;
+            cloze.GetUserRepetition(username).IsNew = true;
         }
 
-        public void PrepareForRemoving(IDeck deck, IEnumerable<ICloze> clozes, ICloze cloze)
+        public void PrepareForRemoving(IDeck deck, IEnumerable<ICloze> clozes, ICloze cloze, string username)
         {
-            var position = cloze.Position;
-            var movedClozes = GetRestClozes(clozes, position);
+            var position = cloze.GetUserRepetition(username).Position;
+            var movedClozes = GetRestClozes(clozes, position, username);
 
-            DecreasePosition(movedClozes);
-            DecreaseDelays(movedClozes);
+            DecreasePosition(movedClozes, username);
+            DecreaseDelays(movedClozes, username);
         }
 
-        public void ShuffleNewClozes(IEnumerable<ICloze> clozes)
+        public void ShuffleNewClozes(IEnumerable<ICloze> clozes, string username)
         {
-            var newClozes = from cloze in clozes where cloze.IsNew select cloze;
-            ShuffleClozes(newClozes);
+            var newClozes = from cloze in clozes where cloze.GetUserRepetition(username).IsNew select cloze;
+            ShuffleClozes(newClozes, username);
         }
 
-        public void MoveCloze(IEnumerable<ICloze> clozes, int oldPosition, int newPosition, int newDelay, bool correctMovedClozesDelays, bool correctRestClozesDelays)
+        public void MoveCloze(IEnumerable<ICloze> clozes, int oldPosition, int newPosition, int newDelay, bool correctMovedClozesDelays, bool correctRestClozesDelays, string username)
         {
-            var movedCloze = clozes.Single(cloze => cloze.Position == oldPosition);
-            movedCloze.Position = -1;
+            var movedCloze = clozes.Single(cloze => cloze.GetUserRepetition(username).Position == oldPosition);
+            movedCloze.GetUserRepetition(username).Position = -1;
 
             var newLimitedPosition =
                 oldPosition > newPosition ?
                 Math.Max(newPosition, 0) :
-                Math.Min(newPosition, GetMaxPosition(clozes));
+                Math.Min(newPosition, GetMaxPosition(clozes, username));
 
             if (oldPosition > newPosition)
             {
-                var movedClozes = GetRange(clozes, newLimitedPosition, oldPosition - 1);
-                IncreasePosition(movedClozes);
+                var movedClozes = GetRange(clozes, newLimitedPosition, oldPosition - 1, username);
+                IncreasePosition(movedClozes, username);
 
                 if (correctMovedClozesDelays)
                 {
-                    IncreaseDelays(movedClozes);
+                    IncreaseDelays(movedClozes, username);
                 }
             }
             else
             {
-                var movedClozes = GetRange(clozes, oldPosition + 1, newLimitedPosition);
+                var movedClozes = GetRange(clozes, oldPosition + 1, newLimitedPosition, username);
 
-                DecreasePosition(movedClozes);
+                DecreasePosition(movedClozes, username);
 
                 if (correctMovedClozesDelays)
                 {
-                    DecreaseDelays(movedClozes);
+                    DecreaseDelays(movedClozes, username);
                 }
 
                 if (correctRestClozesDelays)
                 {
-                    var restClozes = GetRestClozes(clozes, newLimitedPosition);
-                    IncreaseDelays(restClozes);
+                    var restClozes = GetRestClozes(clozes, newLimitedPosition, username);
+                    IncreaseDelays(restClozes, username);
                 }
             }
 
-            movedCloze.Position = newLimitedPosition;
-            movedCloze.LastDelay = newDelay;
+            movedCloze.GetUserRepetition(username).Position = newLimitedPosition;
+            movedCloze.GetUserRepetition(username).LastDelay = newDelay;
         }
     }
 }

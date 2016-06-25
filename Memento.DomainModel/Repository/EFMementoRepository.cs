@@ -69,26 +69,26 @@ namespace Memento.DomainModel.Repository
         public void RemoveCloze(ICloze cloze) =>
             db.Clozes.Remove(cloze as Cloze);
 
-        public void AddClozes(ICard card, IEnumerable<string> clozeNames)
+        public void AddClozes(ICard card, IEnumerable<string> clozeNames, string username)
         {
             foreach (var clozeName in clozeNames)
             {
                 var newCloze = new Cloze(card.ID, clozeName);
                 var deckClozes = card.GetDeck().GetClozes();
 
-                scheduler.PrepareForAdding(card.GetDeck(), deckClozes, newCloze);
+                scheduler.PrepareForAdding(card.GetDeck(), deckClozes, newCloze, username);
 
                 AddCloze(newCloze);
             }
         }
 
-        public void RemoveClozes(ICard card, IEnumerable<string> clozeNames)
+        public void RemoveClozes(ICard card, IEnumerable<string> clozeNames, string username)
         {
             foreach (var clozeName in clozeNames)
             {
                 var cloze = card.GetClozes().Single(item => item.Label == clozeName);
 
-                scheduler.PrepareForRemoving(card.GetDeck(), card.GetClozes(), cloze);
+                scheduler.PrepareForRemoving(card.GetDeck(), card.GetClozes(), cloze, username);
 
                 db.Clozes.Remove(cloze as Cloze);
             }
@@ -112,21 +112,21 @@ namespace Memento.DomainModel.Repository
             db.Answers.Add(answer);
         }
 
-        public void PromoteCloze(IDeck deck, Delays delay)
+        public void PromoteCloze(IDeck deck, Delays delay, string username)
         {
             var clozes = deck.GetClozes();
 
             if (Settings.Default.EnableSiblingsHandling)
             {
-                siblingsManager.RearrangeSiblings(deck, clozes);
+                siblingsManager.RearrangeSiblings(deck, clozes, username);
             }
 
             if (Settings.Default.EnableNewCardsHandling)
             {
-                newCardsManager.RearrangeNewClozes(deck, clozes);
+                newCardsManager.RearrangeNewClozes(deck, clozes, username);
             }
 
-            scheduler.PromoteCloze(deck, clozes, delay);
+            scheduler.PromoteCloze(deck, clozes, delay, username);
         }
 
         public Task SaveChangesAsync() =>

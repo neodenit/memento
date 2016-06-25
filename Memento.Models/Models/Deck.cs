@@ -49,11 +49,11 @@ namespace Memento.Models.Models
             return validCards.SelectMany(card => card.GetClozes() ?? Enumerable.Empty<ICloze>());
         }
 
-        public ICard GetNextCard()
+        public ICard GetNextCard(string username)
         {
             var validCards = GetValidCards();
 
-            var nextCard = validCards.GetMinElement(item => item.GetNextCloze().Position);
+            var nextCard = validCards.GetMinElement(item => item.GetNextCloze(username).GetUserRepetition(username).Position);
 
             return nextCard;
         }

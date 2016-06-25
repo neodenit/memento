@@ -19,10 +19,10 @@ namespace Memento.Services
             this.repository = repository;
         }
 
-        public async Task AddAnswer(int cardID, bool isCorrect)
+        public async Task AddAnswer(int cardID, bool isCorrect, string username)
         {
             var dbCard = await repository.FindCardAsync(cardID);
-            var cloze = dbCard.GetNextCloze();
+            var cloze = dbCard.GetNextCloze(username);
 
             repository.AddAnswer(cloze, isCorrect);
             await repository.SaveChangesAsync();

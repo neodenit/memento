@@ -5,7 +5,7 @@ namespace Memento.Interfaces
     public interface ISchedulerService
     {
         Delays GetDelayForWrongAnswer(DelayModes delayMode);
-        Task PromoteCloze(IDeck deck, Delays delay);
-        Task ShuffleNewClozes(int deckID);
+        Task PromoteCloze(IDeck deck, Delays delay, string username);
+        Task ShuffleNewClozes(int deckID, string username);
     }
 }

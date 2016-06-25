@@ -48,8 +48,8 @@ namespace Memento.Models.Models
 
         public IEnumerable<ICloze> GetClozes() => Clozes;
 
-        public ICloze GetNextCloze() =>
-            Clozes.GetMinElement(c => c.Position);
+        public ICloze GetNextCloze(string username) =>
+            Clozes.GetMinElement(c => c.GetUserRepetition(username).Position);
 
         public void AddCloze(ICloze cloze) =>
             Clozes.Add(cloze as Cloze);

@@ -29,20 +29,20 @@ namespace Memento.Services
         public Delays GetDelayForWrongAnswer(DelayModes delayMode) =>
             delayMap[delayMode];
 
-        public async Task PromoteCloze(IDeck deck, Delays delay)
+        public async Task PromoteCloze(IDeck deck, Delays delay, string username)
         {
-            repository.PromoteCloze(deck, delay);
+            repository.PromoteCloze(deck, delay, username);
 
             await repository.SaveChangesAsync();
         }
 
-        public async Task ShuffleNewClozes(int deckID)
+        public async Task ShuffleNewClozes(int deckID, string username)
         {
             var deck = await repository.FindDeckAsync(deckID);
 
             var clozes = deck.GetClozes();
 
-            scheduler.ShuffleNewClozes(clozes);
+            scheduler.ShuffleNewClozes(clozes, username);
 
             await repository.SaveChangesAsync();
         }

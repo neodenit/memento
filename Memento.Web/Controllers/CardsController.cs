@@ -27,20 +27,24 @@ namespace Memento.Web.Controllers
         private readonly IStatisticsService statService;
         private readonly ISchedulerService schedulerService;
 
+        private readonly string username;
+
         public CardsController(IDecksService decksService, ICardsService cardsService, IStatisticsService statService, ISchedulerService schedulerService)
         {
             this.decksService = decksService;
             this.cardsService = cardsService;
             this.statService = statService;
             this.schedulerService = schedulerService;
+
+            username = User.Identity.Name;
         }
 
         public async Task<ActionResult> ClozesIndex([CheckDeckExistence, CheckDeckOwner] int deckID)
         {
             var deck = await decksService.FindDeckAsync(deckID);
             var clozes = deck.GetClozes();
-            var orderedClozes = clozes.OrderBy(cloze => cloze.Position);
-            var clozeViews = from cloze in orderedClozes select new ClozeViewModel(cloze);
+            var orderedClozes = clozes.OrderBy(cloze => cloze.GetUserRepetition(username).Position);
+            var clozeViews = from cloze in orderedClozes select new ClozeViewModel(cloze, username);
 
             return View(clozeViews);
         }
@@ -76,9 +80,9 @@ namespace Memento.Web.Controllers
         public async Task<ActionResult> Details([CheckCardExistence, CheckCardOwner] int id)
         {
             var card = await cardsService.FindCardAsync(id);
-            var cloze = card.GetNextCloze();
+            var cloze = card.GetNextCloze(username);
 
-            if (cloze.IsNew)
+            if (cloze.GetUserRepetition(username).IsNew)
             {
                 return RedirectToAction("PreviewClosed", new { id = card.ID });
             }
@@ -98,14 +102,14 @@ namespace Memento.Web.Controllers
 
         public async Task<ActionResult> PreviewClosed([CheckCardExistence, CheckCardOwner] int id)
         {
-            var card = await cardsService.GetCardWithQuestion(id);
+            var card = await cardsService.GetCardWithQuestion(id, username);
 
             return View(card);
         }
 
         public async Task<ActionResult> PreviewOpened([CheckCardExistence, CheckCardOwner] int id)
         {
-            var card = await cardsService.GetCardWithAnswer(id);
+            var card = await cardsService.GetCardWithAnswer(id, username);
 
             return View(card);
         }
@@ -117,21 +121,21 @@ namespace Memento.Web.Controllers
             var dbCard = await cardsService.FindCardAsync(card.ID);
             var deck = dbCard.GetDeck();
 
-            await schedulerService.PromoteCloze(deck, Delays.Same);
+            await schedulerService.PromoteCloze(deck, Delays.Same, username);
 
             return RedirectToNextCard(deck);
         }
 
         public async Task<ActionResult> RepeatClosed([CheckCardExistence, CheckCardOwner] int id)
         {
-            var card = await cardsService.GetCardWithQuestion(id);
+            var card = await cardsService.GetCardWithQuestion(id, username);
 
             return View(card);
         }
 
         public async Task<ActionResult> RepeatOpened([CheckCardExistence, CheckCardOwner] int id)
         {
-            var card = await cardsService.GetCardWithAnswer(id);
+            var card = await cardsService.GetCardWithAnswer(id, username);
 
             return View(card);
         }
@@ -147,7 +151,7 @@ namespace Memento.Web.Controllers
 
             var isCorrect = goodButton != null;
 
-            await statService.AddAnswer(card.ID, isCorrect);
+            await statService.AddAnswer(card.ID, isCorrect, username);
 
             var delay = againButton != null ?
                         Delays.Initial :
@@ -160,14 +164,14 @@ namespace Memento.Web.Controllers
             var dbCard = await cardsService.FindCardAsync(card.ID);
             var deck = dbCard.GetDeck();
 
-            await schedulerService.PromoteCloze(deck, delay);
+            await schedulerService.PromoteCloze(deck, delay, username);
 
             return RedirectToNextCard(deck);
         }
 
         public async Task<ActionResult> Question([CheckCardExistence, CheckCardOwner] int id)
         {
-            var card = await cardsService.GetCardWithQuestion(id);
+            var card = await cardsService.GetCardWithQuestion(id, username);
 
             return View(card);
         }
@@ -176,7 +180,7 @@ namespace Memento.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Question([Bind(Include = "ID, UserAnswer")] AnswerCardViewModel card)
         {
-            var evaluatedCard = await cardsService.EvaluateCard(card);
+            var evaluatedCard = await cardsService.EvaluateCard(card, username);
 
             switch (evaluatedCard.Mark)
             {
@@ -195,12 +199,12 @@ namespace Memento.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Right([Bind(Include = "ID")] AnswerCardViewModel card)
         {
-            await statService.AddAnswer(card.ID, true);
+            await statService.AddAnswer(card.ID, true, username);
 
             var dbCard = await cardsService.FindCardAsync(card.ID);
             var deck = dbCard.GetDeck();
 
-            await schedulerService.PromoteCloze(deck, Delays.Next);
+            await schedulerService.PromoteCloze(deck, Delays.Next, username);
 
             return RedirectToNextCard(deck);
         }
@@ -211,19 +215,19 @@ namespace Memento.Web.Controllers
         {
             if (NextButton != null)
             {
-                await statService.AddAnswer(card.ID, false);
+                await statService.AddAnswer(card.ID, false, username);
 
                 var dbCard = await cardsService.FindCardAsync(card.ID);
                 var deck = dbCard.GetDeck();
                 var delay = schedulerService.GetDelayForWrongAnswer(deck.DelayMode);
 
-                await schedulerService.PromoteCloze(deck, delay);
+                await schedulerService.PromoteCloze(deck, delay, username);
 
                 return RedirectToNextCard(deck);
             }
             else if (AltButton != null)
             {
-                await cardsService.AddAltAnswer(card.ID, card.UserAnswer);
+                await cardsService.AddAltAnswer(card.ID, card.UserAnswer, username);
 
                 return RedirectToAction("Details", new { id = card.ID });
             }
@@ -264,7 +268,7 @@ namespace Memento.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                await cardsService.AddCard(card.ID, card.DeckID, card.Text, card.Comment);
+                await cardsService.AddCard(card.ID, card.DeckID, card.Text, card.Comment, username);
 
                 return RedirectToAction("Create", "Cards", new { DeckID = card.DeckID });
             }
@@ -288,7 +292,7 @@ namespace Memento.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                await cardsService.UpdateCard(card.ID, card.Text, card.Comment);
+                await cardsService.UpdateCard(card.ID, card.Text, card.Comment, username);
 
                 var dbCard = await cardsService.FindCardAsync(card.ID);
 
@@ -309,7 +313,7 @@ namespace Memento.Web.Controllers
 
         public async Task<ActionResult> ShuffleNew([CheckDeckExistence, CheckDeckOwner] int deckID)
         {
-            await schedulerService.ShuffleNewClozes(deckID);
+            await schedulerService.ShuffleNewClozes(deckID, username);
 
             return RedirectToAction("ClozesIndex", new { deckID });
         }
@@ -353,7 +357,7 @@ namespace Memento.Web.Controllers
 
         private ActionResult RedirectToNextCard(IDeck deck)
         {
-            var nextCard = deck.GetNextCard();
+            var nextCard = deck.GetNextCard(username);
 
             return RedirectToCard(nextCard.ID);
         }

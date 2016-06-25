@@ -26,20 +26,20 @@ namespace Memento.Services
             this.factory = factory;
         }
 
-        public async Task AddAltAnswer(int cardID, string answer)
+        public async Task AddAltAnswer(int cardID, string answer, string username)
         {
             var dbCard = await FindCardAsync(cardID);
-            var cloze = dbCard.GetNextCloze();
+            var cloze = dbCard.GetNextCloze(username);
 
             dbCard.Text = converter.AddAltAnswer(dbCard.Text, cloze.Label, answer);
 
             await repository.SaveChangesAsync();
         }
 
-        public async Task<IAnswerCardViewModel> GetCardWithQuestion(int cardID)
+        public async Task<IAnswerCardViewModel> GetCardWithQuestion(int cardID, string username)
         {
             var card = await FindCardAsync(cardID);
-            var cloze = card.GetNextCloze();
+            var cloze = card.GetNextCloze(username);
             var question = converter.GetQuestion(card.Text, cloze.Label);
 
             var result = new AnswerCardViewModel(card) { Question = question };
@@ -47,10 +47,10 @@ namespace Memento.Services
             return result;
         }
 
-        public async Task<IAnswerCardViewModel> GetCardWithAnswer(int cardID)
+        public async Task<IAnswerCardViewModel> GetCardWithAnswer(int cardID, string username)
         {
             var card = await FindCardAsync(cardID);
-            var cloze = card.GetNextCloze();
+            var cloze = card.GetNextCloze(username);
             var fullAnswer = converter.GetFullAnswer(card.Text, cloze.Label);
             var comment = converter.GetComment(card.Text);
 
@@ -59,10 +59,10 @@ namespace Memento.Services
             return result;
         }
 
-        public async Task<IAnswerCardViewModel> EvaluateCard(IAnswerCardViewModel card)
+        public async Task<IAnswerCardViewModel> EvaluateCard(IAnswerCardViewModel card, string username)
         {
             var dbCard = await FindCardAsync(card.ID);
-            var cloze = dbCard.GetNextCloze();
+            var cloze = dbCard.GetNextCloze(username);
             var correctAnswer = converter.GetShortAnswer(dbCard.Text, cloze.Label);
             var fullAnswer = converter.GetFullAnswer(dbCard.Text, cloze.Label);
 
@@ -84,13 +84,13 @@ namespace Memento.Services
         public Task<ICard> FindCardAsync(int id) =>
             repository.FindCardAsync(id);
 
-        public async Task<ICard> GetNextCardAsync(int deckID)
+        public async Task<ICard> GetNextCardAsync(int deckID, string username)
         {
             var dbDeck = await repository.FindDeckAsync(deckID);
 
             if (dbDeck.GetValidCards().Any())
             {
-                return dbDeck.GetNextCard();
+                return dbDeck.GetNextCard(username);
             }
             else
             {
@@ -98,7 +98,7 @@ namespace Memento.Services
             }
         }
 
-        public async Task AddCard(int cardID, int deckID, string text, string comment)
+        public async Task AddCard(int cardID, int deckID, string text, string comment, string username)
         {
             var clozeNames = converter.GetClozeNames(text);
             var deck = await repository.FindDeckAsync(deckID);
@@ -109,12 +109,12 @@ namespace Memento.Services
 
             await repository.SaveChangesAsync();
 
-            repository.AddClozes(newCard, clozeNames);
+            repository.AddClozes(newCard, clozeNames, username);
 
             await repository.SaveChangesAsync();
         }
 
-        public async Task UpdateCard(int cardID, string text, string comment)
+        public async Task UpdateCard(int cardID, string text, string comment, string username)
         {
             var dbCard = await FindCardAsync(cardID);
             var clozes = converter.GetClozeNames(dbCard.Text);
@@ -128,8 +128,8 @@ namespace Memento.Services
             var deletedClozes = oldClozes.Except(newClozes).ToList();
             var addedClozes = newClozes.Except(oldClozes).ToList();
 
-            repository.RemoveClozes(dbCard, deletedClozes);
-            repository.AddClozes(dbCard, addedClozes);
+            repository.RemoveClozes(dbCard, deletedClozes, username);
+            repository.AddClozes(dbCard, addedClozes, username);
 
             await repository.SaveChangesAsync();
         }

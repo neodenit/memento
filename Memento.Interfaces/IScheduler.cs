@@ -13,11 +13,11 @@ namespace Memento.Interfaces
 
     public interface IScheduler
     {
-        void AddCloze(IDeck deck, ICollection<ICloze> clozes, ICloze cloze);
-        void MoveCloze(IEnumerable<ICloze> clozes, int oldPosition, int newPosition, int newDelay, bool correctMovedClozesDelays, bool correctRestClozesDelays);
-        void PrepareForAdding(IDeck deck, IEnumerable<ICloze> clozes, ICloze cloze);
-        void PrepareForRemoving(IDeck deck, IEnumerable<ICloze> clozes, ICloze cloze);
-        void PromoteCloze(IDeck deck, IEnumerable<ICloze> clozes, Delays delay);
-        void ShuffleNewClozes(IEnumerable<ICloze> clozes);
+        void AddCloze(IDeck deck, ICollection<ICloze> clozes, ICloze cloze, string username);
+        void MoveCloze(IEnumerable<ICloze> clozes, int oldPosition, int newPosition, int newDelay, bool correctMovedClozesDelays, bool correctRestClozesDelays, string username);
+        void PrepareForAdding(IDeck deck, IEnumerable<ICloze> clozes, ICloze cloze, string username);
+        void PrepareForRemoving(IDeck deck, IEnumerable<ICloze> clozes, ICloze cloze, string username);
+        void PromoteCloze(IDeck deck, IEnumerable<ICloze> clozes, Delays delay, string username);
+        void ShuffleNewClozes(IEnumerable<ICloze> clozes, string username);
     }
 }

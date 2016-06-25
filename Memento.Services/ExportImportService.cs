@@ -35,7 +35,7 @@ namespace Memento.Services
             return result;
         }
 
-        public async Task Import(string text, int deckID)
+        public async Task Import(string text, int deckID, string username)
         {
             var cards = converter.GetCardsFromDeck(text);
 
@@ -52,7 +52,7 @@ namespace Memento.Services
 
                 if (isValid)
                 {
-                    repository.AddClozes(newCard, clozeNames);
+                    repository.AddClozes(newCard, clozeNames, username);
 
                     await repository.SaveChangesAsync();
                 }

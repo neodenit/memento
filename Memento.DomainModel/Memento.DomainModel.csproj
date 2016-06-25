@@ -103,6 +103,10 @@
     <Compile Include="Migrations\201606051922323_Add column for shared decks.Designer.cs">
       <DependentUpon>201606051922323_Add column for shared decks.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201606251947355_Add multiple users handling.cs" />
+    <Compile Include="Migrations\201606251947355_Add multiple users handling.Designer.cs">
+      <DependentUpon>201606251947355_Add multiple users handling.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MementoContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -152,6 +156,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201606051922323_Add column for shared decks.resx">
       <DependentUpon>201606051922323_Add column for shared decks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606251947355_Add multiple users handling.resx">
+      <DependentUpon>201606251947355_Add multiple users handling.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

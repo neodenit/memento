@@ -64,11 +64,12 @@ namespace Memento.Web.Controllers.Api
                         {
                             var state = message.Text == "/back" ? DialogStates.Start : message.GetBotPerUserInConversationData<DialogStates>("dialogState");
 
+                            var username = user.UserName;
+
                             switch (state)
                             {
                                 case DialogStates.Start:
-                                    var userName = user.UserName;
-                                    var decks = await decksService.GetDecksAsync(userName);
+                                    var decks = await decksService.GetDecksAsync(username);
                                     var data = decks.Select((d, i) => Tuple.Create(i + 1, d.ID, d.Title)).ToArray();
                                     var menuItems = data.Select(d => $"{d.Item1}) {d.Item3}");
 
@@ -98,7 +99,7 @@ namespace Memento.Web.Controllers.Api
                                             var backMessage = "Type /back to return to menu.";
                                             var firstQuestionMessage = "**First question:**";
 
-                                            var question = await GetNextQuestion(message);
+                                            var question = await GetNextQuestion(message, username);
 
                                             var pleseFillMessage = "Please fill in the blank.";
 
@@ -121,20 +122,20 @@ namespace Memento.Web.Controllers.Api
                                     break;
                                 case DialogStates.Question:
                                     var deck = await GetCurrentDeck(message);
-                                    var card = deck.GetNextCard();
+                                    var card = deck.GetNextCard(username);
 
                                     var answerCard = new AnswerCardViewModel(card) { UserAnswer = message.Text };
 
-                                    var evaluatedCard = await cardsService.EvaluateCard(answerCard);
+                                    var evaluatedCard = await cardsService.EvaluateCard(answerCard, username);
 
                                     switch (evaluatedCard.Mark)
                                     {
                                         case Mark.Correct:
-                                            var rightResponse = await GetResponseForRightAnswer(message, deck, evaluatedCard);
+                                            var rightResponse = await GetResponseForRightAnswer(message, deck, evaluatedCard, username);
                                             message.SetBotPerUserInConversationData("response", rightResponse);
                                             break;
                                         case Mark.Incorrect:
-                                            var wrongResponse = await GetResponseForWrongAnswer(message, deck, evaluatedCard);
+                                            var wrongResponse = await GetResponseForWrongAnswer(message, deck, evaluatedCard, username);
                                             message.SetBotPerUserInConversationData("response", wrongResponse);
                                             break;
                                         case Mark.Typo:
@@ -167,7 +168,7 @@ namespace Memento.Web.Controllers.Api
             }
         }
 
-        private async Task<string> GetResponseForRightAnswer(Message message, IDeck deck, IAnswerCardViewModel card)
+        private async Task<string> GetResponseForRightAnswer(Message message, IDeck deck, IAnswerCardViewModel card, string username)
         {
             var rightMessage = "**You are right!**";
             var commentMessage = "Comment:";
@@ -179,17 +180,17 @@ namespace Memento.Web.Controllers.Api
             var correctAnswerMessage = "Correct answer: " + card.ShortAnswer;
             var userAnswerMessage = "Your answer: " + card.UserAnswer;
 
-            await schedulerService.PromoteCloze(deck, Delays.Next);
+            await schedulerService.PromoteCloze(deck, Delays.Next, username);
 
             var nextQuestionMessage = "**Next question:**";
-            var nextQuestion = await GetNextQuestion(message);
+            var nextQuestion = await GetNextQuestion(message, username);
 
             var response = string.Join(delimeter, rightMessage, Ruler, fullAnswerMessage, answer, Ruler, correctAnswerMessage, userAnswerMessage, Ruler, nextQuestionMessage, nextQuestion);
 
             return response;
         }
 
-        private async Task<string> GetResponseForWrongAnswer(Message message, IDeck deck, IAnswerCardViewModel card)
+        private async Task<string> GetResponseForWrongAnswer(Message message, IDeck deck, IAnswerCardViewModel card, string username)
         {
             var wrongMessage = "**You are wrong!**";
             var fullAnswerMessage = "Full answer:";
@@ -202,38 +203,38 @@ namespace Memento.Web.Controllers.Api
             var correctAnswerMessage = "Correct answer: " + card.ShortAnswer;
             var userAnswerMessage = "Your answer: " + card.UserAnswer;
 
-            await schedulerService.PromoteCloze(deck, Delays.Previous);
+            await schedulerService.PromoteCloze(deck, Delays.Previous, username);
 
             var nextQuestionMessage = "**Next question:**";
-            var nextQuestion = await GetNextQuestion(message);
+            var nextQuestion = await GetNextQuestion(message, username);
 
             var response = string.Join(delimeter, wrongMessage, Ruler, fullAnswerMessage, answer, Ruler, correctAnswerMessage, userAnswerMessage, Ruler, nextQuestionMessage, nextQuestion);
 
             return response;
         }
 
-        private async Task<ICard> GetNextCard(Message message)
+        private async Task<ICard> GetNextCard(Message message, string username)
         {
             var dbDeck = await GetCurrentDeck(message);
-            var card = dbDeck.GetNextCard();
+            var card = dbDeck.GetNextCard(username);
 
             return card;
         }
 
-        private async Task<string> GetNextQuestion(Message message)
+        private async Task<string> GetNextQuestion(Message message, string username)
         {
-            var card = await GetNextCard(message);
-            var cloze = card.GetNextCloze();
-            var cardWithQuestion = await cardsService.GetCardWithQuestion(card.ID);
+            var card = await GetNextCard(message, username);
+            var cloze = card.GetNextCloze(username);
+            var cardWithQuestion = await cardsService.GetCardWithQuestion(card.ID, username);
 
             return cardWithQuestion.Question;
         }
 
-        private async Task<IAnswerCardViewModel> GetAnswer(Message message)
+        private async Task<IAnswerCardViewModel> GetAnswer(Message message, string username)
         {
-            var card = await GetNextCard(message);
-            var cloze = card.GetNextCloze();
-            var cardWithAnswer = await cardsService.GetCardWithAnswer(card.ID);
+            var card = await GetNextCard(message, username);
+            var cloze = card.GetNextCloze(username);
+            var cardWithAnswer = await cardsService.GetCardWithAnswer(card.ID, username);
 
             return cardWithAnswer;
         }

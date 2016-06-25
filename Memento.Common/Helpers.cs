@@ -10,10 +10,10 @@ namespace Memento.Common
 {
     public class Helpers
     {
-        public static bool CheckPositions(IEnumerable<ICloze> clozes)
+        public static bool CheckPositions(IEnumerable<ICloze> clozes, string username)
         {
             var n = clozes.Count();
-            var result = Enumerable.Range(0, n).All(i => clozes.Any(cloze => cloze.Position == i));
+            var result = Enumerable.Range(0, n).All(i => clozes.Any(cloze => cloze.GetUserRepetition(username).Position == i));
 
             return result;
         }

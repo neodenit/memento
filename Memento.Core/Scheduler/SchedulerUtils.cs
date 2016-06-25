@@ -21,71 +21,71 @@ namespace Memento.Core.Scheduler
         internal static int GetRandomPart(int minStep = 0, int maxStep = 1) =>
             random.Next(minStep, maxStep + 1);
 
-        internal static void ShuffleClozes(IEnumerable<ICloze> clozes)
+        internal static void ShuffleClozes(IEnumerable<ICloze> clozes, string username)
         {
-            var positions = from cloze in clozes select cloze.Position;
+            var positions = from cloze in clozes select cloze.GetUserRepetition(username).Position;
 
             var shuffledNumbers = positions.OrderBy(item => Guid.NewGuid());
 
             var zip = Enumerable.Zip(clozes, shuffledNumbers, (cloze, newPos) => new { cloze, newPos });
 
-            zip.ToList().ForEach(item => item.cloze.Position = item.newPos);
+            zip.ToList().ForEach(item => item.cloze.GetUserRepetition(username).Position = item.newPos);
         }
 
-        internal static IEnumerable<ICloze> GetRestClozes(IEnumerable<ICloze> clozes, int position) =>
-            from cloze in clozes where cloze.Position >= position select cloze;
+        internal static IEnumerable<ICloze> GetRestClozes(IEnumerable<ICloze> clozes, int position, string username) =>
+            from cloze in clozes where cloze.GetUserRepetition(username).Position >= position select cloze;
 
-        internal static IEnumerable<ICloze> GetRange(IEnumerable<ICloze> clozes, int minPosition, int maxPosition) =>
+        internal static IEnumerable<ICloze> GetRange(IEnumerable<ICloze> clozes, int minPosition, int maxPosition, string username) =>
             from cloze in clozes
-            where cloze.Position >= minPosition && cloze.Position <= maxPosition
+            where cloze.GetUserRepetition(username).Position >= minPosition && cloze.GetUserRepetition(username).Position <= maxPosition
             select cloze;
 
-        internal static void IncreasePosition(IEnumerable<ICloze> clozes)
+        internal static void IncreasePosition(IEnumerable<ICloze> clozes, string username)
         {
             foreach (var cloze in clozes)
             {
-                cloze.Position++;
+                cloze.GetUserRepetition(username).Position++;
             }
         }
 
-        internal static void DecreasePosition(IEnumerable<ICloze> clozes)
+        internal static void DecreasePosition(IEnumerable<ICloze> clozes, string username)
         {
             foreach (var cloze in clozes)
             {
-                cloze.Position--;
+                cloze.GetUserRepetition(username).Position--;
             }
         }
 
-        internal static void IncreaseDelays(IEnumerable<ICloze> clozes)
+        internal static void IncreaseDelays(IEnumerable<ICloze> clozes, string username)
         {
             foreach (var cloze in clozes)
             {
-                if (!cloze.IsNew)
+                if (!cloze.GetUserRepetition(username).IsNew)
                 {
-                    cloze.LastDelay++;
+                    cloze.GetUserRepetition(username).LastDelay++;
                 }
             }
         }
 
-        internal static void DecreaseDelays(IEnumerable<ICloze> clozes)
+        internal static void DecreaseDelays(IEnumerable<ICloze> clozes, string username)
         {
             foreach (var cloze in clozes)
             {
-                if (!cloze.IsNew)
+                if (!cloze.GetUserRepetition(username).IsNew)
                 {
-                    cloze.LastDelay--;
+                    cloze.GetUserRepetition(username).LastDelay--;
                 }
             }
         }
 
-        internal static int GetMaxPosition(IEnumerable<ICloze> clozes) =>
-            clozes.Any() ? clozes.Max(cloze => cloze.Position) : 0;
+        internal static int GetMaxPosition(IEnumerable<ICloze> clozes, string username) =>
+            clozes.Any() ? clozes.Max(cloze => cloze.GetUserRepetition(username).Position) : 0;
 
-        internal static int GetMaxNewPosition(IEnumerable<ICloze> clozes)
+        internal static int GetMaxNewPosition(IEnumerable<ICloze> clozes, string username)
         {
             if (clozes.Any())
             {
-                var max = clozes.Max(cloze => cloze.Position);
+                var max = clozes.Max(cloze => cloze.GetUserRepetition(username).Position);
                 var nextToMax = max + 1;
                 return nextToMax;
             }
@@ -95,19 +95,19 @@ namespace Memento.Core.Scheduler
             }
         }
 
-        internal static ICloze GetFirstCloze(IEnumerable<ICloze> clozes) =>
-            clozes.GetMinElement(cloze => cloze.Position);
+        internal static ICloze GetFirstCloze(IEnumerable<ICloze> clozes, string username) =>
+            clozes.GetMinElement(cloze => cloze.GetUserRepetition(username).Position);
 
         [Obsolete]
-        internal static void ReservePosition(IEnumerable<ICloze> clozes, int position, bool correctDelays)
+        internal static void ReservePosition(IEnumerable<ICloze> clozes, int position, bool correctDelays, string username)
         {
-            var movedClozes = from cloze in clozes where cloze.Position >= position select cloze;
+            var movedClozes = from cloze in clozes where cloze.GetUserRepetition(username).Position >= position select cloze;
 
-            IncreasePosition(movedClozes);
+            IncreasePosition(movedClozes, username);
 
             if (correctDelays)
             {
-                IncreaseDelays(movedClozes);
+                IncreaseDelays(movedClozes, username);
             }
         }
 

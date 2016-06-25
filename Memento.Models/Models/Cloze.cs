@@ -25,17 +25,18 @@ namespace Memento.Models.Models
 
         public virtual Card Card { get; set; }
 
+        public virtual ICollection<UserRepetition> UserRepetitions { get; set; }
+
         public ICard GetCard()
         {
             return Card;
         }
 
+        public IUserRepetition GetUserRepetition(string username)
+        {
+            return UserRepetitions.Single(x => x.UserName == username);
+        }
+
         public string Label { get; set; }
-
-        public int Position { get; set; }
-
-        public bool IsNew { get; set; }
-
-        public int LastDelay { get; set; }
     }
 }

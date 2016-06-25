@@ -71,7 +71,7 @@ namespace Memento.Web.Controllers
 
             var statistics = statService.GetStatistics(answers);
 
-            var viewModel = await decksService.GetDeckWithStatViewModel(id, statistics);
+            var viewModel = await decksService.GetDeckWithStatViewModel(id, statistics, User.Identity.Name);
 
             return View(viewModel);
         }
@@ -82,7 +82,7 @@ namespace Memento.Web.Controllers
         public async Task<ActionResult> Details([Bind(Include = "ID")] Deck deck)
         {
             var dbDeck = await decksService.FindDeckAsync(deck.ID);
-            var card = dbDeck.GetNextCard();
+            var card = dbDeck.GetNextCard(User.Identity.Name);
 
             if (card != null)
             {
@@ -196,11 +196,11 @@ namespace Memento.Web.Controllers
             {
                 var text = await new StreamReader(file.InputStream).ReadToEndAsync();
 
-                await exportImportService.Import(text, viewModel.DeckID);
+                await exportImportService.Import(text, viewModel.DeckID, User.Identity.Name);
 
                 if (viewModel.IsShuffled)
                 {
-                    await schedulerService.ShuffleNewClozes(viewModel.DeckID);
+                    await schedulerService.ShuffleNewClozes(viewModel.DeckID, User.Identity.Name);
                 }
             }
 

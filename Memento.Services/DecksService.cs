@@ -31,13 +31,13 @@ namespace Memento.Services
             return orderedDecks;
         }
 
-        public async Task<IDeckWithStatViewModel> GetDeckWithStatViewModel(int deckID, IStatistics statistics)
+        public async Task<IDeckWithStatViewModel> GetDeckWithStatViewModel(int deckID, IStatistics statistics, string username)
         {
             var deck = await repository.FindDeckAsync(deckID);
 
             var clozes = deck.GetClozes();
-            statistics.NewQuestionsCount = clozes.Count(c => c.IsNew);
-            statistics.OldQuestionsCount = clozes.Count(c => !c.IsNew);
+            statistics.NewQuestionsCount = clozes.Count(c => c.GetUserRepetition(username).IsNew);
+            statistics.OldQuestionsCount = clozes.Count(c => !c.GetUserRepetition(username).IsNew);
 
             var viewModel = new DeckWithStatViewModel
             {

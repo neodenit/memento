@@ -26,14 +26,14 @@ namespace Memento.Models.ViewModels
 
         public string Text { get; set; }
 
-        public ClozeViewModel(ICloze cloze, string text = "")
+        public ClozeViewModel(ICloze cloze, string username, string text = "")
         {
             ID = cloze.ID;
             CardID = cloze.CardID;
             Label = cloze.Label;
-            Position = cloze.Position;
-            IsNew = cloze.IsNew;
-            LastDelay = cloze.LastDelay;
+            Position = cloze.GetUserRepetition(username).Position;
+            IsNew = cloze.GetUserRepetition(username).IsNew;
+            LastDelay = cloze.GetUserRepetition(username).LastDelay;
             Text = text;
         }
     }

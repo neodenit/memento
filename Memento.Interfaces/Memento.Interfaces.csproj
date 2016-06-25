@@ -62,6 +62,7 @@
     <Compile Include="INewClozesManager.cs" />
     <Compile Include="IScheduler.cs" />
     <Compile Include="ISiblingsManager.cs" />
+    <Compile Include="IUserRepetition.cs" />
     <Compile Include="IValidator.cs" />
     <Compile Include="IViewCardViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

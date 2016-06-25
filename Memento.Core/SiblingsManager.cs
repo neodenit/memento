@@ -18,18 +18,18 @@ namespace Memento.Core
             this.scheduler = scheduler;
         }
 
-        public void RearrangeSiblings(IDeck deck, IEnumerable<ICloze> clozes)
+        public void RearrangeSiblings(IDeck deck, IEnumerable<ICloze> clozes, string username)
         {
-            var clozesToMove = GetClozesToMove(deck, clozes);
+            var clozesToMove = GetClozesToMove(deck, clozes, username);
 
-            MoveClozes(deck, clozes, clozesToMove);
+            MoveClozes(deck, clozes, clozesToMove, username);
 
-            Debug.Assert(Helpers.CheckPositions(clozes));
+            Debug.Assert(Helpers.CheckPositions(clozes, username));
         }
 
-        private static IEnumerable<ICloze> GetClozesToMove(IDeck deck, IEnumerable<ICloze> clozes)
+        private static IEnumerable<ICloze> GetClozesToMove(IDeck deck, IEnumerable<ICloze> clozes, string username)
         {
-            var cardID = clozes.GetMinElement(cloze => cloze.Position).CardID;
+            var cardID = clozes.GetMinElement(cloze => cloze.GetUserRepetition(username).Position).CardID;
 
             var nextClozes = clozes.Skip(1).Take(deck.StartDelay);
 
@@ -47,11 +47,11 @@ namespace Memento.Core
             }
         }
 
-        private void MoveClozes(IDeck deck, IEnumerable<ICloze> allClozes, IEnumerable<ICloze> clozesToMove)
+        private void MoveClozes(IDeck deck, IEnumerable<ICloze> allClozes, IEnumerable<ICloze> clozesToMove, string username)
         {
             foreach (var cloze in clozesToMove)
             {
-                scheduler.MoveCloze(allClozes, cloze.Position, cloze.Position + deck.StartDelay, cloze.LastDelay + deck.StartDelay, true, false);
+                scheduler.MoveCloze(allClozes, cloze.GetUserRepetition(username).Position, cloze.GetUserRepetition(username).Position + deck.StartDelay, cloze.GetUserRepetition(username).LastDelay + deck.StartDelay, true, false, username);
             }
         }
     }
