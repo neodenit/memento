@@ -360,7 +360,7 @@ namespace Memento.Tests.Controllers
             var result = await sut.Wrong(card, null, "AltButton") as RedirectToRouteResult;
 
             // Assert
-            mockCardsService.Verify(x => x.AddAltAnswer(card.ID, card.UserAnswer));
+            mockCardsService.Verify(x => x.AddAltAnswer(It.IsAny<ICloze>(), card.UserAnswer));
             Assert.IsNotNull(result);
         }
 

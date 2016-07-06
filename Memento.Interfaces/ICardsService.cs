@@ -8,7 +8,7 @@ namespace Memento.Interfaces
         Task<ICard> GetNextCardAsync(int deckID, string username);
         Task<ICard> FindCardAsync(int id);
 
-        Task AddAltAnswer(int cardID, string answer, string username);//todo
+        Task AddAltAnswer(ICloze cloze, string answer);
         Task<IAnswerCardViewModel> GetCardWithQuestion(int cardID, string username);//todo
         Task<IAnswerCardViewModel> GetCardWithAnswer(int cardID, string username);//todo
         Task<IAnswerCardViewModel> EvaluateCard(IAnswerCardViewModel card, string username);//todo

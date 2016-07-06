@@ -26,12 +26,11 @@ namespace Memento.Services
             this.factory = factory;
         }
 
-        public async Task AddAltAnswer(int cardID, string answer, string username)
+        public async Task AddAltAnswer(ICloze cloze, string answer)
         {
-            var dbCard = await FindCardAsync(cardID);
-            var cloze = dbCard.GetNextCloze(username);
+            var card = cloze.GetCard();
 
-            dbCard.Text = converter.AddAltAnswer(dbCard.Text, cloze.Label, answer);
+            card.Text = converter.AddAltAnswer(card.Text, cloze.Label, answer);
 
             await repository.SaveChangesAsync();
         }

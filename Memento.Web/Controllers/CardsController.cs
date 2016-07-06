@@ -227,7 +227,10 @@ namespace Memento.Web.Controllers
             }
             else if (AltButton != null)
             {
-                await cardsService.AddAltAnswer(card.ID, card.UserAnswer, username);
+                var dbCard = await cardsService.FindCardAsync(card.ID);
+                var close = dbCard.GetNextCloze(username);
+
+                await cardsService.AddAltAnswer(close, card.UserAnswer);
 
                 return RedirectToAction("Details", new { id = card.ID });
             }
