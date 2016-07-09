@@ -225,7 +225,7 @@ namespace Memento.Web.Controllers.Api
         {
             var card = await GetNextCard(message, username);
             var cloze = card.GetNextCloze(username);
-            var cardWithQuestion = await cardsService.GetCardWithQuestion(card.ID, username);
+            var cardWithQuestion = cardsService.GetCardWithQuestion(cloze);
 
             return cardWithQuestion.Question;
         }

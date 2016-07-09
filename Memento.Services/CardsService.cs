@@ -35,10 +35,9 @@ namespace Memento.Services
             await repository.SaveChangesAsync();
         }
 
-        public async Task<IAnswerCardViewModel> GetCardWithQuestion(int cardID, string username)
+        public IAnswerCardViewModel GetCardWithQuestion(ICloze cloze)
         {
-            var card = await FindCardAsync(cardID);
-            var cloze = card.GetNextCloze(username);
+            var card = cloze.GetCard();
             var question = converter.GetQuestion(card.Text, cloze.Label);
 
             var result = new AnswerCardViewModel(card) { Question = question };
