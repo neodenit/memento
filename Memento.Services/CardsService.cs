@@ -45,10 +45,9 @@ namespace Memento.Services
             return result;
         }
 
-        public async Task<IAnswerCardViewModel> GetCardWithAnswer(int cardID, string username)
+        public IAnswerCardViewModel GetCardWithAnswer(ICloze cloze)
         {
-            var card = await FindCardAsync(cardID);
-            var cloze = card.GetNextCloze(username);
+            var card = cloze.GetCard();
             var fullAnswer = converter.GetFullAnswer(card.Text, cloze.Label);
             var comment = converter.GetComment(card.Text);
 

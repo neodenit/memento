@@ -111,9 +111,11 @@ namespace Memento.Web.Controllers
 
         public async Task<ActionResult> PreviewOpened([CheckCardExistence, CheckCardOwner] int id)
         {
-            var card = await cardsService.GetCardWithAnswer(id, username);
+            var card = await cardsService.FindCardAsync(id);
+            var cloze = card.GetNextCloze(username);
+            var viewModel = cardsService.GetCardWithAnswer(cloze);
 
-            return View(card);
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -139,9 +141,11 @@ namespace Memento.Web.Controllers
 
         public async Task<ActionResult> RepeatOpened([CheckCardExistence, CheckCardOwner] int id)
         {
-            var card = await cardsService.GetCardWithAnswer(id, username);
+            var card = await cardsService.FindCardAsync(id);
+            var cloze = card.GetNextCloze(username);
+            var viewModel = cardsService.GetCardWithAnswer(cloze);
 
-            return View(card);
+            return View(viewModel);
         }
 
         [HttpPost]
