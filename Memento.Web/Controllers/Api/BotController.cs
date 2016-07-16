@@ -123,10 +123,9 @@ namespace Memento.Web.Controllers.Api
                                 case DialogStates.Question:
                                     var deck = await GetCurrentDeck(message);
                                     var card = deck.GetNextCard(username);
+                                    var cloze = card.GetNextCloze(username);
 
-                                    var answerCard = new AnswerCardViewModel(card) { UserAnswer = message.Text };
-
-                                    var evaluatedCard = await cardsService.EvaluateCard(answerCard, username);
+                                    var evaluatedCard = cardsService.EvaluateCard(cloze, message.Text);
 
                                     switch (evaluatedCard.Mark)
                                     {

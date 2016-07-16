@@ -190,7 +190,10 @@ namespace Memento.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Question([Bind(Include = "ID, UserAnswer")] AnswerCardViewModel card)
         {
-            var evaluatedCard = await cardsService.EvaluateCard(card, username);
+            var dbCard = await cardsService.FindCardAsync(card.ID);
+            var cloze = dbCard.GetNextCloze(username);
+
+            var evaluatedCard = cardsService.EvaluateCard(cloze, card.UserAnswer);
 
             switch (evaluatedCard.Mark)
             {

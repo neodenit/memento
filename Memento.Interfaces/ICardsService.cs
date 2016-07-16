@@ -11,7 +11,7 @@ namespace Memento.Interfaces
         Task AddAltAnswer(ICloze cloze, string answer);
         IAnswerCardViewModel GetCardWithQuestion(ICloze cloze);
         IAnswerCardViewModel GetCardWithAnswer(ICloze cloze);
-        Task<IAnswerCardViewModel> EvaluateCard(IAnswerCardViewModel card, string username);//todo
+        IAnswerCardViewModel EvaluateCard(ICloze cloze, string userAnswer);
 
         Task AddCard(int cardID, int deckID, string text, string comment, string username);//todo
         Task UpdateCard(int cardID, string text, string comment, string username);//todo

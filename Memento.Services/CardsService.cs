@@ -56,23 +56,24 @@ namespace Memento.Services
             return result;
         }
 
-        public async Task<IAnswerCardViewModel> EvaluateCard(IAnswerCardViewModel card, string username)
+        public IAnswerCardViewModel EvaluateCard(ICloze cloze, string userAnswer)
         {
-            var dbCard = await FindCardAsync(card.ID);
-            var cloze = dbCard.GetNextCloze(username);
-            var correctAnswer = converter.GetShortAnswer(dbCard.Text, cloze.Label);
-            var fullAnswer = converter.GetFullAnswer(dbCard.Text, cloze.Label);
+            var card = cloze.GetCard();
 
-            var mark = evaluator.Evaluate(correctAnswer, card.UserAnswer);
+            var question = converter.GetQuestion(card.Text, cloze.Label);
+            var fullAnswer = converter.GetFullAnswer(card.Text, cloze.Label);
+            var correctAnswer = converter.GetShortAnswer(card.Text, cloze.Label);
 
-            var cardWithAnswer = new AnswerCardViewModel(dbCard)
+            var mark = evaluator.Evaluate(correctAnswer, userAnswer);
+
+            var cardWithAnswer = new AnswerCardViewModel(card)
             {
                 Mark = mark,
-                Question = card.Question,
+                Question = question,
                 FullAnswer = fullAnswer,
                 ShortAnswer = correctAnswer,
-                UserAnswer = card.UserAnswer,
-                Comment = dbCard.Comment,
+                UserAnswer = userAnswer,
+                Comment = card.Comment,
             };
 
             return cardWithAnswer;
