@@ -107,7 +107,7 @@ namespace Memento.Web.Controllers
         // POST: Decks/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Title, ControlMode, DelayMode, StartDelay, Coeff, FirstDelay, SecondDelay")] DeckViewModel deck)//todo name
+        public async Task<ActionResult> Create([Bind(Include = "Title, ControlMode, DelayMode, StartDelay, Coeff, FirstDelay, SecondDelay")] DeckViewModel deck)
         {
             if (ModelState.IsValid)
             {
@@ -196,7 +196,7 @@ namespace Memento.Web.Controllers
             {
                 var text = await new StreamReader(file.InputStream).ReadToEndAsync();
 
-                await exportImportService.Import(text, viewModel.DeckID, User.Identity.Name);
+                await exportImportService.Import(text, viewModel.DeckID);
 
                 if (viewModel.IsShuffled)
                 {

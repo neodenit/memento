@@ -69,14 +69,12 @@ namespace Memento.DomainModel.Repository
         public void RemoveCloze(ICloze cloze) =>
             db.Clozes.Remove(cloze as Cloze);
 
-        public void AddClozes(ICard card, IEnumerable<string> clozeNames, string username)
+        public void AddClozes(ICard card, IEnumerable<string> clozeNames)
         {
             foreach (var clozeName in clozeNames)
             {
                 var newCloze = new Cloze(card.ID, clozeName);
                 var deckClozes = card.GetDeck().GetClozes();
-
-                scheduler.PrepareForAdding(card.GetDeck(), deckClozes, newCloze, username);
 
                 AddCloze(newCloze);
             }

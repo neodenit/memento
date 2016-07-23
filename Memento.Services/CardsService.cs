@@ -96,7 +96,7 @@ namespace Memento.Services
             }
         }
 
-        public async Task AddCard(int cardID, int deckID, string text, string comment, string username)
+        public async Task AddCard(int cardID, int deckID, string text, string comment)
         {
             var clozeNames = converter.GetClozeNames(text);
             var deck = await repository.FindDeckAsync(deckID);
@@ -107,7 +107,7 @@ namespace Memento.Services
 
             await repository.SaveChangesAsync();
 
-            repository.AddClozes(newCard, clozeNames, username);
+            repository.AddClozes(newCard, clozeNames);
 
             await repository.SaveChangesAsync();
         }
@@ -127,7 +127,7 @@ namespace Memento.Services
             var addedClozes = newClozes.Except(oldClozes).ToList();
 
             repository.RemoveClozes(dbCard, deletedClozes, username);
-            repository.AddClozes(dbCard, addedClozes, username);
+            repository.AddClozes(dbCard, addedClozes);
 
             await repository.SaveChangesAsync();
         }

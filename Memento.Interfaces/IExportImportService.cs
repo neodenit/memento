@@ -7,7 +7,7 @@ namespace Memento.Interfaces
     public interface IExportImportService
     {
         Task<string> Export(int deckID);
-        Task Import(string text, int deckID, string username);
+        Task Import(string text, int deckID);
         Task<IEnumerable<string>> ConvertApkg(Stream inputStream);
     }
 }

@@ -13,7 +13,7 @@ namespace Memento.Interfaces
         IAnswerCardViewModel GetCardWithAnswer(ICloze cloze);
         IAnswerCardViewModel EvaluateCard(ICloze cloze, string userAnswer);
 
-        Task AddCard(int cardID, int deckID, string text, string comment, string username);//todo
+        Task AddCard(int cardID, int deckID, string text, string comment);
         Task UpdateCard(int cardID, string text, string comment, string username);//todo
         Task DeleteCard(int id);
         Task RestoreCard(int id);
