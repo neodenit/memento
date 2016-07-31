@@ -308,7 +308,7 @@ namespace Memento.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                await cardsService.UpdateCard(card.ID, card.Text, card.Comment, username);
+                await cardsService.UpdateCard(card);
 
                 var dbCard = await cardsService.FindCardAsync(card.ID);
 

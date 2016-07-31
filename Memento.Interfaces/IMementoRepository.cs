@@ -24,7 +24,7 @@ namespace Memento.Interfaces
         void RemoveCard(ICard card);
         void RemoveCloze(ICloze cloze);
         void AddClozes(ICard card, IEnumerable<string> clozeNames);
-        void RemoveClozes(ICard card, IEnumerable<string> clozeNames, string username);
+        void RemoveClozes(ICard card, IEnumerable<string> clozeNames);
         void AddAnswer(ICloze cloze, bool isCorrect);
         void PromoteCloze(IDeck deck, Delays delay, string username);
         Task SaveChangesAsync();

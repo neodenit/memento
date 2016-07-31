@@ -92,7 +92,7 @@ namespace Memento.Tests
         public Task<IEnumerable<IDeck>> GetSharedDecksAsync() =>
             Task.FromResult(decks.Where(d => d.IsShared));
 
-        public void PromoteCloze(IDeck deck, Delays delay) { }
+        public void PromoteCloze(IDeck deck, Delays delay, string username) { }
 
         public void RemoveCard(ICard card) => cards.Remove(card);
 

@@ -14,7 +14,7 @@ namespace Memento.Interfaces
         IAnswerCardViewModel EvaluateCard(ICloze cloze, string userAnswer);
 
         Task AddCard(IEditCardViewModel card);
-        Task UpdateCard(int cardID, string text, string comment, string username);//todo
+        Task UpdateCard(IEditCardViewModel card);
         Task DeleteCard(int id);
         Task RestoreCard(int id);
     }

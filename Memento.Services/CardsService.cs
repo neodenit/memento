@@ -112,13 +112,13 @@ namespace Memento.Services
             await repository.SaveChangesAsync();
         }
 
-        public async Task UpdateCard(int cardID, string text, string comment, string username)
+        public async Task UpdateCard(IEditCardViewModel card)
         {
-            var dbCard = await FindCardAsync(cardID);
+            var dbCard = await FindCardAsync(card.ID);
             var clozes = converter.GetClozeNames(dbCard.Text);
 
-            dbCard.Text = text;
-            dbCard.Comment = comment;
+            dbCard.Text = card.Text;
+            dbCard.Comment = card.Comment;
 
             var oldClozes = from cloze in dbCard.GetClozes() select cloze.Label;
             var newClozes = clozes;
@@ -126,7 +126,7 @@ namespace Memento.Services
             var deletedClozes = oldClozes.Except(newClozes).ToList();
             var addedClozes = newClozes.Except(oldClozes).ToList();
 
-            repository.RemoveClozes(dbCard, deletedClozes, username);
+            repository.RemoveClozes(dbCard, deletedClozes);
             repository.AddClozes(dbCard, addedClozes);
 
             await repository.SaveChangesAsync();

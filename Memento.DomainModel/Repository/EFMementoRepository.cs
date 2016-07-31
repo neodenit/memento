@@ -80,13 +80,11 @@ namespace Memento.DomainModel.Repository
             }
         }
 
-        public void RemoveClozes(ICard card, IEnumerable<string> clozeNames, string username)
+        public void RemoveClozes(ICard card, IEnumerable<string> clozeNames)
         {
             foreach (var clozeName in clozeNames)
             {
                 var cloze = card.GetClozes().Single(item => item.Label == clozeName);
-
-                scheduler.PrepareForRemoving(card.GetDeck(), card.GetClozes(), cloze, username);
 
                 db.Clozes.Remove(cloze as Cloze);
             }
