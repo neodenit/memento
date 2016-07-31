@@ -96,12 +96,12 @@ namespace Memento.Services
             }
         }
 
-        public async Task AddCard(int cardID, int deckID, string text, string comment)
+        public async Task AddCard(IEditCardViewModel card)
         {
-            var clozeNames = converter.GetClozeNames(text);
-            var deck = await repository.FindDeckAsync(deckID);
+            var clozeNames = converter.GetClozeNames(card.Text);
+            var deck = await repository.FindDeckAsync(card.DeckID);
 
-            var newCard = factory.CreateCard(deck, text, comment, true);
+            var newCard = factory.CreateCard(deck, card.Text, card.Comment, true);
 
             repository.AddCard(newCard);
 

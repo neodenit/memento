@@ -284,7 +284,7 @@ namespace Memento.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                await cardsService.AddCard(card.ID, card.DeckID, card.Text, card.Comment);
+                await cardsService.AddCard(card);
 
                 return RedirectToAction("Create", "Cards", new { DeckID = card.DeckID });
             }
