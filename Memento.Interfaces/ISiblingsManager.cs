@@ -4,6 +4,6 @@ namespace Memento.Interfaces
 {
     public interface ISiblingsManager
     {
-        void RearrangeSiblings(IDeck deck, IEnumerable<ICloze> clozes, string username);
+        void RearrangeSiblings(IDeck deck, IEnumerable<IUserRepetition> repetitions);
     }
 }

@@ -29,6 +29,7 @@ namespace Memento.Interfaces
 
         IEnumerable<ICard> GetAllCards();
         IEnumerable<ICloze> GetClozes();
+        IEnumerable<IUserRepetition> GetRepetitions(string username);
         IEnumerable<ICard> GetDeletedCards();
         IEnumerable<ICard> GetDraftCards();
         ICard GetNextCard(string username);

@@ -18,40 +18,40 @@ namespace Memento.Core
             this.scheduler = scheduler;
         }
 
-        public void RearrangeSiblings(IDeck deck, IEnumerable<ICloze> clozes, string username)
+        public void RearrangeSiblings(IDeck deck, IEnumerable<IUserRepetition> repetitions)
         {
-            var clozesToMove = GetClozesToMove(deck, clozes, username);
+            var repetitionsToMove = GetRepetitionsToMove(deck, repetitions);
 
-            MoveClozes(deck, clozes, clozesToMove, username);
+            MoveRepetitions(deck, repetitions, repetitionsToMove);
 
-            Debug.Assert(Helpers.CheckPositions(clozes, username));
+            Debug.Assert(Helpers.CheckPositions(repetitions));
         }
 
-        private static IEnumerable<ICloze> GetClozesToMove(IDeck deck, IEnumerable<ICloze> clozes, string username)
+        private static IEnumerable<IUserRepetition> GetRepetitionsToMove(IDeck deck, IEnumerable<IUserRepetition> repetitions)
         {
-            var cardID = clozes.GetMinElement(cloze => cloze.GetUserRepetition(username).Position).CardID;
+            var cardID = repetitions.GetMinElement(repetition => repetition.Position).GetCloze().CardID;
 
-            var nextClozes = clozes.Skip(1).Take(deck.StartDelay);
+            var nextRepetitions = repetitions.Skip(1).Take(deck.StartDelay);
 
-            if (nextClozes.All(cloze => cloze.CardID == cardID))
+            if (nextRepetitions.All(repetition => repetition.GetCloze().CardID == cardID))
             {
-                return clozes.Skip(1).TakeWhile(cloze => cloze.CardID == cardID);
+                return repetitions.Skip(1).TakeWhile(repetition => repetition.GetCloze().CardID == cardID);
             }
-            else if (nextClozes.Any(cloze => cloze.CardID == cardID))
+            else if (nextRepetitions.Any(repetition => repetition.GetCloze().CardID == cardID))
             {
-                return nextClozes.Where(cloze => cloze.CardID == cardID);
+                return nextRepetitions.Where(repetition => repetition.GetCloze().CardID == cardID);
             }
             else
             {
-                return Enumerable.Empty<ICloze>();
+                return Enumerable.Empty<IUserRepetition>();
             }
         }
 
-        private void MoveClozes(IDeck deck, IEnumerable<ICloze> allClozes, IEnumerable<ICloze> clozesToMove, string username)
+        private void MoveRepetitions(IDeck deck, IEnumerable<IUserRepetition> allRepetitions, IEnumerable<IUserRepetition> repetitionsToMove)
         {
-            foreach (var cloze in clozesToMove)
+            foreach (var repetition in repetitionsToMove)
             {
-                scheduler.MoveCloze(allClozes, cloze.GetUserRepetition(username).Position, cloze.GetUserRepetition(username).Position + deck.StartDelay, cloze.GetUserRepetition(username).LastDelay + deck.StartDelay, true, false, username);
+                scheduler.MoveRepetition(allRepetitions, repetition.Position, repetition.Position + deck.StartDelay, repetition.LastDelay + deck.StartDelay, true, false);
             }
         }
     }

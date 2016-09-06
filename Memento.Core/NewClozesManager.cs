@@ -18,18 +18,18 @@ namespace Memento.Core
             this.scheduler = scheduler;
         }
 
-        public void RearrangeNewClozes(IDeck deck, IEnumerable<ICloze> clozes, string username)
+        public void RearrangeNewRepetitions(IDeck deck, IEnumerable<IUserRepetition> repetitions)
         {
-            var activeClozes = clozes.Take(deck.StartDelay);
+            var activeRepetitions = repetitions.Take(deck.StartDelay);
 
-            if (!activeClozes.Any(cloze => cloze.GetUserRepetition(username).IsNew) && clozes.Any(cloze => cloze.GetUserRepetition(username).IsNew))
+            if (!activeRepetitions.Any(repetition => repetition.IsNew) && repetitions.Any(repetition => repetition.IsNew))
             {
-                var newCloze = clozes.Where(cloze => cloze.GetUserRepetition(username).IsNew).GetMinElement(cloze => cloze.GetUserRepetition(username).Position);
+                var newRepetition = repetitions.Where(repetition => repetition.IsNew).GetMinElement(repetition => repetition.Position);
 
-                scheduler.MoveCloze(clozes, newCloze.GetUserRepetition(username).Position, deck.StartDelay, newCloze.GetUserRepetition(username).LastDelay, true, false, username);
+                scheduler.MoveRepetition(repetitions, newRepetition.Position, deck.StartDelay, newRepetition.LastDelay, true, false);
             }
 
-            Debug.Assert(Helpers.CheckPositions(clozes, username));
+            Debug.Assert(Helpers.CheckPositions(repetitions));
         }
     }
 }

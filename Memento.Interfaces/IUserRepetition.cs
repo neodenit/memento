@@ -8,5 +8,7 @@
         int LastDelay { get; set; }
         int Position { get; set; }
         string UserName { get; set; }
+
+        ICloze GetCloze();
     }
 }

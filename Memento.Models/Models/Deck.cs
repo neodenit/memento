@@ -49,6 +49,11 @@ namespace Memento.Models.Models
             return validCards.SelectMany(card => card.GetClozes() ?? Enumerable.Empty<ICloze>());
         }
 
+        public IEnumerable<IUserRepetition> GetRepetitions(string username)
+        {
+            throw new NotImplementedException();
+        }
+
         public ICard GetNextCard(string username)
         {
             var validCards = GetValidCards();

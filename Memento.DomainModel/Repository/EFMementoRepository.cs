@@ -110,19 +110,19 @@ namespace Memento.DomainModel.Repository
 
         public void PromoteCloze(IDeck deck, Delays delay, string username)
         {
-            var clozes = deck.GetClozes();
+            var repetitions = deck.GetRepetitions(username);
 
             if (Settings.Default.EnableSiblingsHandling)
             {
-                siblingsManager.RearrangeSiblings(deck, clozes, username);
+                siblingsManager.RearrangeSiblings(deck, repetitions);
             }
 
             if (Settings.Default.EnableNewCardsHandling)
             {
-                newCardsManager.RearrangeNewClozes(deck, clozes, username);
+                newCardsManager.RearrangeNewRepetitions(deck, repetitions);
             }
 
-            scheduler.PromoteCloze(deck, clozes, delay, username);
+            scheduler.PromoteRepetition(deck, repetitions, delay);
         }
 
         public Task SaveChangesAsync() =>

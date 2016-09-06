@@ -4,6 +4,6 @@ namespace Memento.Interfaces
 {
     public interface INewClozesManager
     {
-        void RearrangeNewClozes(IDeck deck, IEnumerable<ICloze> clozes, string username);
+        void RearrangeNewRepetitions(IDeck deck, IEnumerable<IUserRepetition> repetitions);
     }
 }

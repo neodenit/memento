@@ -17,6 +17,11 @@ namespace Memento.Models.Models
 
         public virtual Cloze Cloze { get; set; }
 
+        public ICloze GetCloze()
+        {
+            return Cloze;
+        }
+
         public int Position { get; set; }
 
         public bool IsNew { get; set; }

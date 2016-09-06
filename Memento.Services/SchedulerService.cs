@@ -40,9 +40,9 @@ namespace Memento.Services
         {
             var deck = await repository.FindDeckAsync(deckID);
 
-            var clozes = deck.GetClozes();
+            var clozes = deck.GetRepetitions(username);
 
-            scheduler.ShuffleNewClozes(clozes, username);
+            scheduler.ShuffleNewRepetitions(clozes);
 
             await repository.SaveChangesAsync();
         }
