@@ -51,12 +51,13 @@ namespace Memento.Tests.Services
             // Arrange
             var deck = new Deck();
             var delay = Delays.Same;
+            var username = "Username";
 
             // Act
-            await sut.PromoteCloze(deck, delay);
+            await sut.PromoteCloze(deck, delay, username);
 
             // Assert
-            mockRepository.Verify(x => x.PromoteCloze(deck, delay), Times.Once);
+            mockRepository.Verify(x => x.PromoteCloze(deck, delay, username), Times.Once);
             mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
         }
 
@@ -65,13 +66,14 @@ namespace Memento.Tests.Services
         {
             // Arrange
             var id = 1;
+            var username = "Username";
 
             // Act
-            await sut.ShuffleNewClozes(id);
+            await sut.ShuffleNewClozes(id, username);
 
             // Assert
             mockRepository.Verify(x => x.FindDeckAsync(id), Times.Once);
-            mockScheduler.Verify(x => x.ShuffleNewClozes(It.IsAny<IEnumerable<ICloze>>()), Times.Once);
+            mockScheduler.Verify(x => x.ShuffleNewRepetitions(It.IsAny<IEnumerable<IUserRepetition>>()), Times.Once);
             mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
         }
     }

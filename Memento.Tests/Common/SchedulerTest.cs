@@ -29,8 +29,8 @@ namespace Memento.Tests
 
             var delay = 8;
             var deck = new Deck { StartDelay = delay };
-            var clozes = Enumerable.Empty<Cloze>().ToList();
-            var cloze = new Cloze();
+            var clozes = Enumerable.Empty<UserRepetition>().ToList();
+            var cloze = new UserRepetition();
 
             // Act
             sut.PrepareForAdding(deck, clozes, cloze);
@@ -50,8 +50,8 @@ namespace Memento.Tests
             var delay = 8;
             var n = 10;
             var deck = new Deck { StartDelay = delay };
-            var clozes = (from i in Enumerable.Range(0, n) select new Cloze { Position = i }).ToList();
-            var cloze = new Cloze();
+            var clozes = (from i in Enumerable.Range(0, n) select new UserRepetition { Position = i }).ToList();
+            var cloze = new UserRepetition();
 
             // Act
             sut.PrepareForAdding(deck, clozes, cloze);
@@ -71,12 +71,12 @@ namespace Memento.Tests
             var oldPosition = 10;
             var newPosition = 20;
             var n = 30;
-            var clozes = (from i in Enumerable.Range(0, n) select new Cloze { Position = i, ID = i }).ToList();
+            var clozes = (from i in Enumerable.Range(0, n) select new UserRepetition { Position = i, ID = i }).ToList();
             var cloze = clozes.Single(item => item.Position == oldPosition);
             var clozeID = cloze.ID;
 
             // Act
-            sut.MoveCloze(clozes, oldPosition, newPosition, cloze.LastDelay, true, true);
+            sut.MoveRepetition(clozes, oldPosition, newPosition, cloze.LastDelay, true, true);
 
             // Assert
             var clozeOnNewPosition = clozes.Single(item => item.Position == newPosition);
@@ -93,12 +93,12 @@ namespace Memento.Tests
             var oldPosition = 20;
             var newPosition = 10;
             var n = 30;
-            var clozes = (from i in Enumerable.Range(0, n) select new Cloze { Position = i, ID = i }).ToList();
+            var clozes = (from i in Enumerable.Range(0, n) select new UserRepetition { ID = i }).ToList();
             var cloze = clozes.Single(item => item.Position == oldPosition);
             var clozeID = cloze.ID;
 
             // Act
-            sut.MoveCloze(clozes, oldPosition, newPosition, cloze.LastDelay, true, true);
+            sut.MoveRepetition(clozes, oldPosition, newPosition, cloze.LastDelay, true, true);
 
             // Assert
             var clozeOnNewPosition = clozes.Single(item => item.Position == newPosition);

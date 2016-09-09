@@ -49,9 +49,10 @@ namespace Memento.Tests.Services
             // Arrange
             var id = 1;
             var statistics = new Statistics();
+            var username = "Username";
 
             // Act
-            var result = await sut.GetDeckWithStatViewModel(id, statistics);
+            var result = await sut.GetDeckWithStatViewModel(id, statistics, username);
 
             // Assert
             Assert.IsNotNull(result);

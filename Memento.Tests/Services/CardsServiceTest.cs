@@ -54,9 +54,10 @@ namespace Memento.Tests.Services
         {
             // Arrange
             var id = 1;
+            var username = "Username";
 
             // Act
-            var result = await sut.GetNextCardAsync(id);
+            var result = await sut.GetNextCardAsync(id, username);
 
             // Assert
             mockRepository.Verify(x => x.FindDeckAsync(id), Times.Once);
