@@ -51,7 +51,10 @@ namespace Memento.Models.Models
 
         public IEnumerable<IUserRepetition> GetRepetitions(string username)
         {
-            throw new NotImplementedException();
+            var clozes = GetClozes();
+            var userRepetitions = from c in clozes select c.GetUserRepetition(username);
+
+            return userRepetitions;
         }
 
         public ICard GetNextCard(string username)
