@@ -54,6 +54,9 @@ namespace Memento.Models.Models
         public void AddCloze(ICloze cloze) =>
             Clozes.Add(cloze as Cloze);
 
+        public IEnumerable<string> GetUsers() =>
+            Clozes.SelectMany(x => x.GetUsers()).Distinct();
+
         public bool IsValid { get; set; }
 
         public bool IsDeleted { get; set; }

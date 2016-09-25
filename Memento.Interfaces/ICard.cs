@@ -15,5 +15,6 @@ namespace Memento.Interfaces
         IEnumerable<ICloze> GetClozes();
         void AddCloze(ICloze cloze);
         ICloze GetNextCloze(string username);
+        IEnumerable<string> GetUsers();
     }
 }

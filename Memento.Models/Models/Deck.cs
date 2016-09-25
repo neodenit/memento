@@ -85,5 +85,8 @@ namespace Memento.Models.Models
         {
             return Cards.Where(card => card.IsDeleted);
         }
+
+        public IEnumerable<string> GetUsers() =>
+            Cards.SelectMany(x => x.GetUsers()).Distinct();
     }
 }

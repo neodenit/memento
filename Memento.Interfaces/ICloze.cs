@@ -1,4 +1,6 @@
-﻿namespace Memento.Interfaces
+﻿using System.Collections.Generic;
+
+namespace Memento.Interfaces
 {
     public interface ICloze
     {
@@ -8,5 +10,6 @@
 
         ICard GetCard();
         IUserRepetition GetUserRepetition(string username);
+        IEnumerable<string> GetUsers();
     }
 }

@@ -37,6 +37,9 @@ namespace Memento.Models.Models
             return UserRepetitions.Single(x => x.UserName == username);
         }
 
+        public IEnumerable<string> GetUsers() =>
+            UserRepetitions.Select(x => x.UserName).Distinct();
+
         public string Label { get; set; }
     }
 }

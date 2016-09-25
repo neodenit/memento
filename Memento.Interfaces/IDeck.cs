@@ -34,5 +34,6 @@ namespace Memento.Interfaces
         IEnumerable<ICard> GetDraftCards();
         ICard GetNextCard(string username);
         IEnumerable<ICard> GetValidCards();
+        IEnumerable<string> GetUsers();
     }
 }
