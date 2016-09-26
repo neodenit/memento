@@ -11,9 +11,10 @@ namespace Memento.Models.Models
     {
         public Cloze()
         {
+            UserRepetitions = new List<UserRepetition>();
         }
 
-        public Cloze(int cardID, string label)
+        public Cloze(int cardID, string label) : this()
         {
             CardID = cardID;
             Label = label;
