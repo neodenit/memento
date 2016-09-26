@@ -27,7 +27,7 @@ namespace Memento.Web.Controllers
         private readonly IStatisticsService statService;
         private readonly ISchedulerService schedulerService;
 
-        private readonly string username;
+        private string username;
 
         public CardsController(IDecksService decksService, ICardsService cardsService, IStatisticsService statService, ISchedulerService schedulerService)
         {
@@ -35,8 +35,6 @@ namespace Memento.Web.Controllers
             this.cardsService = cardsService;
             this.statService = statService;
             this.schedulerService = schedulerService;
-
-            username = User.Identity.Name;
         }
 
         public async Task<ActionResult> ClozesIndex([CheckDeckExistence, CheckDeckOwner] int deckID)
@@ -369,6 +367,11 @@ namespace Memento.Web.Controllers
             var card = await cardsService.FindCardAsync(id);
 
             return RedirectToAction("Details", "Decks", new { id = card.DeckID });
+        }
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            username = User.Identity.Name;
         }
 
         private ActionResult RedirectToNextCard(IDeck deck)
