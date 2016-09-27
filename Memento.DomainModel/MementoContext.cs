@@ -19,6 +19,8 @@ namespace Memento.Models.Models
 
         public DbSet<Cloze> Clozes { get; set; }
 
+        public DbSet<UserRepetition> Repetitions { get; set; }
+
         public DbSet<Answer> Answers { get; set; }
     }
 }

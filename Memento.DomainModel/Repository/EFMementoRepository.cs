@@ -60,6 +60,9 @@ namespace Memento.DomainModel.Repository
         public void AddCloze(ICloze cloze) =>
             db.Clozes.Add(cloze as Cloze);
 
+        public void AddRepetition(IUserRepetition repetition) =>
+            db.Repetitions.Add(repetition as UserRepetition);
+
         public void RemoveDeck(IDeck deck) =>
             db.Decks.Remove(deck as Deck);
 
@@ -69,14 +72,33 @@ namespace Memento.DomainModel.Repository
         public void RemoveCloze(ICloze cloze) =>
             db.Clozes.Remove(cloze as Cloze);
 
+        public void RemoveRepetition(IUserRepetition repetition) =>
+             db.Repetitions.Remove(repetition as UserRepetition);
+
         public void AddClozes(ICard card, IEnumerable<string> clozeNames)
         {
+            var deck = card.GetDeck();
+            var users = card.GetUsers().Concat(deck.Owner).Distinct();
+
             foreach (var clozeName in clozeNames)
             {
                 var newCloze = new Cloze(card.ID, clozeName);
-                var deckClozes = card.GetDeck().GetClozes();
 
                 AddCloze(newCloze);
+
+                foreach (var user in users)
+                {
+                    var repetition = new UserRepetition
+                    {
+                        UserName = user,
+                        ClozeID = newCloze.ID
+                    };
+
+                    var repetitions = deck.GetRepetitions(user);
+
+                    scheduler.PrepareForAdding(deck, repetitions, repetition);
+                    AddRepetition(repetition);
+                }
             }
         }
 

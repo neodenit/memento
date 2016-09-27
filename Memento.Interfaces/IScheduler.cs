@@ -13,7 +13,6 @@ namespace Memento.Interfaces
 
     public interface IScheduler
     {
-        void AddRepetition(IDeck deck, ICollection<IUserRepetition> repetitions, IUserRepetition repetition);
         void MoveRepetition(IEnumerable<IUserRepetition> repetitions, int oldPosition, int newPosition, int newDelay, bool correctMovedRepetitionsDelays, bool correctRestRepetitionsDelays);
         void PrepareForAdding(IDeck deck, IEnumerable<IUserRepetition> repetitions, IUserRepetition repetition);
         void PrepareForRemoving(IDeck deck, IEnumerable<IUserRepetition> repetitions, IUserRepetition repetition);

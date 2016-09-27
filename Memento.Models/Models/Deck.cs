@@ -53,8 +53,9 @@ namespace Memento.Models.Models
         {
             var clozes = GetClozes();
             var userRepetitions = from c in clozes select c.GetUserRepetition(username);
+            var result = from ur in userRepetitions where ur != null select ur;
 
-            return userRepetitions;
+            return result;
         }
 
         public ICard GetNextCard(string username)
@@ -88,5 +89,10 @@ namespace Memento.Models.Models
 
         public IEnumerable<string> GetUsers() =>
             Cards.SelectMany(x => x.GetUsers()).Distinct();
+
+        public ICollection<IUserRepetition> GetRepetitions()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

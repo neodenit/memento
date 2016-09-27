@@ -28,15 +28,10 @@ namespace Memento.Models.Models
 
         public virtual ICollection<UserRepetition> UserRepetitions { get; set; }
 
-        public ICard GetCard()
-        {
-            return Card;
-        }
+        public ICard GetCard() => Card;
 
-        public IUserRepetition GetUserRepetition(string username)
-        {
-            return UserRepetitions.Single(x => x.UserName == username);
-        }
+        public IUserRepetition GetUserRepetition(string username) =>
+            UserRepetitions.SingleOrDefault(x => x.UserName == username);
 
         public IEnumerable<string> GetUsers() =>
             UserRepetitions.Select(x => x.UserName).Distinct();

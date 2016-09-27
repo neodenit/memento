@@ -29,15 +29,10 @@ namespace Memento.Core.Scheduler
             repetition.IsNew = false;
         }
 
-        public void AddRepetition(IDeck deck, ICollection<IUserRepetition> repetitions, IUserRepetition repetition)
-        {
-            PrepareForAdding(deck, repetitions, repetition);
-            repetitions.Add(repetition);
-        }
-
         public void PrepareForAdding(IDeck deck, IEnumerable<IUserRepetition> repetitions, IUserRepetition repetition)
         {
             var maxNewPosition = GetMaxNewPosition(repetitions);
+
             repetition.Position = maxNewPosition;
             repetition.LastDelay = deck.StartDelay;
             repetition.IsNew = true;
