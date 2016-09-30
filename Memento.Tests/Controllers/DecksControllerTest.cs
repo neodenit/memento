@@ -31,6 +31,8 @@ namespace Memento.Tests.Controllers
 
         private Mock<IFactory> mockFactory;
 
+        private string userName = "user@server.com";
+
         [TestInitialize]
         public void Setup()
         {
@@ -69,7 +71,16 @@ namespace Memento.Tests.Controllers
                             IsValid = true,
                             Clozes = new List<Cloze>
                             {
-                                new Cloze()
+                                new Cloze
+                                {
+                                    UserRepetitions = new List<UserRepetition>
+                                    {
+                                        new UserRepetition
+                                        {
+                                            UserName = userName
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -122,7 +133,7 @@ namespace Memento.Tests.Controllers
 
             // Act
             var result = await sut.Index() as ViewResult;
-            var model = result.Model as IEnumerable<Deck>;
+            var model = result.Model as DecksViewModel;
 
             // Assert
             mockDecksService.Verify(x => x.GetDecksAsync(It.IsAny<string>()), Times.Once);
@@ -192,7 +203,6 @@ namespace Memento.Tests.Controllers
         {
             // Arrange
             var deck = new DeckViewModel();
-            var userName = "user@server.com";
 
             // Act
             var result = await sut.Create(deck) as RedirectToRouteResult;

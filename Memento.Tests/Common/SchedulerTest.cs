@@ -93,7 +93,7 @@ namespace Memento.Tests
             var oldPosition = 20;
             var newPosition = 10;
             var n = 30;
-            var clozes = (from i in Enumerable.Range(0, n) select new UserRepetition { ID = i }).ToList();
+            var clozes = (from i in Enumerable.Range(0, n) select new UserRepetition { ID = i, Position = i }).ToList();
             var cloze = clozes.Single(item => item.Position == oldPosition);
             var clozeID = cloze.ID;
 

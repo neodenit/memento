@@ -21,6 +21,8 @@ namespace Memento.Tests.Services
         private Mock<IEvaluator> mockEvaluator;
         private Mock<IFactory> mockFactory;
 
+        private string userName = "user@server.com";
+
         [TestInitialize]
         public void Setup()
         {
@@ -42,7 +44,16 @@ namespace Memento.Tests.Services
                                 IsValid = true,
                                 Clozes = new List<Cloze>
                                 {
-                                    new Cloze()
+                                    new Cloze
+                                    {
+                                        UserRepetitions = new List<UserRepetition>
+                                        {
+                                            new UserRepetition
+                                            {
+                                                UserName = userName
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -54,10 +65,9 @@ namespace Memento.Tests.Services
         {
             // Arrange
             var id = 1;
-            var username = "Username";
 
             // Act
-            var result = await sut.GetNextCardAsync(id, username);
+            var result = await sut.GetNextCardAsync(id, userName);
 
             // Assert
             mockRepository.Verify(x => x.FindDeckAsync(id), Times.Once);

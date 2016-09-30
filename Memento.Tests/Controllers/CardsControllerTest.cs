@@ -40,6 +40,7 @@ namespace Memento.Tests.Controllers
             var mockDeck = new Mock<IDeck>();
             var mockCard = new Mock<ICard>();
             var mockCloze = new Mock<ICloze>();
+            var mockRepetition = new Mock<IUserRepetition>();
 
             var mockAnswerCardViewModel = new Mock<IAnswerCardViewModel>();
 
@@ -55,6 +56,8 @@ namespace Memento.Tests.Controllers
 
             mockCard.Setup(x => x.GetNextCloze(It.IsAny<string>())).Returns(mockCloze.Object);
             mockCard.Setup(x => x.GetDeck()).Returns(mockDeck.Object);
+
+            mockCloze.Setup(x => x.GetUserRepetition(It.IsAny<string>())).Returns(mockRepetition.Object);
 
             sut = new CardsController(mockDecksService.Object, mockCardsService.Object, mockStatService.Object, mockSchedulerService.Object)
             {
