@@ -120,6 +120,18 @@
   <data name="AutomaticModeHint" xml:space="preserve">
     <value>Your answers will be evaluated by the app.</value>
   </data>
+  <data name="CardCreateHelpClickAddText" xml:space="preserve">
+    <value>Click "Add Сloze" button.</value>
+  </data>
+  <data name="CardCreateHelpClickCreateText" xml:space="preserve">
+    <value>Click "Create" button to finish.</value>
+  </data>
+  <data name="CardCreateHelpPasteText" xml:space="preserve">
+    <value>Paste new card text bellow.</value>
+  </data>
+  <data name="CardCreateHelpSelectText" xml:space="preserve">
+    <value>Select word(s) for cloze deletion.</value>
+  </data>
   <data name="CoefficientHint" xml:space="preserve">
     <value>Coefficient used to calculate the next delay.</value>
   </data>

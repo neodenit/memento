@@ -1,4 +1,5 @@
 ﻿@using Memento.Models.ViewModels
+@using Memento.Common.App_GlobalResources
 
 @model EditCardViewModel
 
@@ -15,7 +16,20 @@
     <div class="form-horizontal">
         <hr />
 
-        <p>To create new card paste text bellow, select word(s) for cloze deletion and click "Add Сloze" button. You may add as many cloze deletions as you want. Click "Create" to finish.</p>
+        <div class="form-group">
+            <div class="col-md-3">
+                1. @Resources.CardCreateHelpPasteText
+            </div>
+            <div class="col-md-3">
+                2. @Resources.CardCreateHelpSelectText
+            </div>
+            <div class="col-md-3">
+                3. @Resources.CardCreateHelpClickAddText
+            </div>
+            <div class="col-md-3">
+                4. @Resources.CardCreateHelpClickCreateText
+            </div>
+        </div>
         <hr />
 
         @Html.ValidationSummary(true, "", new { @class = "col-md-offset-2 text-danger" })
@@ -55,11 +69,11 @@
 <div>
     @if (Model.DeckID == -1)
     {
-    @Html.ActionLink("Index", "Index", "Decks");
+        @Html.ActionLink("Index", "Index", "Decks");
     }
     else
     {
-    @Html.ActionLink("Back", "Details", "Decks", new DeckViewModel { ID = Model.DeckID }, null);
+        @Html.ActionLink("Back", "Details", "Decks", new DeckViewModel { ID = Model.DeckID }, null);
     }
 </div>
 

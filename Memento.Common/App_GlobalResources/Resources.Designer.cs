@@ -70,6 +70,42 @@ namespace Memento.Common.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Click &quot;Add Сloze&quot; button..
+        /// </summary>
+        public static string CardCreateHelpClickAddText {
+            get {
+                return ResourceManager.GetString("CardCreateHelpClickAddText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click &quot;Create&quot; button to finish..
+        /// </summary>
+        public static string CardCreateHelpClickCreateText {
+            get {
+                return ResourceManager.GetString("CardCreateHelpClickCreateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste new card text bellow..
+        /// </summary>
+        public static string CardCreateHelpPasteText {
+            get {
+                return ResourceManager.GetString("CardCreateHelpPasteText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select word(s) for cloze deletion..
+        /// </summary>
+        public static string CardCreateHelpSelectText {
+            get {
+                return ResourceManager.GetString("CardCreateHelpSelectText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Coefficient used to calculate the next delay..
         /// </summary>
         public static string CoefficientHint {
