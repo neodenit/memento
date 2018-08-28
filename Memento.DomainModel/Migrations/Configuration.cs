@@ -1,18 +1,15 @@
-namespace Memento.DomainModel.Migrations
+namespace Memento.DataAccess.Migrations
 {
-    using System;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Memento.Models.Models.MementoContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<MementoContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(Memento.Models.Models.MementoContext context)
+        protected override void Seed(MementoContext context)
         {
             //  This method will be called after migrating to the latest version.
 

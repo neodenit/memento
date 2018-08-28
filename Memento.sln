@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DA5D5C92-2525-4DCA-9B77-6235D2E288D1}"
 	ProjectSection(SolutionItems) = preProject
@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DA5D5C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.Tests", "Memento.Tests\Memento.Tests.csproj", "{80D7D3BB-D189-46FF-9E80-F53B5D15704C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.DomainModel", "Memento.DomainModel\Memento.DomainModel.csproj", "{4CCB3552-1782-4CA3-806E-FE846CA2F6CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.DataAccess", "Memento.DomainModel\Memento.DataAccess.csproj", "{4CCB3552-1782-4CA3-806E-FE846CA2F6CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.Web", "Memento.Web\Memento.Web.csproj", "{1C82468E-77F8-44FA-BE30-DC56BE50B3CF}"
 EndProject
@@ -85,5 +85,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BBEE3E4E-0C9C-455F-94F0-0D05B0F62A22}
 	EndGlobalSection
 EndGlobal

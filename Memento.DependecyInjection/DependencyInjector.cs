@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Reflection;
+using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using Memento.Core;
@@ -6,16 +7,10 @@ using Memento.Core.Converter;
 using Memento.Core.Evaluators;
 using Memento.Core.Scheduler;
 using Memento.Core.Validators;
-using Memento.DomainModel.Repository;
+using Memento.DataAccess.Repository;
 using Memento.Interfaces;
 using Memento.Models;
 using Memento.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Memento.DependecyInjection
 {

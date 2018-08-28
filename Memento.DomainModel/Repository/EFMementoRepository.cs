@@ -1,14 +1,13 @@
-﻿using Memento.Common;
-using Memento.Interfaces;
-using Memento.Models.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Memento.Common;
+using Memento.Interfaces;
+using Memento.Models.Models;
 
-namespace Memento.DomainModel.Repository
+namespace Memento.DataAccess.Repository
 {
     public class EFMementoRepository : IMementoRepository, IDisposable
     {
