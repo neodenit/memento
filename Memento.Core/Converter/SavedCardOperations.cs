@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using static Memento.Core.Converter.ConverterPatterns;
 
 namespace Memento.Core.Converter
@@ -36,7 +34,7 @@ namespace Memento.Core.Converter
             GetParts(card).ElementAtOrDefault(index)?.Trim();
 
         private static IEnumerable<string> GetParts(string card) =>
-            card.Split(new[] { Delimeter }, StringSplitOptions.None);
+            card.Split(new[] { Delimiter }, StringSplitOptions.None);
 
         private static string ReplaceClozeWithSquareBrackets(string field, string clozeName)
         {

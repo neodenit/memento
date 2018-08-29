@@ -1,11 +1,8 @@
-﻿using Memento.Common;
-using Memento.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using Memento.Interfaces;
 using static Memento.Core.Converter.ConverterPatterns;
 
 namespace Memento.Core.Converter
@@ -76,7 +73,7 @@ namespace Memento.Core.Converter
         {
             var normText = TextOperations.TabsToSpaces(text);
             var normComment = TextOperations.TabsToSpaces(comment);
-            var result = normText + RawDelimeter + normComment;
+            var result = normText + RawDelimiter + normComment;
             return result;
         }
 

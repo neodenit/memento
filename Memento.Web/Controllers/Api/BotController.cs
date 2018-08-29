@@ -1,18 +1,14 @@
-﻿using Memento.Bot;
+﻿using System;
+using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Http;
+using Memento.Bot;
 using Memento.Interfaces;
 using Memento.Models;
-using Memento.Models.ViewModels;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Connector.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web.Http;
 
 namespace Memento.Web.Controllers.Api
 {
@@ -28,7 +24,7 @@ namespace Memento.Web.Controllers.Api
 
         private const string Ruler = "---";
 
-        private readonly string delimeter;
+        private readonly string delimiter;
 
         private readonly IDecksService decksService;
         private readonly ICardsService cardsService;
@@ -44,7 +40,7 @@ namespace Memento.Web.Controllers.Api
 
             context = ApplicationDbContext.Create();
 
-            delimeter = Environment.NewLine + Environment.NewLine;
+            delimiter = Environment.NewLine + Environment.NewLine;
         }
 
         // POST: api/Bot
@@ -74,8 +70,8 @@ namespace Memento.Web.Controllers.Api
                                     var menuItems = data.Select(d => $"{d.Item1}) {d.Item3}");
 
                                     var pleaseChooseDeckMessage = "Please enter the deck number:";
-                                    var decksList = string.Join(delimeter, menuItems);
-                                    var menuText = string.Join(delimeter, pleaseChooseDeckMessage, decksList);
+                                    var decksList = string.Join(delimiter, menuItems);
+                                    var menuText = string.Join(delimiter, pleaseChooseDeckMessage, decksList);
 
                                     message.SetBotPerUserInConversationData("response", menuText);
                                     message.SetBotPerUserInConversationData("decks", data);
@@ -103,7 +99,7 @@ namespace Memento.Web.Controllers.Api
 
                                             var pleseFillMessage = "Please fill in the blank.";
 
-                                            var firstQuestionText = string.Join(delimeter, backMessage, Ruler, firstQuestionMessage, question, pleseFillMessage);
+                                            var firstQuestionText = string.Join(delimiter, backMessage, Ruler, firstQuestionMessage, question, pleseFillMessage);
 
 
                                             message.SetBotPerUserInConversationData("dialogState", DialogStates.Question);
@@ -174,7 +170,7 @@ namespace Memento.Web.Controllers.Api
             var fullAnswerMessage = "Full answer:";
             var answer = string.IsNullOrWhiteSpace(card.Comment) ?
                 card.FullAnswer :
-                string.Join(delimeter, card.FullAnswer, commentMessage, card.Comment);
+                string.Join(delimiter, card.FullAnswer, commentMessage, card.Comment);
 
             var correctAnswerMessage = "Correct answer: " + card.ShortAnswer;
             var userAnswerMessage = "Your answer: " + card.UserAnswer;
@@ -184,7 +180,7 @@ namespace Memento.Web.Controllers.Api
             var nextQuestionMessage = "**Next question:**";
             var nextQuestion = await GetNextQuestion(message, username);
 
-            var response = string.Join(delimeter, rightMessage, Ruler, fullAnswerMessage, answer, Ruler, correctAnswerMessage, userAnswerMessage, Ruler, nextQuestionMessage, nextQuestion);
+            var response = string.Join(delimiter, rightMessage, Ruler, fullAnswerMessage, answer, Ruler, correctAnswerMessage, userAnswerMessage, Ruler, nextQuestionMessage, nextQuestion);
 
             return response;
         }
@@ -197,7 +193,7 @@ namespace Memento.Web.Controllers.Api
 
             var answer = string.IsNullOrWhiteSpace(card.Comment) ?
                 card.FullAnswer :
-                string.Join(delimeter, card.FullAnswer, commentMessage, card.Comment);
+                string.Join(delimiter, card.FullAnswer, commentMessage, card.Comment);
 
             var correctAnswerMessage = "Correct answer: " + card.ShortAnswer;
             var userAnswerMessage = "Your answer: " + card.UserAnswer;
@@ -207,7 +203,7 @@ namespace Memento.Web.Controllers.Api
             var nextQuestionMessage = "**Next question:**";
             var nextQuestion = await GetNextQuestion(message, username);
 
-            var response = string.Join(delimeter, wrongMessage, Ruler, fullAnswerMessage, answer, Ruler, correctAnswerMessage, userAnswerMessage, Ruler, nextQuestionMessage, nextQuestion);
+            var response = string.Join(delimiter, wrongMessage, Ruler, fullAnswerMessage, answer, Ruler, correctAnswerMessage, userAnswerMessage, Ruler, nextQuestionMessage, nextQuestion);
 
             return response;
         }

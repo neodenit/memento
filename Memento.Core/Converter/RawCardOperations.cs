@@ -1,10 +1,8 @@
-﻿using Memento.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using Memento.Common;
 using static Memento.Core.Converter.ConverterPatterns;
 
 namespace Memento.Core.Converter
@@ -75,7 +73,7 @@ namespace Memento.Core.Converter
             }
             else
             {
-                return Tuple.Create(TextOperations.ReplaceDelimeters(card), string.Empty);
+                return Tuple.Create(TextOperations.ReplaceDelimiters(card), string.Empty);
             }
         }
 
@@ -83,7 +81,7 @@ namespace Memento.Core.Converter
             GetFields(card).ElementAtOrDefault(index)?.Trim();
 
         private static IEnumerable<string> GetFields(string card) =>
-            card.Split(new[] { RawDelimeter }, StringSplitOptions.None);
+            card.Split(new[] { RawDelimiter }, StringSplitOptions.None);
 
         private static bool IsClozeField(string text) => Regex.IsMatch(text, ClozePattern);
     }
