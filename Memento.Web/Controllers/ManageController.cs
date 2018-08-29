@@ -1,19 +1,16 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Memento.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Memento.Models;
 
 namespace Memento.Web.Controllers
 {
     [Authorize]
-#if !DEBUG
     [RequireHttps]
-#endif
     public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;

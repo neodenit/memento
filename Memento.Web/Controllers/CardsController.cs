@@ -1,25 +1,17 @@
-﻿using Memento.Attributes;
-using Memento.Common;
-using Memento.Interfaces;
-using Memento.Models.Models;
-using Memento.Models.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
-using System.Data.Entity;
+﻿using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
+using Memento.Attributes;
+using Memento.Common;
+using Memento.Interfaces;
+using Memento.Models.ViewModels;
 
 namespace Memento.Web.Controllers
 {
     [Authorize]
-#if !DEBUG
     [RequireHttps]
-#endif
     public class CardsController : Controller
     {
         private readonly IDecksService decksService;

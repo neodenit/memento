@@ -1,19 +1,14 @@
-﻿using Memento.Models.ViewModels;
+﻿using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using Memento.Models.ViewModels;
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
 
 namespace Memento.Web.Controllers
 {
-#if !DEBUG
     [RequireHttps]
-#endif
     public class HomeController : Controller
     {
         public async Task<ActionResult> Index()
