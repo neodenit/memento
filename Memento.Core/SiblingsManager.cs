@@ -24,7 +24,7 @@ namespace Memento.Core
 
             MoveRepetitions(deck, repetitions, repetitionsToMove);
 
-            Debug.Assert(Helpers.CheckPositions(repetitions));
+            Debug.Assert(Helpers.ArePositionsValid(repetitions));
         }
 
         private static IEnumerable<IUserRepetition> GetRepetitionsToMove(IDeck deck, IEnumerable<IUserRepetition> repetitions)

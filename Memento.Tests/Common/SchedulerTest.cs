@@ -39,7 +39,7 @@ namespace Memento.Tests
             Assert.IsTrue(cloze.IsNew);
             Assert.AreEqual(0, cloze.Position);
             Assert.AreEqual(delay, cloze.LastDelay);
-            Assert.IsTrue(Helpers.CheckPositions(clozes));
+            Assert.IsTrue(Helpers.ArePositionsValid(clozes));
         }
 
         [TestMethod]
@@ -60,7 +60,7 @@ namespace Memento.Tests
             Assert.IsTrue(cloze.IsNew);
             Assert.AreEqual(n, cloze.Position);
             Assert.AreEqual(delay, cloze.LastDelay);
-            Assert.IsTrue(Helpers.CheckPositions(clozes));
+            Assert.IsTrue(Helpers.ArePositionsValid(clozes));
         }
 
         [TestMethod]
@@ -82,7 +82,7 @@ namespace Memento.Tests
             var clozeOnNewPosition = clozes.Single(item => item.Position == newPosition);
             Assert.AreEqual(clozeID, clozeOnNewPosition.ID);
             Assert.AreEqual(newPosition, cloze.Position);
-            Assert.IsTrue(Helpers.CheckPositions(clozes));
+            Assert.IsTrue(Helpers.ArePositionsValid(clozes));
         }
 
         [TestMethod]
@@ -104,7 +104,7 @@ namespace Memento.Tests
             var clozeOnNewPosition = clozes.Single(item => item.Position == newPosition);
             Assert.AreEqual(clozeID, clozeOnNewPosition.ID);
             Assert.AreEqual(newPosition, cloze.Position);
-            Assert.IsTrue(Helpers.CheckPositions(clozes));
+            Assert.IsTrue(Helpers.ArePositionsValid(clozes));
         }
     }
 }

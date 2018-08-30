@@ -1,11 +1,8 @@
-﻿using Memento.Common;
-using Memento.Interfaces;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Memento.Common;
+using Memento.Interfaces;
 
 namespace Memento.Core
 {
@@ -29,7 +26,7 @@ namespace Memento.Core
                 scheduler.MoveRepetition(repetitions, newRepetition.Position, deck.StartDelay, newRepetition.LastDelay, true, false);
             }
 
-            Debug.Assert(Helpers.CheckPositions(repetitions));
+            Debug.Assert(Helpers.ArePositionsValid(repetitions));
         }
     }
 }

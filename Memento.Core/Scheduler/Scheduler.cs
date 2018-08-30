@@ -27,6 +27,8 @@ namespace Memento.Core.Scheduler
             MoveRepetition(repetitions, repetition.Position, newPosition, newDelay, false, true);
 
             repetition.IsNew = false;
+
+            Debug.Assert(Helpers.ArePositionsValid(repetitions));
         }
 
         public void PrepareForAdding(IDeck deck, IEnumerable<IUserRepetition> repetitions, IUserRepetition repetition)
@@ -51,6 +53,8 @@ namespace Memento.Core.Scheduler
         {
             var newRepetitions = from repetition in repetitions where repetition.IsNew select repetition;
             ShuffleRepetitions(newRepetitions);
+
+            Debug.Assert(Helpers.ArePositionsValid(repetitions));
         }
 
         public void MoveRepetition(IEnumerable<IUserRepetition> repetitions, int oldPosition, int newPosition, int newDelay, bool correctMovedRepetitionsDelays, bool correctRestRepetitionsDelays)
@@ -93,6 +97,8 @@ namespace Memento.Core.Scheduler
 
             movedRepetition.Position = newLimitedPosition;
             movedRepetition.LastDelay = newDelay;
+
+            Debug.Assert(Helpers.ArePositionsValid(repetitions));
         }
     }
 }

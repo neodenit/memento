@@ -1,11 +1,5 @@
 ﻿using Memento.Common;
 using Memento.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Memento.Core.Validators
 {
@@ -26,7 +20,7 @@ namespace Memento.Core.Validators
 
             var value = converter.GetShortAnswer(field, clozeName);
 
-            var wordsNumber = Helpers.GetWordsNumber(value);
+            var wordsNumber = Helpers.GetWordsCount(value);
 
             var result = wordsNumber <= maxValidLength;
 

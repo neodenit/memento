@@ -60,7 +60,7 @@ namespace Memento.Core.Converter
                 var answer = RawCardOperations.GetSecondField(card);
                 var comment = RawCardOperations.GetThirdField(card);
 
-                var wordsNumber = Helpers.GetWordsNumber(answer);
+                var wordsNumber = Helpers.GetWordsCount(answer);
 
                 var correctedAnswer =
                     wordsNumber <= Settings.Default.DefaultValidLength ?
