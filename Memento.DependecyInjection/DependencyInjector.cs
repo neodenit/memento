@@ -24,13 +24,13 @@ namespace Memento.DependecyInjection
             builder.RegisterControllers(assembly);
             builder.RegisterApiControllers(assembly);
 
-            builder.RegisterType<EFMementoRepository>().As<IMementoRepository>().SingleInstance();
+            builder.RegisterType<EFMementoRepository>().As<IMementoRepository>();
 
-            builder.RegisterType<DecksService>().As<IDecksService>().SingleInstance();
-            builder.RegisterType<CardsService>().As<ICardsService>().SingleInstance();
-            builder.RegisterType<StatisticsService>().As<IStatisticsService>().SingleInstance();
-            builder.RegisterType<ExportImportService>().As<IExportImportService>().SingleInstance();
-            builder.RegisterType<SchedulerService>().As<ISchedulerService>().SingleInstance();            
+            builder.RegisterType<DecksService>().As<IDecksService>();
+            builder.RegisterType<CardsService>().As<ICardsService>();
+            builder.RegisterType<StatisticsService>().As<IStatisticsService>();
+            builder.RegisterType<ExportImportService>().As<IExportImportService>();
+            builder.RegisterType<SchedulerService>().As<ISchedulerService>();            
 
             builder.RegisterType<PhraseEvaluator>().As<IEvaluator>();
             builder.RegisterType<Converter>().As<IConverter>();

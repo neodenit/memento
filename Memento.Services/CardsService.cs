@@ -107,7 +107,7 @@ namespace Memento.Services
 
             await repository.SaveChangesAsync();
 
-            repository.AddClozes(newCard, clozeNames);
+            await repository.AddClozes(newCard, clozeNames);
 
             await repository.SaveChangesAsync();
         }

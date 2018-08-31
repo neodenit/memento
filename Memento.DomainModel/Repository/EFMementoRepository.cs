@@ -9,9 +9,10 @@ using Memento.Models.Models;
 
 namespace Memento.DataAccess.Repository
 {
-    public class EFMementoRepository : IMementoRepository, IDisposable
+    public class EFMementoRepository : IMementoRepository
     {
         private MementoContext db = new MementoContext();
+
         private readonly IScheduler scheduler;
         private readonly ISiblingsManager siblingsManager;
         private readonly INewClozesManager newCardsManager;
@@ -74,7 +75,7 @@ namespace Memento.DataAccess.Repository
         public void RemoveRepetition(IUserRepetition repetition) =>
              db.Repetitions.Remove(repetition as UserRepetition);
 
-        public void AddClozes(ICard card, IEnumerable<string> clozeNames)
+        public async Task AddClozes(ICard card, IEnumerable<string> clozeNames)
         {
             var deck = card.GetDeck();
             var users = card.GetUsers().Concat(deck.Owner).Distinct();
@@ -84,6 +85,8 @@ namespace Memento.DataAccess.Repository
                 var newCloze = new Cloze(card.ID, clozeName);
 
                 AddCloze(newCloze);
+
+                await SaveChangesAsync();
 
                 foreach (var user in users)
                 {
@@ -148,28 +151,5 @@ namespace Memento.DataAccess.Repository
 
         public Task SaveChangesAsync() =>
             db.SaveChangesAsync();
-
-        #region IDisposable Support
-
-        private bool disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposed)
-            {
-                if (disposing)
-                {
-                    db?.Dispose();
-                }
-
-                disposed = true;
-            }
-        }
-
-        public void Dispose() =>
-            Dispose(true);
-
-        #endregion
-
     }
 }
