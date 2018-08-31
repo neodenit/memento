@@ -36,10 +36,10 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="FirstDelay" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">5</Value>
+      <Value Profile="(Default)">4</Value>
     </Setting>
     <Setting Name="SecondDelay" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">9</Value>
+      <Value Profile="(Default)">8</Value>
     </Setting>
   </Settings>
 </SettingsFile>
