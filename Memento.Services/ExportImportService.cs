@@ -52,7 +52,7 @@ namespace Memento.Services
 
                 if (isValid)
                 {
-                    repository.AddClozes(newCard, clozeNames);
+                    await repository.AddClozesAsync(newCard, clozeNames);
 
                     await repository.SaveChangesAsync();
                 }

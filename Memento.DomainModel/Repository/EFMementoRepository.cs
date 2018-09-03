@@ -75,7 +75,7 @@ namespace Memento.DataAccess.Repository
         public void RemoveRepetition(IUserRepetition repetition) =>
              db.Repetitions.Remove(repetition as UserRepetition);
 
-        public async Task AddClozes(ICard card, IEnumerable<string> clozeNames)
+        public async Task AddClozesAsync(ICard card, IEnumerable<string> clozeNames)
         {
             var deck = card.GetDeck();
             var users = card.GetUsers().Concat(deck.Owner).Distinct();

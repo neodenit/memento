@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Memento.Interfaces
@@ -23,7 +20,7 @@ namespace Memento.Interfaces
         void RemoveDeck(IDeck deck);
         void RemoveCard(ICard card);
         void RemoveCloze(ICloze cloze);
-        Task AddClozes(ICard card, IEnumerable<string> clozeNames);
+        Task AddClozesAsync(ICard card, IEnumerable<string> clozeNames);
         void RemoveClozes(ICard card, IEnumerable<string> clozeNames);
         void AddAnswer(ICloze cloze, bool isCorrect);
         void PromoteCloze(IDeck deck, Delays delay, string username);

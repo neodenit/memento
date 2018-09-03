@@ -1,13 +1,7 @@
-﻿using Memento.Additional;
-using Memento.Common;
-using Memento.Interfaces;
-using Memento.Models.Models;
-using Memento.Models.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using Memento.Interfaces;
+using Memento.Models.ViewModels;
 
 namespace Memento.Services
 {
@@ -107,7 +101,7 @@ namespace Memento.Services
 
             await repository.SaveChangesAsync();
 
-            await repository.AddClozes(newCard, clozeNames);
+            await repository.AddClozesAsync(newCard, clozeNames);
 
             await repository.SaveChangesAsync();
         }
@@ -127,7 +121,7 @@ namespace Memento.Services
             var addedClozes = newClozes.Except(oldClozes).ToList();
 
             repository.RemoveClozes(dbCard, deletedClozes);
-            repository.AddClozes(dbCard, addedClozes);
+            await repository.AddClozesAsync(dbCard, addedClozes);
 
             await repository.SaveChangesAsync();
         }
