@@ -49,14 +49,15 @@ namespace Memento.Tests
 
         public void AddCloze(ICloze cloze) => clozes.Add(cloze);
 
-        public void AddClozes(ICard card, IEnumerable<string> clozeNames)
-        {
-            foreach (var clozeName in clozeNames)
-            {
-                var cloze = new Cloze(card.ID, clozeName);
-                card.AddCloze(cloze);
-            }
-        }
+        public Task AddClozesAsync(ICard card, IEnumerable<string> clozeNames) =>
+            Task.Run(() =>
+                {
+                    foreach (var clozeName in clozeNames)
+                    {
+                        var cloze = new Cloze(card.ID, clozeName);
+                        card.AddCloze(cloze);
+                    }
+                });
 
         public void AddDeck(IDeck deck) => decks.Add(deck);
 
