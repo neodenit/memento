@@ -33,7 +33,19 @@ namespace Memento.Tests.Services
 
             sut = new ExportImportService(mockRepository.Object, mockConverter.Object, mockValidator.Object, mockFactory.Object);
 
-            mockRepository.Setup(x => x.FindDeckAsync(It.IsAny<int>())).ReturnsAsync(new Deck { Cards = new List<Card> { new Card() } });
+            mockRepository
+                .Setup(x => x.FindDeckAsync(It.IsAny<int>()))
+                .ReturnsAsync(
+                    new Deck
+                    {
+                        Cards = new List<Card>
+                        {
+                            new Card
+                            {
+                                IsValid = true
+                            }
+                        }
+                    });
         }
 
         [TestMethod()]

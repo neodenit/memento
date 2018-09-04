@@ -71,9 +71,14 @@ namespace Memento.Core.Converter
 
         public string FormatForExport(string text, string comment)
         {
-            var normText = TextOperations.TabsToSpaces(text);
-            var normComment = TextOperations.TabsToSpaces(comment);
-            var result = normText + RawDelimiter + normComment;
+            var textWithoutNewLines = TextOperations.LineBreaksToTags(text);
+            var exportText = TextOperations.TabsToSpaces(textWithoutNewLines);
+
+            var notNullComment = comment ?? string.Empty;
+            var commentWithoutNewLines = TextOperations.LineBreaksToTags(notNullComment);
+            var exportComment = TextOperations.TabsToSpaces(commentWithoutNewLines);
+
+            var result = exportText + RawDelimiter + exportComment;
             return result;
         }
 

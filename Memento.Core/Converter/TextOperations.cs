@@ -17,6 +17,9 @@ namespace Memento.Core.Converter
             return result3;
         }
 
+        internal static string LineBreaksToTags(string text) =>
+            Regex.Replace(text, Environment.NewLine, LineBreakTag);
+
         internal static string LineBreaksToTagsAlt(string text) =>
             Regex.Replace(text, Environment.NewLine, AltLineBreakTag);
 
@@ -45,10 +48,7 @@ namespace Memento.Core.Converter
 
         internal static string AddEndingDelimiter(string text) =>
             text.Contains(RawDelimiter) ? text : text + RawDelimiter;
-
-        private static string LineBreaksToTags(string text) =>
-            Regex.Replace(text, Environment.NewLine, LineBreakTag);
-
+        
         private static string DelimiterToTag(string text) =>
             Regex.Replace(text, Delimiter, DelimiterTag);
 
