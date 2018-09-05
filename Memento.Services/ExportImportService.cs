@@ -1,12 +1,9 @@
-﻿using Memento.Interfaces;
-using Memento.Models.Models;
-using Memento.Models.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Memento.Interfaces;
 
 namespace Memento.Services
 {
@@ -35,28 +32,31 @@ namespace Memento.Services
             return result;
         }
 
-        public async Task Import(string text, int deckID)
+        public async Task Import(string deckText, int deckID)
         {
-            var cards = converter.GetCardsFromDeck(text);
+            var deck = await repository.FindDeckAsync(deckID);
+            var cardTextComments = converter.GetCardsFromDeck(deckText).ToList();
 
-            foreach (var card in cards)
+            foreach (var cardTextComment in cardTextComments)
             {
-                var clozeNames = converter.GetClozeNames(card.Item1);
-                var isValid = clozeNames.Any() && clozeNames.All(clozeName => validator.Validate(card.Item1, clozeName));
-                var deck = await repository.FindDeckAsync(deckID);
-                var newCard = factory.CreateCard(deck, card.Item1, card.Item2, isValid);
+                var clozeNames = converter.GetClozeNames(cardTextComment.Item1);
+                var isValid = clozeNames.Any() && clozeNames.All(clozeName => validator.Validate(cardTextComment.Item1, clozeName));
+                var newCard = factory.CreateCard(deck, cardTextComment.Item1, cardTextComment.Item2, isValid);
 
-                repository.AddCard(newCard);
-
-                await repository.SaveChangesAsync();
-
-                if (isValid)
+                if (!string.IsNullOrWhiteSpace(newCard.Text))
                 {
-                    await repository.AddClozesAsync(newCard, clozeNames);
+                    repository.AddCard(newCard);
 
                     await repository.SaveChangesAsync();
+
+                    if (isValid)
+                    {
+                        await repository.AddClozesAsync(newCard, clozeNames);
+                    }
                 }
             }
+
+            await repository.SaveChangesAsync();
         }
 
         public Task<IEnumerable<string>> ConvertApkg(Stream inputStream)

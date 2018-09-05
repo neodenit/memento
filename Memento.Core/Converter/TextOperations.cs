@@ -11,6 +11,14 @@ namespace Memento.Core.Converter
 
         internal static string TagsToLineBreaks(string text)
         {
+            var result1 = Regex.Replace(text, "<br />", Environment.NewLine);
+            var result2 = Regex.Replace(result1, "<div>", string.Empty);
+            var result3 = Regex.Replace(result2, "</div>", string.Empty);
+            return result3;
+        }
+
+        internal static string TagsToLineBreaksAlt(string text)
+        {
             var result1 = Regex.Replace(text, "<br />", string.Empty);
             var result2 = Regex.Replace(result1, "<div>", Environment.NewLine);
             var result3 = Regex.Replace(result2, "</div>", string.Empty);
