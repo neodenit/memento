@@ -22,7 +22,8 @@
 }
 
 <div>
-    @Html.ActionLink("Create New Card", "Create", "Cards", new { DeckID = Model.Deck.ID }, null)
+    @Html.ActionLink("Create New Card", "Create", "Cards", new { DeckID = Model.Deck.ID }, null) |
+    @Html.ActionLink("Options", "Edit", new { Model.Deck.ID })
 </div>
 
 <div class="row">
