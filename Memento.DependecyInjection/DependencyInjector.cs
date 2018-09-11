@@ -24,7 +24,7 @@ namespace Memento.DependecyInjection
             builder.RegisterControllers(assembly);
             builder.RegisterApiControllers(assembly);
 
-            builder.RegisterType<EFMementoRepository>().As<IMementoRepository>();
+            builder.RegisterType<EFMementoRepository>().As<IMementoRepository>().InstancePerRequest();
 
             builder.RegisterType<DecksService>().As<IDecksService>();
             builder.RegisterType<CardsService>().As<ICardsService>();
