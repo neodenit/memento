@@ -38,7 +38,7 @@ namespace Memento.Models.Models
         [Display(Name = "Coefficient")]
         public double Coeff { get; set; }
 
-        public bool PreviewAnswer { get; set; } = true;
+        public bool PreviewAnswer { get; set; }
 
         public IEnumerable<ICloze> GetClozes()
         {

@@ -33,7 +33,7 @@ namespace Memento.Models.ViewModels
         public int SecondDelay { get; set; }
 
         [Display(Name = "Preview Answer")]
-        public bool PreviewAnswer { get; set; }
+        public bool PreviewAnswer { get; set; } = true;
 
         public DeckViewModel() { }
 
