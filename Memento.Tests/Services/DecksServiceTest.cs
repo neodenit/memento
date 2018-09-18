@@ -96,9 +96,10 @@ namespace Memento.Tests.Services
             var title = "Title";
             var startDelay = 8;
             var coeff = 2.0;
+            var previewAnswer = false;
 
             // Act
-            await sut.UpdateDeck(id, title, startDelay, coeff);
+            await sut.UpdateDeck(id, title, startDelay, coeff, previewAnswer);
 
             // Assert
             mockRepository.Verify(x => x.FindDeckAsync(id), Times.Once);

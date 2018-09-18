@@ -10,7 +10,7 @@ namespace Memento.Interfaces
         Task<IEnumerable<IDeck>> GetSharedDecksAsync();
         Task<IDeckWithStatViewModel> GetDeckWithStatViewModel(int deckID, IStatistics statistics, string username);
         Task<IDeck> FindDeckAsync(int id);
-        Task UpdateDeck(int id, string title, int startDelay, double coeff);
+        Task UpdateDeck(int id, string title, int startDelay, double coeff, bool previewAnswer);
         Task CreateDeck(IDeck deck, string userName);
         Task DeleteDeck(int id);
         Task ShareDeckAsync(int id);

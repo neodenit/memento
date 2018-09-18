@@ -235,10 +235,11 @@ namespace Memento.Tests.Controllers
             // Arrange
             var deck = new DeckViewModel
             {
-                ID = 1,
+                ID = 11,
                 Title = "Title",
                 StartDelay = 8,
                 Coeff = 2.0,
+                PreviewAnswer = true,
             };
 
             // Act
@@ -247,11 +248,11 @@ namespace Memento.Tests.Controllers
             // Assert
             if (Settings.Default.EnableTwoStepsConfig)
             {
-                mockDecksService.Verify(x => x.UpdateDeck(deck.ID, deck.Title, It.IsAny<int>(), It.IsAny<double>()), Times.Once);
+                mockDecksService.Verify(x => x.UpdateDeck(deck.ID, deck.Title, It.IsAny<int>(), It.IsAny<double>(), deck.PreviewAnswer), Times.Once);
             }
             else
             {
-                mockDecksService.Verify(x => x.UpdateDeck(deck.ID, deck.Title, deck.StartDelay, deck.Coeff), Times.Once);
+                mockDecksService.Verify(x => x.UpdateDeck(deck.ID, deck.Title, deck.StartDelay, deck.Coeff, deck.PreviewAnswer), Times.Once);
             }
 
             Assert.IsNotNull(result);

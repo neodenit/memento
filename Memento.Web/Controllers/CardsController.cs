@@ -70,19 +70,20 @@ namespace Memento.Web.Controllers
         public async Task<ActionResult> Details([CheckCardExistence, CheckCardOwner] int id)
         {
             var card = await cardsService.FindCardAsync(id);
+            var deck = card.GetDeck();
             var cloze = card.GetNextCloze(username);
 
-            if (cloze.GetUserRepetition(username).IsNew)
+            if (cloze.GetUserRepetition(username).IsNew && deck.PreviewAnswer)
             {
-                return RedirectToAction("PreviewClosed", new { id = card.ID });
+                return RedirectToAction("PreviewClosed", new { card.ID });
             }
-            else if (card.GetDeck().ControlMode == ControlModes.Manual)
+            else if (deck.ControlMode == ControlModes.Manual)
             {
-                return RedirectToAction("RepeatClosed", new { id = card.ID });
+                return RedirectToAction("RepeatClosed", new { card.ID });
             }
-            else if (card.GetDeck().ControlMode == ControlModes.Automatic)
+            else if (deck.ControlMode == ControlModes.Automatic)
             {
-                return RedirectToAction("Question", new { id = card.ID });
+                return RedirectToAction("Question", new { card.ID });
             }
             else
             {

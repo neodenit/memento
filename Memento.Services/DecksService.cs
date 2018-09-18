@@ -60,13 +60,14 @@ namespace Memento.Services
             await repository.SaveChangesAsync();
         }
 
-        public async Task UpdateDeck(int id, string title, int startDelay, double coeff)
+        public async Task UpdateDeck(int id, string title, int startDelay, double coeff, bool previewAnswer)
         {
             var dbDeck = await repository.FindDeckAsync(id);
 
             dbDeck.Title = title;
             dbDeck.StartDelay = startDelay;
             dbDeck.Coeff = coeff;
+            dbDeck.PreviewAnswer = previewAnswer;
 
             await repository.SaveChangesAsync();
         }

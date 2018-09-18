@@ -32,6 +32,9 @@ namespace Memento.Models.ViewModels
         [Display(Name = "Second Delay")]
         public int SecondDelay { get; set; }
 
+        [Display(Name = "Preview Answer")]
+        public bool PreviewAnswer { get; set; }
+
         public DeckViewModel() { }
 
         public DeckViewModel(IDeck deck)
@@ -44,6 +47,7 @@ namespace Memento.Models.ViewModels
             Coeff = deck.Coeff;
             FirstDelay = deck.StartDelay;
             SecondDelay = (int)Math.Round(deck.StartDelay * deck.Coeff);
+            PreviewAnswer = deck.PreviewAnswer;
         }
     }
 }

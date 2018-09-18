@@ -11,11 +11,6 @@ namespace Memento.Models.Models
     [Serializable]
     public class Deck : IDeck
     {
-        public Deck()
-        {
-            Cards = new List<Card>();
-        }
-
         [CheckDeckOwner]
         public int ID { get; set; }
 
@@ -26,7 +21,7 @@ namespace Memento.Models.Models
 
         public string Owner { get; set; }
 
-        public virtual ICollection<Card> Cards { get; set; }
+        public virtual ICollection<Card> Cards { get; set; } = new List<Card>();
 
         [Display(Name = "Control Mode")]
         public ControlModes ControlMode { get; set; }
@@ -42,6 +37,8 @@ namespace Memento.Models.Models
 
         [Display(Name = "Coefficient")]
         public double Coeff { get; set; }
+
+        public bool PreviewAnswer { get; set; } = true;
 
         public IEnumerable<ICloze> GetClozes()
         {

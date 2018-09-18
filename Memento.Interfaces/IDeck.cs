@@ -26,6 +26,7 @@ namespace Memento.Interfaces
         string Owner { get; set; }
         int StartDelay { get; set; }
         string Title { get; set; }
+        bool PreviewAnswer { get; set; }
 
         IEnumerable<ICard> GetAllCards();
         IEnumerable<ICloze> GetClozes();
