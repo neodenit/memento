@@ -23,8 +23,9 @@
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <div class="checkbox">
-                @Html.CheckBoxFor(x => x.IsShuffled)
-                @Html.LabelFor(x => x.IsShuffled)
+                <label>
+                    @Html.EditorFor(m => m.IsShuffled) @Html.DisplayNameFor(m => m.IsShuffled)
+                </label>
             </div>
         </div>
     </div>
