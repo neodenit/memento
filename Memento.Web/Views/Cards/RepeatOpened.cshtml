@@ -8,30 +8,31 @@
 
 <h2>Repeat</h2>
 
-<div>
-    <h4>@Html.DisplayFor(model => model.DeckTitle)</h4>
+<h4>@Html.DisplayFor(model => model.DeckTitle)</h4>
 
-    @{Html.RenderPartial("_TopActions");}
+@{Html.RenderPartial("_TopActions");}
 
-    @using (Html.BeginForm())
-    {
-
+@using (Html.BeginForm("RepeatOpened", "Cards", FormMethod.Post, new { @class = "form-horizontal" }))
+{
     @Html.AntiForgeryToken()
 
-        @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(model => model.ID)
 
-        Html.RenderPartial("_Answer");
+    Html.RenderPartial("_Answer");
 
-        if (Model.DelayMode == DelayModes.Sharp || Model.DelayMode == DelayModes.Combined)
+    <div class="row">
+        <div class="col-md-2"></div>
+
+        @if (Model.DelayMode == DelayModes.Sharp || Model.DelayMode == DelayModes.Combined)
         {
-        <input type="submit" name="AgainButton" value="Again" class="btn btn-default" />
+            <input type="submit" name="AgainButton" value="Again" class="btn btn-default" />
         }
 
-        if (Model.DelayMode == DelayModes.Smooth || Model.DelayMode == DelayModes.Combined)
+        @if (Model.DelayMode == DelayModes.Smooth || Model.DelayMode == DelayModes.Combined)
         {
-        <input type="submit" name="BadButton" value="Bad" class="btn btn-default" />
+            <input type="submit" name="BadButton" value="Bad" class="btn btn-default" />
         }
 
         <input type="submit" name="GoodButton" value="Good" class="btn btn-default" />
-    }
-</div>
+    </div>
+}
