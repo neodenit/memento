@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Memento.Additional;
 using Memento.Attributes;
 using Memento.Common;
 using Memento.Interfaces;
@@ -189,6 +190,7 @@ namespace Memento.Web.Controllers
             switch (evaluatedCard.Mark)
             {
                 case Mark.Correct:
+                    evaluatedCard.Statistics = await decksService.GetDeckWithStatViewModel(dbCard.DeckID, new Statistics(), username);
                     return View("Right", evaluatedCard);
                 case Mark.Incorrect:
                     return View("Wrong", evaluatedCard);

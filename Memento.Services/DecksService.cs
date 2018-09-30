@@ -36,8 +36,8 @@ namespace Memento.Services
             var deck = await repository.FindDeckAsync(deckID);
 
             var clozes = deck.GetClozes();
-            statistics.NewQuestionsCount = clozes.Count(c => c.GetUserRepetition(username).IsNew);
-            statistics.OldQuestionsCount = clozes.Count(c => !c.GetUserRepetition(username).IsNew);
+            statistics.NewQuestionCount = clozes.Count(c => c.GetUserRepetition(username).IsNew);
+            statistics.OldQuestionCount = clozes.Count(c => !c.GetUserRepetition(username).IsNew);
 
             var viewModel = new DeckWithStatViewModel
             {

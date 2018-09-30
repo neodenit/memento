@@ -65,7 +65,7 @@ namespace Memento.Tests.Controllers
             };
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsClozesIndexTest()
         {
             // Arrange
@@ -81,7 +81,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(model);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsCardsIndexTest()
         {
             // Arrange
@@ -97,7 +97,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(model);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsDeletedIndexTest()
         {
             // Arrange
@@ -113,7 +113,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(model);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsDraftIndexTest()
         {
             // Arrange
@@ -129,7 +129,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(model);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsDetailsTest()
         {
             // Arrange
@@ -143,7 +143,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsPreviewClosedTest()
         {
             // Arrange
@@ -160,7 +160,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(model);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsPreviewOpenedGetTest()
         {
             // Arrange
@@ -176,7 +176,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(model);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsPreviewOpenedPostTest()
         {
             // Arrange
@@ -191,7 +191,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsRepeatClosedTest()
         {
             // Arrange
@@ -207,7 +207,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(model);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsRepeatOpenedGetTest()
         {
             // Arrange
@@ -223,7 +223,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(model);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsRepeatOpenedAgainButtonPostTest()
         {
             // Arrange
@@ -239,7 +239,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsRepeatOpenedBadButtonPostTest()
         {
             if (Settings.Default.AllowSmoothDelayModes)
@@ -259,7 +259,7 @@ namespace Memento.Tests.Controllers
             }
         }
 
-        [TestMethod()]
+        [TestMethod]
         [ExpectedException(typeof(Exception))]
         public async Task CardsRepeatOpenedBadButtonPostExceptionTest()
         {
@@ -273,7 +273,7 @@ namespace Memento.Tests.Controllers
             }
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsRepeatOpenedGoodButtonPostTest()
         {
             // Arrange
@@ -289,7 +289,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsQuestionTest()
         {
             // Arrange
@@ -305,8 +305,8 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(model);
         }
 
-        [TestMethod()]
-        public async Task CardsQuestionPostTest()
+        [TestMethod]
+        public async Task Question_ArgumentIsOk_VerifiesCard()
         {
             // Arrange
             var card = new AnswerCardViewModel();
@@ -321,7 +321,25 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(model);
         }
 
-        [TestMethod()]
+        [TestMethod]
+        public async Task Question_AnswerIsRight_GetsStatistics()
+        {
+            // Arrange
+            var card = new AnswerCardViewModel();
+            mockCardsService
+                .Setup(m => m.EvaluateCard(It.IsAny<ICloze>(), It.IsAny<string>()))
+                .Returns(new AnswerCardViewModel { Mark = Mark.Correct });
+
+            // Act
+            var result = await sut.Question(card) as ViewResult;
+
+            // Assert
+            mockDecksService.Verify(x => x.GetDeckWithStatViewModel(It.IsAny<int>(), It.IsAny<IStatistics>(), It.IsAny<string>()));
+            Assert.IsNotNull(result);
+            Assert.AreEqual(result.ViewName, "Right");
+        }
+
+        [TestMethod]
         public async Task CardsRightTest()
         {
             // Arrange
@@ -337,7 +355,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsWrongNextButtonPostTest()
         {
             // Arrange
@@ -354,7 +372,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsWrongAltButtonPostTest()
         {
             // Arrange
@@ -368,7 +386,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsTypoPostTest()
         {
             // Arrange
@@ -381,7 +399,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsCreateTest()
         {
             // Arrange
@@ -397,7 +415,7 @@ namespace Memento.Tests.Controllers
             Assert.AreEqual(id, model.DeckID);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsCreateNullDeckIDTest()
         {
             // Arrange
@@ -413,7 +431,7 @@ namespace Memento.Tests.Controllers
             Assert.AreEqual(-1, model.DeckID);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsCreatePostTest()
         {
             // Arrange
@@ -427,7 +445,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsEditTest()
         {
             // Arrange
@@ -443,7 +461,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(model);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsEditPostTest()
         {
             // Arrange
@@ -458,7 +476,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsShuffleNewCardsTest()
         {
             // Arrange
@@ -473,7 +491,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsShuffleNewTest()
         {
             // Arrange
@@ -487,7 +505,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsRestoreTest()
         {
             // Arrange
@@ -503,7 +521,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(model);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsRestoreConfirmedTest()
         {
             // Arrange
@@ -518,7 +536,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsDeleteTest()
         {
             // Arrange
@@ -534,7 +552,7 @@ namespace Memento.Tests.Controllers
             Assert.IsNotNull(model);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task CardsDeleteConfirmedTest()
         {
             // Arrange

@@ -44,7 +44,7 @@
         });
     };
 
-    var drawPieChart = function (placeholder, oldQuestionsCount, newQuestionsCount) {
+    var drawPieChart = function (placeholder, oldQuestionCount, newQuestionCount) {
         $(placeholder).highcharts({
             chart: {
                 plotBackgroundColor: null,
@@ -73,10 +73,10 @@
                 colorByPoint: true,
                 data: [{
                     name: 'Active questions',
-                    y: oldQuestionsCount,
+                    y: oldQuestionCount,
                 }, {
                     name: 'New questions',
-                    y: newQuestionsCount,
+                    y: newQuestionCount,
                 }
                 ]
             }]
@@ -85,5 +85,5 @@
 
     drawChart('#answersPlaceholder', chartData.answers.Labels, chartData.answers.Values, 'Total answers', 'Answers');
     drawChart('#correctAnswersPlaceholder', chartData.correctAnswers.Labels, chartData.correctAnswers.Values, 'Correct answers', 'Answers');
-    drawPieChart('#cardsNumberPlaceholder', chartData.oldQuestionsCount, chartData.newQuestionsCount);
+    drawPieChart('#cardsNumberPlaceholder', chartData.oldQuestionCount, chartData.newQuestionCount);
 });

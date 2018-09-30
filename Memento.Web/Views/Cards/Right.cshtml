@@ -6,6 +6,8 @@
 
 <h2>@Html.DisplayFor(model => model.DeckTitle)</h2>
 
+<h4>Progress: @(Model.Statistics.Stat.OldQuestionCount + 1) / @(Model.Statistics.Stat.OldQuestionCount + Model.Statistics.Stat.NewQuestionCount)</h4>
+
 @{Html.RenderPartial("_TopActions");}
 
 @using (Html.BeginForm("Right", "Cards", FormMethod.Post, new { @class = "form-horizontal" }))

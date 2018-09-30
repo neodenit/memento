@@ -32,6 +32,7 @@ namespace Memento.Models.ViewModels
 
         public DelayModes DelayMode { get; set; }
 
+        public IDeckWithStatViewModel Statistics { get; set; }
 
         public AnswerCardViewModel() { }
 
