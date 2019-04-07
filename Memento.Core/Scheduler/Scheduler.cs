@@ -59,44 +59,37 @@ namespace Memento.Core.Scheduler
 
         public void MoveRepetition(IEnumerable<IUserRepetition> repetitions, int oldPosition, int newPosition, int newDelay, bool correctMovedRepetitionsDelays, bool correctRestRepetitionsDelays)
         {
+            Debug.Assert(newPosition >= oldPosition);
+
             var movedRepetition = repetitions.Single(repetition => repetition.Position == oldPosition);
             movedRepetition.Position = -1;
 
-            var newLimitedPosition =
-                oldPosition > newPosition ?
-                Math.Max(newPosition, 0) :
-                Math.Min(newPosition, GetMaxPosition(repetitions));
+            var deck = movedRepetition.GetCloze().GetCard().GetDeck();
 
-            if (oldPosition > newPosition)
+            var newLimitedPosition = Math.Min(newPosition, GetMaxPosition(repetitions));
+
+            var minDelay = deck.AllowSmallDelays ? 1 : deck.StartDelay;
+            var maxDelay = newLimitedPosition - oldPosition;
+            var limitedDelay = Math.Min(newDelay, maxDelay);
+            var minLimitedDelay = Math.Max(limitedDelay, minDelay);
+
+            var movedRepetitions = GetRange(repetitions, oldPosition + 1, newLimitedPosition);
+
+            DecreasePosition(movedRepetitions);
+
+            if (correctMovedRepetitionsDelays)
             {
-                var movedRepetitions = GetRange(repetitions, newLimitedPosition, oldPosition - 1);
-                IncreasePosition(movedRepetitions);
-
-                if (correctMovedRepetitionsDelays)
-                {
-                    IncreaseDelays(movedRepetitions);
-                }
+                DecreaseDelays(movedRepetitions);
             }
-            else
+
+            if (correctRestRepetitionsDelays)
             {
-                var movedRepetitions = GetRange(repetitions, oldPosition + 1, newLimitedPosition);
-
-                DecreasePosition(movedRepetitions);
-
-                if (correctMovedRepetitionsDelays)
-                {
-                    DecreaseDelays(movedRepetitions);
-                }
-
-                if (correctRestRepetitionsDelays)
-                {
-                    var restRepetitions = GetRestRepetitions(repetitions, newLimitedPosition);
-                    IncreaseDelays(restRepetitions);
-                }
+                var restRepetitions = GetRestRepetitions(repetitions, newLimitedPosition);
+                IncreaseDelays(restRepetitions);
             }
 
             movedRepetition.Position = newLimitedPosition;
-            movedRepetition.LastDelay = newDelay;
+            movedRepetition.LastDelay = minLimitedDelay;
 
             Debug.Assert(Helpers.ArePositionsValid(repetitions));
         }

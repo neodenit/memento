@@ -71,29 +71,15 @@ namespace Memento.Tests
             var oldPosition = 10;
             var newPosition = 20;
             var n = 30;
-            var clozes = (from i in Enumerable.Range(0, n) select new UserRepetition { Position = i, ID = i }).ToList();
-            var cloze = clozes.Single(item => item.Position == oldPosition);
-            var clozeID = cloze.ID;
+            var clozes = (from i in Enumerable.Range(0, n)
+                          select
+                              new UserRepetition
+                              {
+                                  Position = i,
+                                  ID = i,
+                                  Cloze = new Cloze { Card = new Card { Deck = new Deck() }  }
+                              }).ToList();
 
-            // Act
-            sut.MoveRepetition(clozes, oldPosition, newPosition, cloze.LastDelay, true, true);
-
-            // Assert
-            var clozeOnNewPosition = clozes.Single(item => item.Position == newPosition);
-            Assert.AreEqual(clozeID, clozeOnNewPosition.ID);
-            Assert.AreEqual(newPosition, cloze.Position);
-            Assert.IsTrue(Helpers.ArePositionsValid(clozes));
-        }
-
-        [TestMethod]
-        public void TestMoveClozeBackward()
-        {
-            // Arrange
-
-            var oldPosition = 20;
-            var newPosition = 10;
-            var n = 30;
-            var clozes = (from i in Enumerable.Range(0, n) select new UserRepetition { ID = i, Position = i }).ToList();
             var cloze = clozes.Single(item => item.Position == oldPosition);
             var clozeID = cloze.ID;
 
