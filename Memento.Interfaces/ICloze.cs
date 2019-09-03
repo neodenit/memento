@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Memento.Interfaces
 {
     public interface ICloze
     {
-        int CardID { get; set; }
+        Guid CardID { get; set; }
         int ID { get; set; }
         string Label { get; set; }
 

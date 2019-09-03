@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Memento.Interfaces;
@@ -63,10 +64,10 @@ namespace Memento.Tests
 
         public void Dispose() { }
 
-        public ICard FindCard(int id) =>
+        public ICard FindCard(Guid id) =>
             cards.FirstOrDefault(c => c.ID == id);
 
-        public Task<ICard> FindCardAsync(int id) =>
+        public Task<ICard> FindCardAsync(Guid id) =>
             Task.FromResult(cards.FirstOrDefault(c => c.ID == id));
 
         public ICloze FindCloze(int id) =>

@@ -4,7 +4,7 @@ namespace Memento.Interfaces
 {
     public interface IAnswer
     {
-        int CardID { get; set; }
+        Guid CardID { get; set; }
         int ClozeID { get; set; }
         int DeckID { get; set; }
         int ID { get; set; }

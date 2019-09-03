@@ -1,10 +1,5 @@
-﻿using Memento.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Memento.Interfaces;
 
 namespace Memento.Models.ViewModels
 {
@@ -12,7 +7,7 @@ namespace Memento.Models.ViewModels
     {
         public int ID { get; set; }
 
-        public int CardID { get; set; }
+        public Guid CardID { get; set; }
 
         public string Label { get; set; }
 

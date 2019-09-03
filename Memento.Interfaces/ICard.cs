@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Memento.Interfaces
 {
     public interface ICard
     {
         int DeckID { get; set; }
-        int ID { get; set; }
+        Guid ID { get; set; }
         bool IsDeleted { get; set; }
         bool IsValid { get; set; }
         string Text { get; set; }

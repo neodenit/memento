@@ -1,17 +1,12 @@
-﻿using Memento.Attributes;
-using Memento.Interfaces;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Memento.Interfaces;
 
 namespace Memento.Models.ViewModels
 {
     public class ViewCardViewModel : IViewCardViewModel
     {
-        public int ID { get; set; }
+        public Guid ID { get; set; }
         public int DeckID { get; set; }
 
         [DataType(DataType.MultilineText)]

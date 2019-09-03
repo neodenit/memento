@@ -68,7 +68,7 @@ namespace Memento.Web.Controllers
             return View(viewModel);
         }
 
-        public async Task<ActionResult> Details([CheckCardExistence, CheckCardOwner] int id)
+        public async Task<ActionResult> Details([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var card = await cardsService.FindCardAsync(id);
             var deck = card.GetDeck();
@@ -92,7 +92,7 @@ namespace Memento.Web.Controllers
             }
         }
 
-        public async Task<ActionResult> PreviewClosed([CheckCardExistence, CheckCardOwner] int id)
+        public async Task<ActionResult> PreviewClosed([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var card = await cardsService.FindCardAsync(id);
             var cloze = card.GetNextCloze(username);
@@ -101,7 +101,7 @@ namespace Memento.Web.Controllers
             return View(viewModel);
         }
 
-        public async Task<ActionResult> PreviewOpened([CheckCardExistence, CheckCardOwner] int id)
+        public async Task<ActionResult> PreviewOpened([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var card = await cardsService.FindCardAsync(id);
             var cloze = card.GetNextCloze(username);
@@ -122,7 +122,7 @@ namespace Memento.Web.Controllers
             return RedirectToNextCard(deck);
         }
 
-        public async Task<ActionResult> RepeatClosed([CheckCardExistence, CheckCardOwner] int id)
+        public async Task<ActionResult> RepeatClosed([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var card = await cardsService.FindCardAsync(id);
             var cloze = card.GetNextCloze(username);
@@ -131,7 +131,7 @@ namespace Memento.Web.Controllers
             return View(viewModel);
         }
 
-        public async Task<ActionResult> RepeatOpened([CheckCardExistence, CheckCardOwner] int id)
+        public async Task<ActionResult> RepeatOpened([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var card = await cardsService.FindCardAsync(id);
             var cloze = card.GetNextCloze(username);
@@ -169,7 +169,7 @@ namespace Memento.Web.Controllers
             return RedirectToNextCard(deck);
         }
 
-        public async Task<ActionResult> Question([CheckCardExistence, CheckCardOwner] int id)
+        public async Task<ActionResult> Question([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var card = await cardsService.FindCardAsync(id);
             var cloze = card.GetNextCloze(username);
@@ -287,7 +287,7 @@ namespace Memento.Web.Controllers
             }
         }
 
-        public async Task<ActionResult> Edit([CheckCardExistence, CheckCardOwner] int id)
+        public async Task<ActionResult> Edit([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var card = await cardsService.FindCardAsync(id);
             var cardViewModel = new EditCardViewModel(card);
@@ -313,7 +313,7 @@ namespace Memento.Web.Controllers
             }
         }
 
-        public async Task<ActionResult> ShuffleNewCards(int cardID)
+        public async Task<ActionResult> ShuffleNewCards(Guid cardID)
         {
             var card = await cardsService.FindCardAsync(cardID);
 
@@ -327,7 +327,7 @@ namespace Memento.Web.Controllers
             return RedirectToAction("ClozesIndex", new { deckID });
         }
 
-        public async Task<ActionResult> Restore([CheckCardExistence, CheckCardOwner] int id)
+        public async Task<ActionResult> Restore([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var card = await cardsService.FindCardAsync(id);
 
@@ -336,7 +336,7 @@ namespace Memento.Web.Controllers
 
         [HttpPost, ActionName("Restore")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RestoreConfirmed([CheckCardExistence, CheckCardOwner] int id)
+        public async Task<ActionResult> RestoreConfirmed([CheckCardExistence, CheckCardOwner] Guid id)
         {
             await cardsService.RestoreCard(id);
 
@@ -345,7 +345,7 @@ namespace Memento.Web.Controllers
             return RedirectToAction("DeletedIndex", "Cards", new { DeckID = card.DeckID });
         }
 
-        public async Task<ActionResult> Delete([CheckCardExistence, CheckCardOwner] int id)
+        public async Task<ActionResult> Delete([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var card = await cardsService.FindCardAsync(id);
             var viewModel = new ViewCardViewModel(card);
@@ -355,7 +355,7 @@ namespace Memento.Web.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed([CheckCardExistence, CheckCardOwner] int id)
+        public async Task<ActionResult> DeleteConfirmed([CheckCardExistence, CheckCardOwner] Guid id)
         {
             await cardsService.DeleteCard(id);
 
@@ -376,7 +376,7 @@ namespace Memento.Web.Controllers
             return RedirectToCard(nextCard.ID);
         }
 
-        private ActionResult RedirectToCard(int cardID)
+        private ActionResult RedirectToCard(Guid cardID)
         {
             return RedirectToAction("Details", new { id = cardID });
         }

@@ -1,17 +1,15 @@
-﻿using Memento.Common.App_GlobalResources;
-using Memento.Interfaces;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Memento.Common.App_GlobalResources;
+using Memento.Interfaces;
 
 namespace Memento.Models.ViewModels
 {
     public class AnswerCardViewModel : IAnswerCardViewModel
     {
-        public int ID { get; set; }
+        public Guid ID { get; set; }
+
+        public int DeckID { get; set; }
 
         public string DeckTitle { get; set; }
 
@@ -39,6 +37,7 @@ namespace Memento.Models.ViewModels
         public AnswerCardViewModel(ICard card)
         {
             ID = card.ID;
+            DeckID = card.DeckID;
 
             var deck = card.GetDeck();
             DeckTitle = deck.Title;

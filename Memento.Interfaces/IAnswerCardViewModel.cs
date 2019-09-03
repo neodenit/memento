@@ -1,10 +1,10 @@
-﻿using Memento.Interfaces;
+﻿using System;
 
 namespace Memento.Interfaces
 {
     public interface IAnswerCardViewModel
     {
-        int ID { get; set; }
+        Guid ID { get; set; }
 
         string Question { get; set; }
 

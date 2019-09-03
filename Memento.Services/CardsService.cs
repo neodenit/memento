@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Memento.Interfaces;
 using Memento.Models.ViewModels;
@@ -73,7 +74,7 @@ namespace Memento.Services
             return cardWithAnswer;
         }
 
-        public Task<ICard> FindCardAsync(int id) =>
+        public Task<ICard> FindCardAsync(Guid id) =>
             repository.FindCardAsync(id);
 
         public async Task<ICard> GetNextCardAsync(int deckID, string username)
@@ -96,6 +97,8 @@ namespace Memento.Services
             var deck = await repository.FindDeckAsync(card.DeckID);
 
             var newCard = factory.CreateCard(deck, card.Text, card.Comment, true);
+
+            newCard.ID = Guid.NewGuid();
 
             repository.AddCard(newCard);
 
@@ -126,7 +129,7 @@ namespace Memento.Services
             await repository.SaveChangesAsync();
         }
 
-        public async Task DeleteCard(int id)
+        public async Task DeleteCard(Guid id)
         {
             var card = await FindCardAsync(id);
 
@@ -142,7 +145,7 @@ namespace Memento.Services
             await repository.SaveChangesAsync();
         }
 
-        public async Task RestoreCard(int id)
+        public async Task RestoreCard(Guid id)
         {
             var card = await FindCardAsync(id);
 

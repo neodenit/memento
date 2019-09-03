@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Memento.Interfaces
@@ -9,10 +10,10 @@ namespace Memento.Interfaces
         Task<IEnumerable<IDeck>> GetUserDecksAsync(string userName);
         Task<IEnumerable<IAnswer>> GetAnswersForDeckAsync(int deckID);
         IDeck FindDeck(int id);
-        ICard FindCard(int id);
+        ICard FindCard(Guid id);
         ICloze FindCloze(int id);
         Task<IDeck> FindDeckAsync(int id);
-        Task<ICard> FindCardAsync(int id);
+        Task<ICard> FindCardAsync(Guid id);
         Task<ICloze> FindClozeAsync(int id);
         void AddDeck(IDeck deck);
         void AddCard(ICard card);

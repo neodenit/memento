@@ -1,12 +1,11 @@
-﻿using Memento.Common;
-using Memento.Attributes;
-using Memento.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Memento.Attributes;
+using Memento.Common;
+using Memento.Interfaces;
 
 namespace Memento.Models.Models
 {
@@ -26,8 +25,10 @@ namespace Memento.Models.Models
             Comment = comment;
         }
 
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [CheckCardOwner]
-        public int ID { get; set; }
+        public Guid ID { get; set; }
 
         public int DeckID { get; set; }
 

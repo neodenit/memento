@@ -1,13 +1,8 @@
-﻿using Memento.Interfaces;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Memento.Interfaces;
 
 namespace Memento.Attributes
 {
@@ -17,7 +12,7 @@ namespace Memento.Attributes
 
         public override bool IsValid(object value)
         {
-            var cardID = (int)value;
+            var cardID = (Guid)value;
 
             var card = repository.FindCard(cardID);
 

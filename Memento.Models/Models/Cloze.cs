@@ -1,9 +1,7 @@
-﻿using Memento.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Memento.Interfaces;
 
 namespace Memento.Models.Models
 {
@@ -14,7 +12,7 @@ namespace Memento.Models.Models
             UserRepetitions = new List<UserRepetition>();
         }
 
-        public Cloze(int cardID, string label) : this()
+        public Cloze(Guid cardID, string label) : this()
         {
             CardID = cardID;
             Label = label;
@@ -22,7 +20,7 @@ namespace Memento.Models.Models
 
         public int ID { get; set; }
 
-        public int CardID { get; set; }
+        public Guid CardID { get; set; }
 
         public virtual Card Card { get; set; }
 

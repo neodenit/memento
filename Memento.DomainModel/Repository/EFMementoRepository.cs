@@ -33,7 +33,7 @@ namespace Memento.DataAccess.Repository
         public IDeck FindDeck(int id) =>
             db.Decks.Find(id);
 
-        public ICard FindCard(int id) =>
+        public ICard FindCard(Guid id) =>
             db.Cards.Find(id);
 
         public ICloze FindCloze(int id) =>
@@ -42,7 +42,7 @@ namespace Memento.DataAccess.Repository
         public async Task<IDeck> FindDeckAsync(int id) =>
             await db.Decks.FindAsync(id);
 
-        public async Task<ICard> FindCardAsync(int id) =>
+        public async Task<ICard> FindCardAsync(Guid id) =>
             await db.Cards.FindAsync(id);
 
         public async Task<ICloze> FindClozeAsync(int id) =>

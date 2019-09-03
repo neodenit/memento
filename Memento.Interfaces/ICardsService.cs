@@ -1,4 +1,4 @@
-﻿using Memento.Interfaces;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace Memento.Interfaces
@@ -6,7 +6,7 @@ namespace Memento.Interfaces
     public interface ICardsService
     {
         Task<ICard> GetNextCardAsync(int deckID, string username);
-        Task<ICard> FindCardAsync(int id);
+        Task<ICard> FindCardAsync(Guid id);
 
         Task AddAltAnswer(ICloze cloze, string answer);
         IAnswerCardViewModel GetCardWithQuestion(ICloze cloze);
@@ -15,7 +15,7 @@ namespace Memento.Interfaces
 
         Task AddCard(IEditCardViewModel card);
         Task UpdateCard(IEditCardViewModel card);
-        Task DeleteCard(int id);
-        Task RestoreCard(int id);
+        Task DeleteCard(Guid id);
+        Task RestoreCard(Guid id);
     }
 }

@@ -1,9 +1,5 @@
-﻿using Memento.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Memento.Interfaces;
 
 namespace Memento.Models.Models
 {
@@ -19,7 +15,7 @@ namespace Memento.Models.Models
 
         public int ClozeID { get; set; }
 
-        public int CardID { get; set; }
+        public Guid CardID { get; set; }
 
         public int DeckID { get; set; }
     }
