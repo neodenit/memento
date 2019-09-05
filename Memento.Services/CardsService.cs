@@ -98,7 +98,8 @@ namespace Memento.Services
 
             var newCard = factory.CreateCard(deck, card.Text, card.Comment, true);
 
-            newCard.ID = Guid.NewGuid();
+            newCard.ID = card.ID != Guid.Empty ? card.ID: Guid.NewGuid();
+            newCard.ReadingCardId = card.ReadingCardId;
 
             repository.AddCard(newCard);
 
@@ -152,6 +153,13 @@ namespace Memento.Services
             card.IsDeleted = false;
 
             await repository.SaveChangesAsync();
+        }
+
+        public async Task<bool> IsCardValidAsync(Guid readingCardId, Guid repetitionCardId)
+        {
+            var card = await repository.FindCardAsync(repetitionCardId);
+            var isValid = card?.ReadingCardId == readingCardId;
+            return isValid;
         }
     }
 }

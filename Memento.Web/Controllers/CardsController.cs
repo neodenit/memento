@@ -8,6 +8,7 @@ using Memento.Attributes;
 using Memento.Common;
 using Memento.Interfaces;
 using Memento.Models.ViewModels;
+using Newtonsoft.Json;
 
 namespace Memento.Web.Controllers
 {
@@ -253,13 +254,19 @@ namespace Memento.Web.Controllers
             return await Task.FromResult(RedirectToAction("Details", new { card.ID }));
         }
 
-        public async Task<ActionResult> Create(int? DeckID)
+        public async Task<ActionResult> Create(int? DeckID, Guid? readingCardId, Guid? repetitionCardId, string text)
         {
             if (DeckID == null)
             {
-                ViewBag.DeckID = new SelectList(await decksService.GetDecksAsync(User.Identity.Name), "ID", "Title");
+                ViewBag.Decks = new SelectList(await decksService.GetDecksAsync(User.Identity.Name), "ID", "Title");
 
-                var card = new EditCardViewModel { DeckID = -1 };
+                var card = new EditCardViewModel
+                {
+                    ID = repetitionCardId.GetValueOrDefault(),
+                    ReadingCardId = readingCardId.GetValueOrDefault(),
+                    DeckID = -1,
+                    Text = text
+                };
 
                 return View(card);
             }
@@ -273,20 +280,39 @@ namespace Memento.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID, DeckID, Text, Comment")] EditCardViewModel card)
+        public async Task<ActionResult> Create([Bind(Include = "ID, DeckID, ReadingCardId, Text, Comment")] EditCardViewModel card)
         {
+            if (card.ReadingCardId != Guid.Empty)
+            {
+                var isCardIdValid = await IsReadingCardValidAsync(card.ID, card.ReadingCardId);
+
+                if (!isCardIdValid)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 await cardsService.AddCard(card);
 
-                return RedirectToAction("Create", "Cards", new { DeckID = card.DeckID });
+                if (card.ReadingCardId == Guid.Empty)
+                {
+                    return RedirectToAction("Create", "Cards", new { card.DeckID });
+                }
+                else
+                {
+                    var baseUri = new Uri(Settings.Default.IncrementalReadingServer);
+                    var uri = new Uri(baseUri, $"Cards/Details/{card.ReadingCardId}");
+                    return Redirect(uri.ToString());
+                }
             }
             else
             {
+                ViewBag.Decks = new SelectList(await decksService.GetDecksAsync(User.Identity.Name), "ID", "Title");
                 return View(card);
             }
         }
-
         public async Task<ActionResult> Edit([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var card = await cardsService.FindCardAsync(id);
@@ -364,6 +390,13 @@ namespace Memento.Web.Controllers
             return RedirectToAction("Details", "Decks", new { id = card.DeckID });
         }
 
+        [AllowAnonymous]
+        public async Task<ActionResult> IsValid(Guid readingCardId, Guid repetitionCardId)
+        {
+            bool isValid = await cardsService.IsCardValidAsync(readingCardId, repetitionCardId);
+            return Json(isValid, JsonRequestBehavior.AllowGet);
+        }
+
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             username = User.Identity.Name;
@@ -379,6 +412,16 @@ namespace Memento.Web.Controllers
         private ActionResult RedirectToCard(Guid cardID)
         {
             return RedirectToAction("Details", new { id = cardID });
+        }
+
+        private async Task<bool> IsReadingCardValidAsync(Guid repetitionCardId, Guid readingCardId)
+        {
+            var baseUri = new Uri(Settings.Default.IncrementalReadingServer);
+            var uri = new Uri(baseUri, $"Cards/IsValid?readingCardId={readingCardId}&repetitionCardId={repetitionCardId}");
+            var response = await HomeController.HttpClient.GetAsync(uri);
+            var responseString = await response.Content.ReadAsStringAsync();
+            var isValid = JsonConvert.DeserializeObject<bool>(responseString);
+            return isValid;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Memento.Models.ViewModels;
@@ -11,6 +12,8 @@ namespace Memento.Web.Controllers
     [RequireHttps]
     public class HomeController : Controller
     {
+        public static readonly HttpClient HttpClient = new HttpClient();
+
         public async Task<ActionResult> Index()
         {
             ViewBag.Message = "Memento";

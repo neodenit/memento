@@ -17,5 +17,7 @@ namespace Memento.Interfaces
         Task UpdateCard(IEditCardViewModel card);
         Task DeleteCard(Guid id);
         Task RestoreCard(Guid id);
+
+        Task<bool> IsCardValidAsync(Guid readingCardId, Guid repetitionCardId);
     }
 }

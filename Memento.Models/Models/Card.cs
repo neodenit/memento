@@ -30,6 +30,8 @@ namespace Memento.Models.Models
         [CheckCardOwner]
         public Guid ID { get; set; }
 
+        public Guid ReadingCardId { get; set; }
+
         public int DeckID { get; set; }
 
         public virtual Deck Deck { get; set; }

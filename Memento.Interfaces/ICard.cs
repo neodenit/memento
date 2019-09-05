@@ -7,6 +7,7 @@ namespace Memento.Interfaces
     {
         int DeckID { get; set; }
         Guid ID { get; set; }
+        Guid ReadingCardId { get; set; }
         bool IsDeleted { get; set; }
         bool IsValid { get; set; }
         string Text { get; set; }

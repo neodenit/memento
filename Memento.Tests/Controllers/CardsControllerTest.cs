@@ -406,7 +406,7 @@ namespace Memento.Tests.Controllers
             var id = 1;
 
             // Act
-            var result = await sut.Create(id) as ViewResult;
+            var result = await sut.Create(id, null, null, null) as ViewResult;
             var model = result.Model as EditCardViewModel;
 
             // Assert
@@ -422,7 +422,7 @@ namespace Memento.Tests.Controllers
             int? id = null;
 
             // Act
-            var result = await sut.Create(id) as ViewResult;
+            var result = await sut.Create(id, null, null, null) as ViewResult;
             var model = result.Model as EditCardViewModel;
 
             // Assert
