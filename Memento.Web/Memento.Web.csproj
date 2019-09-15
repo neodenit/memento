@@ -379,7 +379,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -388,7 +387,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Memento.Attributes\Memento.Attributes.csproj">
-      <Project>{fa6f41e3-a64f-408c-b831-de622dd25c7b}</Project>
+      <Project>{FA6F41E3-A64F-408C-B831-DE622DD25C7B}</Project>
       <Name>Memento.Attributes</Name>
     </ProjectReference>
     <ProjectReference Include="..\Memento.Bot\Memento.Bot.csproj">

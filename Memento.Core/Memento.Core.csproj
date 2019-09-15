@@ -51,6 +51,7 @@
     <Compile Include="Evaluators\BaseEvaluator.cs" />
     <Compile Include="Evaluators\PhraseEvaluator.cs" />
     <Compile Include="Evaluators\WordsEvaluator.cs" />
+    <Compile Include="Factory.cs" />
     <Compile Include="Scheduler\SchedulerUtils.cs" />
     <Compile Include="Validators\BaseValidator.cs" />
     <Compile Include="NewClozesManager.cs" />
@@ -74,6 +75,10 @@
     <ProjectReference Include="..\Memento.Interfaces\Memento.Interfaces.csproj">
       <Project>{57e544cd-a620-4820-bbf4-dc8c27b4968e}</Project>
       <Name>Memento.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Memento.Models\Memento.Models.csproj">
+      <Project>{9A7EBCFB-2F3A-4ED3-8DFF-C356AD46F230}</Project>
+      <Name>Memento.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

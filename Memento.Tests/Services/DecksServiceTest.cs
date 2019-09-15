@@ -1,14 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Memento.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Memento.Interfaces;
-using Moq;
-using Memento.Models.Models;
+﻿using System.Threading.Tasks;
 using Memento.Additional;
+using Memento.Interfaces;
+using Memento.Models.Models;
+using Memento.Services;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Memento.Tests.Services
 {
@@ -117,7 +113,7 @@ namespace Memento.Tests.Services
 
             // Assert
             mockRepository.Verify(x => x.FindDeckAsync(id), Times.Once);
-            mockRepository.Verify(x => x.RemoveDeck(It.IsAny<IDeck>()), Times.Once);
+            mockRepository.Verify(x => x.RemoveDeck(It.IsAny<Deck>()), Times.Once);
             mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
         }
     }

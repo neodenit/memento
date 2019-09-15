@@ -1,11 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Memento.Services;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Memento.Interfaces;
+using Memento.Models.Models;
+using Memento.Services;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 namespace Memento.Tests.Services
@@ -44,7 +43,7 @@ namespace Memento.Tests.Services
         public void StatServiceGetStatisticsTest()
         {
             // Arrange
-            var answers = Enumerable.Empty<IAnswer>();
+            var answers = Enumerable.Empty<Answer>();
 
             // Act
             var result = sut.GetStatistics(answers);

@@ -1,10 +1,7 @@
-﻿using Memento.Interfaces;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Memento.Models.Enums;
+using Memento.Models.Models;
 
 namespace Memento.Models.ViewModels
 {
@@ -37,7 +34,7 @@ namespace Memento.Models.ViewModels
 
         public DeckViewModel() { }
 
-        public DeckViewModel(IDeck deck)
+        public DeckViewModel(Deck deck)
         {
             ID = deck.ID;
             Title = deck.Title;

@@ -1,9 +1,8 @@
-﻿using Memento.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Memento.Additional
 {
-    public class ChartData : IChartData
+    public class ChartData
     {
         public IEnumerable<string> Labels { get; set; }
         public IEnumerable<int> Values { get; set; }

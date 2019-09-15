@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Memento.Models.Models;
 
 namespace Memento.Interfaces
 {
     public interface IFactory
     {
-        IDeck CreateDeck();
-        IDeck CreateDeck(int id);
-        IDeck CreateDeck(double coeff, int startDelay);
+        Deck CreateDeck();
+        Deck CreateDeck(int id);
+        Deck CreateDeck(double coeff, int startDelay);
 
-        ICard CreateCard();
-        ICard CreateCard(IDeck deck, string text, string comment, bool isValid);
+        Card CreateCard();
+        Card CreateCard(Deck deck, string text, string comment, bool isValid);
     }
 }

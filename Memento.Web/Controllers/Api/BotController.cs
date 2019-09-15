@@ -6,6 +6,9 @@ using System.Web.Http;
 using Memento.Bot;
 using Memento.Interfaces;
 using Memento.Models;
+using Memento.Models.Enums;
+using Memento.Models.Models;
+using Memento.Models.ViewModels;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Connector.Utilities;
@@ -163,7 +166,7 @@ namespace Memento.Web.Controllers.Api
             }
         }
 
-        private async Task<string> GetResponseForRightAnswer(Message message, IDeck deck, IAnswerCardViewModel card, string username)
+        private async Task<string> GetResponseForRightAnswer(Message message, Deck deck, AnswerCardViewModel card, string username)
         {
             var rightMessage = "**You are right!**";
             var commentMessage = "Comment:";
@@ -185,7 +188,7 @@ namespace Memento.Web.Controllers.Api
             return response;
         }
 
-        private async Task<string> GetResponseForWrongAnswer(Message message, IDeck deck, IAnswerCardViewModel card, string username)
+        private async Task<string> GetResponseForWrongAnswer(Message message, Deck deck, AnswerCardViewModel card, string username)
         {
             var wrongMessage = "**You are wrong!**";
             var fullAnswerMessage = "Full answer:";
@@ -208,7 +211,7 @@ namespace Memento.Web.Controllers.Api
             return response;
         }
 
-        private async Task<ICard> GetNextCard(Message message, string username)
+        private async Task<Card> GetNextCard(Message message, string username)
         {
             var dbDeck = await GetCurrentDeck(message);
             var card = dbDeck.GetNextCard(username);
@@ -225,7 +228,7 @@ namespace Memento.Web.Controllers.Api
             return cardWithQuestion.Question;
         }
 
-        private async Task<IAnswerCardViewModel> GetAnswer(Message message, string username)
+        private async Task<AnswerCardViewModel> GetAnswer(Message message, string username)
         {
             var card = await GetNextCard(message, username);
             var cloze = card.GetNextCloze(username);
@@ -234,7 +237,7 @@ namespace Memento.Web.Controllers.Api
             return cardWithAnswer;
         }
 
-        private async Task<IDeck> GetCurrentDeck(Message message)
+        private async Task<Deck> GetCurrentDeck(Message message)
         {
             var deckID = message.GetBotPerUserInConversationData<int>("deckID");
             var dbDeck = await decksService.FindDeckAsync(deckID);

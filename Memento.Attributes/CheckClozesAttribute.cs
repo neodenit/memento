@@ -1,12 +1,8 @@
-﻿using Memento.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
+using Memento.Interfaces;
+using Memento.Models.ViewModels;
 
 namespace Memento.Attributes
 {
@@ -17,7 +13,7 @@ namespace Memento.Attributes
 
         public override bool IsValid(object value)
         {
-            var card = (IEditCardViewModel)value;
+            var card = (EditCardViewModel)value;
 
             var text = card.Text;
             var clozeNames = converter.GetClozeNames(text);

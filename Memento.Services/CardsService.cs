@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Memento.Interfaces;
+using Memento.Models;
+using Memento.Models.Models;
 using Memento.Models.ViewModels;
 
 namespace Memento.Services
@@ -21,7 +23,7 @@ namespace Memento.Services
             this.factory = factory;
         }
 
-        public async Task AddAltAnswer(ICloze cloze, string answer)
+        public async Task AddAltAnswer(Cloze cloze, string answer)
         {
             var card = cloze.GetCard();
 
@@ -30,7 +32,7 @@ namespace Memento.Services
             await repository.SaveChangesAsync();
         }
 
-        public IAnswerCardViewModel GetCardWithQuestion(ICloze cloze)
+        public AnswerCardViewModel GetCardWithQuestion(Cloze cloze)
         {
             var card = cloze.GetCard();
             var question = converter.GetQuestion(card.Text, cloze.Label);
@@ -40,7 +42,7 @@ namespace Memento.Services
             return result;
         }
 
-        public IAnswerCardViewModel GetCardWithAnswer(ICloze cloze)
+        public AnswerCardViewModel GetCardWithAnswer(Cloze cloze)
         {
             var card = cloze.GetCard();
             var fullAnswer = converter.GetFullAnswer(card.Text, cloze.Label);
@@ -51,7 +53,7 @@ namespace Memento.Services
             return result;
         }
 
-        public IAnswerCardViewModel EvaluateCard(ICloze cloze, string userAnswer)
+        public AnswerCardViewModel EvaluateCard(Cloze cloze, string userAnswer)
         {
             var card = cloze.GetCard();
 
@@ -74,10 +76,10 @@ namespace Memento.Services
             return cardWithAnswer;
         }
 
-        public Task<ICard> FindCardAsync(Guid id) =>
+        public Task<Card> FindCardAsync(Guid id) =>
             repository.FindCardAsync(id);
 
-        public async Task<ICard> GetNextCardAsync(int deckID, string username)
+        public async Task<Card> GetNextCardAsync(int deckID, string username)
         {
             var dbDeck = await repository.FindDeckAsync(deckID);
 
@@ -91,7 +93,7 @@ namespace Memento.Services
             }
         }
 
-        public async Task AddCard(IEditCardViewModel card)
+        public async Task AddCard(EditCardViewModel card)
         {
             var clozeNames = converter.GetClozeNames(card.Text);
             var deck = await repository.FindDeckAsync(card.DeckID);
@@ -110,7 +112,7 @@ namespace Memento.Services
             await repository.SaveChangesAsync();
         }
 
-        public async Task UpdateCard(IEditCardViewModel card)
+        public async Task UpdateCard(EditCardViewModel card)
         {
             var dbCard = await FindCardAsync(card.ID);
             var clozes = converter.GetClozeNames(dbCard.Text);

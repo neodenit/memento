@@ -3,21 +3,19 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using Memento.Attributes;
 using Memento.Common;
-using Memento.Interfaces;
 
 namespace Memento.Models.Models
 {
     [Serializable]
-    public class Card : ICard
+    public class Card
     {
         public Card()
         {
             Clozes = new List<Cloze>();
         }
 
-        public Card(IDeck deck, string text, string comment, bool isValid) : this()
+        public Card(Deck deck, string text, string comment, bool isValid) : this()
         {
             Deck = deck as Deck;
             Text = text;
@@ -27,7 +25,6 @@ namespace Memento.Models.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        [CheckCardOwner]
         public Guid ID { get; set; }
 
         public Guid ReadingCardId { get; set; }
@@ -36,7 +33,7 @@ namespace Memento.Models.Models
 
         public virtual Deck Deck { get; set; }
 
-        public IDeck GetDeck()
+        public Deck GetDeck()
         {
             return Deck;
         }
@@ -49,12 +46,12 @@ namespace Memento.Models.Models
 
         public virtual ICollection<Cloze> Clozes { get; set; }
 
-        public IEnumerable<ICloze> GetClozes() => Clozes;
+        public IEnumerable<Cloze> GetClozes() => Clozes;
 
-        public ICloze GetNextCloze(string username) =>
+        public Cloze GetNextCloze(string username) =>
             Clozes.GetMinElement(c => c.GetUserRepetition(username).Position);
 
-        public void AddCloze(ICloze cloze) =>
+        public void AddCloze(Cloze cloze) =>
             Clozes.Add(cloze as Cloze);
 
         public IEnumerable<string> GetUsers() =>

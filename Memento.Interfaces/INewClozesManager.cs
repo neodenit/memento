@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using Memento.Models.Models;
 
 namespace Memento.Interfaces
 {
     public interface INewClozesManager
     {
-        void RearrangeNewRepetitions(IDeck deck, IEnumerable<IUserRepetition> repetitions);
+        void RearrangeNewRepetitions(Deck deck, IEnumerable<UserRepetition> repetitions);
     }
 }

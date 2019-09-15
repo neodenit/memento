@@ -64,12 +64,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Memento.Interfaces\Memento.Interfaces.csproj">
-      <Project>{57e544cd-a620-4820-bbf4-dc8c27b4968e}</Project>
-      <Name>Memento.Interfaces</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="App_GlobalResources\Resources.resx">
       <Generator>PublicResxFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

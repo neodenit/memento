@@ -1,11 +1,10 @@
-﻿using Memento.Common;
-using Memento.Interfaces;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Memento.Common;
+using Memento.Interfaces;
+using Memento.Models.Helpers;
+using Memento.Models.Models;
 
 namespace Memento.Core
 {
@@ -18,16 +17,16 @@ namespace Memento.Core
             this.scheduler = scheduler;
         }
 
-        public void RearrangeSiblings(IDeck deck, IEnumerable<IUserRepetition> repetitions)
+        public void RearrangeSiblings(Deck deck, IEnumerable<UserRepetition> repetitions)
         {
             var repetitionsToMove = GetRepetitionsToMove(deck, repetitions);
 
             MoveRepetitions(deck, repetitions, repetitionsToMove);
 
-            Debug.Assert(Helpers.ArePositionsValid(repetitions));
+            Debug.Assert(ModelHelpers.ArePositionsValid(repetitions));
         }
 
-        private static IEnumerable<IUserRepetition> GetRepetitionsToMove(IDeck deck, IEnumerable<IUserRepetition> repetitions)
+        private static IEnumerable<UserRepetition> GetRepetitionsToMove(Deck deck, IEnumerable<UserRepetition> repetitions)
         {
             var cardID = repetitions.GetMinElement(repetition => repetition.Position).GetCloze().CardID;
 
@@ -43,11 +42,11 @@ namespace Memento.Core
             }
             else
             {
-                return Enumerable.Empty<IUserRepetition>();
+                return Enumerable.Empty<UserRepetition>();
             }
         }
 
-        private void MoveRepetitions(IDeck deck, IEnumerable<IUserRepetition> allRepetitions, IEnumerable<IUserRepetition> repetitionsToMove)
+        private void MoveRepetitions(Deck deck, IEnumerable<UserRepetition> allRepetitions, IEnumerable<UserRepetition> repetitionsToMove)
         {
             foreach (var repetition in repetitionsToMove)
             {

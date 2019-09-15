@@ -117,10 +117,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Memento.Attributes\Memento.Attributes.csproj">
-      <Project>{fa6f41e3-a64f-408c-b831-de622dd25c7b}</Project>
-      <Name>Memento.Attributes</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Memento.Common\Memento.Common.csproj">
       <Project>{af08785a-2a1b-47f8-8100-460b69df26be}</Project>
       <Name>Memento.Common</Name>

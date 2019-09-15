@@ -1,5 +1,5 @@
 ﻿using System;
-using Memento.Interfaces;
+using Memento.Models.Models;
 
 namespace Memento.Models.ViewModels
 {
@@ -21,7 +21,7 @@ namespace Memento.Models.ViewModels
 
         public string Text { get; set; }
 
-        public ClozeViewModel(ICloze cloze, string username, string text = "")
+        public ClozeViewModel(Cloze cloze, string username, string text = "")
         {
             ID = cloze.ID;
             CardID = cloze.CardID;

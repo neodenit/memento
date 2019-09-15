@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using Memento.Models.Models;
 
 namespace Memento.Interfaces
 {
     public interface ISiblingsManager
     {
-        void RearrangeSiblings(IDeck deck, IEnumerable<IUserRepetition> repetitions);
+        void RearrangeSiblings(Deck deck, IEnumerable<UserRepetition> repetitions);
     }
 }

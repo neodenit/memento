@@ -1,10 +1,10 @@
-﻿using Memento.Interfaces;
-using Memento.Models.ViewModels;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Memento.Additional;
+using Memento.Interfaces;
+using Memento.Models.Models;
+using Memento.Models.ViewModels;
 
 namespace Memento.Services
 {
@@ -17,21 +17,21 @@ namespace Memento.Services
             this.repository = repository;
         }
 
-        public async Task<IEnumerable<IDeck>> GetDecksAsync(string username)
+        public async Task<IEnumerable<Deck>> GetDecksAsync(string username)
         {
             var decks = await repository.GetUserDecksAsync(username);
             var orderedDecks = decks.OrderBy(deck => deck.Title);
             return orderedDecks;
         }
 
-        public async Task<IEnumerable<IDeck>> GetSharedDecksAsync()
+        public async Task<IEnumerable<Deck>> GetSharedDecksAsync()
         {
             var decks = await repository.GetSharedDecksAsync();
             var orderedDecks = decks.OrderBy(deck => deck.Title);
             return orderedDecks;
         }
 
-        public async Task<IDeckWithStatViewModel> GetDeckWithStatViewModel(int deckID, IStatistics statistics, string username)
+        public async Task<DeckWithStatViewModel> GetDeckWithStatViewModel(int deckID, Statistics statistics, string username)
         {
             var deck = await repository.FindDeckAsync(deckID);
 
@@ -48,10 +48,10 @@ namespace Memento.Services
             return viewModel;
         }
 
-        public Task<IDeck> FindDeckAsync(int id) =>
+        public Task<Deck> FindDeckAsync(int id) =>
             repository.FindDeckAsync(id);
 
-        public async Task CreateDeck(IDeck deck, string userName)
+        public async Task CreateDeck(Deck deck, string userName)
         {
             deck.Owner = userName;
 

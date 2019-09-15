@@ -1,13 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
-using Memento.Attributes;
-using Memento.Interfaces;
+using Memento.Models.Models;
 
 namespace Memento.Models.ViewModels
 {
-    [CheckClozes]
-    public class EditCardViewModel : IEditCardViewModel
+    public class EditCardViewModel
     {
         public Guid ID { get; set; }
 
@@ -27,7 +25,7 @@ namespace Memento.Models.ViewModels
 
         public EditCardViewModel() { }
 
-        public EditCardViewModel(ICard card)
+        public EditCardViewModel(Card card)
         {
             ID = card.ID;
             DeckID = card.DeckID;

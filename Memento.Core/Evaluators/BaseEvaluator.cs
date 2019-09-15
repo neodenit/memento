@@ -1,12 +1,11 @@
-﻿using Memento.Common;
-using Memento.Interfaces;
-using MinimumEditDistance;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using Memento.Common;
+using Memento.Interfaces;
+using Memento.Models.Enums;
+using MinimumEditDistance;
 
 namespace Memento.Core.Evaluators
 {

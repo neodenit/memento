@@ -7,6 +7,8 @@ using Memento.Additional;
 using Memento.Attributes;
 using Memento.Common;
 using Memento.Interfaces;
+using Memento.Models.Enums;
+using Memento.Models.Models;
 using Memento.Models.ViewModels;
 using Newtonsoft.Json;
 
@@ -402,7 +404,7 @@ namespace Memento.Web.Controllers
             username = User.Identity.Name;
         }
 
-        private ActionResult RedirectToNextCard(IDeck deck)
+        private ActionResult RedirectToNextCard(Deck deck)
         {
             var nextCard = deck.GetNextCard(username);
 

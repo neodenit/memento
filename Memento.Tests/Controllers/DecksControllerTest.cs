@@ -1,4 +1,12 @@
-﻿using Memento.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using Memento.Additional;
+using Memento.Common;
 using Memento.Interfaces;
 using Memento.Models.Models;
 using Memento.Models.ViewModels;
@@ -6,14 +14,6 @@ using Memento.Tests.TestDbAsync;
 using Memento.Web.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace Memento.Tests.Controllers
 {
@@ -55,9 +55,9 @@ namespace Memento.Tests.Controllers
             };
 
             mockStatisticsService.Setup(x => x.GetAnswersAsync(It.IsAny<int>(), It.IsAny<DateTime>()))
-                .ReturnsAsync(Enumerable.Empty<IAnswer>());
+                .ReturnsAsync(Enumerable.Empty<Answer>());
 
-            mockDecksService.Setup(x => x.GetDeckWithStatViewModel(It.IsAny<int>(), It.IsAny<IStatistics>(), It.IsAny<string>())).ReturnsAsync(new DeckWithStatViewModel());
+            mockDecksService.Setup(x => x.GetDeckWithStatViewModel(It.IsAny<int>(), It.IsAny<Statistics>(), It.IsAny<string>())).ReturnsAsync(new DeckWithStatViewModel());
 
             mockDecksService.Setup(x => x.FindDeckAsync(It.IsAny<int>())).Returns<int>(async x => await Task.FromResult(
                 new Deck
@@ -119,11 +119,11 @@ namespace Memento.Tests.Controllers
 
             mockRepository
                 .Setup(x => x.GetUserDecksAsync(It.IsAny<string>()))
-                .Returns(async () => await mockDbSet.Object.ToListAsync<IDeck>());
+                .Returns(async () => await mockDbSet.Object.ToListAsync<Deck>());
 
             mockRepository
                 .Setup(x => x.FindDeckAsync(It.IsAny<int>()))
-                .Returns<int>(x => Task.FromResult(data.FirstOrDefault(d => d.ID == x) as IDeck));
+                .Returns<int>(x => Task.FromResult(data.FirstOrDefault(d => d.ID == x) as Deck));
         }
 
         [TestMethod()]
@@ -153,8 +153,8 @@ namespace Memento.Tests.Controllers
 
             // Assert
             mockStatisticsService.Verify(x => x.GetAnswersAsync(id, It.IsAny<DateTime>()), Times.Once);
-            mockStatisticsService.Verify(x => x.GetStatistics(It.IsAny<IEnumerable<IAnswer>>()), Times.Once);
-            mockDecksService.Verify(x => x.GetDeckWithStatViewModel(id, It.IsAny<IStatistics>(), It.IsAny<string>()));
+            mockStatisticsService.Verify(x => x.GetStatistics(It.IsAny<IEnumerable<Answer>>()), Times.Once);
+            mockDecksService.Verify(x => x.GetDeckWithStatViewModel(id, It.IsAny<Statistics>(), It.IsAny<string>()));
 
             Assert.IsNotNull(result);
             Assert.IsNotNull(model);

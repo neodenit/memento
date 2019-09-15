@@ -9,10 +9,10 @@ namespace Memento.Tests
 {
     public class FakeRepository : IMementoRepository
     {
-        private readonly List<IDeck> decks;
-        private readonly List<ICard> cards;
-        private readonly List<ICloze> clozes;
-        private readonly List<IAnswer> answers;
+        private readonly List<Deck> decks;
+        private readonly List<Card> cards;
+        private readonly List<Cloze> clozes;
+        private readonly List<Answer> answers;
 
         public FakeRepository(IEnumerable<Deck> decks, IEnumerable<Card> cards, IEnumerable<Cloze> clozes, IEnumerable<Answer> answers)
         {
@@ -34,23 +34,23 @@ namespace Memento.Tests
                 }
             }
 
-            this.decks = new List<IDeck>(decks);
-            this.cards = new List<ICard>(cards);
-            this.clozes = new List<ICloze>(clozes);
-            this.answers = new List<IAnswer>(answers);
+            this.decks = new List<Deck>(decks);
+            this.cards = new List<Card>(cards);
+            this.clozes = new List<Cloze>(clozes);
+            this.answers = new List<Answer>(answers);
         }
 
-        public void AddAnswer(ICloze cloze, bool isCorrect)
+        public void AddAnswer(Cloze cloze, bool isCorrect)
         {
             var answer = new Answer { ClozeID = cloze.ID, IsCorrect = isCorrect };
             answers.Add(answer);
         }
 
-        public void AddCard(ICard card) => cards.Add(card);
+        public void AddCard(Card card) => cards.Add(card);
 
-        public void AddCloze(ICloze cloze) => clozes.Add(cloze);
+        public void AddCloze(Cloze cloze) => clozes.Add(cloze);
 
-        public Task AddClozesAsync(ICard card, IEnumerable<string> clozeNames) =>
+        public Task AddClozesAsync(Card card, IEnumerable<string> clozeNames) =>
             Task.Run(() =>
                 {
                     foreach (var clozeName in clozeNames)
@@ -60,44 +60,44 @@ namespace Memento.Tests
                     }
                 });
 
-        public void AddDeck(IDeck deck) => decks.Add(deck);
+        public void AddDeck(Deck deck) => decks.Add(deck);
 
         public void Dispose() { }
 
-        public ICard FindCard(Guid id) =>
+        public Card FindCard(Guid id) =>
             cards.FirstOrDefault(c => c.ID == id);
 
-        public Task<ICard> FindCardAsync(Guid id) =>
+        public Task<Card> FindCardAsync(Guid id) =>
             Task.FromResult(cards.FirstOrDefault(c => c.ID == id));
 
-        public ICloze FindCloze(int id) =>
+        public Cloze FindCloze(int id) =>
             clozes.FirstOrDefault(c => c.ID == id);
 
-        public Task<ICloze> FindClozeAsync(int id) =>
+        public Task<Cloze> FindClozeAsync(int id) =>
             Task.FromResult(clozes.FirstOrDefault(c => c.ID == id));
 
-        public IDeck FindDeck(int id) =>
+        public Deck FindDeck(int id) =>
             decks.FirstOrDefault(d => d.ID == id);
 
-        public Task<IDeck> FindDeckAsync(int id) =>
+        public Task<Deck> FindDeckAsync(int id) =>
             Task.FromResult(decks.FirstOrDefault(d => d.ID == id));
 
-        public Task<IEnumerable<IAnswer>> GetAnswersForDeckAsync(int deckID) =>
+        public Task<IEnumerable<Answer>> GetAnswersForDeckAsync(int deckID) =>
             Task.FromResult(answers.Where(a => a.DeckID == deckID));
 
-        public Task<IEnumerable<IDeck>> GetUserDecksAsync(string userName) =>
+        public Task<IEnumerable<Deck>> GetUserDecksAsync(string userName) =>
             Task.FromResult(decks.Where(d => d.Owner == userName  && !d.IsShared));
 
-        public Task<IEnumerable<IDeck>> GetSharedDecksAsync() =>
+        public Task<IEnumerable<Deck>> GetSharedDecksAsync() =>
             Task.FromResult(decks.Where(d => d.IsShared));
 
-        public void PromoteCloze(IDeck deck, Delays delay, string username) { }
+        public void PromoteCloze(Deck deck, Delays delay, string username) { }
 
-        public void RemoveCard(ICard card) => cards.Remove(card);
+        public void RemoveCard(Card card) => cards.Remove(card);
 
-        public void RemoveCloze(ICloze cloze) => clozes.Remove(cloze);
+        public void RemoveCloze(Cloze cloze) => clozes.Remove(cloze);
 
-        public void RemoveClozes(ICard card, IEnumerable<string> clozeNames)
+        public void RemoveClozes(Card card, IEnumerable<string> clozeNames)
         {
             foreach (var clozeName in clozeNames)
             {
@@ -106,7 +106,7 @@ namespace Memento.Tests
             }
         }
 
-        public void RemoveDeck(IDeck deck) => decks.Remove(deck);
+        public void RemoveDeck(Deck deck) => decks.Remove(deck);
 
         public Task SaveChangesAsync() => Task.Delay(1);
     }

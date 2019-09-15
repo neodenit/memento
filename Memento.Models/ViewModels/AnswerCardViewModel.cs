@@ -1,11 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Memento.Common.App_GlobalResources;
-using Memento.Interfaces;
+using Memento.Models.Enums;
+using Memento.Models.Models;
 
 namespace Memento.Models.ViewModels
 {
-    public class AnswerCardViewModel : IAnswerCardViewModel
+    public class AnswerCardViewModel
     {
         public Guid ID { get; set; }
 
@@ -30,11 +31,11 @@ namespace Memento.Models.ViewModels
 
         public DelayModes DelayMode { get; set; }
 
-        public IDeckWithStatViewModel Statistics { get; set; }
+        public DeckWithStatViewModel Statistics { get; set; }
 
         public AnswerCardViewModel() { }
 
-        public AnswerCardViewModel(ICard card)
+        public AnswerCardViewModel(Card card)
         {
             ID = card.ID;
             DeckID = card.DeckID;

@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Memento.Additional;
+using Memento.Models.Models;
 
 namespace Memento.Interfaces
 {
     public interface IStatisticsService
     {
-        Task<IEnumerable<IAnswer>> GetAnswersAsync(int deckID, DateTime startTime);
-        IStatistics GetStatistics(IEnumerable<IAnswer> answers);
+        Task<IEnumerable<Answer>> GetAnswersAsync(int deckID, DateTime startTime);
+        Statistics GetStatistics(IEnumerable<Answer> answers);
         Task AddAnswer(Guid cardID, bool isCorrect, string username);
     }
 }

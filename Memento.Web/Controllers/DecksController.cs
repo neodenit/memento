@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Memento.Attributes;
 using Memento.Common;
 using Memento.Interfaces;
+using Memento.Models.Enums;
 using Memento.Models.Models;
 using Memento.Models.ViewModels;
 

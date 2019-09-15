@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Linq;
 using Memento.Common;
 using Memento.Interfaces;
+using Memento.Models.Helpers;
+using Memento.Models.Models;
 
 namespace Memento.Core
 {
@@ -15,7 +17,7 @@ namespace Memento.Core
             this.scheduler = scheduler;
         }
 
-        public void RearrangeNewRepetitions(IDeck deck, IEnumerable<IUserRepetition> repetitions)
+        public void RearrangeNewRepetitions(Deck deck, IEnumerable<UserRepetition> repetitions)
         {
             var activeRepetitions = repetitions.Take(deck.StartDelay);
 
@@ -26,7 +28,7 @@ namespace Memento.Core
                 scheduler.MoveRepetition(repetitions, newRepetition.Position, deck.StartDelay, newRepetition.LastDelay, true, false);
             }
 
-            Debug.Assert(Helpers.ArePositionsValid(repetitions));
+            Debug.Assert(ModelHelpers.ArePositionsValid(repetitions));
         }
     }
 }

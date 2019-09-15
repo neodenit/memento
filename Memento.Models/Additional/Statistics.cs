@@ -1,12 +1,10 @@
-﻿using Memento.Interfaces;
-
-namespace Memento.Additional
+﻿namespace Memento.Additional
 {
-    public class Statistics : IStatistics
+    public class Statistics
     {
-        public IChartData Answers { get; set; }
+        public ChartData Answers { get; set; }
 
-        public IChartData CorrectAnswers { get; set; }
+        public ChartData CorrectAnswers { get; set; }
 
         public int NewQuestionCount { get; set; }
 

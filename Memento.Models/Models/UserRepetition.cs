@@ -1,13 +1,6 @@
-﻿using Memento.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Memento.Models.Models
+﻿namespace Memento.Models.Models
 {
-    public class UserRepetition : IUserRepetition
+    public class UserRepetition
     {
         public int ID { get; set; }
 
@@ -17,7 +10,7 @@ namespace Memento.Models.Models
 
         public virtual Cloze Cloze { get; set; }
 
-        public ICloze GetCloze()
+        public Cloze GetCloze()
         {
             return Cloze;
         }

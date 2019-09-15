@@ -1,5 +1,7 @@
 ﻿using Memento.Common;
 using Memento.Interfaces;
+using Memento.Models.Helpers;
+using Memento.Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,7 +14,7 @@ namespace Memento.Core.Scheduler
 {
     public class Scheduler : IScheduler
     {
-        public void PromoteRepetition(IDeck deck, IEnumerable<IUserRepetition> repetitions, Delays delay)
+        public void PromoteRepetition(Deck deck, IEnumerable<UserRepetition> repetitions, Delays delay)
         {
             var repetition = GetFirstRepetition(repetitions);
 
@@ -28,10 +30,10 @@ namespace Memento.Core.Scheduler
 
             repetition.IsNew = false;
 
-            Debug.Assert(Helpers.ArePositionsValid(repetitions));
+            Debug.Assert(ModelHelpers.ArePositionsValid(repetitions));
         }
 
-        public void PrepareForAdding(IDeck deck, IEnumerable<IUserRepetition> repetitions, IUserRepetition repetition)
+        public void PrepareForAdding(Deck deck, IEnumerable<UserRepetition> repetitions, UserRepetition repetition)
         {
             var maxNewPosition = GetMaxNewPosition(repetitions);
 
@@ -40,7 +42,7 @@ namespace Memento.Core.Scheduler
             repetition.IsNew = true;
         }
 
-        public void PrepareForRemoving(IDeck deck, IEnumerable<IUserRepetition> repetitions, IUserRepetition repetition)
+        public void PrepareForRemoving(Deck deck, IEnumerable<UserRepetition> repetitions, UserRepetition repetition)
         {
             var position = repetition.Position;
             var movedRepetitions = GetRestRepetitions(repetitions, position);
@@ -49,15 +51,15 @@ namespace Memento.Core.Scheduler
             DecreaseDelays(movedRepetitions);
         }
 
-        public void ShuffleNewRepetitions(IEnumerable<IUserRepetition> repetitions)
+        public void ShuffleNewRepetitions(IEnumerable<UserRepetition> repetitions)
         {
             var newRepetitions = from repetition in repetitions where repetition.IsNew select repetition;
             ShuffleRepetitions(newRepetitions);
 
-            Debug.Assert(Helpers.ArePositionsValid(repetitions));
+            Debug.Assert(ModelHelpers.ArePositionsValid(repetitions));
         }
 
-        public void MoveRepetition(IEnumerable<IUserRepetition> repetitions, int oldPosition, int newPosition, int newDelay, bool correctMovedRepetitionsDelays, bool correctRestRepetitionsDelays)
+        public void MoveRepetition(IEnumerable<UserRepetition> repetitions, int oldPosition, int newPosition, int newDelay, bool correctMovedRepetitionsDelays, bool correctRestRepetitionsDelays)
         {
             Debug.Assert(newPosition >= oldPosition);
 
@@ -91,7 +93,7 @@ namespace Memento.Core.Scheduler
             movedRepetition.Position = newLimitedPosition;
             movedRepetition.LastDelay = minLimitedDelay;
 
-            Debug.Assert(Helpers.ArePositionsValid(repetitions));
+            Debug.Assert(ModelHelpers.ArePositionsValid(repetitions));
         }
     }
 }

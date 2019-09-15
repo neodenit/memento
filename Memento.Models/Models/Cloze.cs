@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Memento.Interfaces;
 
 namespace Memento.Models.Models
 {
-    public class Cloze : ICloze
+    public class Cloze
     {
         public Cloze()
         {
@@ -26,9 +25,9 @@ namespace Memento.Models.Models
 
         public virtual ICollection<UserRepetition> UserRepetitions { get; set; }
 
-        public ICard GetCard() => Card;
+        public Card GetCard() => Card;
 
-        public IUserRepetition GetUserRepetition(string username) =>
+        public UserRepetition GetUserRepetition(string username) =>
             UserRepetitions.SingleOrDefault(x => x.UserName == username);
 
         public IEnumerable<string> GetUsers() =>

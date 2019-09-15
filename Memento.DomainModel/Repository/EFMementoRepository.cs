@@ -24,58 +24,58 @@ namespace Memento.DataAccess.Repository
             this.newCardsManager = newCardsManager;
         }
 
-        public async Task<IEnumerable<IDeck>> GetSharedDecksAsync() =>
+        public async Task<IEnumerable<Deck>> GetSharedDecksAsync() =>
             await db.Decks.Where(item => item.IsShared).ToListAsync();
 
-        public async Task<IEnumerable<IDeck>> GetUserDecksAsync(string userName) =>
+        public async Task<IEnumerable<Deck>> GetUserDecksAsync(string userName) =>
             await db.Decks.Where(item => item.Owner == userName && !item.IsShared).ToListAsync();
 
-        public IDeck FindDeck(int id) =>
+        public Deck FindDeck(int id) =>
             db.Decks.Find(id);
 
-        public ICard FindCard(Guid id) =>
+        public Card FindCard(Guid id) =>
             db.Cards.Find(id);
 
-        public ICloze FindCloze(int id) =>
+        public Cloze FindCloze(int id) =>
             db.Clozes.Find(id);
 
-        public async Task<IDeck> FindDeckAsync(int id) =>
+        public async Task<Deck> FindDeckAsync(int id) =>
             await db.Decks.FindAsync(id);
 
-        public async Task<ICard> FindCardAsync(Guid id) =>
+        public async Task<Card> FindCardAsync(Guid id) =>
             await db.Cards.FindAsync(id);
 
-        public async Task<ICloze> FindClozeAsync(int id) =>
+        public async Task<Cloze> FindClozeAsync(int id) =>
             await db.Clozes.FindAsync(id);
 
-        public async Task<IEnumerable<IAnswer>> GetAnswersForDeckAsync(int deckID) =>
+        public async Task<IEnumerable<Answer>> GetAnswersForDeckAsync(int deckID) =>
             await db.Answers.Where(a => a.DeckID == deckID).ToListAsync();
 
-        public void AddDeck(IDeck deck) =>
+        public void AddDeck(Deck deck) =>
             db.Decks.Add(deck as Deck);
 
-        public void AddCard(ICard card) =>
+        public void AddCard(Card card) =>
             db.Cards.Add(card as Card);
 
-        public void AddCloze(ICloze cloze) =>
+        public void AddCloze(Cloze cloze) =>
             db.Clozes.Add(cloze as Cloze);
 
-        public void AddRepetition(IUserRepetition repetition) =>
+        public void AddRepetition(UserRepetition repetition) =>
             db.Repetitions.Add(repetition as UserRepetition);
 
-        public void RemoveDeck(IDeck deck) =>
+        public void RemoveDeck(Deck deck) =>
             db.Decks.Remove(deck as Deck);
 
-        public void RemoveCard(ICard card) =>
+        public void RemoveCard(Card card) =>
             db.Cards.Remove(card as Card);
 
-        public void RemoveCloze(ICloze cloze) =>
+        public void RemoveCloze(Cloze cloze) =>
             db.Clozes.Remove(cloze as Cloze);
 
-        public void RemoveRepetition(IUserRepetition repetition) =>
+        public void RemoveRepetition(UserRepetition repetition) =>
              db.Repetitions.Remove(repetition as UserRepetition);
 
-        public async Task AddClozesAsync(ICard card, IEnumerable<string> clozeNames)
+        public async Task AddClozesAsync(Card card, IEnumerable<string> clozeNames)
         {
             var deck = card.GetDeck();
             var users = card.GetUsers().Concat(deck.Owner).Distinct();
@@ -104,7 +104,7 @@ namespace Memento.DataAccess.Repository
             }
         }
 
-        public void RemoveClozes(ICard card, IEnumerable<string> clozeNames)
+        public void RemoveClozes(Card card, IEnumerable<string> clozeNames)
         {
             foreach (var clozeName in clozeNames)
             {
@@ -114,7 +114,7 @@ namespace Memento.DataAccess.Repository
             }
         }
 
-        public void AddAnswer(ICloze cloze, bool isCorrect)
+        public void AddAnswer(Cloze cloze, bool isCorrect)
         {
             var card = cloze.GetCard();
             var deck = card.GetDeck();
@@ -132,7 +132,7 @@ namespace Memento.DataAccess.Repository
             db.Answers.Add(answer);
         }
 
-        public void PromoteCloze(IDeck deck, Delays delay, string username)
+        public void PromoteCloze(Deck deck, Delays delay, string username)
         {
             var repetitions = deck.GetRepetitions(username);
 

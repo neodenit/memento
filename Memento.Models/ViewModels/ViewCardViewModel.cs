@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Memento.Interfaces;
+using Memento.Models.Models;
 
 namespace Memento.Models.ViewModels
 {
-    public class ViewCardViewModel : IViewCardViewModel
+    public class ViewCardViewModel
     {
         public Guid ID { get; set; }
         public int DeckID { get; set; }
@@ -16,7 +16,7 @@ namespace Memento.Models.ViewModels
 
         public ViewCardViewModel() { }
 
-        public ViewCardViewModel(ICard card)
+        public ViewCardViewModel(Card card)
         {
             ID = card.ID;
             DeckID = card.DeckID;

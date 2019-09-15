@@ -73,7 +73,7 @@ namespace Memento.Tests.Services
 
             // Assert
             mockRepository.Verify(x => x.FindDeckAsync(id), Times.Once);
-            mockScheduler.Verify(x => x.ShuffleNewRepetitions(It.IsAny<IEnumerable<IUserRepetition>>()), Times.Once);
+            mockScheduler.Verify(x => x.ShuffleNewRepetitions(It.IsAny<IEnumerable<UserRepetition>>()), Times.Once);
             mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
         }
     }

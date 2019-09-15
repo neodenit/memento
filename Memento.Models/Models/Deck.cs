@@ -1,17 +1,15 @@
-﻿using Memento.Attributes;
-using Memento.Common;
-using Memento.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Memento.Common;
+using Memento.Models.Enums;
 
 namespace Memento.Models.Models
 {
     [Serializable]
-    public class Deck : IDeck
+    public class Deck
     {
-        [CheckDeckOwner]
         public int ID { get; set; }
 
         public bool IsShared { get; set; }
@@ -40,13 +38,13 @@ namespace Memento.Models.Models
 
         public bool PreviewAnswer { get; set; }
 
-        public IEnumerable<ICloze> GetClozes()
+        public IEnumerable<Cloze> GetClozes()
         {
             var validCards = GetValidCards();
-            return validCards.SelectMany(card => card.GetClozes() ?? Enumerable.Empty<ICloze>());
+            return validCards.SelectMany(card => card.GetClozes() ?? Enumerable.Empty<Cloze>());
         }
 
-        public IEnumerable<IUserRepetition> GetRepetitions(string username)
+        public IEnumerable<UserRepetition> GetRepetitions(string username)
         {
             var clozes = GetClozes();
             var userRepetitions = from c in clozes select c.GetUserRepetition(username);
@@ -55,7 +53,7 @@ namespace Memento.Models.Models
             return result;
         }
 
-        public ICard GetNextCard(string username)
+        public Card GetNextCard(string username)
         {
             var validCards = GetValidCards();
 
@@ -64,22 +62,22 @@ namespace Memento.Models.Models
             return nextCard;
         }
 
-        public IEnumerable<ICard> GetAllCards()
+        public IEnumerable<Card> GetAllCards()
         {
             return Cards;
         }
 
-        public IEnumerable<ICard> GetValidCards()
+        public IEnumerable<Card> GetValidCards()
         {
             return Cards.Where(card => card.IsValid && !card.IsDeleted);
         }
 
-        public IEnumerable<ICard> GetDraftCards()
+        public IEnumerable<Card> GetDraftCards()
         {
             return Cards.Where(card => !card.IsValid && !card.IsDeleted);
         }
 
-        public IEnumerable<ICard> GetDeletedCards()
+        public IEnumerable<Card> GetDeletedCards()
         {
             return Cards.Where(card => card.IsDeleted);
         }
@@ -87,7 +85,7 @@ namespace Memento.Models.Models
         public IEnumerable<string> GetUsers() =>
             Cards.SelectMany(x => x.GetUsers()).Distinct();
 
-        public ICollection<IUserRepetition> GetRepetitions()
+        public ICollection<UserRepetition> GetRepetitions()
         {
             throw new NotImplementedException();
         }

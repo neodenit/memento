@@ -40,32 +40,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IAnswer.cs" />
-    <Compile Include="IAnswerCardViewModel.cs" />
     <Compile Include="ICardsService.cs" />
-    <Compile Include="IDecksViewModel.cs" />
     <Compile Include="IExportImportService.cs" />
     <Compile Include="IFactory.cs" />
     <Compile Include="ISchedulerService.cs" />
-    <Compile Include="IStatistics.cs" />
-    <Compile Include="ICard.cs" />
-    <Compile Include="IChartData.cs" />
-    <Compile Include="ICloze.cs" />
     <Compile Include="IConverter.cs" />
-    <Compile Include="IDeck.cs" />
     <Compile Include="IStatisticsService.cs" />
     <Compile Include="IDecksService.cs" />
-    <Compile Include="IDeckWithStatViewModel.cs" />
-    <Compile Include="IEditCardViewModel.cs" />
     <Compile Include="IEvaluator.cs" />
     <Compile Include="IMementoRepository.cs" />
     <Compile Include="INewClozesManager.cs" />
     <Compile Include="IScheduler.cs" />
     <Compile Include="ISiblingsManager.cs" />
-    <Compile Include="IUserRepetition.cs" />
     <Compile Include="IValidator.cs" />
-    <Compile Include="IViewCardViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Memento.Models\Memento.Models.csproj">
+      <Project>{9a7ebcfb-2f3a-4ed3-8dff-c356ad46f230}</Project>
+      <Name>Memento.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

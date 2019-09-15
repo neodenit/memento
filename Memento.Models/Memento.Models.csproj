@@ -71,10 +71,11 @@
   <ItemGroup>
     <Compile Include="Additional\ChartData.cs" />
     <Compile Include="Additional\Statistics.cs" />
-    <Compile Include="Factory.cs" />
+    <Compile Include="Enums\ControlModes.cs" />
+    <Compile Include="Enums\DelayModes.cs" />
+    <Compile Include="Enums\Mark.cs" />
+    <Compile Include="Helpers\ModelHelpers.cs" />
     <Compile Include="Models\UserRepetition.cs" />
-    <Compile Include="ViewModels\DeckViewModel.cs" />
-    <Compile Include="ViewModels\DeckWithStatViewModel.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Card.cs" />
     <Compile Include="Models\Cloze.cs" />
@@ -82,29 +83,24 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AnswerCardViewModel.cs" />
     <Compile Include="ViewModels\ClozeViewModel.cs" />
+    <Compile Include="ViewModels\DecksViewModel.cs" />
+    <Compile Include="ViewModels\DeckViewModel.cs" />
+    <Compile Include="ViewModels\DeckWithStatViewModel.cs" />
     <Compile Include="ViewModels\EditCardViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
-    <Compile Include="ViewModels\DecksViewModel.cs" />
     <Compile Include="ViewModels\ImportViewModel.cs" />
     <Compile Include="ViewModels\ViewCardViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Memento.Attributes\Memento.Attributes.csproj">
-      <Project>{fa6f41e3-a64f-408c-b831-de622dd25c7b}</Project>
-      <Name>Memento.Attributes</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Memento.Common\Memento.Common.csproj">
       <Project>{af08785a-2a1b-47f8-8100-460b69df26be}</Project>
       <Name>Memento.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Memento.Interfaces\Memento.Interfaces.csproj">
-      <Project>{57e544cd-a620-4820-bbf4-dc8c27b4968e}</Project>
-      <Name>Memento.Interfaces</Name>
-    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

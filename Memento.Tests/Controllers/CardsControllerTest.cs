@@ -1,16 +1,16 @@
-﻿using Memento.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using Memento.Additional;
+using Memento.Common;
 using Memento.Interfaces;
+using Memento.Models.Enums;
 using Memento.Models.Models;
 using Memento.Models.ViewModels;
 using Memento.Web.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace Memento.Tests.Controllers
 {
@@ -26,6 +26,11 @@ namespace Memento.Tests.Controllers
 
         private string userName = "user@server.com";
 
+        int deckId = 10;
+        Guid cardId = new Guid("00000000-0000-0000-0000-000000000020");
+        int clozeId = 30;
+        int repetitionId = 40;
+
         [TestInitialize]
         public void Setup()
         {
@@ -37,27 +42,23 @@ namespace Memento.Tests.Controllers
             var mockContext = new Mock<ControllerContext>();
             mockContext.Setup(item => item.HttpContext.User.Identity.Name).Returns(userName);
 
-            var mockDeck = new Mock<IDeck>();
-            var mockCard = new Mock<ICard>();
-            var mockCloze = new Mock<ICloze>();
-            var mockRepetition = new Mock<IUserRepetition>();
+            var repetition = new UserRepetition { ID = repetitionId, ClozeID = clozeId };
+            var cloze = new Cloze { UserRepetitions = new[] { repetition }, ID = clozeId, CardID = cardId };
+            var card = new Card { Clozes = new[] { cloze }, ID = cardId, DeckID = deckId, IsValid = true };
+            var deck = new Deck { Cards = new[] { card }, ID = deckId };
 
-            var mockAnswerCardViewModel = new Mock<IAnswerCardViewModel>();
+            repetition.Cloze = cloze;
+            cloze.Card = card;
+            card.Deck = deck;
 
-            mockDecksService.Setup(x => x.FindDeckAsync(It.IsAny<int>())).ReturnsAsync(mockDeck.Object);
-            mockCardsService.Setup(x => x.FindCardAsync(It.IsAny<Guid>())).ReturnsAsync(mockCard.Object);
-            mockCardsService.Setup(x => x.GetCardWithQuestion(It.IsAny<ICloze>())).Returns(mockAnswerCardViewModel.Object);
-            mockCardsService.Setup(x => x.GetCardWithAnswer(It.IsAny<ICloze>())).Returns(mockAnswerCardViewModel.Object);
-            mockCardsService.Setup(x => x.EvaluateCard(It.IsAny<ICloze>(), It.IsAny<string>())).Returns(mockAnswerCardViewModel.Object);
+            var mockAnswerCardViewModel = new Mock<AnswerCardViewModel>();
+
+            mockDecksService.Setup(x => x.FindDeckAsync(It.IsAny<int>())).ReturnsAsync(deck);
+            mockCardsService.Setup(x => x.FindCardAsync(It.IsAny<Guid>())).ReturnsAsync(card);
+            mockCardsService.Setup(x => x.GetCardWithQuestion(It.IsAny<Cloze>())).Returns(mockAnswerCardViewModel.Object);
+            mockCardsService.Setup(x => x.GetCardWithAnswer(It.IsAny<Cloze>())).Returns(mockAnswerCardViewModel.Object);
+            mockCardsService.Setup(x => x.EvaluateCard(It.IsAny<Cloze>(), It.IsAny<string>())).Returns(mockAnswerCardViewModel.Object);
             mockSchedulerService.Setup(x => x.GetDelayForWrongAnswer(It.IsAny<DelayModes>()));
-
-
-            mockDeck.Setup(x => x.GetNextCard(It.IsAny<string>())).Returns(mockCard.Object);
-
-            mockCard.Setup(x => x.GetNextCloze(It.IsAny<string>())).Returns(mockCloze.Object);
-            mockCard.Setup(x => x.GetDeck()).Returns(mockDeck.Object);
-
-            mockCloze.Setup(x => x.GetUserRepetition(It.IsAny<string>())).Returns(mockRepetition.Object);
 
             sut = new CardsController(mockDecksService.Object, mockCardsService.Object, mockStatService.Object, mockSchedulerService.Object)
             {
@@ -133,7 +134,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsDetailsTest()
         {
             // Arrange
-            var id = Guid.NewGuid();
+            var id = cardId;
 
             // Act
             var result = await sut.Details(id) as RedirectToRouteResult;
@@ -147,15 +148,15 @@ namespace Memento.Tests.Controllers
         public async Task CardsPreviewClosedTest()
         {
             // Arrange
-            var id = Guid.NewGuid();
+            var id = cardId;
 
             // Act
             var result = await sut.PreviewClosed(id) as ViewResult;
-            var model = result.Model as IAnswerCardViewModel;
+            var model = result.Model as AnswerCardViewModel;
 
             // Assert
             mockCardsService.Verify(x => x.FindCardAsync(id));
-            mockCardsService.Verify(x => x.GetCardWithQuestion(It.IsAny<ICloze>()));
+            mockCardsService.Verify(x => x.GetCardWithQuestion(It.IsAny<Cloze>()));
             Assert.IsNotNull(result);
             Assert.IsNotNull(model);
         }
@@ -164,14 +165,14 @@ namespace Memento.Tests.Controllers
         public async Task CardsPreviewOpenedGetTest()
         {
             // Arrange
-            var id = Guid.NewGuid();
+            var id = cardId;
 
             // Act
             var result = await sut.PreviewOpened(id) as ViewResult;
-            var model = result.Model as IAnswerCardViewModel;
+            var model = result.Model as AnswerCardViewModel;
 
             // Assert
-            mockCardsService.Verify(x => x.GetCardWithAnswer(It.IsAny<ICloze>()));
+            mockCardsService.Verify(x => x.GetCardWithAnswer(It.IsAny<Cloze>()));
             Assert.IsNotNull(result);
             Assert.IsNotNull(model);
         }
@@ -180,14 +181,14 @@ namespace Memento.Tests.Controllers
         public async Task CardsPreviewOpenedPostTest()
         {
             // Arrange
-            var card = new ViewCardViewModel { ID = Guid.NewGuid() };
+            var card = new ViewCardViewModel { ID = cardId };
 
             // Act
             var result = await sut.PreviewOpened(card) as RedirectToRouteResult;
 
             // Assert
             mockCardsService.Verify(x => x.FindCardAsync(card.ID));
-            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<IDeck>(), Delays.Same, It.IsAny<string>()));
+            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<Deck>(), Delays.Same, It.IsAny<string>()));
             Assert.IsNotNull(result);
         }
 
@@ -195,14 +196,14 @@ namespace Memento.Tests.Controllers
         public async Task CardsRepeatClosedTest()
         {
             // Arrange
-            var id = Guid.NewGuid();
+            var id = cardId;
 
             // Act
             var result = await sut.RepeatClosed(id) as ViewResult;
-            var model = result.Model as IAnswerCardViewModel;
+            var model = result.Model as AnswerCardViewModel;
 
             // Assert
-            mockCardsService.Verify(x => x.GetCardWithQuestion(It.IsAny<ICloze>()));
+            mockCardsService.Verify(x => x.GetCardWithQuestion(It.IsAny<Cloze>()));
             Assert.IsNotNull(result);
             Assert.IsNotNull(model);
         }
@@ -211,14 +212,14 @@ namespace Memento.Tests.Controllers
         public async Task CardsRepeatOpenedGetTest()
         {
             // Arrange
-            var id = Guid.NewGuid();
+            var id = cardId;
 
             // Act
             var result = await sut.RepeatOpened(id) as ViewResult;
-            var model = result.Model as IAnswerCardViewModel;
+            var model = result.Model as AnswerCardViewModel;
 
             // Assert
-            mockCardsService.Verify(x => x.GetCardWithAnswer(It.IsAny<ICloze>()));
+            mockCardsService.Verify(x => x.GetCardWithAnswer(It.IsAny<Cloze>()));
             Assert.IsNotNull(result);
             Assert.IsNotNull(model);
         }
@@ -227,7 +228,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsRepeatOpenedAgainButtonPostTest()
         {
             // Arrange
-            var card = new ViewCardViewModel { ID = Guid.NewGuid() };
+            var card = new ViewCardViewModel { ID = cardId };
 
             // Act
             var result = await sut.RepeatOpened(card, "againButton", null, null) as RedirectToRouteResult;
@@ -235,7 +236,7 @@ namespace Memento.Tests.Controllers
             // Assert
             mockStatService.Verify(x => x.AddAnswer(card.ID, It.IsAny<bool>(), It.IsAny<string>()));
             mockCardsService.Verify(x => x.FindCardAsync(card.ID));
-            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<IDeck>(), Delays.Initial, It.IsAny<string>()));
+            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<Deck>(), Delays.Initial, It.IsAny<string>()));
             Assert.IsNotNull(result);
         }
 
@@ -246,7 +247,7 @@ namespace Memento.Tests.Controllers
             {
 
                 // Arrange
-                var card = new ViewCardViewModel { ID = Guid.NewGuid() };
+                var card = new ViewCardViewModel { ID = cardId };
 
                 // Act
                 var result = await sut.RepeatOpened(card, null, "badButton", null) as RedirectToRouteResult;
@@ -254,7 +255,7 @@ namespace Memento.Tests.Controllers
                 // Assert
                 mockStatService.Verify(x => x.AddAnswer(card.ID, It.IsAny<bool>(), It.IsAny<string>()));
                 mockCardsService.Verify(x => x.FindCardAsync(card.ID));
-                mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<IDeck>(), Delays.Previous, It.IsAny<string>()));
+                mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<Deck>(), Delays.Previous, It.IsAny<string>()));
                 Assert.IsNotNull(result);
             }
         }
@@ -266,7 +267,7 @@ namespace Memento.Tests.Controllers
             if (!Settings.Default.AllowSmoothDelayModes)
             {
                 // Arrange
-                var card = new ViewCardViewModel { ID = Guid.NewGuid() };
+                var card = new ViewCardViewModel { ID = cardId };
 
                 // Act
                 var result = await sut.RepeatOpened(card, null, "badButton", null) as RedirectToRouteResult;
@@ -277,7 +278,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsRepeatOpenedGoodButtonPostTest()
         {
             // Arrange
-            var card = new ViewCardViewModel { ID = Guid.NewGuid() };
+            var card = new ViewCardViewModel { ID = cardId };
 
             // Act
             var result = await sut.RepeatOpened(card, null, null, "goodButton") as RedirectToRouteResult;
@@ -285,7 +286,7 @@ namespace Memento.Tests.Controllers
             // Assert
             mockStatService.Verify(x => x.AddAnswer(card.ID, It.IsAny<bool>(), It.IsAny<string>()));
             mockCardsService.Verify(x => x.FindCardAsync(card.ID));
-            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<IDeck>(), Delays.Next, It.IsAny<string>()));
+            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<Deck>(), Delays.Next, It.IsAny<string>()));
             Assert.IsNotNull(result);
         }
 
@@ -293,14 +294,14 @@ namespace Memento.Tests.Controllers
         public async Task CardsQuestionTest()
         {
             // Arrange
-            var id = Guid.NewGuid();
+            var id = cardId;
 
             // Act
             var result = await sut.Question(id) as ViewResult;
-            var model = result.Model as IAnswerCardViewModel;
+            var model = result.Model as AnswerCardViewModel;
 
             // Assert
-            mockCardsService.Verify(x => x.GetCardWithQuestion(It.IsAny<ICloze>()));
+            mockCardsService.Verify(x => x.GetCardWithQuestion(It.IsAny<Cloze>()));
             Assert.IsNotNull(result);
             Assert.IsNotNull(model);
         }
@@ -313,10 +314,10 @@ namespace Memento.Tests.Controllers
 
             // Act
             var result = await sut.Question(card) as ViewResult;
-            var model = result.Model as IAnswerCardViewModel;
+            var model = result.Model as AnswerCardViewModel;
 
             // Assert
-            mockCardsService.Verify(x => x.EvaluateCard(It.IsAny<ICloze>(), It.IsAny<string>()));
+            mockCardsService.Verify(x => x.EvaluateCard(It.IsAny<Cloze>(), It.IsAny<string>()));
             Assert.IsNotNull(result);
             Assert.IsNotNull(model);
         }
@@ -327,14 +328,14 @@ namespace Memento.Tests.Controllers
             // Arrange
             var card = new AnswerCardViewModel();
             mockCardsService
-                .Setup(m => m.EvaluateCard(It.IsAny<ICloze>(), It.IsAny<string>()))
+                .Setup(m => m.EvaluateCard(It.IsAny<Cloze>(), It.IsAny<string>()))
                 .Returns(new AnswerCardViewModel { Mark = Mark.Correct });
 
             // Act
             var result = await sut.Question(card) as ViewResult;
 
             // Assert
-            mockDecksService.Verify(x => x.GetDeckWithStatViewModel(It.IsAny<int>(), It.IsAny<IStatistics>(), It.IsAny<string>()));
+            mockDecksService.Verify(x => x.GetDeckWithStatViewModel(It.IsAny<int>(), It.IsAny<Statistics>(), It.IsAny<string>()));
             Assert.IsNotNull(result);
             Assert.AreEqual(result.ViewName, "Right");
         }
@@ -343,7 +344,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsRightTest()
         {
             // Arrange
-            var card = new AnswerCardViewModel { ID = Guid.NewGuid() };
+            var card = new AnswerCardViewModel { ID = cardId };
 
             // Act
             var result = await sut.Right(card) as RedirectToRouteResult;
@@ -351,7 +352,7 @@ namespace Memento.Tests.Controllers
             // Assert
             mockStatService.Verify(x => x.AddAnswer(card.ID, It.IsAny<bool>(), It.IsAny<string>()));
             mockCardsService.Verify(x => x.FindCardAsync(card.ID));
-            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<IDeck>(), Delays.Next, It.IsAny<string>()));
+            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<Deck>(), Delays.Next, It.IsAny<string>()));
             Assert.IsNotNull(result);
         }
 
@@ -359,7 +360,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsWrongNextButtonPostTest()
         {
             // Arrange
-            var card = new AnswerCardViewModel { ID = Guid.NewGuid() };
+            var card = new AnswerCardViewModel { ID = cardId };
 
             // Act
             var result = await sut.Wrong(card, "NextButton", null) as RedirectToRouteResult;
@@ -368,7 +369,7 @@ namespace Memento.Tests.Controllers
             mockStatService.Verify(x => x.AddAnswer(card.ID, false, It.IsAny<string>()));
             mockSchedulerService.Verify(x => x.GetDelayForWrongAnswer(It.IsAny<DelayModes>()));
             mockCardsService.Verify(x => x.FindCardAsync(card.ID));
-            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<IDeck>(), It.IsAny<Delays>(), It.IsAny<string>()));
+            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<Deck>(), It.IsAny<Delays>(), It.IsAny<string>()));
             Assert.IsNotNull(result);
         }
 
@@ -376,13 +377,13 @@ namespace Memento.Tests.Controllers
         public async Task CardsWrongAltButtonPostTest()
         {
             // Arrange
-            var card = new AnswerCardViewModel { ID = Guid.NewGuid() };
+            var card = new AnswerCardViewModel { ID = cardId };
 
             // Act
             var result = await sut.Wrong(card, null, "AltButton") as RedirectToRouteResult;
 
             // Assert
-            mockCardsService.Verify(x => x.AddAltAnswer(It.IsAny<ICloze>(), card.UserAnswer));
+            mockCardsService.Verify(x => x.AddAltAnswer(It.IsAny<Cloze>(), card.UserAnswer));
             Assert.IsNotNull(result);
         }
 
@@ -390,7 +391,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsTypoPostTest()
         {
             // Arrange
-            var card = new AnswerCardViewModel { ID = Guid.NewGuid() };
+            var card = new AnswerCardViewModel { ID = cardId };
 
             // Act
             var result = await sut.Typo(card) as RedirectToRouteResult;
@@ -435,7 +436,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsCreatePostTest()
         {
             // Arrange
-            var id = Guid.NewGuid();
+            var id = cardId;
             var card = new EditCardViewModel { ID = id };
 
             // Act
@@ -449,7 +450,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsEditTest()
         {
             // Arrange
-            var id = Guid.NewGuid();
+            var id = cardId;
 
             // Act
             var result = await sut.Edit(id) as ViewResult;
@@ -465,7 +466,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsEditPostTest()
         {
             // Arrange
-            var card = new EditCardViewModel { ID = Guid.NewGuid(), Text = "text", Comment = "comment" };
+            var card = new EditCardViewModel { ID = cardId, Text = "text", Comment = "comment" };
 
             // Act
             var result = await sut.Edit(card) as RedirectToRouteResult;
@@ -480,7 +481,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsShuffleNewCardsTest()
         {
             // Arrange
-            var id = Guid.NewGuid();
+            var id = cardId;
 
             // Act
             var result = await sut.ShuffleNewCards(id) as RedirectToRouteResult;
@@ -509,11 +510,11 @@ namespace Memento.Tests.Controllers
         public async Task CardsRestoreTest()
         {
             // Arrange
-            var id = Guid.NewGuid();
+            var id = cardId;
 
             // Act
             var result = await sut.Restore(id) as ViewResult;
-            var model = result.Model as ICard;
+            var model = result.Model as Card;
 
             // Assert
             mockCardsService.Verify(x => x.FindCardAsync(id));
@@ -525,7 +526,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsRestoreConfirmedTest()
         {
             // Arrange
-            var id = Guid.NewGuid();
+            var id = cardId;
 
             // Act
             var result = await sut.RestoreConfirmed(id) as RedirectToRouteResult;
@@ -540,7 +541,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsDeleteTest()
         {
             // Arrange
-            var id = Guid.NewGuid();
+            var id = cardId;
 
             // Act
             var result = await sut.Delete(id) as ViewResult;
@@ -556,7 +557,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsDeleteConfirmedTest()
         {
             // Arrange
-            var id = Guid.NewGuid();
+            var id = cardId;
 
             // Act
             var result = await sut.DeleteConfirmed(id) as RedirectToRouteResult;

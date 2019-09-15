@@ -1,11 +1,6 @@
 ﻿using Memento.Core.Evaluators;
-using Memento.Interfaces;
+using Memento.Models.Enums;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Memento.Tests.Evaluators
 {

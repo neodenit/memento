@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Memento.Models.Models;
 
-namespace Memento.Interfaces
+namespace Memento.Models.ViewModels
 {
-    public class DecksViewModel : IDecksViewModel
+    public class DecksViewModel
     {
-        public IEnumerable<IDeck> UserDecks { get; set; }
-        public IEnumerable<IDeck> SharedDecks { get; set; }
+        public IEnumerable<Deck> UserDecks { get; set; }
+        public IEnumerable<Deck> SharedDecks { get; set; }
     }
 }

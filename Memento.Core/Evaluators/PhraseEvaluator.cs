@@ -1,9 +1,5 @@
-﻿using Memento.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
+using Memento.Models.Enums;
 
 namespace Memento.Core.Evaluators
 {

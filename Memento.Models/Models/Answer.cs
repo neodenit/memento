@@ -1,9 +1,8 @@
 ﻿using System;
-using Memento.Interfaces;
 
 namespace Memento.Models.Models
 {
-    public class Answer : IAnswer
+    public class Answer
     {
         public int ID { get; set; }
 

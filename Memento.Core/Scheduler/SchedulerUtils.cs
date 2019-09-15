@@ -1,11 +1,9 @@
-﻿using Memento.Common;
-using Memento.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Memento.Common;
+using Memento.Interfaces;
+using Memento.Models.Models;
 
 namespace Memento.Core.Scheduler
 {
@@ -21,7 +19,7 @@ namespace Memento.Core.Scheduler
         internal static int GetRandomPart(int minStep = 0, int maxStep = 1) =>
             random.Next(minStep, maxStep + 1);
 
-        internal static void ShuffleRepetitions(IEnumerable<IUserRepetition> repetitions)
+        internal static void ShuffleRepetitions(IEnumerable<UserRepetition> repetitions)
         {
             var positions = from repetition in repetitions select repetition.Position;
 
@@ -32,15 +30,15 @@ namespace Memento.Core.Scheduler
             zip.ToList().ForEach(item => item.repetition.Position = item.newPos);
         }
 
-        internal static IEnumerable<IUserRepetition> GetRestRepetitions(IEnumerable<IUserRepetition> repetitions, int position) =>
+        internal static IEnumerable<UserRepetition> GetRestRepetitions(IEnumerable<UserRepetition> repetitions, int position) =>
             from repetition in repetitions where repetition.Position >= position select repetition;
 
-        internal static IEnumerable<IUserRepetition> GetRange(IEnumerable<IUserRepetition> repetitions, int minPosition, int maxPosition) =>
+        internal static IEnumerable<UserRepetition> GetRange(IEnumerable<UserRepetition> repetitions, int minPosition, int maxPosition) =>
             from repetition in repetitions
             where repetition.Position >= minPosition && repetition.Position <= maxPosition
             select repetition;
 
-        internal static void IncreasePosition(IEnumerable<IUserRepetition> repetitions)
+        internal static void IncreasePosition(IEnumerable<UserRepetition> repetitions)
         {
             foreach (var repetition in repetitions)
             {
@@ -48,7 +46,7 @@ namespace Memento.Core.Scheduler
             }
         }
 
-        internal static void DecreasePosition(IEnumerable<IUserRepetition> repetitions)
+        internal static void DecreasePosition(IEnumerable<UserRepetition> repetitions)
         {
             foreach (var repetition in repetitions)
             {
@@ -56,7 +54,7 @@ namespace Memento.Core.Scheduler
             }
         }
 
-        internal static void IncreaseDelays(IEnumerable<IUserRepetition> repetitions)
+        internal static void IncreaseDelays(IEnumerable<UserRepetition> repetitions)
         {
             foreach (var repetition in repetitions)
             {
@@ -67,7 +65,7 @@ namespace Memento.Core.Scheduler
             }
         }
 
-        internal static void DecreaseDelays(IEnumerable<IUserRepetition> repetitions)
+        internal static void DecreaseDelays(IEnumerable<UserRepetition> repetitions)
         {
             foreach (var repetition in repetitions)
             {
@@ -78,10 +76,10 @@ namespace Memento.Core.Scheduler
             }
         }
 
-        internal static int GetMaxPosition(IEnumerable<IUserRepetition> repetitions) =>
+        internal static int GetMaxPosition(IEnumerable<UserRepetition> repetitions) =>
             repetitions.Any() ? repetitions.Max(repetition => repetition.Position) : 0;
 
-        internal static int GetMaxNewPosition(IEnumerable<IUserRepetition> repetitions)
+        internal static int GetMaxNewPosition(IEnumerable<UserRepetition> repetitions)
         {
             if (repetitions.Any())
             {
@@ -95,11 +93,11 @@ namespace Memento.Core.Scheduler
             }
         }
 
-        internal static IUserRepetition GetFirstRepetition(IEnumerable<IUserRepetition> repetitions) =>
+        internal static UserRepetition GetFirstRepetition(IEnumerable<UserRepetition> repetitions) =>
             repetitions.GetMinElement(repetition => repetition.Position);
 
         [Obsolete]
-        internal static void ReservePosition(IEnumerable<IUserRepetition> repetitions, int position, bool correctDelays)
+        internal static void ReservePosition(IEnumerable<UserRepetition> repetitions, int position, bool correctDelays)
         {
             var movedRepetitions = from repetition in repetitions where repetition.Position >= position select repetition;
 
@@ -111,7 +109,7 @@ namespace Memento.Core.Scheduler
             }
         }
 
-        internal static int GetStep(IDeck deck, Delays delay, int lastDelay)
+        internal static int GetStep(Deck deck, Delays delay, int lastDelay)
         {
             Func<double, int> op = Utils.Round;
 

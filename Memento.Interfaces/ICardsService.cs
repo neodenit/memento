@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Memento.Models.Models;
+using Memento.Models.ViewModels;
 
 namespace Memento.Interfaces
 {
     public interface ICardsService
     {
-        Task<ICard> GetNextCardAsync(int deckID, string username);
-        Task<ICard> FindCardAsync(Guid id);
+        Task<Card> GetNextCardAsync(int deckID, string username);
+        Task<Card> FindCardAsync(Guid id);
 
-        Task AddAltAnswer(ICloze cloze, string answer);
-        IAnswerCardViewModel GetCardWithQuestion(ICloze cloze);
-        IAnswerCardViewModel GetCardWithAnswer(ICloze cloze);
-        IAnswerCardViewModel EvaluateCard(ICloze cloze, string userAnswer);
+        Task AddAltAnswer(Cloze cloze, string answer);
+        AnswerCardViewModel GetCardWithQuestion(Cloze cloze);
+        AnswerCardViewModel GetCardWithAnswer(Cloze cloze);
+        AnswerCardViewModel EvaluateCard(Cloze cloze, string userAnswer);
 
-        Task AddCard(IEditCardViewModel card);
-        Task UpdateCard(IEditCardViewModel card);
+        Task AddCard(EditCardViewModel card);
+        Task UpdateCard(EditCardViewModel card);
         Task DeleteCard(Guid id);
         Task RestoreCard(Guid id);
 

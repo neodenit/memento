@@ -1,13 +1,7 @@
-﻿using Memento.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Web;
 using System.Web.Mvc;
+using Memento.Interfaces;
 
 namespace Memento.Attributes
 {

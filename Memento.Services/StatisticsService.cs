@@ -28,13 +28,13 @@ namespace Memento.Services
             await repository.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<IAnswer>> GetAnswersAsync(int deckID, DateTime startTime)
+        public async Task<IEnumerable<Answer>> GetAnswersAsync(int deckID, DateTime startTime)
         {
             var answers = await repository.GetAnswersForDeckAsync(deckID);
             return answers.Where(answer => answer.Time >= startTime);
         }
 
-        public IStatistics GetStatistics(IEnumerable<IAnswer> answers)
+        public Statistics GetStatistics(IEnumerable<Answer> answers)
         {
             var groupedAnswers = from answer in answers group answer by answer.Time.Date;
 

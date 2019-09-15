@@ -1,9 +1,8 @@
-﻿using Memento.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Memento.Interfaces;
+using Memento.Models.Enums;
+using Memento.Models.Models;
 
 namespace Memento.Services
 {
@@ -29,7 +28,7 @@ namespace Memento.Services
         public Delays GetDelayForWrongAnswer(DelayModes delayMode) =>
             delayMap[delayMode];
 
-        public async Task PromoteCloze(IDeck deck, Delays delay, string username)
+        public async Task PromoteCloze(Deck deck, Delays delay, string username)
         {
             repository.PromoteCloze(deck, delay, username);
 
