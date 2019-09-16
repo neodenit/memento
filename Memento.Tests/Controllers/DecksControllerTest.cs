@@ -24,12 +24,9 @@ namespace Memento.Tests.Controllers
 
         private Mock<IMementoRepository> mockRepository;
         private Mock<IDecksService> mockDecksService;
-        private Mock<ICardsService> mockCardsService;
         private Mock<IStatisticsService> mockStatisticsService;
         private Mock<IExportImportService> mockExportImportService;
         private Mock<ISchedulerService> mockSchedulerService;
-
-        private Mock<IFactory> mockFactory;
 
         private string userName = "user@server.com";
 
@@ -39,17 +36,14 @@ namespace Memento.Tests.Controllers
             mockRepository = new Mock<IMementoRepository>();
 
             mockDecksService = new Mock<IDecksService>();
-            mockCardsService = new Mock<ICardsService>();
             mockStatisticsService = new Mock<IStatisticsService>();
             mockExportImportService = new Mock<IExportImportService>();
             mockSchedulerService = new Mock<ISchedulerService>();
 
-            mockFactory = new Mock<IFactory>();
-
             var mockContext = new Mock<ControllerContext>();
             mockContext.Setup(item => item.HttpContext.User.Identity.Name).Returns("user@server.com");
 
-            sut = new DecksController(mockDecksService.Object, mockCardsService.Object, mockStatisticsService.Object, mockExportImportService.Object, mockSchedulerService.Object, mockFactory.Object)
+            sut = new DecksController(mockDecksService.Object, mockStatisticsService.Object, mockExportImportService.Object, mockSchedulerService.Object)
             {
                 ControllerContext = mockContext.Object
             };
@@ -87,10 +81,6 @@ namespace Memento.Tests.Controllers
                 }));
 
             mockExportImportService.Setup(x => x.Export(It.IsAny<int>())).ReturnsAsync(string.Empty);
-
-            mockFactory.Setup(x => x.CreateDeck(It.IsAny<double>(), It.IsAny<int>())).Returns<double, int>((x, y) => new Deck { Coeff = x, StartDelay = y });
-
-            mockFactory.Setup(x => x.CreateDeck(It.IsAny<int>())).Returns<int>((x) => new Deck { ID = x });
         }
 
         private void AddDbSetMocking()

@@ -42,7 +42,6 @@
   <ItemGroup>
     <Compile Include="ICardsService.cs" />
     <Compile Include="IExportImportService.cs" />
-    <Compile Include="IFactory.cs" />
     <Compile Include="ISchedulerService.cs" />
     <Compile Include="IConverter.cs" />
     <Compile Include="IStatisticsService.cs" />

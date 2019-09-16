@@ -39,8 +39,6 @@ namespace Memento.DependecyInjection
             builder.RegisterType<NewClozesManager>().As<INewClozesManager>();
             builder.RegisterType<SiblingsManager>().As<ISiblingsManager>();
 
-            builder.RegisterType<Factory>().As<IFactory>();
-
             container = builder.Build();
         }
 

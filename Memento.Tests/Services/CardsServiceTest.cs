@@ -19,7 +19,6 @@ namespace Memento.Tests.Services
         private Mock<IMementoRepository> mockRepository;
         private Mock<IConverter> mockConverter;
         private Mock<IEvaluator> mockEvaluator;
-        private Mock<IFactory> mockFactory;
 
         private string userName = "user@server.com";
 
@@ -29,9 +28,8 @@ namespace Memento.Tests.Services
             mockRepository = new Mock<IMementoRepository>();
             mockConverter = new Mock<IConverter>();
             mockEvaluator = new Mock<IEvaluator>();
-            mockFactory = new Mock<IFactory>();
 
-            sut = new CardsService(mockRepository.Object, mockConverter.Object, mockEvaluator.Object, mockFactory.Object);
+            sut = new CardsService(mockRepository.Object, mockConverter.Object, mockEvaluator.Object);
 
             mockRepository.Setup(x => x.FindDeckAsync(It.IsAny<int>()))
                 .ReturnsAsync(

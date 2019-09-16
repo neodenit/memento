@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Memento.Interfaces;
+using Memento.Models.Models;
 
 namespace Memento.Services
 {
@@ -12,14 +13,12 @@ namespace Memento.Services
         private readonly IMementoRepository repository;
         private readonly IConverter converter;
         private readonly IValidator validator;
-        private readonly IFactory factory;
 
-        public ExportImportService(IMementoRepository repository, IConverter converter, IValidator validator, IFactory factory)
+        public ExportImportService(IMementoRepository repository, IConverter converter, IValidator validator)
         {
             this.repository = repository;
             this.converter = converter;
             this.validator = validator;
-            this.factory = factory;
         }
 
         public async Task<string> Export(int deckID)
@@ -41,7 +40,7 @@ namespace Memento.Services
             {
                 var clozeNames = converter.GetClozeNames(cardTextComment.Item1);
                 var isValid = clozeNames.Any() && clozeNames.All(clozeName => validator.Validate(cardTextComment.Item1, clozeName));
-                var newCard = factory.CreateCard(deck, cardTextComment.Item1, cardTextComment.Item2, isValid);
+                var newCard = new Card(deck, cardTextComment.Item1, cardTextComment.Item2, isValid);
 
                 if (!string.IsNullOrWhiteSpace(newCard.Text))
                 {

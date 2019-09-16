@@ -19,20 +19,16 @@ namespace Memento.Web.Controllers
     public class DecksController : Controller
     {
         private readonly IDecksService decksService;
-        private readonly ICardsService cardsService;
         private readonly IStatisticsService statService;
         private readonly IExportImportService exportImportService;
         private readonly ISchedulerService schedulerService;
-        private readonly IFactory factory;
 
-        public DecksController(IDecksService decksService, ICardsService cardsService, IStatisticsService statService, IExportImportService exportImportService, ISchedulerService schedulerService, IFactory factory)
+        public DecksController(IDecksService decksService, IStatisticsService statService, IExportImportService exportImportService, ISchedulerService schedulerService)
         {
             this.decksService = decksService;
-            this.cardsService = cardsService;
             this.statService = statService;
             this.exportImportService = exportImportService;
             this.schedulerService = schedulerService;
-            this.factory = factory;
         }
 
         // GET: Decks

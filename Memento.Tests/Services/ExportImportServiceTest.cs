@@ -21,7 +21,6 @@ namespace Memento.Tests.Services
         private Mock<IMementoRepository> mockRepository;
         private Mock<IConverter> mockConverter;
         private Mock<IValidator> mockValidator;
-        private Mock<IFactory> mockFactory;
 
         [TestInitialize]
         public void Setup()
@@ -29,9 +28,8 @@ namespace Memento.Tests.Services
             mockRepository = new Mock<IMementoRepository>();
             mockConverter = new Mock<IConverter>();
             mockValidator = new Mock<IValidator>();
-            mockFactory = new Mock<IFactory>();
 
-            sut = new ExportImportService(mockRepository.Object, mockConverter.Object, mockValidator.Object, mockFactory.Object);
+            sut = new ExportImportService(mockRepository.Object, mockConverter.Object, mockValidator.Object);
 
             mockRepository
                 .Setup(x => x.FindDeckAsync(It.IsAny<int>()))
