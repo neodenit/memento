@@ -21,7 +21,7 @@ namespace Memento.Services
             this.validator = validator;
         }
 
-        public async Task<string> Export(int deckID)
+        public async Task<string> Export(Guid deckID)
         {
             var deck = await repository.FindDeckAsync(deckID);
             var cards = deck.GetValidCards();
@@ -31,7 +31,7 @@ namespace Memento.Services
             return result;
         }
 
-        public async Task Import(string deckText, int deckID)
+        public async Task Import(string deckText, Guid deckID)
         {
             var deck = await repository.FindDeckAsync(deckID);
             var cardTextComments = converter.GetCardsFromDeck(deckText).ToList();

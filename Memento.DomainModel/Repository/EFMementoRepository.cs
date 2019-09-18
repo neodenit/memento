@@ -30,7 +30,7 @@ namespace Memento.DataAccess.Repository
         public async Task<IEnumerable<Deck>> GetUserDecksAsync(string userName) =>
             await db.Decks.Where(item => item.Owner == userName && !item.IsShared).ToListAsync();
 
-        public Deck FindDeck(int id) =>
+        public Deck FindDeck(Guid id) =>
             db.Decks.Find(id);
 
         public Card FindCard(Guid id) =>
@@ -39,7 +39,7 @@ namespace Memento.DataAccess.Repository
         public Cloze FindCloze(int id) =>
             db.Clozes.Find(id);
 
-        public async Task<Deck> FindDeckAsync(int id) =>
+        public async Task<Deck> FindDeckAsync(Guid id) =>
             await db.Decks.FindAsync(id);
 
         public async Task<Card> FindCardAsync(Guid id) =>
@@ -48,7 +48,7 @@ namespace Memento.DataAccess.Repository
         public async Task<Cloze> FindClozeAsync(int id) =>
             await db.Clozes.FindAsync(id);
 
-        public async Task<IEnumerable<Answer>> GetAnswersForDeckAsync(int deckID) =>
+        public async Task<IEnumerable<Answer>> GetAnswersForDeckAsync(Guid deckID) =>
             await db.Answers.Where(a => a.DeckID == deckID).ToListAsync();
 
         public void AddDeck(Deck deck) =>

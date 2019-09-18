@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Memento.Interfaces;
 using Memento.Models.Enums;
@@ -35,7 +36,7 @@ namespace Memento.Services
             await repository.SaveChangesAsync();
         }
 
-        public async Task ShuffleNewClozes(int deckID, string username)
+        public async Task ShuffleNewClozes(Guid deckID, string username)
         {
             var deck = await repository.FindDeckAsync(deckID);
 

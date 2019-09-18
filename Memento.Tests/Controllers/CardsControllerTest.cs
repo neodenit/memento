@@ -26,10 +26,10 @@ namespace Memento.Tests.Controllers
 
         private string userName = "user@server.com";
 
-        int deckId = 10;
-        Guid cardId = new Guid("00000000-0000-0000-0000-000000000020");
-        int clozeId = 30;
-        int repetitionId = 40;
+        private Guid deckId = new Guid("00000000-0000-0000-0000-000000000010");
+        private Guid cardId = new Guid("00000000-0000-0000-0000-000000000020");
+        private readonly int clozeId = 30;
+        private readonly int repetitionId = 40;
 
         [TestInitialize]
         public void Setup()
@@ -53,7 +53,7 @@ namespace Memento.Tests.Controllers
 
             var mockAnswerCardViewModel = new Mock<AnswerCardViewModel>();
 
-            mockDecksService.Setup(x => x.FindDeckAsync(It.IsAny<int>())).ReturnsAsync(deck);
+            mockDecksService.Setup(x => x.FindDeckAsync(It.IsAny<Guid>())).ReturnsAsync(deck);
             mockCardsService.Setup(x => x.FindCardAsync(It.IsAny<Guid>())).ReturnsAsync(card);
             mockCardsService.Setup(x => x.GetCardWithQuestion(It.IsAny<Cloze>())).Returns(mockAnswerCardViewModel.Object);
             mockCardsService.Setup(x => x.GetCardWithAnswer(It.IsAny<Cloze>())).Returns(mockAnswerCardViewModel.Object);
@@ -70,7 +70,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsClozesIndexTest()
         {
             // Arrange
-            var id = 1;
+            var id = deckId;
 
             // Act
             var result = await sut.ClozesIndex(id) as ViewResult;
@@ -86,7 +86,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsCardsIndexTest()
         {
             // Arrange
-            var id = 1;
+            var id = deckId;
 
             // Act
             var result = await sut.CardsIndex(id) as ViewResult;
@@ -102,7 +102,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsDeletedIndexTest()
         {
             // Arrange
-            var id = 1;
+            var id = deckId;
 
             // Act
             var result = await sut.DeletedIndex(id) as ViewResult;
@@ -118,7 +118,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsDraftIndexTest()
         {
             // Arrange
-            var id = 1;
+            var id = deckId;
 
             // Act
             var result = await sut.DraftIndex(id) as ViewResult;
@@ -335,7 +335,7 @@ namespace Memento.Tests.Controllers
             var result = await sut.Question(card) as ViewResult;
 
             // Assert
-            mockDecksService.Verify(x => x.GetDeckWithStatViewModel(It.IsAny<int>(), It.IsAny<Statistics>(), It.IsAny<string>()));
+            mockDecksService.Verify(x => x.GetDeckWithStatViewModel(It.IsAny<Guid>(), It.IsAny<Statistics>(), It.IsAny<string>()));
             Assert.IsNotNull(result);
             Assert.AreEqual(result.ViewName, "Right");
         }
@@ -404,7 +404,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsCreateTest()
         {
             // Arrange
-            var id = 1;
+            var id = deckId;
 
             // Act
             var result = await sut.Create(id, null, null, null) as ViewResult;
@@ -420,7 +420,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsCreateNullDeckIDTest()
         {
             // Arrange
-            int? id = null;
+            Guid? id = null;
 
             // Act
             var result = await sut.Create(id, null, null, null) as ViewResult;
@@ -429,7 +429,7 @@ namespace Memento.Tests.Controllers
             // Assert
             Assert.IsNotNull(result);
             Assert.IsNotNull(model);
-            Assert.AreEqual(-1, model.DeckID);
+            Assert.AreEqual(Guid.Empty, model.DeckID);
         }
 
         [TestMethod]
@@ -488,7 +488,7 @@ namespace Memento.Tests.Controllers
 
             // Assert
             mockCardsService.Verify(x => x.FindCardAsync(id));
-            mockSchedulerService.Verify(x => x.ShuffleNewClozes(It.IsAny<int>(), It.IsAny<string>()));
+            mockSchedulerService.Verify(x => x.ShuffleNewClozes(It.IsAny<Guid>(), It.IsAny<string>()));
             Assert.IsNotNull(result);
         }
 
@@ -496,7 +496,7 @@ namespace Memento.Tests.Controllers
         public async Task CardsShuffleNewTest()
         {
             // Arrange
-            var id = 1;
+            var id = deckId;
 
             // Act
             var result = await sut.ShuffleNew(id) as RedirectToRouteResult;

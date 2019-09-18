@@ -261,9 +261,8 @@
     <Compile Include="Models\AccountViewModels.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="Models\IdentityModels.cs">
-      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
-    </Compile>
+    <Compile Include="Models\ApplicationDbContext.cs" />
+    <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\ManageViewModels.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>

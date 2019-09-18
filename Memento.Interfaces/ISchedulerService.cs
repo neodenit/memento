@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Memento.Models.Enums;
 using Memento.Models.Models;
 
@@ -8,6 +9,6 @@ namespace Memento.Interfaces
     {
         Delays GetDelayForWrongAnswer(DelayModes delayMode);
         Task PromoteCloze(Deck deck, Delays delay, string username);
-        Task ShuffleNewClozes(int deckID, string username);
+        Task ShuffleNewClozes(Guid deckID, string username);
     }
 }

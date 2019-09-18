@@ -1,13 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Memento.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Memento.Interfaces;
-using Moq;
 using Memento.Models.Models;
+using Memento.Services;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Memento.Tests.Services
 {
@@ -31,7 +29,7 @@ namespace Memento.Tests.Services
 
             sut = new CardsService(mockRepository.Object, mockConverter.Object, mockEvaluator.Object);
 
-            mockRepository.Setup(x => x.FindDeckAsync(It.IsAny<int>()))
+            mockRepository.Setup(x => x.FindDeckAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(
                     new Deck
                     {
@@ -62,7 +60,7 @@ namespace Memento.Tests.Services
         public async Task StatServiceGetAnswersTest()
         {
             // Arrange
-            var id = 1;
+            var id = new Guid("00000000-0000-0000-0000-000000000001");
 
             // Act
             var result = await sut.GetNextCardAsync(id, userName);

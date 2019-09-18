@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Memento.Additional;
 using Memento.Interfaces;
 using Memento.Models.Models;
@@ -15,6 +16,8 @@ namespace Memento.Tests.Services
 
         private Mock<IMementoRepository> mockRepository;
 
+        private Guid deckId = new Guid("00000000-0000-0000-0000-000000000001");
+
         [TestInitialize]
         public void Setup()
         {
@@ -22,7 +25,7 @@ namespace Memento.Tests.Services
 
             sut = new DecksService(mockRepository.Object);
 
-            mockRepository.Setup(x => x.FindDeckAsync(It.IsAny<int>())).ReturnsAsync(new Deck());
+            mockRepository.Setup(x => x.FindDeckAsync(It.IsAny<Guid>())).ReturnsAsync(new Deck());
         }
 
         [TestMethod()]
@@ -43,7 +46,7 @@ namespace Memento.Tests.Services
         public async Task DecksServiceGetDeckWithStatViewModelTest()
         {
             // Arrange
-            var id = 1;
+            var id = deckId;
             var statistics = new Statistics();
             var username = "Username";
 
@@ -60,7 +63,7 @@ namespace Memento.Tests.Services
         public async Task DecksServiceFindDeckTest()
         {
             // Arrange
-            var id = 1;
+            var id = deckId;
 
             // Act
             var result = await sut.FindDeckAsync(id);
@@ -88,7 +91,7 @@ namespace Memento.Tests.Services
         public async Task DecksServiceUpdateDeckTest()
         {
             // Arrange
-            var id = 1;
+            var id = deckId;
             var title = "Title";
             var startDelay = 8;
             var coeff = 2.0;
@@ -106,7 +109,7 @@ namespace Memento.Tests.Services
         public async Task DecksServiceDeleteDeckTest()
         {
             // Arrange
-            var id = 1;
+            var id = deckId;
 
             // Act
             await sut.DeleteDeck(id);

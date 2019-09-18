@@ -1,13 +1,11 @@
-﻿using Memento.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Memento.Interfaces;
 using Memento.Models.Models;
 using Memento.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Memento.Tests.Services
 {
@@ -27,7 +25,7 @@ namespace Memento.Tests.Services
 
             sut = new SchedulerService(mockRepository.Object, mockScheduler.Object);
 
-            mockRepository.Setup(x => x.FindDeckAsync(It.IsAny<int>()))
+            mockRepository.Setup(x => x.FindDeckAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(
                     new Deck
                     {
@@ -65,7 +63,7 @@ namespace Memento.Tests.Services
         public async Task SchedulerServiceShuffleNewClozes()
         {
             // Arrange
-            var id = 1;
+            var id = new Guid("00000000-0000-0000-0000-000000000001");
             var username = "Username";
 
             // Act

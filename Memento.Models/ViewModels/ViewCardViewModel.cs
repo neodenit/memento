@@ -7,7 +7,7 @@ namespace Memento.Models.ViewModels
     public class ViewCardViewModel
     {
         public Guid ID { get; set; }
-        public int DeckID { get; set; }
+        public Guid DeckID { get; set; }
 
         [DataType(DataType.MultilineText)]
         public string Text { get; set; }

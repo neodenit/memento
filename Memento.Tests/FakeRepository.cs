@@ -76,13 +76,13 @@ namespace Memento.Tests
         public Task<Cloze> FindClozeAsync(int id) =>
             Task.FromResult(clozes.FirstOrDefault(c => c.ID == id));
 
-        public Deck FindDeck(int id) =>
+        public Deck FindDeck(Guid id) =>
             decks.FirstOrDefault(d => d.ID == id);
 
-        public Task<Deck> FindDeckAsync(int id) =>
+        public Task<Deck> FindDeckAsync(Guid id) =>
             Task.FromResult(decks.FirstOrDefault(d => d.ID == id));
 
-        public Task<IEnumerable<Answer>> GetAnswersForDeckAsync(int deckID) =>
+        public Task<IEnumerable<Answer>> GetAnswersForDeckAsync(Guid deckID) =>
             Task.FromResult(answers.Where(a => a.DeckID == deckID));
 
         public Task<IEnumerable<Deck>> GetUserDecksAsync(string userName) =>

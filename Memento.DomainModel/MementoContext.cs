@@ -6,7 +6,7 @@ namespace Memento.DataAccess
     public class MementoContext : DbContext
     {
         public MementoContext()
-            : base("name=MementoContext")
+            : base("DefaultConnection")
         {
         }
 

@@ -33,7 +33,7 @@ namespace Memento.Web.Controllers
             this.schedulerService = schedulerService;
         }
 
-        public async Task<ActionResult> ClozesIndex([CheckDeckExistence, CheckDeckOwner] int deckID)
+        public async Task<ActionResult> ClozesIndex([CheckDeckExistence, CheckDeckOwner] Guid deckID)
         {
             var deck = await decksService.FindDeckAsync(deckID);
             var clozes = deck.GetClozes();
@@ -43,7 +43,7 @@ namespace Memento.Web.Controllers
             return View(clozeViews);
         }
 
-        public async Task<ActionResult> CardsIndex([CheckDeckExistence, CheckDeckOwner] int deckID)
+        public async Task<ActionResult> CardsIndex([CheckDeckExistence, CheckDeckOwner] Guid deckID)
         {
             var deck = await decksService.FindDeckAsync(deckID);
             var cards = deck.GetValidCards();
@@ -53,7 +53,7 @@ namespace Memento.Web.Controllers
             return View(viewModel);
         }
 
-        public async Task<ActionResult> DeletedIndex([CheckDeckExistence, CheckDeckOwner] int deckID)
+        public async Task<ActionResult> DeletedIndex([CheckDeckExistence, CheckDeckOwner] Guid deckID)
         {
             var deck = await decksService.FindDeckAsync(deckID);
             var cards = deck.GetDeletedCards();
@@ -62,7 +62,7 @@ namespace Memento.Web.Controllers
             return View(viewModel);
         }
 
-        public async Task<ActionResult> DraftIndex([CheckDeckExistence, CheckDeckOwner] int deckID)
+        public async Task<ActionResult> DraftIndex([CheckDeckExistence, CheckDeckOwner] Guid deckID)
         {
             var deck = await decksService.FindDeckAsync(deckID);
             var cards = deck.GetDraftCards();
@@ -256,7 +256,7 @@ namespace Memento.Web.Controllers
             return await Task.FromResult(RedirectToAction("Details", new { card.ID }));
         }
 
-        public async Task<ActionResult> Create(int? DeckID, Guid? readingCardId, Guid? repetitionCardId, string text)
+        public async Task<ActionResult> Create(Guid? DeckID, Guid? readingCardId, Guid? repetitionCardId, string text)
         {
             if (DeckID == null)
             {
@@ -266,7 +266,7 @@ namespace Memento.Web.Controllers
                 {
                     ID = repetitionCardId.GetValueOrDefault(),
                     ReadingCardId = readingCardId.GetValueOrDefault(),
-                    DeckID = -1,
+                    DeckID = Guid.Empty,
                     Text = text
                 };
 
@@ -348,7 +348,7 @@ namespace Memento.Web.Controllers
             return await ShuffleNew(card.DeckID);
         }
 
-        public async Task<ActionResult> ShuffleNew([CheckDeckExistence, CheckDeckOwner] int deckID)
+        public async Task<ActionResult> ShuffleNew([CheckDeckExistence, CheckDeckOwner] Guid deckID)
         {
             await schedulerService.ShuffleNewClozes(deckID, username);
 

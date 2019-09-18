@@ -79,34 +79,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\201511011032471_Initial.cs" />
-    <Compile Include="Migrations\201511011032471_Initial.Designer.cs">
-      <DependentUpon>201511011032471_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511011808506_Drop Answer column.cs" />
-    <Compile Include="Migrations\201511011808506_Drop Answer column.Designer.cs">
-      <DependentUpon>201511011808506_Drop Answer column.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201603221812014_Add comments to cards.cs" />
-    <Compile Include="Migrations\201603221812014_Add comments to cards.Designer.cs">
-      <DependentUpon>201603221812014_Add comments to cards.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201604171201041_Make text field required.cs" />
-    <Compile Include="Migrations\201604171201041_Make text field required.Designer.cs">
-      <DependentUpon>201604171201041_Make text field required.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201605151602446_Remove clozes count.cs" />
-    <Compile Include="Migrations\201605151602446_Remove clozes count.Designer.cs">
-      <DependentUpon>201605151602446_Remove clozes count.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201606051922323_Add column for shared decks.cs" />
-    <Compile Include="Migrations\201606051922323_Add column for shared decks.Designer.cs">
-      <DependentUpon>201606051922323_Add column for shared decks.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201606251947355_Add multiple users handling.cs" />
-    <Compile Include="Migrations\201606251947355_Add multiple users handling.Designer.cs">
-      <DependentUpon>201606251947355_Add multiple users handling.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MementoContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -133,29 +105,6 @@
       <Project>{9a7ebcfb-2f3a-4ed3-8dff-c356ad46f230}</Project>
       <Name>Memento.Models</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201511011032471_Initial.resx">
-      <DependentUpon>201511011032471_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511011808506_Drop Answer column.resx">
-      <DependentUpon>201511011808506_Drop Answer column.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201603221812014_Add comments to cards.resx">
-      <DependentUpon>201603221812014_Add comments to cards.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201604171201041_Make text field required.resx">
-      <DependentUpon>201604171201041_Make text field required.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201605151602446_Remove clozes count.resx">
-      <DependentUpon>201605151602446_Remove clozes count.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201606051922323_Add column for shared decks.resx">
-      <DependentUpon>201606051922323_Add column for shared decks.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201606251947355_Add multiple users handling.resx">
-      <DependentUpon>201606251947355_Add multiple users handling.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

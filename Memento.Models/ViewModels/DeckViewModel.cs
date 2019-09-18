@@ -7,7 +7,7 @@ namespace Memento.Models.ViewModels
 {
     public class DeckViewModel
     {
-        public int ID { get; set; }
+        public Guid ID { get; set; }
 
         public string Title { get; set; }
 

@@ -9,11 +9,11 @@ namespace Memento.Interfaces
     {
         Task<IEnumerable<Deck>> GetSharedDecksAsync();
         Task<IEnumerable<Deck>> GetUserDecksAsync(string userName);
-        Task<IEnumerable<Answer>> GetAnswersForDeckAsync(int deckID);
-        Deck FindDeck(int id);
+        Task<IEnumerable<Answer>> GetAnswersForDeckAsync(Guid deckID);
+        Deck FindDeck(Guid id);
         Card FindCard(Guid id);
         Cloze FindCloze(int id);
-        Task<Deck> FindDeckAsync(int id);
+        Task<Deck> FindDeckAsync(Guid id);
         Task<Card> FindCardAsync(Guid id);
         Task<Cloze> FindClozeAsync(int id);
         void AddDeck(Deck deck);

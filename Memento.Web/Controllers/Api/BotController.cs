@@ -239,7 +239,7 @@ namespace Memento.Web.Controllers.Api
 
         private async Task<Deck> GetCurrentDeck(Message message)
         {
-            var deckID = message.GetBotPerUserInConversationData<int>("deckID");
+            var deckID = message.GetBotPerUserInConversationData<Guid>("deckID");
             var dbDeck = await decksService.FindDeckAsync(deckID);
 
             return dbDeck;

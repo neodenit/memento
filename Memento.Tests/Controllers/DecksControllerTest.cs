@@ -28,7 +28,8 @@ namespace Memento.Tests.Controllers
         private Mock<IExportImportService> mockExportImportService;
         private Mock<ISchedulerService> mockSchedulerService;
 
-        private string userName = "user@server.com";
+        private readonly string userName = "user@server.com";
+        private Guid deckId = new Guid("00000000-0000-0000-0000-000000000001");
 
         [TestInitialize]
         public void Setup()
@@ -48,12 +49,12 @@ namespace Memento.Tests.Controllers
                 ControllerContext = mockContext.Object
             };
 
-            mockStatisticsService.Setup(x => x.GetAnswersAsync(It.IsAny<int>(), It.IsAny<DateTime>()))
+            mockStatisticsService.Setup(x => x.GetAnswersAsync(It.IsAny<Guid>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(Enumerable.Empty<Answer>());
 
-            mockDecksService.Setup(x => x.GetDeckWithStatViewModel(It.IsAny<int>(), It.IsAny<Statistics>(), It.IsAny<string>())).ReturnsAsync(new DeckWithStatViewModel());
+            mockDecksService.Setup(x => x.GetDeckWithStatViewModel(It.IsAny<Guid>(), It.IsAny<Statistics>(), It.IsAny<string>())).ReturnsAsync(new DeckWithStatViewModel());
 
-            mockDecksService.Setup(x => x.FindDeckAsync(It.IsAny<int>())).Returns<int>(async x => await Task.FromResult(
+            mockDecksService.Setup(x => x.FindDeckAsync(It.IsAny<Guid>())).Returns<Guid>(async x => await Task.FromResult(
                 new Deck
                 {
                     ID = x,
@@ -80,15 +81,15 @@ namespace Memento.Tests.Controllers
                     }
                 }));
 
-            mockExportImportService.Setup(x => x.Export(It.IsAny<int>())).ReturnsAsync(string.Empty);
+            mockExportImportService.Setup(x => x.Export(It.IsAny<Guid>())).ReturnsAsync(string.Empty);
         }
 
         private void AddDbSetMocking()
         {
             var data = new List<Deck> {
-                 new Deck { ID = 1, Cards = new[] { new Card() } },
-                 new Deck { ID = 2, },
-                 new Deck { ID = 3, },
+                 new Deck { ID = new Guid("00000000-0000-0000-0000-000000000001"), Cards = new[] { new Card() } },
+                 new Deck { ID = new Guid("00000000-0000-0000-0000-000000000002"), },
+                 new Deck { ID = new Guid("00000000-0000-0000-0000-000000000003"), },
             };
 
             var dataQuery = data.AsQueryable();
@@ -112,8 +113,8 @@ namespace Memento.Tests.Controllers
                 .Returns(async () => await mockDbSet.Object.ToListAsync<Deck>());
 
             mockRepository
-                .Setup(x => x.FindDeckAsync(It.IsAny<int>()))
-                .Returns<int>(x => Task.FromResult(data.FirstOrDefault(d => d.ID == x) as Deck));
+                .Setup(x => x.FindDeckAsync(It.IsAny<Guid>()))
+                .Returns<Guid>(x => Task.FromResult(data.FirstOrDefault(d => d.ID == x) as Deck));
         }
 
         [TestMethod()]
@@ -135,7 +136,7 @@ namespace Memento.Tests.Controllers
         public async Task DecksDetailsGetTest()
         {
             // Arrange
-            var id = 1;
+            var id = deckId;
 
             // Act
             var result = await sut.Details(id) as ViewResult;
@@ -154,7 +155,7 @@ namespace Memento.Tests.Controllers
         public async Task DecksDetailsPostTest()
         {
             // Arrange
-            var deck = new Deck { ID = 1 };
+            var deck = new Deck { ID = deckId };
 
             // Act
             var result = await sut.Details(deck) as RedirectToRouteResult;
@@ -206,7 +207,7 @@ namespace Memento.Tests.Controllers
         public async Task DecksEditGetTest()
         {
             // Arrange
-            var id = 1;
+            var id = deckId;
 
             // Act
             var result = await sut.Edit(id) as ViewResult;
@@ -225,7 +226,7 @@ namespace Memento.Tests.Controllers
             // Arrange
             var deck = new DeckViewModel
             {
-                ID = 11,
+                ID = deckId,
                 Title = "Title",
                 StartDelay = 8,
                 Coeff = 2.0,
@@ -252,7 +253,7 @@ namespace Memento.Tests.Controllers
         public async Task DecksDeleteTest()
         {
             // Arrange
-            var id = 1;
+            var id = deckId;
 
             // Act
             var result = await sut.Delete(id) as ViewResult;
@@ -269,7 +270,7 @@ namespace Memento.Tests.Controllers
         public async Task DecksDeleteConfirmedTest()
         {
             // Arrange
-            var id = 1;
+            var id = deckId;
 
             // Act
             var result = await sut.DeleteConfirmed(id) as RedirectToRouteResult;
@@ -284,7 +285,7 @@ namespace Memento.Tests.Controllers
         public void DecksImportGetTest()
         {
             // Arrange
-            var id = 1;
+            var id = deckId;
 
             // Act
             var result = sut.Import(id) as ViewResult;
@@ -301,7 +302,7 @@ namespace Memento.Tests.Controllers
         public async Task DecksImportPostTest()
         {
             // Arrange
-            var deck = new ImportViewModel { DeckID = 1 };
+            var deck = new ImportViewModel { DeckID = deckId };
 
             // Act
             var result = await sut.Import(deck, null) as RedirectToRouteResult;
@@ -314,7 +315,7 @@ namespace Memento.Tests.Controllers
         public async Task DecksExportTest()
         {
             // Arrange
-            var id = 1;
+            var id = deckId;
 
             // Act
             var result = await sut.Export(id) as FileContentResult;

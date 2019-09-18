@@ -1,15 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Memento.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Memento.Interfaces;
-using Moq;
 using Memento.Models.Models;
-using Memento.Additional;
-using System.IO;
+using Memento.Services;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Memento.Tests.Services
 {
@@ -32,7 +30,7 @@ namespace Memento.Tests.Services
             sut = new ExportImportService(mockRepository.Object, mockConverter.Object, mockValidator.Object);
 
             mockRepository
-                .Setup(x => x.FindDeckAsync(It.IsAny<int>()))
+                .Setup(x => x.FindDeckAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(
                     new Deck
                     {
@@ -51,7 +49,7 @@ namespace Memento.Tests.Services
         {
             // Arrange
             var text = "text";
-            var id = 1;
+            var id = new Guid("00000000-0000-0000-0000-000000000001");
 
             // Act
             await sut.Import(text, id);
@@ -60,7 +58,6 @@ namespace Memento.Tests.Services
             mockConverter.Verify(x => x.GetCardsFromDeck(text));
         }
 
-        [TestMethod()]
         public async Task ExportImportServiceConvertApkgTest1()
         {
             var filePath = @"Decks\Deck1.apkg";
@@ -68,7 +65,6 @@ namespace Memento.Tests.Services
             await TestApkgConvertion(filePath, expected);
         }
 
-        [TestMethod()]
         public async Task ExportImportServiceConvertApkgTest2()
         {
             var filePath = @"Decks\Deck2.apkg";
@@ -95,7 +91,7 @@ namespace Memento.Tests.Services
         public async Task ExportImportServiceExportTest()
         {
             // Arrange
-            var id = 1;
+            var id = new Guid("00000000-0000-0000-0000-000000000001");
 
             // Act
             var result = await sut.Export(id);
@@ -105,6 +101,5 @@ namespace Memento.Tests.Services
             mockConverter.Verify(x => x.FormatForExport(It.IsAny<string>(), It.IsAny<string>()));
             Assert.IsNotNull(result);
         }
-
     }
 }

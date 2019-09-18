@@ -28,7 +28,7 @@ namespace Memento.Services
             await repository.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Answer>> GetAnswersAsync(int deckID, DateTime startTime)
+        public async Task<IEnumerable<Answer>> GetAnswersAsync(Guid deckID, DateTime startTime)
         {
             var answers = await repository.GetAnswersForDeckAsync(deckID);
             return answers.Where(answer => answer.Time >= startTime);

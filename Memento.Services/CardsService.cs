@@ -77,7 +77,7 @@ namespace Memento.Services
         public Task<Card> FindCardAsync(Guid id) =>
             repository.FindCardAsync(id);
 
-        public async Task<Card> GetNextCardAsync(int deckID, string username)
+        public async Task<Card> GetNextCardAsync(Guid deckID, string username)
         {
             var dbDeck = await repository.FindDeckAsync(deckID);
 

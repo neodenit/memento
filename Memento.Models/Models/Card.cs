@@ -29,7 +29,7 @@ namespace Memento.Models.Models
 
         public Guid ReadingCardId { get; set; }
 
-        public int DeckID { get; set; }
+        public Guid DeckID { get; set; }
 
         public virtual Deck Deck { get; set; }
 

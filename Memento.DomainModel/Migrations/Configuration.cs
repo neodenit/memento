@@ -2,11 +2,11 @@ namespace Memento.DataAccess.Migrations
 {
     using System.Data.Entity.Migrations;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<MementoContext>
+    public sealed class Configuration : DbMigrationsConfiguration<MementoContext>
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(MementoContext context)

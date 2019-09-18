@@ -10,7 +10,7 @@ namespace Memento.Models.ViewModels
         public Guid ID { get; set; }
 
         [Display(Name = "Deck")]
-        public int DeckID { get; set; }
+        public Guid DeckID { get; set; }
 
         public Guid ReadingCardId { get; set; }
 

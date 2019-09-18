@@ -11,11 +11,11 @@ namespace Memento.Interfaces
     {
         Task<IEnumerable<Deck>> GetDecksAsync(string username);
         Task<IEnumerable<Deck>> GetSharedDecksAsync();
-        Task<DeckWithStatViewModel> GetDeckWithStatViewModel(int deckID, Statistics statistics, string username);
-        Task<Deck> FindDeckAsync(int id);
-        Task UpdateDeck(int id, string title, int startDelay, double coeff, bool previewAnswer);
+        Task<DeckWithStatViewModel> GetDeckWithStatViewModel(Guid deckID, Statistics statistics, string username);
+        Task<Deck> FindDeckAsync(Guid id);
+        Task UpdateDeck(Guid id, string title, int startDelay, double coeff, bool previewAnswer);
         Task CreateDeck(Deck deck, string userName);
-        Task DeleteDeck(int id);
-        Task ShareDeckAsync(int id);
+        Task DeleteDeck(Guid id);
+        Task ShareDeckAsync(Guid id);
     }
 }

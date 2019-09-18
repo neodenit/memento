@@ -7,7 +7,7 @@ namespace Memento.Interfaces
 {
     public interface ICardsService
     {
-        Task<Card> GetNextCardAsync(int deckID, string username);
+        Task<Card> GetNextCardAsync(Guid deckID, string username);
         Task<Card> FindCardAsync(Guid id);
 
         Task AddAltAnswer(Cloze cloze, string answer);

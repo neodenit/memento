@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Memento.Additional;
@@ -31,7 +32,7 @@ namespace Memento.Services
             return orderedDecks;
         }
 
-        public async Task<DeckWithStatViewModel> GetDeckWithStatViewModel(int deckID, Statistics statistics, string username)
+        public async Task<DeckWithStatViewModel> GetDeckWithStatViewModel(Guid deckID, Statistics statistics, string username)
         {
             var deck = await repository.FindDeckAsync(deckID);
 
@@ -48,19 +49,20 @@ namespace Memento.Services
             return viewModel;
         }
 
-        public Task<Deck> FindDeckAsync(int id) =>
+        public Task<Deck> FindDeckAsync(Guid id) =>
             repository.FindDeckAsync(id);
 
         public async Task CreateDeck(Deck deck, string userName)
         {
             deck.Owner = userName;
+            deck.ID = new Guid();
 
             repository.AddDeck(deck);
 
             await repository.SaveChangesAsync();
         }
 
-        public async Task UpdateDeck(int id, string title, int startDelay, double coeff, bool previewAnswer)
+        public async Task UpdateDeck(Guid id, string title, int startDelay, double coeff, bool previewAnswer)
         {
             var dbDeck = await repository.FindDeckAsync(id);
 
@@ -72,7 +74,7 @@ namespace Memento.Services
             await repository.SaveChangesAsync();
         }
 
-        public async Task DeleteDeck(int id)
+        public async Task DeleteDeck(Guid id)
         {
             var deck = await repository.FindDeckAsync(id);
 
@@ -81,7 +83,7 @@ namespace Memento.Services
             await repository.SaveChangesAsync();
         }
 
-        public async Task ShareDeckAsync(int id)
+        public async Task ShareDeckAsync(Guid id)
         {
             var deck = await repository.FindDeckAsync(id);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Memento.Common;
 using Memento.Models.Enums;
@@ -10,7 +11,9 @@ namespace Memento.Models.Models
     [Serializable]
     public class Deck
     {
-        public int ID { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public Guid ID { get; set; }
 
         public bool IsShared { get; set; }
 

@@ -45,7 +45,7 @@ namespace Memento.Web.Controllers
             return View(viewModel);
         }
 
-        public async Task<ActionResult> Share([CheckDeckExistence, CheckDeckOwner] int id)
+        public async Task<ActionResult> Share([CheckDeckExistence, CheckDeckOwner] Guid id)
         {
             await decksService.ShareDeckAsync(id);
 
@@ -53,7 +53,7 @@ namespace Memento.Web.Controllers
         }
 
         // GET: Decks/Details/5
-        public async Task<ActionResult> Details([CheckDeckExistence, CheckDeckOwner] int id)
+        public async Task<ActionResult> Details([CheckDeckExistence, CheckDeckOwner] Guid id)
         {
             var startTime = DateTime.Now.AddDays(-10);
 
@@ -129,7 +129,7 @@ namespace Memento.Web.Controllers
         }
 
         // GET: Decks/Edit/5
-        public async Task<ActionResult> Edit([CheckDeckExistence, CheckDeckOwner] int id)
+        public async Task<ActionResult> Edit([CheckDeckExistence, CheckDeckOwner] Guid id)
         {
             var deck = await decksService.FindDeckAsync(id);
             var viewModel = new DeckViewModel(deck);
@@ -161,7 +161,7 @@ namespace Memento.Web.Controllers
             }
         }
 
-        public async Task<ActionResult> Delete([CheckDeckExistence, CheckDeckOwner] int id)
+        public async Task<ActionResult> Delete([CheckDeckExistence, CheckDeckOwner] Guid id)
         {
             var deck = await decksService.FindDeckAsync(id);
 
@@ -171,14 +171,14 @@ namespace Memento.Web.Controllers
         // POST: Decks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed([CheckDeckExistence, CheckDeckOwner] int id)
+        public async Task<ActionResult> DeleteConfirmed([CheckDeckExistence, CheckDeckOwner] Guid id)
         {
             await decksService.DeleteDeck(id);
 
             return RedirectToAction("Index");
         }
 
-        public ActionResult Import([CheckDeckExistence, CheckDeckOwner] int deckID)
+        public ActionResult Import([CheckDeckExistence, CheckDeckOwner] Guid deckID)
         {
             var viewModel = new ImportViewModel { DeckID = deckID, IsShuffled = true };
 
@@ -204,7 +204,7 @@ namespace Memento.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<ActionResult> Export([CheckDeckExistence, CheckDeckOwner] int deckID)
+        public async Task<ActionResult> Export([CheckDeckExistence, CheckDeckOwner] Guid deckID)
         {
             var fileContentText = await exportImportService.Export(deckID);
             var deck = await decksService.FindDeckAsync(deckID);

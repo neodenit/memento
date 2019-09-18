@@ -92,7 +92,7 @@
     {
         <a href="@Settings.Default.IncrementalReadingServer/Cards/Details/@Model.ReadingCardId">Back</a>
     }
-    else if (Model.DeckID == -1)
+    else if (Model.DeckID == Guid.Empty)
     {
         @Html.ActionLink("Index", "Index", "Decks");
     }

@@ -28,7 +28,7 @@ namespace Memento.Tests.Services
         public async Task StatServiceGetAnswersTest()
         {
             // Arrange
-            var id = 1;
+            var id = new Guid("00000000-0000-0000-0000-000000000001");
             var startTime = DateTime.UtcNow;
 
             // Act

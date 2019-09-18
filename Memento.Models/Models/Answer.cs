@@ -16,6 +16,6 @@ namespace Memento.Models.Models
 
         public Guid CardID { get; set; }
 
-        public int DeckID { get; set; }
+        public Guid DeckID { get; set; }
     }
 }
