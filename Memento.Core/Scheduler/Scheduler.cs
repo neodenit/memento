@@ -1,13 +1,11 @@
-﻿using Memento.Common;
-using Memento.Interfaces;
-using Memento.Models.Helpers;
-using Memento.Models.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Memento.Common;
+using Memento.Interfaces;
+using Memento.Models.Helpers;
+using Memento.Models.Models;
 using static Memento.Core.Scheduler.SchedulerUtils;
 
 namespace Memento.Core.Scheduler
@@ -19,8 +17,10 @@ namespace Memento.Core.Scheduler
             var repetition = GetFirstRepetition(repetitions);
 
             var step = GetStep(deck, delay, repetition.LastDelay);
-            var randomPart = GetRandomPart();
-            var correctedStep = Settings.Default.AddRandomization ? step + randomPart : step;
+
+            var maxRandomPart = (int)Math.Round(step * Settings.Default.RandomizationCoeff);
+            var randomPart = GetRandomPart(0, maxRandomPart);
+            var correctedStep = step + randomPart;
 
             var maxNewPosition = GetMaxPosition(repetitions);
             var newPosition = Math.Min(correctedStep, maxNewPosition);

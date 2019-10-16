@@ -88,10 +88,10 @@ namespace Memento.Common {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool AddRandomization {
+        [global::System.Configuration.DefaultSettingValueAttribute("0.25")]
+        public double RandomizationCoeff {
             get {
-                return ((bool)(this["AddRandomization"]));
+                return ((double)(this["RandomizationCoeff"]));
             }
         }
         
