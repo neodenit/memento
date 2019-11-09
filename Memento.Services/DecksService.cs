@@ -55,7 +55,7 @@ namespace Memento.Services
         public async Task CreateDeck(Deck deck, string userName)
         {
             deck.Owner = userName;
-            deck.ID = new Guid();
+            deck.ID = Guid.NewGuid();
 
             repository.AddDeck(deck);
 
