@@ -12,10 +12,10 @@ namespace Memento.Interfaces
         Task<IEnumerable<Answer>> GetAnswersForDeckAsync(Guid deckID);
         Deck FindDeck(Guid id);
         Card FindCard(Guid id);
-        Cloze FindCloze(int id);
+        Cloze FindCloze(Guid id);
         Task<Deck> FindDeckAsync(Guid id);
         Task<Card> FindCardAsync(Guid id);
-        Task<Cloze> FindClozeAsync(int id);
+        Task<Cloze> FindClozeAsync(Guid id);
         void AddDeck(Deck deck);
         void AddCard(Card card);
         void AddCloze(Cloze cloze);

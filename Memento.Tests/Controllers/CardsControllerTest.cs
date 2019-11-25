@@ -28,8 +28,8 @@ namespace Memento.Tests.Controllers
 
         private Guid deckId = new Guid("00000000-0000-0000-0000-000000000010");
         private Guid cardId = new Guid("00000000-0000-0000-0000-000000000020");
-        private readonly int clozeId = 30;
-        private readonly int repetitionId = 40;
+        private Guid clozeId = new Guid("00000000-0000-0000-0000-000000000030");
+        private Guid repetitionId = new Guid("00000000-0000-0000-0000-000000000040");
 
         [TestInitialize]
         public void Setup()

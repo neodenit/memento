@@ -70,10 +70,10 @@ namespace Memento.Tests
         public Task<Card> FindCardAsync(Guid id) =>
             Task.FromResult(cards.FirstOrDefault(c => c.ID == id));
 
-        public Cloze FindCloze(int id) =>
+        public Cloze FindCloze(Guid id) =>
             clozes.FirstOrDefault(c => c.ID == id);
 
-        public Task<Cloze> FindClozeAsync(int id) =>
+        public Task<Cloze> FindClozeAsync(Guid id) =>
             Task.FromResult(clozes.FirstOrDefault(c => c.ID == id));
 
         public Deck FindDeck(Guid id) =>

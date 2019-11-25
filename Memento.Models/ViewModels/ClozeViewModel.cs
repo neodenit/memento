@@ -5,7 +5,7 @@ namespace Memento.Models.ViewModels
 {
     public class ClozeViewModel
     {
-        public int ID { get; set; }
+        public Guid ID { get; set; }
 
         public Guid CardID { get; set; }
 

@@ -36,7 +36,7 @@ namespace Memento.DataAccess.Repository
         public Card FindCard(Guid id) =>
             db.Cards.Find(id);
 
-        public Cloze FindCloze(int id) =>
+        public Cloze FindCloze(Guid id) =>
             db.Clozes.Find(id);
 
         public async Task<Deck> FindDeckAsync(Guid id) =>
@@ -45,7 +45,7 @@ namespace Memento.DataAccess.Repository
         public async Task<Card> FindCardAsync(Guid id) =>
             await db.Cards.FindAsync(id);
 
-        public async Task<Cloze> FindClozeAsync(int id) =>
+        public async Task<Cloze> FindClozeAsync(Guid id) =>
             await db.Clozes.FindAsync(id);
 
         public async Task<IEnumerable<Answer>> GetAnswersForDeckAsync(Guid deckID) =>
@@ -84,6 +84,8 @@ namespace Memento.DataAccess.Repository
             {
                 var newCloze = new Cloze(card.ID, clozeName);
 
+                newCloze.ID = Guid.NewGuid();
+
                 AddCloze(newCloze);
 
                 await SaveChangesAsync();
@@ -92,6 +94,7 @@ namespace Memento.DataAccess.Repository
                 {
                     var repetition = new UserRepetition
                     {
+                        ID =  Guid.NewGuid(),
                         UserName = user,
                         ClozeID = newCloze.ID
                     };
@@ -121,6 +124,7 @@ namespace Memento.DataAccess.Repository
 
             var answer = new Answer
             {
+                ID = Guid.NewGuid(),
                 Time = DateTime.Now,
                 Owner = deck.Owner,
                 ClozeID = cloze.ID,

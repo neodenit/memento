@@ -77,7 +77,6 @@ namespace Memento.Tests
                               new UserRepetition
                               {
                                   Position = i,
-                                  ID = i,
                                   Cloze = new Cloze { Card = new Card { Deck = new Deck() }  }
                               }).ToList();
 

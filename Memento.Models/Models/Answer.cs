@@ -1,10 +1,14 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Memento.Models.Models
 {
     public class Answer
     {
-        public int ID { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public Guid ID { get; set; }
 
         public DateTime Time { get; set; }
 
@@ -12,7 +16,7 @@ namespace Memento.Models.Models
 
         public bool IsCorrect { get; set; }
 
-        public int ClozeID { get; set; }
+        public Guid ClozeID { get; set; }
 
         public Guid CardID { get; set; }
 

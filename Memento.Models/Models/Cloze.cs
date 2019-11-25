@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Memento.Models.Models
@@ -17,7 +19,9 @@ namespace Memento.Models.Models
             Label = label;
         }
 
-        public int ID { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public Guid ID { get; set; }
 
         public Guid CardID { get; set; }
 

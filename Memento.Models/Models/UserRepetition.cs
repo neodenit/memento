@@ -1,12 +1,18 @@
-﻿namespace Memento.Models.Models
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Memento.Models.Models
 {
     public class UserRepetition
     {
-        public int ID { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public Guid ID { get; set; }
 
         public string UserName { get; set; }
 
-        public int ClozeID { get; set; }
+        public Guid ClozeID { get; set; }
 
         public virtual Cloze Cloze { get; set; }
 
