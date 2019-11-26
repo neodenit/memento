@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Memento.Common;
+using Newtonsoft.Json;
 
 namespace Memento.Models.Models
 {
@@ -31,6 +32,7 @@ namespace Memento.Models.Models
 
         public Guid DeckID { get; set; }
 
+        [JsonIgnore]
         public virtual Deck Deck { get; set; }
 
         public Deck GetDeck()

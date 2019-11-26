@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Memento.Interfaces;
 using Memento.Models.Models;
+using Newtonsoft.Json;
 
 namespace Memento.Services
 {
@@ -61,6 +62,52 @@ namespace Memento.Services
         public Task<IEnumerable<string>> ConvertApkg(Stream inputStream)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<string> Backup()
+        {
+            var backup = new BackupModel
+            {
+                Decks = await repository.GetAllDecksAsync(),
+                Answers = await repository.GetAllAnswersAsync()
+            };
+
+            var result = JsonConvert.SerializeObject(backup, Formatting.Indented);
+            return result;
+        }
+
+        public async Task Restore(Stream inputStream)
+        {
+            BackupModel GetBackup(Stream stream)
+            {
+                using (var streamReader = new StreamReader(stream))
+                {
+                    var jsonSerializer = new JsonSerializer();
+
+                    using (var jsonReader = new JsonTextReader(streamReader))
+                    {
+                        var backupModel = jsonSerializer.Deserialize<BackupModel>(jsonReader);
+                        return backupModel;
+                    }
+                }
+            }
+
+            var backup = GetBackup(inputStream);
+
+            repository.RemoveDecks();
+            repository.RemoveAnswers();
+
+            foreach (var deck in backup.Decks)
+            {
+                repository.AddDeck(deck);
+            }
+
+            foreach (var answer in backup.Answers)
+            {
+                repository.AddAnswer(answer);
+            }
+
+            await repository.SaveChangesAsync();
         }
     }
 }

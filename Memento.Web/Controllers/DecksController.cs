@@ -213,5 +213,26 @@ namespace Memento.Web.Controllers
 
             return File(Encoding.UTF8.GetBytes(fileContentText), MediaTypeNames.Text.Plain, $"{fileName}.txt");
         }
+
+        public ActionResult Backup()
+        {
+            return View();
+        }
+
+        public async Task<ActionResult> GetBackupFile()
+        {
+            string fileContentText = await exportImportService.Backup();
+
+            return File(Encoding.UTF8.GetBytes(fileContentText), MediaTypeNames.Text.Plain, $"MEMENTO-BACKUP-{DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss")}.json");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Restore(HttpPostedFileBase file)
+        {
+            await exportImportService.Restore(file.InputStream);
+
+            return View("Backup");
+        }
     }
 }

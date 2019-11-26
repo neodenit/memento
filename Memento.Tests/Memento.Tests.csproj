@@ -99,7 +99,6 @@
     <Compile Include="Services\SchedulerServiceTest.cs" />
     <Compile Include="Services\StatisticsServiceTest.cs" />
     <Compile Include="Services\DecksServiceTest.cs" />
-    <Compile Include="FakeRepository.cs" />
     <Compile Include="TestDbAsync\TestDbAsyncEnumerator.cs" />
     <Compile Include="TestDbAsync\TestDbAsyncEnumerable.cs" />
     <Compile Include="TestDbAsync\TestDbAsyncQueryProvider.cs" />

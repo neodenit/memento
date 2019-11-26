@@ -24,6 +24,9 @@ namespace Memento.DataAccess.Repository
             this.newCardsManager = newCardsManager;
         }
 
+        public async Task<IEnumerable<Deck>> GetAllDecksAsync() =>
+            await db.Decks.ToListAsync();
+
         public async Task<IEnumerable<Deck>> GetSharedDecksAsync() =>
             await db.Decks.Where(item => item.IsShared).ToListAsync();
 
@@ -48,6 +51,9 @@ namespace Memento.DataAccess.Repository
         public async Task<Cloze> FindClozeAsync(Guid id) =>
             await db.Clozes.FindAsync(id);
 
+        public async Task<IEnumerable<Answer>> GetAllAnswersAsync() =>
+            await db.Answers.ToListAsync();
+
         public async Task<IEnumerable<Answer>> GetAnswersForDeckAsync(Guid deckID) =>
             await db.Answers.Where(a => a.DeckID == deckID).ToListAsync();
 
@@ -63,6 +69,9 @@ namespace Memento.DataAccess.Repository
         public void AddRepetition(UserRepetition repetition) =>
             db.Repetitions.Add(repetition as UserRepetition);
 
+        public void AddAnswer(Answer answer) =>
+            db.Answers.Add(answer);
+
         public void RemoveDeck(Deck deck) =>
             db.Decks.Remove(deck as Deck);
 
@@ -74,6 +83,12 @@ namespace Memento.DataAccess.Repository
 
         public void RemoveRepetition(UserRepetition repetition) =>
              db.Repetitions.Remove(repetition as UserRepetition);
+
+        public void RemoveDecks() =>
+            db.Decks.RemoveRange(db.Decks);
+
+        public void RemoveAnswers() =>
+            db.Answers.RemoveRange(db.Answers);
 
         public async Task AddClozesAsync(Card card, IEnumerable<string> clozeNames)
         {

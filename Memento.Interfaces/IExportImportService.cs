@@ -12,5 +12,9 @@ namespace Memento.Interfaces
         Task Import(string deckText, Guid deckID);
 
         Task<IEnumerable<string>> ConvertApkg(Stream inputStream);
+
+        Task<string> Backup();
+
+        Task Restore(Stream inputStream);
     }
 }

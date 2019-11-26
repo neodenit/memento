@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Memento.Models.Models
 {
@@ -25,6 +26,7 @@ namespace Memento.Models.Models
 
         public Guid CardID { get; set; }
 
+        [JsonIgnore]
         public virtual Card Card { get; set; }
 
         public virtual ICollection<UserRepetition> UserRepetitions { get; set; }
