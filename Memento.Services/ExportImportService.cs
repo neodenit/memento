@@ -41,13 +41,14 @@ namespace Memento.Services
             {
                 var clozeNames = converter.GetClozeNames(cardTextComment.Item1);
                 var isValid = clozeNames.Any() && clozeNames.All(clozeName => validator.Validate(cardTextComment.Item1, clozeName));
-                var newCard = new Card(deck, cardTextComment.Item1, cardTextComment.Item2, isValid);
+                var newCard = new Card(deck, cardTextComment.Item1, cardTextComment.Item2, isValid)
+                {
+                    ID = Guid.NewGuid()
+                };
 
                 if (!string.IsNullOrWhiteSpace(newCard.Text))
                 {
-                    repository.AddCard(newCard);
-
-                    await repository.SaveChangesAsync();
+                    deck.Cards.Add(newCard);
 
                     if (isValid)
                     {

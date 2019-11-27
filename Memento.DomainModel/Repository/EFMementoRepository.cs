@@ -97,13 +97,12 @@ namespace Memento.DataAccess.Repository
 
             foreach (var clozeName in clozeNames)
             {
-                var newCloze = new Cloze(card.ID, clozeName);
+                var newCloze = new Cloze(card.ID, clozeName)
+                {
+                    ID = Guid.NewGuid()
+                };
 
-                newCloze.ID = Guid.NewGuid();
-
-                AddCloze(newCloze);
-
-                await SaveChangesAsync();
+                card.Clozes.Add(newCloze);
 
                 foreach (var user in users)
                 {
@@ -117,7 +116,8 @@ namespace Memento.DataAccess.Repository
                     var repetitions = deck.GetRepetitions(user);
 
                     scheduler.PrepareForAdding(deck, repetitions, repetition);
-                    AddRepetition(repetition);
+
+                    newCloze.UserRepetitions.Add(repetition);
                 }
             }
         }

@@ -191,9 +191,12 @@ namespace Memento.Web.Controllers
         {
             if (file?.ContentLength > 0)
             {
-                var deckText = await new StreamReader(file.InputStream).ReadToEndAsync();
+                using (var streamReader = new StreamReader(file.InputStream))
+                {
+                    var deckText = await streamReader.ReadToEndAsync();
 
-                await exportImportService.Import(deckText, viewModel.DeckID);
+                    await exportImportService.Import(deckText, viewModel.DeckID);
+                }
 
                 if (viewModel.IsShuffled)
                 {
