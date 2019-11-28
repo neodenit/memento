@@ -25,8 +25,7 @@ namespace Memento.Core.Converter
 
         public string GetQuestion(string cardText, string clozeName)
         {
-            var questionPart = SavedCardOperations.GetQuestionPart(cardText);
-            var result = SavedCardOperations.GetQuestionForCloze(questionPart, clozeName);
+            var result = SavedCardOperations.GetQuestionForCloze(cardText, clozeName);
             return result;
         }
 
@@ -47,13 +46,9 @@ namespace Memento.Core.Converter
 
         public string GetFullAnswer(string card, string clozeName)
         {
-            var questionText = SavedCardOperations.GetQuestionPart(card);
-            var result = SavedCardOperations.GetAnswerForCloze(questionText, clozeName);
+            var result = SavedCardOperations.GetAnswerForCloze(card, clozeName);
             return result;
         }
-
-        public string GetComment(string cardText) =>
-            SavedCardOperations.GetCommentPart(cardText);
 
         public string ReplaceAnswer(string text, string label, string newAnswers)
         {

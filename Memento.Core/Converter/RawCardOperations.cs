@@ -73,7 +73,7 @@ namespace Memento.Core.Converter
             }
             else
             {
-                return Tuple.Create(TextOperations.ReplaceDelimiters(card), string.Empty);
+                return Tuple.Create(card, string.Empty);
             }
         }
 

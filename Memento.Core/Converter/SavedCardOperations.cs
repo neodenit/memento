@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using static Memento.Core.Converter.ConverterPatterns;
 
 namespace Memento.Core.Converter
@@ -25,16 +22,6 @@ namespace Memento.Core.Converter
 
         internal static string GetCurrentClozePattern(string clozeName) =>
             ClozePattern.Replace(LabelPattern, clozeName);
-
-        internal static string GetQuestionPart(string card) => GetPart(card, 0);
-
-        internal static string GetCommentPart(string card) => GetPart(card, 1);
-
-        private static string GetPart(string card, int index) =>
-            GetParts(card).ElementAtOrDefault(index)?.Trim();
-
-        private static IEnumerable<string> GetParts(string card) =>
-            card.Split(new[] { Delimiter }, StringSplitOptions.None);
 
         private static string ReplaceClozeWithSquareBrackets(string field, string clozeName)
         {

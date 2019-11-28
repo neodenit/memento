@@ -44,7 +44,7 @@ namespace Memento.Services
         {
             var card = cloze.GetCard();
             var fullAnswer = converter.GetFullAnswer(card.Text, cloze.Label);
-            var comment = converter.GetComment(card.Text);
+            var comment = card.Comment;
 
             var result = new AnswerCardViewModel(card) { FullAnswer = fullAnswer, Comment = comment };
 

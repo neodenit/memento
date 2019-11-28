@@ -8,7 +8,6 @@ namespace Memento.Interfaces
         string GetQuestion(string card, string clozeName);
         string GetFullAnswer(string card, string clozeName);
         string GetShortAnswer(string field, string clozeName);
-        string GetComment(string text);
 
         IEnumerable<Tuple<string, string>> GetCardsFromDeck(string deckText);
         IEnumerable<string> GetClozeNames(string field);
