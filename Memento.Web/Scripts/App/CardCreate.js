@@ -30,7 +30,7 @@
     });
 
     var getCurrentClozePattern = function (clozeName) {
-        var currentPattern = '{{' + clozeName + '::((?:(?!}}).)+?)}}';
+        var currentPattern = '{{' + clozeName + '::(.+?)}}';
         return currentPattern;
     };
 
@@ -55,7 +55,7 @@
     };
 
     var getExistingLabel = function (text, answer) {
-        var pattern = '{{((?:(?!}}).)+?)::' + answer + '}}';
+        var pattern = '{{(c[1-9]\\d*)::' + answer + '(::(.+?))?}}';
 
         var regex = new RegExp(pattern);
 
