@@ -3,7 +3,7 @@ using Memento.Models.Models;
 
 namespace Memento.Interfaces
 {
-    public interface ISiblingsManager
+    public interface ISiblingsManagerService
     {
         void RearrangeSiblings(Deck deck, IEnumerable<UserRepetition> repetitions);
     }

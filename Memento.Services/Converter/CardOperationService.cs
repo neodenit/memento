@@ -1,18 +1,19 @@
 ﻿using System.Text.RegularExpressions;
-using static Memento.Core.Converter.ConverterPatterns;
+using Memento.Interfaces;
+using static Memento.Common.ConverterPatterns;
 
-namespace Memento.Core.Converter
+namespace Memento.Services.Converter
 {
-    static class SavedCardOperations
+    public class CardOperationService : ICardOperationService
     {
-        internal static string GetQuestionForCloze(string field, string clozeName)
+        public string GetQuestionForCloze(string field, string clozeName)
         {
             var cloze1 = ReplaceClozeWithSquareBrackets(field, clozeName);
             var cloze2 = StripClozes(cloze1);
             return cloze2;
         }
 
-        internal static string GetAnswerForCloze(string field, string clozeName)
+        public string GetAnswerForCloze(string field, string clozeName)
         {
             var currentPattern = GetCurrentClozePattern(clozeName);
             var answer1 = Regex.Replace(field, currentPattern, "[$2]");
@@ -20,10 +21,10 @@ namespace Memento.Core.Converter
             return answer2;
         }
 
-        internal static string GetCurrentClozePattern(string clozeName) =>
+        public string GetCurrentClozePattern(string clozeName) =>
             ClozePattern.Replace(LabelPattern, clozeName);
 
-        private static string ReplaceClozeWithSquareBrackets(string field, string clozeName)
+        private string ReplaceClozeWithSquareBrackets(string field, string clozeName)
         {
             var clozePattern = GetCurrentClozePattern(clozeName);
             var match = Regex.Match(field, clozePattern);
@@ -45,7 +46,7 @@ namespace Memento.Core.Converter
             }
         }
 
-        private static string StripClozes(string field) =>
+        private string StripClozes(string field) =>
             Regex.Replace(field, ClozePattern, "$2");
     }
 }

@@ -125,10 +125,6 @@
       <Project>{af08785a-2a1b-47f8-8100-460b69df26be}</Project>
       <Name>Memento.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Memento.Core\Memento.Core.csproj">
-      <Project>{2f5faa65-d83a-47d4-abea-f2693dae25a3}</Project>
-      <Name>Memento.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Memento.DomainModel\Memento.DataAccess.csproj">
       <Project>{4ccb3552-1782-4ca3-806e-fe846ca2f6cf}</Project>
       <Name>Memento.DataAccess</Name>

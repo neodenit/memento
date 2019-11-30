@@ -2,7 +2,7 @@
 
 namespace Memento.Interfaces
 {
-    public interface IEvaluator
+    public interface IEvaluatorService
     {
         Mark Evaluate(string correctAnswer, string answer);
     }

@@ -1,15 +1,15 @@
 ﻿using Memento.Common;
 using Memento.Interfaces;
 
-namespace Memento.Core.Validators
+namespace Memento.Services.Validators
 {
-    public class LengthValidator : BaseValidator
+    public class LengthValidatorService : BaseValidatorService
     {
-        protected readonly IConverter converter;
+        protected readonly IConverterService converter;
 
         public override string ErrorMessage { get; } = "There are too many words in the cloze deletion.";
 
-        public LengthValidator(IConverter converter, IValidator baseValidator = null) : base(baseValidator)
+        public LengthValidatorService(IConverterService converter, IValidatorService baseValidator = null) : base(baseValidator)
         {
             this.converter = converter;
         }

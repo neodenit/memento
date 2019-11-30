@@ -11,10 +11,10 @@ namespace Memento.Services
     public class CardsService : ICardsService
     {
         private readonly IMementoRepository repository;
-        private readonly IConverter converter;
-        private readonly IEvaluator evaluator;
+        private readonly IConverterService converter;
+        private readonly IEvaluatorService evaluator;
 
-        public CardsService(IMementoRepository repository, IConverter converter, IEvaluator evaluator)
+        public CardsService(IMementoRepository repository, IConverterService converter, IEvaluatorService evaluator)
         {
             this.repository = repository;
             this.converter = converter;

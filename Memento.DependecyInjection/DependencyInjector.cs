@@ -2,15 +2,13 @@
 using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
-using Memento.Core;
-using Memento.Core.Converter;
-using Memento.Core.Evaluators;
-using Memento.Core.Scheduler;
-using Memento.Core.Validators;
 using Memento.DataAccess.Repository;
 using Memento.Interfaces;
-using Memento.Models;
 using Memento.Services;
+using Memento.Services.Converter;
+using Memento.Services.Evaluators;
+using Memento.Services.Scheduler;
+using Memento.Services.Validators;
 
 namespace Memento.DependecyInjection
 {
@@ -27,17 +25,23 @@ namespace Memento.DependecyInjection
             builder.RegisterType<EFMementoRepository>().As<IMementoRepository>().InstancePerRequest();
 
             builder.RegisterType<DecksService>().As<IDecksService>();
+
             builder.RegisterType<CardsService>().As<ICardsService>();
+            builder.RegisterType<CardOperationService>().As<ICardOperationService>();
+            builder.RegisterType<RawCardOperationService>().As<IRawCardOperationService>();
+            builder.RegisterType<ConverterService>().As<IConverterService>();
+
+            builder.RegisterType<SchedulerService>().As<ISchedulerService>();
+            builder.RegisterType<SchedulerOperationService>().As<ISchedulerOperationService>();
+            builder.RegisterType<SchedulerUtilsService>().As<ISchedulerUtilsService>();
+
             builder.RegisterType<StatisticsService>().As<IStatisticsService>();
             builder.RegisterType<ExportImportService>().As<IExportImportService>();
-            builder.RegisterType<SchedulerService>().As<ISchedulerService>();            
+            builder.RegisterType<PhraseEvaluatorService>().As<IEvaluatorService>();
+            builder.RegisterType<ExistenceValidatorService>().As<IValidatorService>().WithParameter("baseValidator", null);
 
-            builder.RegisterType<PhraseEvaluator>().As<IEvaluator>();
-            builder.RegisterType<Converter>().As<IConverter>();
-            builder.RegisterType<ExistenceValidator>().As<IValidator>().WithParameter("baseValidator", null);
-            builder.RegisterType<Scheduler>().As<IScheduler>();
-            builder.RegisterType<NewClozesManager>().As<INewClozesManager>();
-            builder.RegisterType<SiblingsManager>().As<ISiblingsManager>();
+            builder.RegisterType<NewClozesManagerService>().As<INewClozesManagerService>();
+            builder.RegisterType<SiblingsManagerService>().As<ISiblingsManagerService>();
 
             container = builder.Build();
         }

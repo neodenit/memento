@@ -1,18 +1,12 @@
 ﻿using Memento.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace Memento.Core.Validators
+namespace Memento.Services.Validators
 {
-    public abstract class BaseValidator : IValidator
+    public abstract class BaseValidatorService : IValidatorService
     {
-        private readonly IValidator baseValidator;
+        private readonly IValidatorService baseValidator;
 
-        public BaseValidator(IValidator baseValidator = null)
+        public BaseValidatorService(IValidatorService baseValidator = null)
         {
             this.baseValidator = baseValidator;
         }

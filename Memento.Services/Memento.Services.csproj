@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MinimumEditDistance, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\LevenshteinMinimumEditDistance.1.2.0\lib\MinimumEditDistance.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -44,11 +47,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CardsService.cs" />
+    <Compile Include="Converter\ConverterService.cs" />
+    <Compile Include="Converter\RawCardOperationService.cs" />
+    <Compile Include="Converter\CardOperationService.cs" />
+    <Compile Include="Converter\TextOperationService.cs" />
+    <Compile Include="Evaluators\BaseEvaluatorService.cs" />
+    <Compile Include="Evaluators\PhraseEvaluatorService.cs" />
+    <Compile Include="Evaluators\WordsEvaluatorService.cs" />
     <Compile Include="ExportImportService.cs" />
+    <Compile Include="NewClozesManagerService.cs" />
     <Compile Include="SchedulerService.cs" />
+    <Compile Include="Scheduler\SchedulerOperationService.cs" />
+    <Compile Include="Scheduler\SchedulerUtilsService.cs" />
+    <Compile Include="SiblingsManagerService.cs" />
     <Compile Include="StatisticsService.cs" />
     <Compile Include="DecksService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validators\BaseValidatorService.cs" />
+    <Compile Include="Validators\CombinedValidatorService.cs" />
+    <Compile Include="Validators\ExistenceValidatorService.cs" />
+    <Compile Include="Validators\LengthValidatorService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Memento.Common\Memento.Common.csproj">

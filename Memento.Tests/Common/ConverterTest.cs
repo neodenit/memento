@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
+﻿using Memento.Interfaces;
+using Memento.Services.Converter;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Memento.Interfaces;
-using Memento.Core.Converter;
 
 namespace Memento.Tests
 {
     [TestClass]
     public class ConverterTest
     {
-        private IConverter sut;
+        private IConverterService sut;
 
         [TestInitialize]
         public void Setup()
         {
-            sut = new Converter();
+            var cardOperationService = new CardOperationService(); // TODO: create separate tests
+            var rawCardOperationService = new RawCardOperationService(); // TODO: create separate tests
+            sut = new ConverterService(cardOperationService, rawCardOperationService);
         }
 
         [TestMethod]

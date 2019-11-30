@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Memento.Common;
 using Memento.Models.Models;
 
 namespace Memento.Interfaces

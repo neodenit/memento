@@ -40,21 +40,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICardOperationService.cs" />
     <Compile Include="ICardsService.cs" />
     <Compile Include="IExportImportService.cs" />
+    <Compile Include="IRawCardOperationService.cs" />
+    <Compile Include="ISchedulerOperationService.cs" />
     <Compile Include="ISchedulerService.cs" />
-    <Compile Include="IConverter.cs" />
+    <Compile Include="IConverterService.cs" />
+    <Compile Include="ISchedulerUtilsService.cs" />
     <Compile Include="IStatisticsService.cs" />
     <Compile Include="IDecksService.cs" />
-    <Compile Include="IEvaluator.cs" />
+    <Compile Include="IEvaluatorService.cs" />
     <Compile Include="IMementoRepository.cs" />
-    <Compile Include="INewClozesManager.cs" />
-    <Compile Include="IScheduler.cs" />
-    <Compile Include="ISiblingsManager.cs" />
-    <Compile Include="IValidator.cs" />
+    <Compile Include="INewClozesManagerService.cs" />
+    <Compile Include="ISiblingsManagerService.cs" />
+    <Compile Include="IValidatorService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Memento.Common\Memento.Common.csproj">
+      <Project>{AF08785A-2A1B-47F8-8100-460B69DF26BE}</Project>
+      <Name>Memento.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Memento.Models\Memento.Models.csproj">
       <Project>{9a7ebcfb-2f3a-4ed3-8dff-c356ad46f230}</Project>
       <Name>Memento.Models</Name>

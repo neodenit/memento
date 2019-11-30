@@ -1,6 +1,6 @@
 ﻿namespace Memento.Interfaces
 {
-    public interface IValidator
+    public interface IValidatorService
     {
         string ErrorMessage { get; }
 

@@ -15,8 +15,8 @@ namespace Memento.Tests.Services
         private CardsService sut;
 
         private Mock<IMementoRepository> mockRepository;
-        private Mock<IConverter> mockConverter;
-        private Mock<IEvaluator> mockEvaluator;
+        private Mock<IConverterService> mockConverter;
+        private Mock<IEvaluatorService> mockEvaluator;
 
         private string userName = "user@server.com";
 
@@ -24,8 +24,8 @@ namespace Memento.Tests.Services
         public void Setup()
         {
             mockRepository = new Mock<IMementoRepository>();
-            mockConverter = new Mock<IConverter>();
-            mockEvaluator = new Mock<IEvaluator>();
+            mockConverter = new Mock<IConverterService>();
+            mockEvaluator = new Mock<IEvaluatorService>();
 
             sut = new CardsService(mockRepository.Object, mockConverter.Object, mockEvaluator.Object);
 

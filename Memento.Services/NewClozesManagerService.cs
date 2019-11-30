@@ -6,13 +6,13 @@ using Memento.Interfaces;
 using Memento.Models.Helpers;
 using Memento.Models.Models;
 
-namespace Memento.Core
+namespace Memento.Services
 {
-    public class NewClozesManager : INewClozesManager
+    public class NewClozesManagerService : INewClozesManagerService
     {
-        private readonly IScheduler scheduler;
+        private readonly ISchedulerOperationService scheduler;
 
-        public NewClozesManager(IScheduler scheduler)
+        public NewClozesManagerService(ISchedulerOperationService scheduler)
         {
             this.scheduler = scheduler;
         }

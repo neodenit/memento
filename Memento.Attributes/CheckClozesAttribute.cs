@@ -8,8 +8,8 @@ namespace Memento.Attributes
 {
     public class CheckClozesAttribute : ValidationAttribute
     {
-        private IValidator validator = DependencyResolver.Current.GetService<IValidator>();
-        private IConverter converter = DependencyResolver.Current.GetService<IConverter>();
+        private IValidatorService validator = DependencyResolver.Current.GetService<IValidatorService>();
+        private IConverterService converter = DependencyResolver.Current.GetService<IConverterService>();
 
         public override bool IsValid(object value)
         {

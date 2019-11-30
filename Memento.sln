@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DA5D5C92-2525-4DCA-9B77-6235D2E288D1}"
 	ProjectSection(SolutionItems) = preProject
@@ -15,8 +15,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.DataAccess", "Memento.DomainModel\Memento.DataAccess.csproj", "{4CCB3552-1782-4CA3-806E-FE846CA2F6CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.Web", "Memento.Web\Memento.Web.csproj", "{1C82468E-77F8-44FA-BE30-DC56BE50B3CF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.Core", "Memento.Core\Memento.Core.csproj", "{2F5FAA65-D83A-47D4-ABEA-F2693DAE25A3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.Interfaces", "Memento.Interfaces\Memento.Interfaces.csproj", "{57E544CD-A620-4820-BBF4-DC8C27B4968E}"
 EndProject
@@ -50,10 +48,6 @@ Global
 		{1C82468E-77F8-44FA-BE30-DC56BE50B3CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C82468E-77F8-44FA-BE30-DC56BE50B3CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C82468E-77F8-44FA-BE30-DC56BE50B3CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2F5FAA65-D83A-47D4-ABEA-F2693DAE25A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F5FAA65-D83A-47D4-ABEA-F2693DAE25A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2F5FAA65-D83A-47D4-ABEA-F2693DAE25A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2F5FAA65-D83A-47D4-ABEA-F2693DAE25A3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{57E544CD-A620-4820-BBF4-DC8C27B4968E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{57E544CD-A620-4820-BBF4-DC8C27B4968E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57E544CD-A620-4820-BBF4-DC8C27B4968E}.Release|Any CPU.ActiveCfg = Release|Any CPU

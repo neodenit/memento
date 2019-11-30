@@ -3,16 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Memento.Interfaces;
-using static Memento.Core.Converter.ConverterPatterns;
+using static Memento.Common.ConverterPatterns;
 
-namespace Memento.Core.Converter
+namespace Memento.Services.Converter
 {
-    public class Converter : IConverter
+    public class ConverterService : IConverterService
     {
+        private readonly ICardOperationService cardOperationService;
+        private readonly IRawCardOperationService rawCardOperationService;
+
+        public ConverterService(ICardOperationService cardOperationService, IRawCardOperationService rawCardOperationService)
+        {
+            this.cardOperationService = cardOperationService ?? throw new ArgumentNullException(nameof(cardOperationService));
+            this.rawCardOperationService = rawCardOperationService ?? throw new ArgumentNullException(nameof(rawCardOperationService));
+        }
+
         public IEnumerable<Tuple<string, string>> GetCardsFromDeck(string deckText)
         {
-            var cards = RawCardOperations.GetCards(deckText);
-            var clozes = RawCardOperations.RawCardsToClozes(cards);
+            var cards = rawCardOperationService.GetCards(deckText);
+            var clozes = rawCardOperationService.RawCardsToClozes(cards);
             return clozes;
         }
 
@@ -25,13 +34,13 @@ namespace Memento.Core.Converter
 
         public string GetQuestion(string cardText, string clozeName)
         {
-            var result = SavedCardOperations.GetQuestionForCloze(cardText, clozeName);
+            var result = cardOperationService.GetQuestionForCloze(cardText, clozeName);
             return result;
         }
 
         public string GetShortAnswer(string field, string clozeName)
         {
-            var currentPattern = SavedCardOperations.GetCurrentClozePattern(clozeName);
+            var currentPattern = cardOperationService.GetCurrentClozePattern(clozeName);
 
             if (Regex.IsMatch(field, currentPattern))
             {
@@ -46,13 +55,13 @@ namespace Memento.Core.Converter
 
         public string GetFullAnswer(string card, string clozeName)
         {
-            var result = SavedCardOperations.GetAnswerForCloze(card, clozeName);
+            var result = cardOperationService.GetAnswerForCloze(card, clozeName);
             return result;
         }
 
         public string ReplaceAnswer(string text, string label, string newAnswers)
         {
-            var currentPattern = SavedCardOperations.GetCurrentClozePattern(label);
+            var currentPattern = cardOperationService.GetCurrentClozePattern(label);
             var newPattern = $"{{{{{label}::{newAnswers}$3}}}}";
             return Regex.Replace(text, currentPattern, newPattern);
         }
@@ -66,18 +75,18 @@ namespace Memento.Core.Converter
 
         public string FormatForExport(string text, string comment)
         {
-            var textWithoutNewLines = TextOperations.LineBreaksToTags(text);
-            var exportText = TextOperations.TabsToSpaces(textWithoutNewLines);
+            var textWithoutNewLines = TextOperationService.LineBreaksToTags(text);
+            var exportText = TextOperationService.TabsToSpaces(textWithoutNewLines);
 
             var notNullComment = comment ?? string.Empty;
-            var commentWithoutNewLines = TextOperations.LineBreaksToTags(notNullComment);
-            var exportComment = TextOperations.TabsToSpaces(commentWithoutNewLines);
+            var commentWithoutNewLines = TextOperationService.LineBreaksToTags(notNullComment);
+            var exportComment = TextOperationService.TabsToSpaces(commentWithoutNewLines);
 
             var result = exportText + RawDelimiter + exportComment;
             return result;
         }
 
         public string GetCurrentClozePattern(string clozeName) =>
-            SavedCardOperations.GetCurrentClozePattern(clozeName);
+            cardOperationService.GetCurrentClozePattern(clozeName);
     }
 }

@@ -6,13 +6,13 @@ using Memento.Interfaces;
 using Memento.Models.Helpers;
 using Memento.Models.Models;
 
-namespace Memento.Core
+namespace Memento.Services
 {
-    public class SiblingsManager : ISiblingsManager
+    public class SiblingsManagerService : ISiblingsManagerService
     {
-        private readonly IScheduler scheduler;
+        private readonly ISchedulerOperationService scheduler;
 
-        public SiblingsManager(IScheduler scheduler)
+        public SiblingsManagerService(ISchedulerOperationService scheduler)
         {
             this.scheduler = scheduler;
         }

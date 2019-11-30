@@ -1,4 +1,4 @@
-﻿using Memento.Core.Evaluators;
+﻿using Memento.Services.Evaluators;
 using Memento.Models.Enums;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -7,12 +7,12 @@ namespace Memento.Tests.Evaluators
     [TestClass]
     public class WordsEvaluatorTest
     {
-        private WordsEvaluator sut;
+        private WordsEvaluatorService sut;
 
         [TestInitialize]
         public void Setup()
         {
-            sut = new WordsEvaluator();
+            sut = new WordsEvaluatorService();
         }
 
         [TestMethod]

@@ -1,18 +1,10 @@
 ﻿using System.Collections.Generic;
+using Memento.Common;
 using Memento.Models.Models;
 
 namespace Memento.Interfaces
 {
-    public enum Delays
-    {
-        AfterNext,
-        Next,
-        Same,
-        Previous,
-        Initial,
-    }
-
-    public interface IScheduler
+    public interface ISchedulerOperationService
     {
         void MoveRepetition(IEnumerable<UserRepetition> repetitions, int oldPosition, int newPosition, int newDelay, bool correctMovedRepetitionsDelays, bool correctRestRepetitionsDelays);
         void PrepareForAdding(Deck deck, IEnumerable<UserRepetition> repetitions, UserRepetition repetition);

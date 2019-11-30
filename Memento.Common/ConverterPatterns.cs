@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Memento.Core.Converter
+namespace Memento.Common
 {
     public static class ConverterPatterns
     {

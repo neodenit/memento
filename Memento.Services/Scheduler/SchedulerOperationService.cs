@@ -6,23 +6,29 @@ using Memento.Common;
 using Memento.Interfaces;
 using Memento.Models.Helpers;
 using Memento.Models.Models;
-using static Memento.Core.Scheduler.SchedulerUtils;
 
-namespace Memento.Core.Scheduler
+namespace Memento.Services.Scheduler
 {
-    public class Scheduler : IScheduler
+    public class SchedulerOperationService : ISchedulerOperationService
     {
+        private readonly ISchedulerUtilsService schedulerUtilsService;
+
+        public SchedulerOperationService(ISchedulerUtilsService schedulerUtilsService)
+        {
+            this.schedulerUtilsService = schedulerUtilsService ?? throw new ArgumentNullException(nameof(schedulerUtilsService));
+        }
+
         public void PromoteRepetition(Deck deck, IEnumerable<UserRepetition> repetitions, Delays delay)
         {
-            var repetition = GetFirstRepetition(repetitions);
+            var repetition = schedulerUtilsService.GetFirstRepetition(repetitions);
 
-            var step = GetStep(deck, delay, repetition.LastDelay);
+            var step = schedulerUtilsService.GetStep(deck, delay, repetition.LastDelay);
 
             var maxRandomPart = (int)Math.Round(step * Settings.Default.RandomizationCoeff);
-            var randomPart = GetRandomPart(0, maxRandomPart);
+            var randomPart = schedulerUtilsService.GetRandomPart(0, maxRandomPart);
             var correctedStep = step + randomPart;
 
-            var maxNewPosition = GetMaxPosition(repetitions);
+            var maxNewPosition = schedulerUtilsService.GetMaxPosition(repetitions);
             var newPosition = Math.Min(correctedStep, maxNewPosition);
             var newDelay = newPosition > deck.StartDelay || deck.AllowSmallDelays ? newPosition : deck.StartDelay;
 
@@ -35,7 +41,7 @@ namespace Memento.Core.Scheduler
 
         public void PrepareForAdding(Deck deck, IEnumerable<UserRepetition> repetitions, UserRepetition repetition)
         {
-            var maxNewPosition = GetMaxNewPosition(repetitions);
+            var maxNewPosition = schedulerUtilsService.GetMaxNewPosition(repetitions);
 
             repetition.Position = maxNewPosition;
             repetition.LastDelay = deck.StartDelay;
@@ -45,16 +51,16 @@ namespace Memento.Core.Scheduler
         public void PrepareForRemoving(Deck deck, IEnumerable<UserRepetition> repetitions, UserRepetition repetition)
         {
             var position = repetition.Position;
-            var movedRepetitions = GetRestRepetitions(repetitions, position);
+            var movedRepetitions = schedulerUtilsService.GetRestRepetitions(repetitions, position);
 
-            DecreasePosition(movedRepetitions);
-            DecreaseDelays(movedRepetitions);
+            schedulerUtilsService.DecreasePosition(movedRepetitions);
+            schedulerUtilsService.DecreaseDelays(movedRepetitions);
         }
 
         public void ShuffleNewRepetitions(IEnumerable<UserRepetition> repetitions)
         {
             var newRepetitions = from repetition in repetitions where repetition.IsNew select repetition;
-            ShuffleRepetitions(newRepetitions);
+            schedulerUtilsService.ShuffleRepetitions(newRepetitions);
 
             Debug.Assert(ModelHelpers.ArePositionsValid(repetitions));
         }
@@ -68,26 +74,26 @@ namespace Memento.Core.Scheduler
 
             var deck = movedRepetition.GetCloze().GetCard().GetDeck();
 
-            var newLimitedPosition = Math.Min(newPosition, GetMaxPosition(repetitions));
+            var newLimitedPosition = Math.Min(newPosition, schedulerUtilsService.GetMaxPosition(repetitions));
 
             var minDelay = deck.AllowSmallDelays ? 1 : deck.StartDelay;
             var maxDelay = newLimitedPosition - oldPosition;
             var limitedDelay = Math.Min(newDelay, maxDelay);
             var minLimitedDelay = Math.Max(limitedDelay, minDelay);
 
-            var movedRepetitions = GetRange(repetitions, oldPosition + 1, newLimitedPosition);
+            var movedRepetitions = schedulerUtilsService.GetRange(repetitions, oldPosition + 1, newLimitedPosition);
 
-            DecreasePosition(movedRepetitions);
+            schedulerUtilsService.DecreasePosition(movedRepetitions);
 
             if (correctMovedRepetitionsDelays)
             {
-                DecreaseDelays(movedRepetitions);
+                schedulerUtilsService.DecreaseDelays(movedRepetitions);
             }
 
             if (correctRestRepetitionsDelays)
             {
-                var restRepetitions = GetRestRepetitions(repetitions, newLimitedPosition);
-                IncreaseDelays(restRepetitions);
+                var restRepetitions = schedulerUtilsService.GetRestRepetitions(repetitions, newLimitedPosition);
+                schedulerUtilsService.IncreaseDelays(restRepetitions);
             }
 
             movedRepetition.Position = newLimitedPosition;

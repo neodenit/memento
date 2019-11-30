@@ -7,9 +7,9 @@ using Memento.Interfaces;
 using Memento.Models.Enums;
 using MinimumEditDistance;
 
-namespace Memento.Core.Evaluators
+namespace Memento.Services.Evaluators
 {
-    public abstract class BaseEvaluator : IEvaluator
+    public abstract class BaseEvaluatorService : IEvaluatorService
     {
         public abstract Mark Evaluate(string correctAnswer, string answer);
 

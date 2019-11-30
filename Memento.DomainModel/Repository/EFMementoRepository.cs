@@ -13,11 +13,11 @@ namespace Memento.DataAccess.Repository
     {
         private MementoContext db = new MementoContext();
 
-        private readonly IScheduler scheduler;
-        private readonly ISiblingsManager siblingsManager;
-        private readonly INewClozesManager newCardsManager;
+        private readonly ISchedulerOperationService scheduler;
+        private readonly ISiblingsManagerService siblingsManager;
+        private readonly INewClozesManagerService newCardsManager;
 
-        public EFMementoRepository(IScheduler scheduler, ISiblingsManager siblingsManager, INewClozesManager newCardsManager)
+        public EFMementoRepository(ISchedulerOperationService scheduler, ISiblingsManagerService siblingsManager, INewClozesManagerService newCardsManager)
         {
             this.scheduler = scheduler;
             this.siblingsManager = siblingsManager;

@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Memento.Interfaces;
 using Memento.Common;
 using Memento.Models.Models;
-using Memento.Core.Scheduler;
+using Memento.Services.Scheduler;
 using Memento.Models.Helpers;
 
 namespace Memento.Tests
@@ -15,12 +15,14 @@ namespace Memento.Tests
     [TestClass]
     public class SchedulerTest
     {
-        private IScheduler sut;
+        private ISchedulerOperationService sut;
 
         [TestInitialize]
         public void Setup()
         {
-            sut = new Scheduler();
+            var cardOperationService = new SchedulerUtilsService(); // TODO: create separate tests
+
+            sut = new SchedulerOperationService(cardOperationService);
         }
 
         [TestMethod]

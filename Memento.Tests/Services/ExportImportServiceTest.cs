@@ -17,15 +17,15 @@ namespace Memento.Tests.Services
         private ExportImportService sut;
 
         private Mock<IMementoRepository> mockRepository;
-        private Mock<IConverter> mockConverter;
-        private Mock<IValidator> mockValidator;
+        private Mock<IConverterService> mockConverter;
+        private Mock<IValidatorService> mockValidator;
 
         [TestInitialize]
         public void Setup()
         {
             mockRepository = new Mock<IMementoRepository>();
-            mockConverter = new Mock<IConverter>();
-            mockValidator = new Mock<IValidator>();
+            mockConverter = new Mock<IConverterService>();
+            mockValidator = new Mock<IValidatorService>();
 
             sut = new ExportImportService(mockRepository.Object, mockConverter.Object, mockValidator.Object);
 

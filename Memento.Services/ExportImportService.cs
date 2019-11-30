@@ -12,10 +12,10 @@ namespace Memento.Services
     public class ExportImportService : IExportImportService
     {
         private readonly IMementoRepository repository;
-        private readonly IConverter converter;
-        private readonly IValidator validator;
+        private readonly IConverterService converter;
+        private readonly IValidatorService validator;
 
-        public ExportImportService(IMementoRepository repository, IConverter converter, IValidator validator)
+        public ExportImportService(IMementoRepository repository, IConverterService converter, IValidatorService validator)
         {
             this.repository = repository;
             this.converter = converter;

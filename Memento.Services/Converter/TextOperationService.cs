@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using static Memento.Core.Converter.ConverterPatterns;
+using static Memento.Common.ConverterPatterns;
 
-namespace Memento.Core.Converter
+namespace Memento.Services.Converter
 {
-    class TextOperations
+    class TextOperationService
     {
         internal static string TagsToLineBreaks(string text)
         {

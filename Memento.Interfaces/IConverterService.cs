@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Memento.Interfaces
 {
-    public interface IConverter
+    public interface IConverterService
     {
         string GetQuestion(string card, string clozeName);
         string GetFullAnswer(string card, string clozeName);

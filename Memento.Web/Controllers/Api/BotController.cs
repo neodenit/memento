@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Memento.Bot;
+using Memento.Common;
 using Memento.Interfaces;
 using Memento.Models;
 using Memento.Models.Enums;

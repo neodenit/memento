@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Memento.Common;
 using Memento.Interfaces;
 using Memento.Models.Models;
 using Memento.Services;
@@ -15,13 +16,13 @@ namespace Memento.Tests.Services
         private SchedulerService sut;
 
         private Mock<IMementoRepository> mockRepository;
-        private Mock<IScheduler> mockScheduler;
+        private Mock<ISchedulerOperationService> mockScheduler;
 
         [TestInitialize]
         public void Setup()
         {
             mockRepository = new Mock<IMementoRepository>();
-            mockScheduler = new Mock<IScheduler>();
+            mockScheduler = new Mock<ISchedulerOperationService>();
 
             sut = new SchedulerService(mockRepository.Object, mockScheduler.Object);
 

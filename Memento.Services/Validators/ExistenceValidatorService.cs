@@ -1,20 +1,16 @@
-﻿using Memento.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using Memento.Interfaces;
 
-namespace Memento.Core.Validators
+namespace Memento.Services.Validators
 {
-    public class ExistenceValidator : BaseValidator
+    public class ExistenceValidatorService : BaseValidatorService
     {
-        protected readonly IConverter converter;
+        protected readonly IConverterService converter;
 
         public override string ErrorMessage { get; } = "Please add cloze deletions.";
 
-        public ExistenceValidator(IConverter converter, IValidator baseValidator = null) : base(baseValidator)
+        public ExistenceValidatorService(IConverterService converter, IValidatorService baseValidator = null) : base(baseValidator)
         {
             this.converter = converter;
         }

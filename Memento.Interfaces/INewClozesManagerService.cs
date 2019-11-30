@@ -3,7 +3,7 @@ using Memento.Models.Models;
 
 namespace Memento.Interfaces
 {
-    public interface INewClozesManager
+    public interface INewClozesManagerService
     {
         void RearrangeNewRepetitions(Deck deck, IEnumerable<UserRepetition> repetitions);
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Memento.Common;
 using Memento.Interfaces;
 using Memento.Models.Enums;
 using Memento.Models.Models;
@@ -10,11 +11,11 @@ namespace Memento.Services
     public class SchedulerService : ISchedulerService
     {
         private readonly IMementoRepository repository;
-        private readonly IScheduler scheduler;
+        private readonly ISchedulerOperationService scheduler;
 
         private readonly Dictionary<DelayModes, Delays> delayMap;
 
-        public SchedulerService(IMementoRepository repository, IScheduler scheduler)
+        public SchedulerService(IMementoRepository repository, ISchedulerOperationService scheduler)
         {
             this.repository = repository;
             this.scheduler = scheduler;

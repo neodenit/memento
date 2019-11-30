@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using Memento.Models.Enums;
 
-namespace Memento.Core.Evaluators
+namespace Memento.Services.Evaluators
 {
-    public class PhraseEvaluator : BaseEvaluator
+    public class PhraseEvaluatorService : BaseEvaluatorService
     {
         public override Mark Evaluate(string correctAnswer, string answer)
         {
