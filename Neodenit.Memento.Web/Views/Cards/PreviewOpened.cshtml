@@ -1,0 +1,26 @@
+﻿@model Memento.Models.ViewModels.AnswerCardViewModel
+
+@{
+    ViewBag.Title = "Preview";
+}
+
+<h2>@Html.DisplayFor(model => model.DeckTitle)</h2>
+
+<h4>Preview</h4>
+
+@{Html.RenderPartial("_TopActions");}
+
+@using (Html.BeginForm("PreviewOpened", "Cards", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.ID)
+
+    Html.RenderPartial("_Answer");
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-8">
+            <input type="submit" value="Next question" class="btn btn-default focused" />
+        </div>
+    </div>
+}

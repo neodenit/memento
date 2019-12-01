@@ -1,0 +1,38 @@
+﻿@using Memento.Models.Enums
+
+@model Memento.Models.ViewModels.AnswerCardViewModel
+
+@{
+    ViewBag.Title = "Repeat";
+}
+
+<h2>Repeat</h2>
+
+<h4>@Html.DisplayFor(model => model.DeckTitle)</h4>
+
+@{Html.RenderPartial("_TopActions");}
+
+@using (Html.BeginForm("RepeatOpened", "Cards", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.ID)
+
+    Html.RenderPartial("_Answer");
+
+    <div class="row">
+        <div class="col-md-2"></div>
+
+        @if (Model.DelayMode == DelayModes.Sharp || Model.DelayMode == DelayModes.Combined)
+        {
+            <input type="submit" name="AgainButton" value="Again" class="btn btn-default" />
+        }
+
+        @if (Model.DelayMode == DelayModes.Smooth || Model.DelayMode == DelayModes.Combined)
+        {
+            <input type="submit" name="BadButton" value="Bad" class="btn btn-default" />
+        }
+
+        <input type="submit" name="GoodButton" value="Good" class="btn btn-default" />
+    </div>
+}

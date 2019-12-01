@@ -1,0 +1,100 @@
+﻿@using Memento.Common
+
+@model Memento.Models.ViewModels.DeckViewModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+<div>
+    @Html.ActionLink("Clozes Index", "ClozesIndex", "Cards", new { DeckID = Model.ID }, null) |
+    @Html.ActionLink("Cards Index", "CardsIndex", "Cards", new { DeckID = Model.ID }, null) |
+    @Html.ActionLink("Import", "Import", new { DeckID = Model.ID }) |
+    @Html.ActionLink("Export", "Export", new { DeckID = Model.ID }) |
+    @Html.ActionLink("Deleted cards", "DeletedIndex", "Cards", new { DeckID = Model.ID }, null) |
+    @Html.ActionLink("Draft cards", "DraftIndex", "Cards", new { DeckID = Model.ID }, null)
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Deck</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (Settings.Default.EnableTwoStepsConfig)
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.FirstDelay, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FirstDelay, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FirstDelay, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.SecondDelay, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SecondDelay, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SecondDelay, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.StartDelay, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.StartDelay, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.StartDelay, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Coeff, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Coeff, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Coeff, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <label>
+                        @Html.CheckBoxFor(m => m.PreviewAnswer) @Html.DisplayNameFor(m => m.PreviewAnswer)
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    <script src="~/js/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/js/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+}

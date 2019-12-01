@@ -1,0 +1,31 @@
+﻿@model Memento.Models.ViewModels.AnswerCardViewModel
+
+@{
+    ViewBag.Title = "Question";
+}
+
+<h2>@Html.DisplayFor(model => model.DeckTitle)</h2>
+
+@{Html.RenderPartial("_TopActions");}
+
+@using (Html.BeginForm("Question", "Cards", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+
+    Html.RenderPartial("_Question");
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-6">
+            @Html.TextBoxFor(model => model.UserAnswer, new { @class = "form-control focused", autocomplete = "off" })
+            @Html.ValidationMessageFor(model => model.UserAnswer, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            <input type="submit" value="Answer" class="btn btn-default" />
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/js/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+}

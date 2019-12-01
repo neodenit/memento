@@ -1,0 +1,51 @@
+﻿@using Newtonsoft.Json;
+
+@model Memento.Models.ViewModels.DeckWithStatViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>@Html.DisplayFor(model => model.Deck.Title)</h2>
+
+@section Scripts {
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+
+    <script>
+        var chartData = {
+            answers: @Html.Raw(JsonConvert.SerializeObject(Model.Stat.Answers)),
+            correctAnswers: @Html.Raw(JsonConvert.SerializeObject(Model.Stat.CorrectAnswers)),
+            newQuestionCount: @Html.Raw(JsonConvert.SerializeObject(Model.Stat.NewQuestionCount)),
+            oldQuestionCount: @Html.Raw(JsonConvert.SerializeObject(Model.Stat.OldQuestionCount)),
+        }
+    </script>
+
+    <script src="~/Scripts/App/Charts.js"></script>
+}
+
+<div>
+    @Html.ActionLink("Create New Card", "Create", "Cards", new { DeckID = Model.Deck.ID }, null) |
+    @Html.ActionLink("Options", "Edit", new { Model.Deck.ID })
+</div>
+
+<div class="row">
+    <div id="answersPlaceholder" class="chart col-md-5"></div>
+    <div id="correctAnswersPlaceholder" class="chart col-md-5"></div>
+    <div id="cardsNumberPlaceholder" class="chart col-md-2"></div>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-offset-4 col-md-4">
+                <input type="submit" value="Start" class="btn btn-default btn-block focused" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to Decks List", "Index")
+</div>

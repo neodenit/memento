@@ -1,0 +1,19 @@
+﻿@model Memento.Models.ViewModels.AnswerCardViewModel
+
+<div class="form-group">
+    <div class="col-md-2 text-right">
+        Correct answer:
+    </div>
+    <div class="col-md-8 short-answer-text">
+        @Html.DisplayFor(model => model.ShortAnswer)
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-2 text-right">
+        Your answer:
+    </div>
+    <div class="col-md-8 short-answer-text">
+        @Html.DisplayFor(model => model.UserAnswer)
+    </div>
+</div>

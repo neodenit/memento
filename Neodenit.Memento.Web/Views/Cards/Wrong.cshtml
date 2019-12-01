@@ -1,0 +1,46 @@
+﻿@model Memento.Models.ViewModels.AnswerCardViewModel
+
+@{
+    ViewBag.Title = "Wrong";
+}
+
+<h2>@Html.DisplayFor(model => model.DeckTitle)</h2>
+
+@{Html.RenderPartial("_TopActions");}
+
+@using (Html.BeginForm("Wrong", "Cards", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(model => model.UserAnswer)
+
+    Html.RenderPartial("_Answer");
+    Html.RenderPartial("_Comparison");
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-8">
+            <div class="wrong-answer">You are wrong!</div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-8">
+            <input type="submit" name="NextButton" value="Next question" class="btn btn-primary focused" />
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-8">
+            Is it an alternative answer?
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-8">
+            <input type="submit" name="AltButton" value="Add it" class="btn btn-default" />
+        </div>
+    </div>
+}

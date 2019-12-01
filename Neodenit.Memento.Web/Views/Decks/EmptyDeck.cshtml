@@ -1,0 +1,27 @@
+﻿@model Memento.Models.ViewModels.DeckViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>@Html.DisplayFor(model => model.Title)</h4>
+
+    <hr />
+
+    <div class="topactions">
+        @Html.ActionLink("Add card", "Create", "Cards", new { DeckID = Model.ID }, null)
+    </div>
+
+    <hr />
+
+    <p>
+        This deck is empty.
+    </p>
+
+    <div>
+        @Html.ActionLink("Back", "Details", "Decks", new { Model.ID }, null)
+    </div>
+</div>

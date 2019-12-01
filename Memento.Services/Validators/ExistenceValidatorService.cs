@@ -10,7 +10,7 @@ namespace Memento.Services.Validators
 
         public override string ErrorMessage { get; } = "Please add cloze deletions.";
 
-        public ExistenceValidatorService(IConverterService converter, IValidatorService baseValidator = null) : base(baseValidator)
+        public ExistenceValidatorService(IConverterService converter)
         {
             this.converter = converter;
         }

@@ -1,0 +1,134 @@
+﻿@using Memento.Common
+
+@model Memento.Models.ViewModels.DecksViewModel
+
+@{
+    ViewBag.Title = "Decks";
+}
+
+<h1>Decks</h1>
+
+<h2>Shared</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.SharedDecks.First().Title)
+        </th>
+        <th>
+            Cards
+        </th>
+        <th>
+            Valid Cards
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SharedDecks.First().ControlMode)
+        </th>
+
+        @if (Settings.Default.AllowSmoothDelayModes)
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.SharedDecks.First().DelayMode)
+            </th>
+        }
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.SharedDecks)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(item.Title, "Details", new { id = item.ID })
+            </td>
+            <td>
+                @(item.GetAllCards().Count())
+            </td>
+            <td>
+                @(item.GetValidCards().Count())
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ControlMode)
+            </td>
+
+            @if (Settings.Default.AllowSmoothDelayModes)
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.DelayMode)
+                </td>
+            }
+
+            <td>
+                @Html.ActionLink("Options", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+            </td>
+        </tr>
+    }
+</table>
+
+<h2>Private</h2>
+
+<p>
+    @Html.ActionLink("Create New Deck", "Create")
+</p>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UserDecks.First().Title)
+        </th>
+        <th>
+            Cards
+        </th>
+        <th>
+            Valid Cards
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserDecks.First().ControlMode)
+        </th>
+
+        @if (Settings.Default.AllowSmoothDelayModes)
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.UserDecks.First().DelayMode)
+            </th>
+        }
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.UserDecks)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(item.Title, "Details", new { id = item.ID })
+            </td>
+            <td>
+                @(item.GetAllCards().Count())
+            </td>
+            <td>
+                @(item.GetValidCards().Count())
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ControlMode)
+            </td>
+
+            @if (Settings.Default.AllowSmoothDelayModes)
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.DelayMode)
+                </td>
+            }
+
+            <td>
+                @Html.ActionLink("Options", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID }) |
+                @Html.ActionLink("Share", "Share", new { id = item.ID })
+            </td>
+        </tr>
+    }
+</table>
+
+<hr />
+
+@Html.ActionLink("Backup", "Backup")
