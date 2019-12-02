@@ -30,9 +30,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.Services", "Memento
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.Bot", "Memento.Bot\Memento.Bot.csproj", "{23A8A58C-430F-4884-B113-F0FC8BD8359E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neodenit.Memento.DependecyInjection", "Neodenit.Memento.DependecyInjection\Neodenit.Memento.DependecyInjection.csproj", "{416B70AB-2538-4472-AD7C-1FD803A6E515}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neodenit.Memento.DependecyInjection", "Neodenit.Memento.DependecyInjection\Neodenit.Memento.DependecyInjection.csproj", "{416B70AB-2538-4472-AD7C-1FD803A6E515}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neodenit.Memento.Web", "Neodenit.Memento.Web\Neodenit.Memento.Web.csproj", "{D50FB65A-AE06-4969-8E11-95146E816AA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neodenit.Memento.Web", "Neodenit.Memento.Web\Neodenit.Memento.Web.csproj", "{D50FB65A-AE06-4969-8E11-95146E816AA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neodenit.Memento.DataAccess", "Neodenit.Memento.DataAccess\Neodenit.Memento.DataAccess.csproj", "{43BCE9D2-8460-4DC4-A018-8752C7BEAF35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -88,6 +90,10 @@ Global
 		{D50FB65A-AE06-4969-8E11-95146E816AA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D50FB65A-AE06-4969-8E11-95146E816AA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D50FB65A-AE06-4969-8E11-95146E816AA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43BCE9D2-8460-4DC4-A018-8752C7BEAF35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43BCE9D2-8460-4DC4-A018-8752C7BEAF35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43BCE9D2-8460-4DC4-A018-8752C7BEAF35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43BCE9D2-8460-4DC4-A018-8752C7BEAF35}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

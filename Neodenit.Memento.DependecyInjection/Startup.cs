@@ -1,4 +1,5 @@
 using System.Reflection;
+using Memento.DataAccess;
 using Memento.DataAccess.Repository;
 using Memento.Interfaces;
 using Memento.Services;
@@ -30,11 +31,14 @@ namespace Neodenit.Memento.DependecyInjection
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<MementoContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<IdentityContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("IdentityConnection")));
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<IdentityContext>();
 
             services.Configure<IdentityOptions>(options =>
             {

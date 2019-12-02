@@ -33,9 +33,9 @@ namespace Neodenit.Memento.Web.Controllers.Api
         private readonly ICardsService cardsService;
         private readonly ISchedulerService schedulerService;
 
-        private readonly ApplicationDbContext context;
+        private readonly IdentityContext context;
 
-        public BotController(IDecksService decksService, ICardsService cardsService, ISchedulerService schedulerService, ApplicationDbContext context)
+        public BotController(IDecksService decksService, ICardsService cardsService, ISchedulerService schedulerService, IdentityContext context)
         {
             this.decksService = decksService;
             this.cardsService = cardsService;

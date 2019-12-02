@@ -20,7 +20,7 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\Memento.DomainModel\Memento.DataAccess.csproj" />
+    <ProjectReference Include="..\Neodenit.Memento.DataAccess\Neodenit.Memento.DataAccess.csproj" />
     <ProjectReference Include="..\Neodenit.Memento.Web\Neodenit.Memento.Web.csproj" />
   </ItemGroup>
 
