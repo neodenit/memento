@@ -2,12 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Memento.Bot;
-using Memento.Common;
-using Memento.Interfaces;
-using Memento.Models.Enums;
-using Memento.Models.Models;
-using Memento.Models.ViewModels;
+using Neodenit.Memento.Common;
+using Neodenit.Memento.Interfaces;
+using Neodenit.Memento.Models.Enums;
+using Neodenit.Memento.Models.DataModels;
+using Neodenit.Memento.Models.ViewModels;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Microsoft.EntityFrameworkCore;
@@ -34,15 +33,16 @@ namespace Neodenit.Memento.Web.Controllers.Api
         private readonly ISchedulerService schedulerService;
 
         private readonly IdentityContext context;
+        private readonly IDialog dialog;
 
-        public BotController(IDecksService decksService, ICardsService cardsService, ISchedulerService schedulerService, IdentityContext context)
+        public BotController(IDecksService decksService, ICardsService cardsService, ISchedulerService schedulerService, IdentityContext context, IDialog dialog)
         {
             this.decksService = decksService;
             this.cardsService = cardsService;
             this.schedulerService = schedulerService;
 
             this.context = context;
-
+            this.dialog = dialog ?? throw new ArgumentNullException(nameof(dialog));
             delimiter = Environment.NewLine + Environment.NewLine;
         }
 
@@ -148,7 +148,7 @@ namespace Neodenit.Memento.Web.Controllers.Api
                             message.SetBotPerUserInConversationData("dialogState", DialogStates.Start);
                         }
 
-                        return await Conversation.SendAsync(message, () => new Dialog());
+                        return await Conversation.SendAsync(message, () => dialog);
                     }
                     else
                     {

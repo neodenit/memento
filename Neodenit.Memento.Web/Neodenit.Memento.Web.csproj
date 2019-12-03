@@ -30,11 +30,9 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
   </ItemGroup>
-
+  
   <ItemGroup>
-    <ProjectReference Include="..\Memento.Attributes\Memento.Attributes.csproj" />
-    <ProjectReference Include="..\Memento.Bot\Memento.Bot.csproj" />
-    <ProjectReference Include="..\Memento.Services\Memento.Services.csproj" />
+    <ProjectReference Include="..\Neodenit.Memento.Attributes\Neodenit.Memento.Attributes.csproj" />
   </ItemGroup>
 
 

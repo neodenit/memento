@@ -234,3 +234,5 @@ $RECYCLE.BIN/
 # Others
 *.dll
 *.exe
+
+/Neodenit.Memento.Web/wwwroot/lib

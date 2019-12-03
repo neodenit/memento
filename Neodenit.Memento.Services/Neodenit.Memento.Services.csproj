@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LevenshteinMinimumEditDistance" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Neodenit.Memento.Common\Neodenit.Memento.Common.csproj" />
+    <ProjectReference Include="..\Neodenit.Memento.Interfaces\Neodenit.Memento.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

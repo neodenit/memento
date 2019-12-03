@@ -1,11 +1,7 @@
-﻿using System;
-using System.Diagnostics;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
-using Memento.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure;
-using Microsoft.WindowsAzure.Storage;
+using Neodenit.Memento.Models.ViewModels;
 
 namespace Neodenit.Memento.Web.Controllers
 {

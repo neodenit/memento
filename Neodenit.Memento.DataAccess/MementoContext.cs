@@ -1,7 +1,7 @@
-﻿using Memento.Models.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Neodenit.Memento.Models.DataModels;
 
-namespace Memento.DataAccess
+namespace Neodenit.Memento.DataAccess
 {
     public class MementoContext : DbContext
     {

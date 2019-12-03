@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Memento.Common;
-using Memento.Interfaces;
-using Memento.Models.Models;
 using Microsoft.EntityFrameworkCore;
+using Neodenit.Memento.Common;
+using Neodenit.Memento.DataAccess;
+using Neodenit.Memento.Interfaces;
+using Neodenit.Memento.Models.DataModels;
 
 namespace Memento.DataAccess.Repository
 {

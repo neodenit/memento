@@ -15,8 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Memento.Interfaces\Memento.Interfaces.csproj" />
-    <ProjectReference Include="..\Memento.Models\Memento.Models.csproj" />
+    <ProjectReference Include="..\Neodenit.Memento.Interfaces\Neodenit.Memento.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

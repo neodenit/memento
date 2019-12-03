@@ -1,12 +1,5 @@
 using System.Reflection;
-using Memento.DataAccess;
 using Memento.DataAccess.Repository;
-using Memento.Interfaces;
-using Memento.Services;
-using Memento.Services.Converter;
-using Memento.Services.Evaluators;
-using Memento.Services.Scheduler;
-using Memento.Services.Validators;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -15,6 +8,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Neodenit.Memento.DataAccess;
+using Neodenit.Memento.Interfaces;
+using Neodenit.Memento.Services;
+using Neodenit.Memento.Services.Converter;
+using Neodenit.Memento.Services.Evaluators;
+using Neodenit.Memento.Services.Scheduler;
+using Neodenit.Memento.Services.Validators;
 using Neodenit.Memento.Web.Controllers;
 using Neodenit.Memento.Web.Data;
 

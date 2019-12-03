@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Neodenit.Memento.DataAccess\Neodenit.Memento.DataAccess.csproj" />
+    <ProjectReference Include="..\Neodenit.Memento.Services\Neodenit.Memento.Services.csproj" />
     <ProjectReference Include="..\Neodenit.Memento.Web\Neodenit.Memento.Web.csproj" />
   </ItemGroup>
 

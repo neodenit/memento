@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Neodenit.Memento.Common\Neodenit.Memento.Common.csproj" />
+    <ProjectReference Include="..\Neodenit.Memento.Models\Neodenit.Memento.Models.csproj" />
+  </ItemGroup>
+
+</Project>
