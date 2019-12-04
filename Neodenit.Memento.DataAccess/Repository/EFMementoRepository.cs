@@ -39,16 +39,25 @@ namespace Memento.DataAccess.Repository
             db.Decks.Find(id);
 
         public Card FindCard(Guid id) =>
-            db.Cards.Find(id);
+            db.Cards.Include(c => c.Deck).SingleOrDefault(d => d.ID == id);
 
         public Cloze FindCloze(Guid id) =>
             db.Clozes.Find(id);
 
         public async Task<Deck> FindDeckAsync(Guid id) =>
-            await db.Decks.FindAsync(id);
+            await db.Decks
+                .Include(d => d.Cards)
+                .ThenInclude(c => c.Clozes)
+                .ThenInclude(c => c.UserRepetitions)
+                .SingleOrDefaultAsync(d => d.ID == id);
 
         public async Task<Card> FindCardAsync(Guid id) =>
-            await db.Cards.FindAsync(id);
+            await db.Cards
+                .Include(c => c.Deck)
+                .ThenInclude(d => d.Cards)
+                .ThenInclude(c => c.Clozes)
+                .ThenInclude(c => c.UserRepetitions)
+                .SingleOrDefaultAsync(c => c.ID == id);
 
         public async Task<Cloze> FindClozeAsync(Guid id) =>
             await db.Clozes.FindAsync(id);
