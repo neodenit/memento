@@ -22,7 +22,7 @@ namespace Neodenit.Memento.Services
 
         public async Task AddAltAnswer(Cloze cloze, string answer)
         {
-            var card = cloze.GetCard();
+            var card = cloze.Card;
 
             card.Text = converter.AddAltAnswer(card.Text, cloze.Label, answer);
 
@@ -31,7 +31,7 @@ namespace Neodenit.Memento.Services
 
         public AnswerCardViewModel GetCardWithQuestion(Cloze cloze)
         {
-            var card = cloze.GetCard();
+            var card = cloze.Card;
             var question = converter.GetQuestion(card.Text, cloze.Label);
 
             var result = new AnswerCardViewModel(card) { Question = question };
@@ -41,7 +41,7 @@ namespace Neodenit.Memento.Services
 
         public AnswerCardViewModel GetCardWithAnswer(Cloze cloze)
         {
-            var card = cloze.GetCard();
+            var card = cloze.Card;
             var fullAnswer = converter.GetFullAnswer(card.Text, cloze.Label);
             var comment = card.Comment;
 
@@ -52,7 +52,7 @@ namespace Neodenit.Memento.Services
 
         public AnswerCardViewModel EvaluateCard(Cloze cloze, string userAnswer)
         {
-            var card = cloze.GetCard();
+            var card = cloze.Card;
 
             var question = converter.GetQuestion(card.Text, cloze.Label);
             var fullAnswer = converter.GetFullAnswer(card.Text, cloze.Label);
@@ -117,7 +117,7 @@ namespace Neodenit.Memento.Services
             dbCard.Text = card.Text;
             dbCard.Comment = card.Comment;
 
-            var oldClozes = from cloze in dbCard.GetClozes() select cloze.Label;
+            var oldClozes = from cloze in dbCard.Clozes select cloze.Label;
             var newClozes = clozes;
 
             var deletedClozes = oldClozes.Except(newClozes).ToList();

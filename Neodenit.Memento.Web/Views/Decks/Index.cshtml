@@ -42,7 +42,7 @@
                 @Html.ActionLink(item.Title, "Details", new { id = item.ID })
             </td>
             <td>
-                @(item.GetAllCards().Count())
+                @(item.Cards.Count())
             </td>
             <td>
                 @(item.GetValidCards().Count())
@@ -104,7 +104,7 @@
                 @Html.ActionLink(item.Title, "Details", new { id = item.ID })
             </td>
             <td>
-                @(item.GetAllCards().Count())
+                @(item.Cards.Count())
             </td>
             <td>
                 @(item.GetValidCards().Count())

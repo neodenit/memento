@@ -28,17 +28,17 @@ namespace Neodenit.Memento.Services
 
         private static IEnumerable<UserRepetition> GetRepetitionsToMove(Deck deck, IEnumerable<UserRepetition> repetitions)
         {
-            var cardID = repetitions.GetMinElement(repetition => repetition.Position).GetCloze().CardID;
+            var cardID = repetitions.GetMinElement(repetition => repetition.Position).Cloze.CardID;
 
             var nextRepetitions = repetitions.Skip(1).Take(deck.StartDelay);
 
-            if (nextRepetitions.All(repetition => repetition.GetCloze().CardID == cardID))
+            if (nextRepetitions.All(repetition => repetition.Cloze.CardID == cardID))
             {
-                return repetitions.Skip(1).TakeWhile(repetition => repetition.GetCloze().CardID == cardID);
+                return repetitions.Skip(1).TakeWhile(repetition => repetition.Cloze.CardID == cardID);
             }
-            else if (nextRepetitions.Any(repetition => repetition.GetCloze().CardID == cardID))
+            else if (nextRepetitions.Any(repetition => repetition.Cloze.CardID == cardID))
             {
-                return nextRepetitions.Where(repetition => repetition.GetCloze().CardID == cardID);
+                return nextRepetitions.Where(repetition => repetition.Cloze.CardID == cardID);
             }
             else
             {

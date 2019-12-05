@@ -35,11 +35,6 @@ namespace Neodenit.Memento.Models.DataModels
         [JsonIgnore]
         public virtual Deck Deck { get; set; }
 
-        public Deck GetDeck()
-        {
-            return Deck;
-        }
-
         [Required]
         [DataType(DataType.MultilineText)]
         public string Text { get; set; }
@@ -47,8 +42,6 @@ namespace Neodenit.Memento.Models.DataModels
         public string Comment { get; set; }
 
         public virtual ICollection<Cloze> Clozes { get; set; }
-
-        public IEnumerable<Cloze> GetClozes() => Clozes;
 
         public Cloze GetNextCloze(string username) =>
             Clozes.GetMinElement(c => c.GetUserRepetition(username).Position);

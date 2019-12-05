@@ -40,7 +40,7 @@ namespace Neodenit.Memento.Models.ViewModels
             ID = card.ID;
             DeckID = card.DeckID;
 
-            var deck = card.GetDeck();
+            var deck = card.Deck;
             DeckTitle = deck.Title;
             DelayMode = deck.DelayMode;
         }

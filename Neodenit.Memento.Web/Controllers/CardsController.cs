@@ -74,7 +74,7 @@ namespace Neodenit.Memento.Web.Controllers
         public async Task<ActionResult> Details([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var card = await cardsService.FindCardAsync(id);
-            var deck = card.GetDeck();
+            var deck = card.Deck;
             var cloze = card.GetNextCloze(UserName);
 
             if (cloze.GetUserRepetition(UserName).IsNew && deck.PreviewAnswer)
@@ -118,7 +118,7 @@ namespace Neodenit.Memento.Web.Controllers
         public async Task<ActionResult> PreviewOpened(ViewCardViewModel card)
         {
             var dbCard = await cardsService.FindCardAsync(card.ID);
-            var deck = dbCard.GetDeck();
+            var deck = dbCard.Deck;
 
             await schedulerService.PromoteCloze(deck, Delays.Same, UserName);
 
@@ -165,7 +165,7 @@ namespace Neodenit.Memento.Web.Controllers
                         Delays.Same;
 
             var dbCard = await cardsService.FindCardAsync(card.ID);
-            var deck = dbCard.GetDeck();
+            var deck = dbCard.Deck;
 
             await schedulerService.PromoteCloze(deck, delay, UserName);
 
@@ -211,7 +211,7 @@ namespace Neodenit.Memento.Web.Controllers
             await statService.AddAnswer(card.ID, true, UserName);
 
             var dbCard = await cardsService.FindCardAsync(card.ID);
-            var deck = dbCard.GetDeck();
+            var deck = dbCard.Deck;
 
             await schedulerService.PromoteCloze(deck, Delays.Next, UserName);
 
@@ -227,7 +227,7 @@ namespace Neodenit.Memento.Web.Controllers
                 await statService.AddAnswer(card.ID, false, UserName);
 
                 var dbCard = await cardsService.FindCardAsync(card.ID);
-                var deck = dbCard.GetDeck();
+                var deck = dbCard.Deck;
                 var delay = schedulerService.GetDelayForWrongAnswer(deck.DelayMode);
 
                 await schedulerService.PromoteCloze(deck, delay, UserName);

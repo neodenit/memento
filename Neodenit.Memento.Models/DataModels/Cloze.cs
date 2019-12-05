@@ -31,8 +31,6 @@ namespace Neodenit.Memento.Models.DataModels
 
         public virtual ICollection<UserRepetition> UserRepetitions { get; set; }
 
-        public Card GetCard() => Card;
-
         public UserRepetition GetUserRepetition(string username) =>
             UserRepetitions.SingleOrDefault(x => x.UserName == username);
 

@@ -18,7 +18,7 @@ namespace Neodenit.Memento.Attributes
 
             var card = repository.FindCard(cardID);
 
-            return card == null || card.GetDeck().Owner == httpContextAccessor.HttpContext.User.Identity.Name
+            return card == null || card.Deck.Owner == httpContextAccessor.HttpContext.User.Identity.Name
                 ? ValidationResult.Success
                 : FailedValidationResult;
         }

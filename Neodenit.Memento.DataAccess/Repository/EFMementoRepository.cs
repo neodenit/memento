@@ -103,7 +103,7 @@ namespace Memento.DataAccess.Repository
 
         public async Task AddClozesAsync(Card card, IEnumerable<string> clozeNames)
         {
-            var deck = card.GetDeck();
+            var deck = card.Deck;
             var users = card.GetUsers().Concat(deck.Owner).Distinct();
 
             foreach (var clozeName in clozeNames)
@@ -137,7 +137,7 @@ namespace Memento.DataAccess.Repository
         {
             foreach (var clozeName in clozeNames)
             {
-                var cloze = card.GetClozes().Single(item => item.Label == clozeName);
+                var cloze = card.Clozes.Single(item => item.Label == clozeName);
 
                 db.Clozes.Remove(cloze as Cloze);
             }
@@ -145,8 +145,8 @@ namespace Memento.DataAccess.Repository
 
         public void AddAnswer(Cloze cloze, bool isCorrect)
         {
-            var card = cloze.GetCard();
-            var deck = card.GetDeck();
+            var card = cloze.Card;
+            var deck = card.Deck;
 
             var answer = new Answer
             {

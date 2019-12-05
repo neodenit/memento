@@ -72,7 +72,7 @@ namespace Neodenit.Memento.Services.Scheduler
             var movedRepetition = repetitions.Single(repetition => repetition.Position == oldPosition);
             movedRepetition.Position = -1;
 
-            var deck = movedRepetition.GetCloze().GetCard().GetDeck();
+            var deck = movedRepetition.Cloze.Card.Deck;
 
             var newLimitedPosition = Math.Min(newPosition, schedulerUtilsService.GetMaxPosition(repetitions));
 

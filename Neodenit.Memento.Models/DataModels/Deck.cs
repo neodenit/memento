@@ -44,7 +44,7 @@ namespace Neodenit.Memento.Models.DataModels
         public IEnumerable<Cloze> GetClozes()
         {
             var validCards = GetValidCards();
-            return validCards.SelectMany(card => card.GetClozes() ?? Enumerable.Empty<Cloze>());
+            return validCards.SelectMany(card => card.Clozes ?? Enumerable.Empty<Cloze>());
         }
 
         public IEnumerable<UserRepetition> GetRepetitions(string username)
@@ -65,11 +65,6 @@ namespace Neodenit.Memento.Models.DataModels
             return nextCard;
         }
 
-        public IEnumerable<Card> GetAllCards()
-        {
-            return Cards;
-        }
-
         public IEnumerable<Card> GetValidCards()
         {
             return Cards.Where(card => card.IsValid && !card.IsDeleted);
@@ -87,10 +82,5 @@ namespace Neodenit.Memento.Models.DataModels
 
         public IEnumerable<string> GetUsers() =>
             Cards.SelectMany(x => x.GetUsers()).Distinct();
-
-        public ICollection<UserRepetition> GetRepetitions()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

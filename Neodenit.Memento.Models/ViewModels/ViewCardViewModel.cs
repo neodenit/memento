@@ -22,7 +22,7 @@ namespace Neodenit.Memento.Models.ViewModels
             ID = card.ID;
             DeckID = card.DeckID;
             Text = card.Text;
-            DeckTitle = card.GetDeck().Title;
+            DeckTitle = card.Deck.Title;
         }
     }
 }

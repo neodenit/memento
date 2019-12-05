@@ -18,11 +18,6 @@ namespace Neodenit.Memento.Models.DataModels
         [JsonIgnore]
         public virtual Cloze Cloze { get; set; }
 
-        public Cloze GetCloze()
-        {
-            return Cloze;
-        }
-
         public int Position { get; set; }
 
         public bool IsNew { get; set; }
