@@ -9,17 +9,6 @@ namespace Neodenit.Memento.Models.DataModels
 {
     public class Cloze
     {
-        public Cloze()
-        {
-            UserRepetitions = new List<UserRepetition>();
-        }
-
-        public Cloze(Guid cardID, string label) : this()
-        {
-            CardID = cardID;
-            Label = label;
-        }
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid ID { get; set; }
@@ -29,7 +18,7 @@ namespace Neodenit.Memento.Models.DataModels
         [JsonIgnore]
         public virtual Card Card { get; set; }
 
-        public virtual ICollection<UserRepetition> UserRepetitions { get; set; }
+        public virtual ICollection<UserRepetition> UserRepetitions { get; set; } = new List<UserRepetition>();
 
         public UserRepetition GetUserRepetition(string username) =>
             UserRepetitions.SingleOrDefault(x => x.UserName == username);

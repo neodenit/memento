@@ -41,8 +41,12 @@ namespace Neodenit.Memento.Services
             {
                 var clozeNames = converter.GetClozeNames(cardTextComment.Item1);
                 var isValid = clozeNames.Any() && clozeNames.All(clozeName => validator.Validate(cardTextComment.Item1, clozeName));
-                var newCard = new Card(deck, cardTextComment.Item1, cardTextComment.Item2, isValid)
+                var newCard = new Card
                 {
+                    Deck = deck,
+                    Text = cardTextComment.Item1,
+                    Comment = cardTextComment.Item2,
+                    IsValid = true,
                     ID = Guid.NewGuid()
                 };
 

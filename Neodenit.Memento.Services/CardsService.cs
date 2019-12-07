@@ -95,10 +95,15 @@ namespace Neodenit.Memento.Services
             var clozeNames = converter.GetClozeNames(card.Text);
             var deck = await repository.FindDeckAsync(card.DeckID);
 
-            var newCard = new Card(deck, card.Text, card.Comment, true);
-
-            newCard.ID = card.ID != Guid.Empty ? card.ID: Guid.NewGuid();
-            newCard.ReadingCardId = card.ReadingCardId;
+            var newCard = new Card
+            {
+                Deck = deck,
+                Text = card.Text,
+                Comment = card.Comment,
+                IsValid = true,
+                ID = card.ID != Guid.Empty ? card.ID : Guid.NewGuid(),
+                ReadingCardId = card.ReadingCardId
+            };
 
             repository.AddCard(newCard);
 

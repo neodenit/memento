@@ -11,19 +11,6 @@ namespace Neodenit.Memento.Models.DataModels
     [Serializable]
     public class Card
     {
-        public Card()
-        {
-            Clozes = new List<Cloze>();
-        }
-
-        public Card(Deck deck, string text, string comment, bool isValid) : this()
-        {
-            Deck = deck as Deck;
-            Text = text;
-            IsValid = isValid;
-            Comment = comment;
-        }
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid ID { get; set; }
@@ -41,7 +28,7 @@ namespace Neodenit.Memento.Models.DataModels
 
         public string Comment { get; set; }
 
-        public virtual ICollection<Cloze> Clozes { get; set; }
+        public virtual ICollection<Cloze> Clozes { get; set; } = new List<Cloze>();
 
         public Cloze GetNextCloze(string username) =>
             Clozes.GetMinElement(c => c.GetUserRepetition(username).Position);

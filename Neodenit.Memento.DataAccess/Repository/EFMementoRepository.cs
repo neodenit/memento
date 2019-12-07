@@ -108,8 +108,10 @@ namespace Memento.DataAccess.Repository
 
             foreach (var clozeName in clozeNames)
             {
-                var newCloze = new Cloze(card.ID, clozeName)
+                var newCloze = new Cloze
                 {
+                    CardID = card.ID,
+                    Label = clozeName,
                     ID = Guid.NewGuid()
                 };
 
