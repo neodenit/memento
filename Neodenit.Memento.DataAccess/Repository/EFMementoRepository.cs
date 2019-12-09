@@ -33,7 +33,7 @@ namespace Memento.DataAccess.Repository
             await db.Decks.Where(item => item.IsShared).ToListAsync();
 
         public async Task<IEnumerable<Deck>> GetUserDecksAsync(string userName) =>
-            await db.Decks.Where(item => item.Owner == userName && !item.IsShared).ToListAsync();
+            await db.Decks.Include(d => d.Cards).Where(item => item.Owner == userName && !item.IsShared).ToListAsync();
 
         public Deck FindDeck(Guid id) =>
             db.Decks.Find(id);
