@@ -34,7 +34,7 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Restore" class="btn btn-default" /> |
+            <input type="submit" value="Restore" class="btn btn-outline-secondary" /> |
             @Html.ActionLink("Back", "Details", "Decks", new { ID = Model.DeckID }, null)
         </div>
     }

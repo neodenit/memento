@@ -15,12 +15,12 @@
     Html.RenderPartial("_Question");
 
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-6">
+        <div class="offset-md-2 col-md-6">
             @Html.TextBoxFor(model => model.UserAnswer, new { @class = "form-control focused", autocomplete = "off" })
             @Html.ValidationMessageFor(model => model.UserAnswer, "", new { @class = "text-danger" })
         </div>
         <div class="col-md-2">
-            <input type="submit" value="Answer" class="btn btn-default" />
+            <input type="submit" value="Answer" class="btn btn-outline-secondary" />
         </div>
     </div>
 }

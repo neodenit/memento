@@ -25,14 +25,14 @@
 
         @if (Model.DelayMode == DelayModes.Sharp || Model.DelayMode == DelayModes.Combined)
         {
-            <input type="submit" name="AgainButton" value="Again" class="btn btn-default" />
+            <input type="submit" name="AgainButton" value="Again" class="btn btn-outline-secondary" />
         }
 
         @if (Model.DelayMode == DelayModes.Smooth || Model.DelayMode == DelayModes.Combined)
         {
-            <input type="submit" name="BadButton" value="Bad" class="btn btn-default" />
+            <input type="submit" name="BadButton" value="Bad" class="btn btn-outline-secondary" />
         }
 
-        <input type="submit" name="GoodButton" value="Good" class="btn btn-default" />
+        <input type="submit" name="GoodButton" value="Good" class="btn btn-outline-secondary" />
     </div>
 }
