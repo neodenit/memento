@@ -48,8 +48,8 @@ namespace Neodenit.Memento.DependecyInjection
                 options.Password.RequireUppercase = false;
             });
 
-            services.AddRazorPages();
-            services.AddControllersWithViews();
+            services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
             services.AddScoped<IMementoRepository, EFMementoRepository>();
 
