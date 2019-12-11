@@ -2,9 +2,9 @@
 {
     public class Statistics
     {
-        public ChartData Answers { get; set; }
+        public AnswerChartData Answers { get; set; }
 
-        public ChartData CorrectAnswers { get; set; }
+        public CorrectAnswerChartData CorrectAnswers { get; set; }
 
         public int NewQuestionCount { get; set; }
 

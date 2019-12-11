@@ -1,5 +1,5 @@
 ﻿$(function () {
-    var drawChart = function (placeholder, labels, values, title, label) {
+    function drawSingleColumnChart(placeholder, labels, values, title, label) {
         $(placeholder).highcharts({
             chart: {
                 type: 'column'
@@ -33,7 +33,58 @@
             },
             series: [{
                 name: title,
+                color: 'DeepSkyBlue',
                 data: values
+            }],
+            legend: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            }
+        });
+    }
+
+    function drawDoubleColumnChart(placeholder, labels, correctValues, incorrectValues, correctTitle, incorrectTitle, label) {
+        $(placeholder).highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: correctTitle
+            },
+            xAxis: {
+                categories: labels,
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: label
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: correctTitle,
+                color: 'GreenYellow',
+                data: correctValues
+            }, {
+                name: incorrectTitle,
+                color: 'Crimson',
+                data: incorrectValues
             }],
             legend: {
                 enabled: false
@@ -44,13 +95,13 @@
         });
     };
 
-    var drawPieChart = function (placeholder, oldQuestionCount, newQuestionCount) {
+    function drawPieChart(placeholder, oldQuestionCount, newQuestionCount) {
         $(placeholder).highcharts({
             chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
                 plotShadow: false,
-                type: 'pie',
+                type: 'pie'
             },
             title: {
                 text: 'Progress'
@@ -63,9 +114,9 @@
                     allowPointSelect: true,
                     cursor: 'pointer',
                     dataLabels: {
-                        enabled: false,
+                        enabled: false
                     },
-                    showInLegend: true,
+                    showInLegend: true
                 }
             },
             series: [{
@@ -73,17 +124,18 @@
                 colorByPoint: true,
                 data: [{
                     name: 'Active questions',
-                    y: oldQuestionCount,
+                    color: 'DeepSkyBlue',
+                    y: oldQuestionCount
                 }, {
                     name: 'New questions',
-                    y: newQuestionCount,
-                }
-                ]
+                    color: 'Black',
+                    y: newQuestionCount
+                }]
             }]
         });
     }
 
-    drawChart('#answersPlaceholder', chartData.answers.Labels, chartData.answers.Values, 'Total answers', 'Answers');
-    drawChart('#correctAnswersPlaceholder', chartData.correctAnswers.Labels, chartData.correctAnswers.Values, 'Correct answers', 'Answers');
+    drawSingleColumnChart('#answersPlaceholder', chartData.answers.Labels, chartData.answers.Values, 'Total answers', 'Answers');
+    drawDoubleColumnChart('#correctAnswersPlaceholder', chartData.correctAnswers.Labels, chartData.correctAnswers.Correct, chartData.correctAnswers.Incorrect, 'Correct answers', 'Incorrect answers', 'Answers');
     drawPieChart('#cardsNumberPlaceholder', chartData.oldQuestionCount, chartData.newQuestionCount);
 });

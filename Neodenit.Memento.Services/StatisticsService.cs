@@ -35,19 +35,18 @@ namespace Neodenit.Memento.Services
         public Statistics GetStatistics(IEnumerable<Answer> answers)
         {
             var groupedAnswers = from answer in answers group answer by answer.Time.Date;
+            var orderedGroupedAnswers = from answer in groupedAnswers orderby answer.Key select answer;
 
-            var answerLabels = from item in groupedAnswers select item.Key.ToShortDateString();
-            var answerValues = from item in groupedAnswers select item.Count();
+            var answerLabels = from item in orderedGroupedAnswers select item.Key.ToShortDateString();
+            var answerValues = from item in orderedGroupedAnswers select item.Count();
 
-            var groupedCorrectAnswers = from answer in answers where answer.IsCorrect group answer by answer.Time.Date;
-
-            var correctAnswerLabels = from item in groupedCorrectAnswers select item.Key.ToShortDateString();
-            var correctAnswerValues = from item in groupedCorrectAnswers select item.Count();
+            var correctAnswerValues = from answer in orderedGroupedAnswers select answer.Count(a => a.IsCorrect);
+            var incorrectAnswerValues = from answer in orderedGroupedAnswers select answer.Count(a => !a.IsCorrect);
 
             var statistics = new Statistics
             {
-                Answers = new ChartData(answerLabels, answerValues),
-                CorrectAnswers = new ChartData(correctAnswerLabels, correctAnswerValues),
+                Answers = new AnswerChartData { Labels = answerLabels, Values = answerValues },
+                CorrectAnswers = new CorrectAnswerChartData { Labels = answerLabels, Correct = correctAnswerValues, Incorrect = incorrectAnswerValues },
             };
 
             return statistics;
