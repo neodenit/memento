@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Neodenit.Memento.Additional
+namespace Neodenit.Memento.Models.ViewModels
 {
-    public class CorrectAnswerChartData
+    public class CorrectAnswerChartViewModel
     {
         public IEnumerable<string> Labels { get; set; }
 

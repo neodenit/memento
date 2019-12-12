@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Neodenit.Memento.Additional;
 using Neodenit.Memento.Interfaces;
 using Neodenit.Memento.Models.DataModels;
 using Neodenit.Memento.Models.ViewModels;
@@ -32,7 +31,7 @@ namespace Neodenit.Memento.Services
             return orderedDecks;
         }
 
-        public async Task<DeckWithStatViewModel> GetDeckWithStatViewModel(Guid deckID, Statistics statistics, string username)
+        public async Task<DeckWithStatViewModel> GetDeckWithStatViewModel(Guid deckID, StatisticsViewModel statistics, string username)
         {
             var deck = await repository.FindDeckAsync(deckID);
 
@@ -42,8 +41,19 @@ namespace Neodenit.Memento.Services
 
             var viewModel = new DeckWithStatViewModel
             {
-                Deck = deck,
-                Stat = statistics,
+                Deck = new DeckViewModel
+                {
+                    ID = deck.ID,
+                    Title = deck.Title,
+                    ControlMode = deck.ControlMode,
+                    DelayMode = deck.DelayMode,
+                    StartDelay = deck.StartDelay,
+                    Coeff = deck.Coeff,
+                    FirstDelay = deck.StartDelay,
+                    SecondDelay = (int)Math.Round(deck.StartDelay * deck.Coeff),
+                    PreviewAnswer = deck.PreviewAnswer
+                },
+                Stat = statistics
             };
 
             return viewModel;

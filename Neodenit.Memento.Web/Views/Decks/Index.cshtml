@@ -42,10 +42,10 @@
                 @Html.ActionLink(item.Title, "Details", new { id = item.ID })
             </td>
             <td>
-                @(item.Cards.Count())
+                @(item.CardsCount)
             </td>
             <td>
-                @(item.GetValidCards().Count())
+                @(item.ValidCardsCount)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ControlMode)
@@ -104,10 +104,10 @@
                 @Html.ActionLink(item.Title, "Details", new { id = item.ID })
             </td>
             <td>
-                @(item.Cards.Count())
+                @(item.CardsCount)
             </td>
             <td>
-                @(item.GetValidCards().Count())
+                @(item.ValidCardsCount)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ControlMode)

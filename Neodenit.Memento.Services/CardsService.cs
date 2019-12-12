@@ -34,7 +34,14 @@ namespace Neodenit.Memento.Services
             var card = cloze.Card;
             var question = converter.GetQuestion(card.Text, cloze.Label);
 
-            var result = new AnswerCardViewModel(card) { Question = question };
+            var result = new AnswerCardViewModel
+            {
+                ID = card.ID,
+                DeckID = card.DeckID,
+                DeckTitle = card.Deck.Title,
+                DelayMode = card.Deck.DelayMode,
+                Question = question
+            };
 
             return result;
         }
@@ -45,7 +52,15 @@ namespace Neodenit.Memento.Services
             var fullAnswer = converter.GetFullAnswer(card.Text, cloze.Label);
             var comment = card.Comment;
 
-            var result = new AnswerCardViewModel(card) { FullAnswer = fullAnswer, Comment = comment };
+            var result = new AnswerCardViewModel
+            {
+                ID = card.ID,
+                DeckID = card.DeckID,
+                DeckTitle = card.Deck.Title,
+                DelayMode = card.Deck.DelayMode,
+                FullAnswer = fullAnswer,
+                Comment = comment
+            };
 
             return result;
         }
@@ -60,8 +75,12 @@ namespace Neodenit.Memento.Services
 
             var mark = evaluator.Evaluate(correctAnswer, userAnswer);
 
-            var cardWithAnswer = new AnswerCardViewModel(card)
+            var cardWithAnswer = new AnswerCardViewModel
             {
+                ID = card.ID,
+                DeckID = card.DeckID,
+                DeckTitle = card.Deck.Title,
+                DelayMode = card.Deck.DelayMode,
                 Mark = mark,
                 Question = question,
                 FullAnswer = fullAnswer,

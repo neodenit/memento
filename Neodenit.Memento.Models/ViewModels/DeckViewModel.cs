@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Neodenit.Memento.Models.DataModels;
 using Neodenit.Memento.Models.Enums;
 
 namespace Neodenit.Memento.Models.ViewModels
@@ -32,19 +31,8 @@ namespace Neodenit.Memento.Models.ViewModels
         [Display(Name = "Preview Answer")]
         public bool PreviewAnswer { get; set; } = true;
 
-        public DeckViewModel() { }
+        public int CardsCount { get; set; }
 
-        public DeckViewModel(Deck deck)
-        {
-            ID = deck.ID;
-            Title = deck.Title;
-            ControlMode = deck.ControlMode;
-            DelayMode = deck.DelayMode;
-            StartDelay = deck.StartDelay;
-            Coeff = deck.Coeff;
-            FirstDelay = deck.StartDelay;
-            SecondDelay = (int)Math.Round(deck.StartDelay * deck.Coeff);
-            PreviewAnswer = deck.PreviewAnswer;
-        }
+        public int ValidCardsCount { get; set; }
     }
 }

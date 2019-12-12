@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,8 +39,34 @@ namespace Neodenit.Memento.Web.Controllers
             var sharedDecks = await decksService.GetSharedDecksAsync();
             var viewModel = new DecksViewModel
             {
-                UserDecks = decks,
-                SharedDecks = sharedDecks,
+                UserDecks = decks.Select(d => new DeckViewModel
+                {
+                    ID = d.ID,
+                    Title = d.Title,
+                    ControlMode = d.ControlMode,
+                    DelayMode = d.DelayMode,
+                    StartDelay = d.StartDelay,
+                    Coeff = d.Coeff,
+                    FirstDelay = d.StartDelay,
+                    SecondDelay = (int)Math.Round(d.StartDelay * d.Coeff),
+                    PreviewAnswer = d.PreviewAnswer,
+                    CardsCount = d.Cards.Count(),
+                    ValidCardsCount = d.GetValidCards().Count()
+                }),
+                SharedDecks = sharedDecks.Select(d => new DeckViewModel
+                {
+                    ID = d.ID,
+                    Title = d.Title,
+                    ControlMode = d.ControlMode,
+                    DelayMode = d.DelayMode,
+                    StartDelay = d.StartDelay,
+                    Coeff = d.Coeff,
+                    FirstDelay = d.StartDelay,
+                    SecondDelay = (int)Math.Round(d.StartDelay * d.Coeff),
+                    PreviewAnswer = d.PreviewAnswer,
+                    CardsCount = d.Cards.Count(),
+                    ValidCardsCount = d.GetValidCards().Count()
+                }),
             };
 
             return View(viewModel);
@@ -80,7 +107,18 @@ namespace Neodenit.Memento.Web.Controllers
             }
             else
             {
-                return View("EmptyDeck", new DeckViewModel(dbDeck));
+                return View("EmptyDeck", new DeckViewModel
+                {
+                    ID = dbDeck.ID,
+                    Title = dbDeck.Title,
+                    ControlMode = dbDeck.ControlMode,
+                    DelayMode = dbDeck.DelayMode,
+                    StartDelay = dbDeck.StartDelay,
+                    Coeff = dbDeck.Coeff,
+                    FirstDelay = dbDeck.StartDelay,
+                    SecondDelay = (int)Math.Round(dbDeck.StartDelay * dbDeck.Coeff),
+                    PreviewAnswer = dbDeck.PreviewAnswer
+                });
             }
         }
 
@@ -132,7 +170,18 @@ namespace Neodenit.Memento.Web.Controllers
         public async Task<ActionResult> Edit([CheckDeckExistence, CheckDeckOwner] Guid id)
         {
             var deck = await decksService.FindDeckAsync(id);
-            var viewModel = new DeckViewModel(deck);
+            var viewModel = new DeckViewModel
+            {
+                ID = deck.ID,
+                Title = deck.Title,
+                ControlMode = deck.ControlMode,
+                DelayMode = deck.DelayMode,
+                StartDelay = deck.StartDelay,
+                Coeff = deck.Coeff,
+                FirstDelay = deck.StartDelay,
+                SecondDelay = (int)Math.Round(deck.StartDelay * deck.Coeff),
+                PreviewAnswer = deck.PreviewAnswer
+            };
 
             return View(viewModel);
         }

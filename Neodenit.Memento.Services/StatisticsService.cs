@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Neodenit.Memento.Additional;
 using Neodenit.Memento.Interfaces;
 using Neodenit.Memento.Models.DataModels;
+using Neodenit.Memento.Models.ViewModels;
 
 namespace Neodenit.Memento.Services
 {
@@ -32,7 +32,7 @@ namespace Neodenit.Memento.Services
             return answers.Where(answer => answer.Time >= startTime);
         }
 
-        public Statistics GetStatistics(IEnumerable<Answer> answers)
+        public StatisticsViewModel GetStatistics(IEnumerable<Answer> answers)
         {
             var groupedAnswers = from answer in answers group answer by answer.Time.Date;
             var orderedGroupedAnswers = from answer in groupedAnswers orderby answer.Key select answer;
@@ -43,10 +43,10 @@ namespace Neodenit.Memento.Services
             var correctAnswerValues = from answer in orderedGroupedAnswers select answer.Count(a => a.IsCorrect);
             var incorrectAnswerValues = from answer in orderedGroupedAnswers select answer.Count(a => !a.IsCorrect);
 
-            var statistics = new Statistics
+            var statistics = new StatisticsViewModel
             {
-                Answers = new AnswerChartData { Labels = answerLabels, Values = answerValues },
-                CorrectAnswers = new CorrectAnswerChartData { Labels = answerLabels, Correct = correctAnswerValues, Incorrect = incorrectAnswerValues },
+                Answers = new AnswerChartViewModel { Labels = answerLabels, Values = answerValues },
+                CorrectAnswers = new CorrectAnswerChartViewModel { Labels = answerLabels, Correct = correctAnswerValues, Incorrect = incorrectAnswerValues },
             };
 
             return statistics;

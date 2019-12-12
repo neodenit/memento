@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Neodenit.Memento.Additional;
 using Neodenit.Memento.Common;
 using Neodenit.Memento.Interfaces;
 using Neodenit.Memento.Models.DataModels;
@@ -50,7 +48,7 @@ namespace Neodenit.Memento.Tests.Controllers
             mockStatisticsService.Setup(x => x.GetAnswersAsync(It.IsAny<Guid>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(Enumerable.Empty<Answer>());
 
-            mockDecksService.Setup(x => x.GetDeckWithStatViewModel(It.IsAny<Guid>(), It.IsAny<Statistics>(), It.IsAny<string>())).ReturnsAsync(new DeckWithStatViewModel());
+            mockDecksService.Setup(x => x.GetDeckWithStatViewModel(It.IsAny<Guid>(), It.IsAny<StatisticsViewModel>(), It.IsAny<string>())).ReturnsAsync(new DeckWithStatViewModel());
 
             mockDecksService.Setup(x => x.FindDeckAsync(It.IsAny<Guid>())).Returns<Guid>(async x => await Task.FromResult(
                 new Deck
@@ -129,7 +127,7 @@ namespace Neodenit.Memento.Tests.Controllers
             // Assert
             mockStatisticsService.Verify(x => x.GetAnswersAsync(id, It.IsAny<DateTime>()), Times.Once);
             mockStatisticsService.Verify(x => x.GetStatistics(It.IsAny<IEnumerable<Answer>>()), Times.Once);
-            mockDecksService.Verify(x => x.GetDeckWithStatViewModel(id, It.IsAny<Statistics>(), It.IsAny<string>()));
+            mockDecksService.Verify(x => x.GetDeckWithStatViewModel(id, It.IsAny<StatisticsViewModel>(), It.IsAny<string>()));
 
             Assert.IsNotNull(result);
             Assert.IsNotNull(model);

@@ -1,12 +1,9 @@
-﻿using Neodenit.Memento.Additional;
-using Neodenit.Memento.Models.DataModels;
-
-namespace Neodenit.Memento.Models.ViewModels
+﻿namespace Neodenit.Memento.Models.ViewModels
 {
     public class DeckWithStatViewModel
     {
-        public Deck Deck { get; set; }
+        public DeckViewModel Deck { get; set; }
 
-        public Statistics Stat { get; set; }
+        public StatisticsViewModel Stat { get; set; }
     }
 }

@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Neodenit.Memento.Additional;
 using Neodenit.Memento.Interfaces;
 using Neodenit.Memento.Models.DataModels;
+using Neodenit.Memento.Models.ViewModels;
 using Neodenit.Memento.Services;
 
 namespace Neodenit.Memento.Tests.Services
@@ -47,7 +47,7 @@ namespace Neodenit.Memento.Tests.Services
         {
             // Arrange
             var id = deckId;
-            var statistics = new Statistics();
+            var statistics = new StatisticsViewModel();
             var username = "Username";
 
             // Act

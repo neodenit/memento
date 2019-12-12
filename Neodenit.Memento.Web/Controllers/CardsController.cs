@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Neodenit.Memento.Additional;
 using Neodenit.Memento.Attributes;
 using Neodenit.Memento.Common;
 using Neodenit.Memento.Interfaces;
@@ -38,7 +37,16 @@ namespace Neodenit.Memento.Web.Controllers
             var deck = await decksService.FindDeckAsync(deckID);
             var clozes = deck.GetClozes();
             var orderedClozes = clozes.OrderBy(cloze => cloze.GetUserRepetition(UserName).Position);
-            var clozeViews = from cloze in orderedClozes select new ClozeViewModel(cloze, UserName);
+            var clozeViews = from cloze in orderedClozes
+                             select new ClozeViewModel
+                             {
+                                 ID = cloze.ID,
+                                 CardID = cloze.CardID,
+                                 Label = cloze.Label,
+                                 Position = cloze.GetUserRepetition(UserName).Position,
+                                 IsNew = cloze.GetUserRepetition(UserName).IsNew,
+                                 LastDelay = cloze.GetUserRepetition(UserName).LastDelay
+                             };
 
             return View(clozeViews);
         }
@@ -48,7 +56,14 @@ namespace Neodenit.Memento.Web.Controllers
             var deck = await decksService.FindDeckAsync(deckID);
             var cards = deck.GetValidCards();
 
-            var viewModel = from card in cards select new ViewCardViewModel(card);
+            var viewModel = from card in cards
+                            select new ViewCardViewModel
+                            {
+                                ID = card.ID,
+                                DeckID = card.DeckID,
+                                Text = card.Text,
+                                DeckTitle = card.Deck.Title
+                            };
 
             return View(viewModel);
         }
@@ -57,7 +72,14 @@ namespace Neodenit.Memento.Web.Controllers
         {
             var deck = await decksService.FindDeckAsync(deckID);
             var cards = deck.GetDeletedCards();
-            var viewModel = from card in cards select new ViewCardViewModel(card);
+            var viewModel = from card in cards
+                            select new ViewCardViewModel
+                            {
+                                ID = card.ID,
+                                DeckID = card.DeckID,
+                                Text = card.Text,
+                                DeckTitle = card.Deck.Title
+                            };
 
             return View(viewModel);
         }
@@ -66,7 +88,14 @@ namespace Neodenit.Memento.Web.Controllers
         {
             var deck = await decksService.FindDeckAsync(deckID);
             var cards = deck.GetDraftCards();
-            var viewModel = from card in cards select new ViewCardViewModel(card);
+            var viewModel = from card in cards
+                            select new ViewCardViewModel
+                            {
+                                ID = card.ID,
+                                DeckID = card.DeckID,
+                                Text = card.Text,
+                                DeckTitle = card.Deck.Title
+                            };
 
             return View(viewModel);
         }
@@ -193,7 +222,7 @@ namespace Neodenit.Memento.Web.Controllers
             switch (evaluatedCard.Mark)
             {
                 case Mark.Correct:
-                    evaluatedCard.Statistics = await decksService.GetDeckWithStatViewModel(dbCard.DeckID, new Statistics(), UserName);
+                    evaluatedCard.Statistics = await decksService.GetDeckWithStatViewModel(dbCard.DeckID, new StatisticsViewModel(), UserName);
                     return View("Right", evaluatedCard);
                 case Mark.Incorrect:
                     return View("Wrong", evaluatedCard);
@@ -318,7 +347,13 @@ namespace Neodenit.Memento.Web.Controllers
         public async Task<ActionResult> Edit([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var card = await cardsService.FindCardAsync(id);
-            var cardViewModel = new EditCardViewModel(card);
+            var cardViewModel = new EditCardViewModel
+            {
+                ID = card.ID,
+                DeckID = card.DeckID,
+                Text = card.Text,
+                Comment = card.Comment
+            };
 
             return View(cardViewModel);
         }
@@ -376,7 +411,13 @@ namespace Neodenit.Memento.Web.Controllers
         public async Task<ActionResult> Delete([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var card = await cardsService.FindCardAsync(id);
-            var viewModel = new ViewCardViewModel(card);
+            var viewModel = new ViewCardViewModel
+            {
+                ID = card.ID,
+                DeckID = card.DeckID,
+                Text = card.Text,
+                DeckTitle = card.Deck.Title
+            };
 
             return View(viewModel);
         }

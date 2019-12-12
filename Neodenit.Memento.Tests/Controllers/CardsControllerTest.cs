@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Neodenit.Memento.Additional;
 using Neodenit.Memento.Common;
 using Neodenit.Memento.Interfaces;
 using Neodenit.Memento.Models.DataModels;
@@ -335,7 +334,7 @@ namespace Neodenit.Memento.Tests.Controllers
             var result = await sut.Question(card) as ViewResult;
 
             // Assert
-            mockDecksService.Verify(x => x.GetDeckWithStatViewModel(It.IsAny<Guid>(), It.IsAny<Statistics>(), It.IsAny<string>()));
+            mockDecksService.Verify(x => x.GetDeckWithStatViewModel(It.IsAny<Guid>(), It.IsAny<StatisticsViewModel>(), It.IsAny<string>()));
             Assert.IsNotNull(result);
             Assert.AreEqual(result.ViewName, "Right");
         }

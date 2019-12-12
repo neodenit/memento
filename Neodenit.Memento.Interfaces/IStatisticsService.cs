@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Neodenit.Memento.Additional;
 using Neodenit.Memento.Models.DataModels;
+using Neodenit.Memento.Models.ViewModels;
 
 namespace Neodenit.Memento.Interfaces
 {
@@ -10,7 +10,7 @@ namespace Neodenit.Memento.Interfaces
     {
         Task<IEnumerable<Answer>> GetAnswersAsync(Guid deckID, DateTime startTime);
 
-        Statistics GetStatistics(IEnumerable<Answer> answers);
+        StatisticsViewModel GetStatistics(IEnumerable<Answer> answers);
 
         Task AddAnswer(Guid cardID, bool isCorrect, string username);
     }

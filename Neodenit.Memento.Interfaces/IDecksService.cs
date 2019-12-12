@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Neodenit.Memento.Additional;
 using Neodenit.Memento.Models.DataModels;
 using Neodenit.Memento.Models.ViewModels;
 
@@ -13,7 +12,7 @@ namespace Neodenit.Memento.Interfaces
 
         Task<IEnumerable<Deck>> GetSharedDecksAsync();
 
-        Task<DeckWithStatViewModel> GetDeckWithStatViewModel(Guid deckID, Statistics statistics, string username);
+        Task<DeckWithStatViewModel> GetDeckWithStatViewModel(Guid deckID, StatisticsViewModel statistics, string username);
 
         Task<Deck> FindDeckAsync(Guid id);
 

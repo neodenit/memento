@@ -1,5 +1,4 @@
 ﻿using System;
-using Neodenit.Memento.Models.DataModels;
 
 namespace Neodenit.Memento.Models.ViewModels
 {
@@ -20,16 +19,5 @@ namespace Neodenit.Memento.Models.ViewModels
         public int TopicID { get; set; }
 
         public string Text { get; set; }
-
-        public ClozeViewModel(Cloze cloze, string username, string text = "")
-        {
-            ID = cloze.ID;
-            CardID = cloze.CardID;
-            Label = cloze.Label;
-            Position = cloze.GetUserRepetition(username).Position;
-            IsNew = cloze.GetUserRepetition(username).IsNew;
-            LastDelay = cloze.GetUserRepetition(username).LastDelay;
-            Text = text;
-        }
     }
 }
