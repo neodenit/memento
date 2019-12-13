@@ -1,4 +1,5 @@
 using System.Reflection;
+using AutoMapper;
 using Memento.DataAccess.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -50,6 +51,8 @@ namespace Neodenit.Memento.DependecyInjection
 
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+            services.AddAutoMapper(typeof(MappingProfile));
 
             services.AddScoped<IMementoRepository, EFMementoRepository>();
 
