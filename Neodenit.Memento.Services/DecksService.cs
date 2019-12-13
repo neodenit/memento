@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Neodenit.Memento.Common;
 using Neodenit.Memento.Interfaces;
 using Neodenit.Memento.Models.DataModels;
+using Neodenit.Memento.Models.Enums;
 using Neodenit.Memento.Models.ViewModels;
 
 namespace Neodenit.Memento.Services
@@ -62,12 +64,28 @@ namespace Neodenit.Memento.Services
         public Task<Deck> FindDeckAsync(Guid id) =>
             repository.FindDeckAsync(id);
 
-        public async Task CreateDeck(Deck deck, string userName)
+        public async Task CreateDeck(DeckViewModel deck, string userName)
         {
-            deck.Owner = userName;
-            deck.ID = Guid.NewGuid();
+            var newDeck = new Deck
+            {
+                ID = Guid.NewGuid(),
+                Owner = userName,
+                AllowSmallDelays = Settings.Default.AllowSmallDelays,
+                Title = deck.Title,
+                DelayMode = Settings.Default.AllowSmoothDelayModes
+                    ? deck.DelayMode
+                    : DelayModes.Sharp,
+                ControlMode = deck.ControlMode,
+                StartDelay = Settings.Default.EnableTwoStepsConfig
+                    ? deck.FirstDelay
+                    : deck.StartDelay,
+                Coeff = Settings.Default.EnableTwoStepsConfig
+                    ? (double)deck.SecondDelay / deck.FirstDelay
+                    : deck.Coeff,
+                PreviewAnswer = deck.PreviewAnswer
+            };
 
-            repository.AddDeck(deck);
+            repository.AddDeck(newDeck);
 
             await repository.SaveChangesAsync();
         }

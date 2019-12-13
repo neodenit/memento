@@ -10,8 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Neodenit.Memento.Attributes;
 using Neodenit.Memento.Common;
 using Neodenit.Memento.Interfaces;
-using Neodenit.Memento.Models.DataModels;
-using Neodenit.Memento.Models.Enums;
 using Neodenit.Memento.Models.ViewModels;
 
 namespace Neodenit.Memento.Web.Controllers
@@ -96,7 +94,7 @@ namespace Neodenit.Memento.Web.Controllers
         // POST: Decks/Details
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Details(Deck deck)
+        public async Task<ActionResult> Details(DeckViewModel deck)
         {
             var dbDeck = await decksService.FindDeckAsync(deck.ID);
             var card = dbDeck.GetNextCard(User.Identity.Name);
@@ -139,24 +137,7 @@ namespace Neodenit.Memento.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var newDeck = new Deck
-                {
-                    AllowSmallDelays = Settings.Default.AllowSmallDelays,
-                    Title = deck.Title,
-                    DelayMode = Settings.Default.AllowSmoothDelayModes ?
-                        deck.DelayMode :
-                        DelayModes.Sharp,
-                    ControlMode = deck.ControlMode,
-                    StartDelay = Settings.Default.EnableTwoStepsConfig ?
-                        deck.FirstDelay :
-                        deck.StartDelay,
-                    Coeff = Settings.Default.EnableTwoStepsConfig ?
-                        (double)deck.SecondDelay / deck.FirstDelay :
-                        deck.Coeff,
-                    PreviewAnswer = deck.PreviewAnswer,
-                };
-
-                await decksService.CreateDeck(newDeck, User.Identity.Name);
+                await decksService.CreateDeck(deck, User.Identity.Name);
 
                 return RedirectToAction("Index");
             }

@@ -137,7 +137,7 @@ namespace Neodenit.Memento.Tests.Controllers
         public async Task DecksDetailsPostTest()
         {
             // Arrange
-            var deck = new Deck { ID = deckId };
+            var deck = new DeckViewModel { ID = deckId };
 
             // Act
             var result = await sut.Details(deck) as RedirectToRouteResult;
@@ -181,7 +181,7 @@ namespace Neodenit.Memento.Tests.Controllers
             var result = await sut.Create(deck) as RedirectToRouteResult;
 
             // Assert
-            mockDecksService.Verify(x => x.CreateDeck(It.IsAny<Deck>(), userName), Times.Once);
+            mockDecksService.Verify(x => x.CreateDeck(It.IsAny<DeckViewModel>(), userName), Times.Once);
             Assert.IsNotNull(result);
         }
 

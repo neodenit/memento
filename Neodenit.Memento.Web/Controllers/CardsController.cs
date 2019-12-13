@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Neodenit.Memento.Attributes;
 using Neodenit.Memento.Common;
 using Neodenit.Memento.Interfaces;
-using Neodenit.Memento.Models.DataModels;
 using Neodenit.Memento.Models.Enums;
 using Neodenit.Memento.Models.ViewModels;
 using Newtonsoft.Json;
@@ -151,7 +150,9 @@ namespace Neodenit.Memento.Web.Controllers
 
             await schedulerService.PromoteCloze(deck, Delays.Same, UserName);
 
-            return RedirectToNextCard(deck);
+            var nextCard = deck.GetNextCard(UserName);
+
+            return RedirectToCard(nextCard.ID);
         }
 
         public async Task<ActionResult> RepeatClosed([CheckCardExistence, CheckCardOwner] Guid id)
@@ -198,7 +199,9 @@ namespace Neodenit.Memento.Web.Controllers
 
             await schedulerService.PromoteCloze(deck, delay, UserName);
 
-            return RedirectToNextCard(deck);
+            var nextCard = deck.GetNextCard(UserName);
+
+            return RedirectToCard(nextCard.ID);
         }
 
         public async Task<ActionResult> Question([CheckCardExistence, CheckCardOwner] Guid id)
@@ -244,7 +247,9 @@ namespace Neodenit.Memento.Web.Controllers
 
             await schedulerService.PromoteCloze(deck, Delays.Next, UserName);
 
-            return RedirectToNextCard(deck);
+            var nextCard = deck.GetNextCard(UserName);
+
+            return RedirectToCard(nextCard.ID);
         }
 
         [HttpPost]
@@ -261,7 +266,9 @@ namespace Neodenit.Memento.Web.Controllers
 
                 await schedulerService.PromoteCloze(deck, delay, UserName);
 
-                return RedirectToNextCard(deck);
+                var nextCard = deck.GetNextCard(UserName);
+
+                return RedirectToCard(nextCard.ID);
             }
             else if (AltButton != null)
             {
@@ -438,13 +445,6 @@ namespace Neodenit.Memento.Web.Controllers
         {
             bool isValid = await cardsService.IsCardValidAsync(readingCardId, repetitionCardId);
             return Json(isValid);
-        }
-
-        private ActionResult RedirectToNextCard(Deck deck)
-        {
-            var nextCard = deck.GetNextCard(UserName);
-
-            return RedirectToCard(nextCard.ID);
         }
 
         private ActionResult RedirectToCard(Guid cardID)

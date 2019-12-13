@@ -18,7 +18,7 @@ namespace Neodenit.Memento.Interfaces
 
         Task UpdateDeck(Guid id, string title, int startDelay, double coeff, bool previewAnswer);
 
-        Task CreateDeck(Deck deck, string userName);
+        Task CreateDeck(DeckViewModel deck, string userName);
 
         Task DeleteDeck(Guid id);
 

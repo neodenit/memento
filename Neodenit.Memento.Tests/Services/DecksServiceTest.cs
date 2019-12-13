@@ -76,14 +76,14 @@ namespace Neodenit.Memento.Tests.Services
         public async Task DecksServiceCreateDeckTest()
         {
             // Arrange
-            var deck = new Deck();
+            var deck = new DeckViewModel();
             var userName = "user@server.com";
 
             // Act
             await sut.CreateDeck(deck, userName);
 
             // Assert
-            mockRepository.Verify(x => x.AddDeck(deck), Times.Once);
+            mockRepository.Verify(x => x.AddDeck(It.Is<Deck>(x => x.Owner == userName)), Times.Once);
             mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
         }
 
