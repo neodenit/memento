@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -17,7 +18,7 @@ namespace Neodenit.Memento.Tests.Controllers
     public class DecksControllerTest
     {
         private DecksController sut;
-
+        private Mock<IMapper> mockMapper;
         private Mock<IMementoRepository> mockRepository;
         private Mock<IDecksService> mockDecksService;
         private Mock<IStatisticsService> mockStatisticsService;
@@ -30,6 +31,7 @@ namespace Neodenit.Memento.Tests.Controllers
         [TestInitialize]
         public void Setup()
         {
+            mockMapper = new Mock<IMapper>();
             mockRepository = new Mock<IMementoRepository>();
 
             mockDecksService = new Mock<IDecksService>();
@@ -40,7 +42,7 @@ namespace Neodenit.Memento.Tests.Controllers
             var mockContext = new Mock<ControllerContext>();
             mockContext.Setup(item => item.HttpContext.User.Identity.Name).Returns("user@server.com");
 
-            sut = new DecksController(mockDecksService.Object, mockStatisticsService.Object, mockExportImportService.Object, mockSchedulerService.Object)
+            sut = new DecksController(mockMapper.Object, mockDecksService.Object, mockStatisticsService.Object, mockExportImportService.Object, mockSchedulerService.Object)
             {
                 ControllerContext = mockContext.Object
             };

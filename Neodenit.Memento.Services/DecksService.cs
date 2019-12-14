@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Neodenit.Memento.Common;
 using Neodenit.Memento.Interfaces;
 using Neodenit.Memento.Models.DataModels;
@@ -12,10 +13,12 @@ namespace Neodenit.Memento.Services
 {
     public class DecksService : IDecksService
     {
+        private readonly IMapper mapper;
         private readonly IMementoRepository repository;
 
-        public DecksService(IMementoRepository repository)
+        public DecksService(IMapper mapper, IMementoRepository repository)
         {
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             this.repository = repository;
         }
 
@@ -43,18 +46,7 @@ namespace Neodenit.Memento.Services
 
             var viewModel = new DeckWithStatViewModel
             {
-                Deck = new DeckViewModel
-                {
-                    ID = deck.ID,
-                    Title = deck.Title,
-                    ControlMode = deck.ControlMode,
-                    DelayMode = deck.DelayMode,
-                    StartDelay = deck.StartDelay,
-                    Coeff = deck.Coeff,
-                    FirstDelay = deck.StartDelay,
-                    SecondDelay = (int)Math.Round(deck.StartDelay * deck.Coeff),
-                    PreviewAnswer = deck.PreviewAnswer
-                },
+                Deck = mapper.Map<DeckViewModel>(deck),
                 Stat = statistics
             };
 

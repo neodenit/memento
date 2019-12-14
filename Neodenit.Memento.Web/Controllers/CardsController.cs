@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Neodenit.Memento.Attributes;
 using Neodenit.Memento.Common;
 using Neodenit.Memento.Interfaces;
+using Neodenit.Memento.Models.DataModels;
 using Neodenit.Memento.Models.Enums;
 using Neodenit.Memento.Models.ViewModels;
 using Newtonsoft.Json;
@@ -16,6 +19,7 @@ namespace Neodenit.Memento.Web.Controllers
     [Authorize]
     public class CardsController : Controller
     {
+        private readonly IMapper mapper;
         private readonly IDecksService decksService;
         private readonly ICardsService cardsService;
         private readonly IStatisticsService statService;
@@ -23,8 +27,9 @@ namespace Neodenit.Memento.Web.Controllers
 
         private string UserName => User.Identity.Name;
 
-        public CardsController(IDecksService decksService, ICardsService cardsService, IStatisticsService statService, ISchedulerService schedulerService)
+        public CardsController(IMapper mapper, IDecksService decksService, ICardsService cardsService, IStatisticsService statService, ISchedulerService schedulerService)
         {
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             this.decksService = decksService;
             this.cardsService = cardsService;
             this.statService = statService;
@@ -36,18 +41,17 @@ namespace Neodenit.Memento.Web.Controllers
             var deck = await decksService.FindDeckAsync(deckID);
             var clozes = deck.GetClozes();
             var orderedClozes = clozes.OrderBy(cloze => cloze.GetUserRepetition(UserName).Position);
-            var clozeViews = from cloze in orderedClozes
-                             select new ClozeViewModel
-                             {
-                                 ID = cloze.ID,
-                                 CardID = cloze.CardID,
-                                 Label = cloze.Label,
-                                 Position = cloze.GetUserRepetition(UserName).Position,
-                                 IsNew = cloze.GetUserRepetition(UserName).IsNew,
-                                 LastDelay = cloze.GetUserRepetition(UserName).LastDelay
-                             };
 
-            return View(clozeViews);
+            var viewModel = from cloze in orderedClozes
+                            select mapper.Map<Cloze, ClozeViewModel>(cloze, opt =>
+                                opt.AfterMap((src, dest) =>
+                                {
+                                    dest.Position = cloze.GetUserRepetition(UserName).Position;
+                                    dest.IsNew = cloze.GetUserRepetition(UserName).IsNew;
+                                    dest.LastDelay = cloze.GetUserRepetition(UserName).LastDelay;
+                                }));
+
+            return View(viewModel);
         }
 
         public async Task<ActionResult> CardsIndex([CheckDeckExistence, CheckDeckOwner] Guid deckID)
@@ -55,14 +59,7 @@ namespace Neodenit.Memento.Web.Controllers
             var deck = await decksService.FindDeckAsync(deckID);
             var cards = deck.GetValidCards();
 
-            var viewModel = from card in cards
-                            select new ViewCardViewModel
-                            {
-                                ID = card.ID,
-                                DeckID = card.DeckID,
-                                Text = card.Text,
-                                DeckTitle = card.Deck.Title
-                            };
+            var viewModel = mapper.Map<IEnumerable<ViewCardViewModel>>(cards);
 
             return View(viewModel);
         }
@@ -71,14 +68,7 @@ namespace Neodenit.Memento.Web.Controllers
         {
             var deck = await decksService.FindDeckAsync(deckID);
             var cards = deck.GetDeletedCards();
-            var viewModel = from card in cards
-                            select new ViewCardViewModel
-                            {
-                                ID = card.ID,
-                                DeckID = card.DeckID,
-                                Text = card.Text,
-                                DeckTitle = card.Deck.Title
-                            };
+            var viewModel = mapper.Map<IEnumerable<ViewCardViewModel>>(cards);
 
             return View(viewModel);
         }
@@ -87,14 +77,7 @@ namespace Neodenit.Memento.Web.Controllers
         {
             var deck = await decksService.FindDeckAsync(deckID);
             var cards = deck.GetDraftCards();
-            var viewModel = from card in cards
-                            select new ViewCardViewModel
-                            {
-                                ID = card.ID,
-                                DeckID = card.DeckID,
-                                Text = card.Text,
-                                DeckTitle = card.Deck.Title
-                            };
+            var viewModel = mapper.Map<IEnumerable<ViewCardViewModel>>(cards);
 
             return View(viewModel);
         }
@@ -354,15 +337,10 @@ namespace Neodenit.Memento.Web.Controllers
         public async Task<ActionResult> Edit([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var card = await cardsService.FindCardAsync(id);
-            var cardViewModel = new EditCardViewModel
-            {
-                ID = card.ID,
-                DeckID = card.DeckID,
-                Text = card.Text,
-                Comment = card.Comment
-            };
 
-            return View(cardViewModel);
+            var viewModel = mapper.Map<EditCardViewModel>(card);
+
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -418,13 +396,7 @@ namespace Neodenit.Memento.Web.Controllers
         public async Task<ActionResult> Delete([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var card = await cardsService.FindCardAsync(id);
-            var viewModel = new ViewCardViewModel
-            {
-                ID = card.ID,
-                DeckID = card.DeckID,
-                Text = card.Text,
-                DeckTitle = card.Deck.Title
-            };
+            var viewModel = mapper.Map<ViewCardViewModel>(card);
 
             return View(viewModel);
         }

@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,13 +18,15 @@ namespace Neodenit.Memento.Web.Controllers
     [Authorize]
     public class DecksController : Controller
     {
+        private readonly IMapper mapper;
         private readonly IDecksService decksService;
         private readonly IStatisticsService statService;
         private readonly IExportImportService exportImportService;
         private readonly ISchedulerService schedulerService;
 
-        public DecksController(IDecksService decksService, IStatisticsService statService, IExportImportService exportImportService, ISchedulerService schedulerService)
+        public DecksController(IMapper mapper, IDecksService decksService, IStatisticsService statService, IExportImportService exportImportService, ISchedulerService schedulerService)
         {
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             this.decksService = decksService;
             this.statService = statService;
             this.exportImportService = exportImportService;
@@ -35,36 +38,11 @@ namespace Neodenit.Memento.Web.Controllers
         {
             var decks = await decksService.GetDecksAsync(User.Identity.Name);
             var sharedDecks = await decksService.GetSharedDecksAsync();
+
             var viewModel = new DecksViewModel
             {
-                UserDecks = decks.Select(d => new DeckViewModel
-                {
-                    ID = d.ID,
-                    Title = d.Title,
-                    ControlMode = d.ControlMode,
-                    DelayMode = d.DelayMode,
-                    StartDelay = d.StartDelay,
-                    Coeff = d.Coeff,
-                    FirstDelay = d.StartDelay,
-                    SecondDelay = (int)Math.Round(d.StartDelay * d.Coeff),
-                    PreviewAnswer = d.PreviewAnswer,
-                    CardsCount = d.Cards.Count(),
-                    ValidCardsCount = d.GetValidCards().Count()
-                }),
-                SharedDecks = sharedDecks.Select(d => new DeckViewModel
-                {
-                    ID = d.ID,
-                    Title = d.Title,
-                    ControlMode = d.ControlMode,
-                    DelayMode = d.DelayMode,
-                    StartDelay = d.StartDelay,
-                    Coeff = d.Coeff,
-                    FirstDelay = d.StartDelay,
-                    SecondDelay = (int)Math.Round(d.StartDelay * d.Coeff),
-                    PreviewAnswer = d.PreviewAnswer,
-                    CardsCount = d.Cards.Count(),
-                    ValidCardsCount = d.GetValidCards().Count()
-                }),
+                UserDecks = mapper.Map<IEnumerable<DeckViewModel>>(decks),
+                SharedDecks = mapper.Map<IEnumerable<DeckViewModel>>(sharedDecks),
             };
 
             return View(viewModel);
@@ -105,18 +83,7 @@ namespace Neodenit.Memento.Web.Controllers
             }
             else
             {
-                return View("EmptyDeck", new DeckViewModel
-                {
-                    ID = dbDeck.ID,
-                    Title = dbDeck.Title,
-                    ControlMode = dbDeck.ControlMode,
-                    DelayMode = dbDeck.DelayMode,
-                    StartDelay = dbDeck.StartDelay,
-                    Coeff = dbDeck.Coeff,
-                    FirstDelay = dbDeck.StartDelay,
-                    SecondDelay = (int)Math.Round(dbDeck.StartDelay * dbDeck.Coeff),
-                    PreviewAnswer = dbDeck.PreviewAnswer
-                });
+                return View("EmptyDeck", mapper.Map<DeckViewModel>(dbDeck));
             }
         }
 
@@ -151,18 +118,7 @@ namespace Neodenit.Memento.Web.Controllers
         public async Task<ActionResult> Edit([CheckDeckExistence, CheckDeckOwner] Guid id)
         {
             var deck = await decksService.FindDeckAsync(id);
-            var viewModel = new DeckViewModel
-            {
-                ID = deck.ID,
-                Title = deck.Title,
-                ControlMode = deck.ControlMode,
-                DelayMode = deck.DelayMode,
-                StartDelay = deck.StartDelay,
-                Coeff = deck.Coeff,
-                FirstDelay = deck.StartDelay,
-                SecondDelay = (int)Math.Round(deck.StartDelay * deck.Coeff),
-                PreviewAnswer = deck.PreviewAnswer
-            };
+            var viewModel = mapper.Map<DeckViewModel>(deck);
 
             return View(viewModel);
         }

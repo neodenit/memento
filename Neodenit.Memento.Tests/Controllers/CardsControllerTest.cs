@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -17,7 +18,7 @@ namespace Neodenit.Memento.Tests.Controllers
     public class CardsControllerTest
     {
         private CardsController sut;
-
+        private Mock<IMapper> mockMapper;
         private Mock<IDecksService> mockDecksService;
         private Mock<ICardsService> mockCardsService;
         private Mock<IStatisticsService> mockStatService;
@@ -33,6 +34,7 @@ namespace Neodenit.Memento.Tests.Controllers
         [TestInitialize]
         public void Setup()
         {
+            mockMapper = new Mock<IMapper>();
             mockDecksService = new Mock<IDecksService>();
             mockCardsService = new Mock<ICardsService>();
             mockStatService = new Mock<IStatisticsService>();
@@ -59,7 +61,7 @@ namespace Neodenit.Memento.Tests.Controllers
             mockCardsService.Setup(x => x.EvaluateCard(It.IsAny<Cloze>(), It.IsAny<string>())).Returns(mockAnswerCardViewModel.Object);
             mockSchedulerService.Setup(x => x.GetDelayForWrongAnswer(It.IsAny<DelayModes>()));
 
-            sut = new CardsController(mockDecksService.Object, mockCardsService.Object, mockStatService.Object, mockSchedulerService.Object)
+            sut = new CardsController(mockMapper.Object, mockDecksService.Object, mockCardsService.Object, mockStatService.Object, mockSchedulerService.Object)
             {
                 ControllerContext = mockContext.Object
             };

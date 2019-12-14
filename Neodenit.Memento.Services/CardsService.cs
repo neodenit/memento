@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Neodenit.Memento.Interfaces;
 using Neodenit.Memento.Models.DataModels;
 using Neodenit.Memento.Models.ViewModels;
@@ -9,15 +10,17 @@ namespace Neodenit.Memento.Services
 {
     public class CardsService : ICardsService
     {
+        private readonly IMapper mapper;
         private readonly IMementoRepository repository;
         private readonly IConverterService converter;
         private readonly IEvaluatorService evaluator;
 
-        public CardsService(IMementoRepository repository, IConverterService converter, IEvaluatorService evaluator)
+        public CardsService(IMapper mapper, IMementoRepository repository, IConverterService converter, IEvaluatorService evaluator)
         {
-            this.repository = repository;
-            this.converter = converter;
-            this.evaluator = evaluator;
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            this.converter = converter ?? throw new ArgumentNullException(nameof(converter));
+            this.evaluator = evaluator ?? throw new ArgumentNullException(nameof(evaluator));
         }
 
         public async Task AddAltAnswer(Cloze cloze, string answer)
@@ -34,35 +37,27 @@ namespace Neodenit.Memento.Services
             var card = cloze.Card;
             var question = converter.GetQuestion(card.Text, cloze.Label);
 
-            var result = new AnswerCardViewModel
-            {
-                ID = card.ID,
-                DeckID = card.DeckID,
-                DeckTitle = card.Deck.Title,
-                DelayMode = card.Deck.DelayMode,
-                Question = question
-            };
+            var viewModel = mapper.Map<Card, AnswerCardViewModel>(card, opt =>
+                                opt.AfterMap((src, dest) =>
+                                {
+                                    dest.Question = question;
+                                }));
 
-            return result;
+            return viewModel;
         }
 
         public AnswerCardViewModel GetCardWithAnswer(Cloze cloze)
         {
             var card = cloze.Card;
             var fullAnswer = converter.GetFullAnswer(card.Text, cloze.Label);
-            var comment = card.Comment;
 
-            var result = new AnswerCardViewModel
-            {
-                ID = card.ID,
-                DeckID = card.DeckID,
-                DeckTitle = card.Deck.Title,
-                DelayMode = card.Deck.DelayMode,
-                FullAnswer = fullAnswer,
-                Comment = comment
-            };
+            var viewModel = mapper.Map<Card, AnswerCardViewModel>(card, opt =>
+                                opt.AfterMap((src, dest) =>
+                                {
+                                    dest.FullAnswer = fullAnswer;
+                                }));
 
-            return result;
+            return viewModel;
         }
 
         public AnswerCardViewModel EvaluateCard(Cloze cloze, string userAnswer)
@@ -75,21 +70,17 @@ namespace Neodenit.Memento.Services
 
             var mark = evaluator.Evaluate(correctAnswer, userAnswer);
 
-            var cardWithAnswer = new AnswerCardViewModel
-            {
-                ID = card.ID,
-                DeckID = card.DeckID,
-                DeckTitle = card.Deck.Title,
-                DelayMode = card.Deck.DelayMode,
-                Mark = mark,
-                Question = question,
-                FullAnswer = fullAnswer,
-                ShortAnswer = correctAnswer,
-                UserAnswer = userAnswer,
-                Comment = card.Comment,
-            };
+            var viewModel = mapper.Map<Card, AnswerCardViewModel>(card, opt =>
+                                opt.AfterMap((src, dest) =>
+                                {
+                                    dest.Mark = mark;
+                                    dest.Question = question;
+                                    dest.FullAnswer = fullAnswer;
+                                    dest.ShortAnswer = correctAnswer;
+                                    dest.UserAnswer = userAnswer;
+                                }));
 
-            return cardWithAnswer;
+            return viewModel;
         }
 
         public Task<Card> FindCardAsync(Guid id) =>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Neodenit.Memento.Interfaces;
@@ -14,6 +15,7 @@ namespace Neodenit.Memento.Tests.Services
     {
         private CardsService sut;
 
+        private Mock<IMapper> mockMapper;
         private Mock<IMementoRepository> mockRepository;
         private Mock<IConverterService> mockConverter;
         private Mock<IEvaluatorService> mockEvaluator;
@@ -23,11 +25,12 @@ namespace Neodenit.Memento.Tests.Services
         [TestInitialize]
         public void Setup()
         {
+            mockMapper = new Mock<IMapper>();
             mockRepository = new Mock<IMementoRepository>();
             mockConverter = new Mock<IConverterService>();
             mockEvaluator = new Mock<IEvaluatorService>();
 
-            sut = new CardsService(mockRepository.Object, mockConverter.Object, mockEvaluator.Object);
+            sut = new CardsService(mockMapper.Object, mockRepository.Object, mockConverter.Object, mockEvaluator.Object);
 
             mockRepository.Setup(x => x.FindDeckAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(
