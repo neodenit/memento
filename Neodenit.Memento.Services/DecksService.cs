@@ -22,23 +22,27 @@ namespace Neodenit.Memento.Services
             this.repository = repository;
         }
 
-        public async Task<IEnumerable<Deck>> GetDecksAsync(string username)
+        public async Task<IEnumerable<DeckViewModel>> GetDecksAsync(string userName)
         {
-            var decks = await repository.GetUserDecksAsync(username);
+            var decks = await repository.GetUserDecksAsync(userName);
             var orderedDecks = decks.OrderBy(deck => deck.Title);
-            return orderedDecks;
+
+            var viewModel = mapper.Map<IEnumerable<DeckViewModel>>(decks);
+            return viewModel;
         }
 
-        public async Task<IEnumerable<Deck>> GetSharedDecksAsync()
+        public async Task<IEnumerable<DeckViewModel>> GetSharedDecksAsync()
         {
             var decks = await repository.GetSharedDecksAsync();
             var orderedDecks = decks.OrderBy(deck => deck.Title);
-            return orderedDecks;
+
+            var viewModel = mapper.Map<IEnumerable<DeckViewModel>>(decks);
+            return viewModel;
         }
 
-        public async Task<DeckWithStatViewModel> GetDeckWithStatViewModel(Guid deckID, StatisticsViewModel statistics, string username)
+        public async Task<DeckWithStatViewModel> GetDeckWithStatViewModel(Guid deckId, StatisticsViewModel statistics, string username)
         {
-            var deck = await repository.FindDeckAsync(deckID);
+            var deck = await repository.FindDeckAsync(deckId);
 
             var clozes = deck.GetClozes();
             statistics.NewQuestionCount = clozes.Count(c => c.GetUserRepetition(username).IsNew);
@@ -53,8 +57,13 @@ namespace Neodenit.Memento.Services
             return viewModel;
         }
 
-        public Task<Deck> FindDeckAsync(Guid id) =>
-            repository.FindDeckAsync(id);
+        public async Task<DeckViewModel> FindDeckAsync(Guid id)
+        {
+            var deck = await repository.FindDeckAsync(id);
+
+            var viewModel = mapper.Map<DeckViewModel>(deck);
+            return viewModel;
+        }
 
         public async Task CreateDeck(DeckViewModel deck, string userName)
         {
@@ -84,12 +93,12 @@ namespace Neodenit.Memento.Services
 
         public async Task UpdateDeck(Guid id, string title, int startDelay, double coeff, bool previewAnswer)
         {
-            var dbDeck = await repository.FindDeckAsync(id);
+            var deck = await repository.FindDeckAsync(id);
 
-            dbDeck.Title = title;
-            dbDeck.StartDelay = startDelay;
-            dbDeck.Coeff = coeff;
-            dbDeck.PreviewAnswer = previewAnswer;
+            deck.Title = title;
+            deck.StartDelay = startDelay;
+            deck.Coeff = coeff;
+            deck.PreviewAnswer = previewAnswer;
 
             await repository.SaveChangesAsync();
         }
@@ -110,6 +119,53 @@ namespace Neodenit.Memento.Services
             deck.IsShared = true;
 
             await repository.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<ClozeViewModel>> GetClozesAsync(Guid deckId, string userName)
+        {
+            var deck = await repository.FindDeckAsync(deckId);
+            var clozes = deck.GetClozes();
+            var orderedClozes = clozes.OrderBy(cloze => cloze.GetUserRepetition(userName).Position);
+
+            var viewModel = from cloze in orderedClozes
+                            select mapper.Map<Cloze, ClozeViewModel>(cloze, opt =>
+                                opt.AfterMap((src, dest) =>
+                                {
+                                    var repetition = cloze.GetUserRepetition(userName);
+
+                                    dest.Position = repetition.Position;
+                                    dest.IsNew = repetition.IsNew;
+                                    dest.LastDelay = repetition.LastDelay;
+                                }));
+
+            return viewModel;
+        }
+
+        public async Task<IEnumerable<ViewCardViewModel>> GetCardsAsync(Guid deckId)
+        {
+            var deck = await repository.FindDeckAsync(deckId);
+            var cards = deck.GetValidCards();
+
+            var viewModel = mapper.Map<IEnumerable<ViewCardViewModel>>(cards);
+            return viewModel;
+        }
+
+        public async Task<IEnumerable<ViewCardViewModel>> GetDeletedCardsAsync(Guid deckId)
+        {
+            var deck = await repository.FindDeckAsync(deckId);
+            var cards = deck.GetDeletedCards();
+
+            var viewModel = mapper.Map<IEnumerable<ViewCardViewModel>>(cards);
+            return viewModel;
+        }
+
+        public async Task<IEnumerable<ViewCardViewModel>> GetDraftCardsAsync(Guid deckId)
+        {
+            var deck = await repository.FindDeckAsync(deckId);
+            var cards = deck.GetDraftCards();
+
+            var viewModel = mapper.Map<IEnumerable<ViewCardViewModel>>(cards);
+            return viewModel;
         }
     }
 }

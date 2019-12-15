@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Neodenit.Memento.Models.DataModels;
 using Neodenit.Memento.Models.ViewModels;
 
 namespace Neodenit.Memento.Interfaces
 {
     public interface ICardsService
     {
-        Task<Card> GetNextCardAsync(Guid deckID, string username);
+        Task<ViewCardViewModel> GetNextCardAsync(Guid deckId, string username);
 
-        Task<Card> FindCardAsync(Guid id);
+        Task<ViewCardViewModel> FindCardAsync(Guid id);
 
-        Task AddAltAnswer(Cloze cloze, string answer);
+        Task AddAltAnswerAsync(Guid cardId, string altAnswer, string userName);
 
-        AnswerCardViewModel GetCardWithQuestion(Cloze cloze);
+        Task<AnswerCardViewModel> GetCardWithQuestionAsync(Guid cardId, string userName);
 
-        AnswerCardViewModel GetCardWithAnswer(Cloze cloze);
+        Task<AnswerCardViewModel> GetCardWithAnswerAsync(Guid cardId, string userName);
 
-        AnswerCardViewModel EvaluateCard(Cloze cloze, string userAnswer);
+        Task<AnswerCardViewModel> EvaluateCardAsync(Guid cardId, string userAnswer, string userName);
 
         Task AddCard(EditCardViewModel card);
 
@@ -28,5 +27,9 @@ namespace Neodenit.Memento.Interfaces
         Task RestoreCard(Guid id);
 
         Task<bool> IsCardValidAsync(Guid readingCardId, Guid repetitionCardId);
+
+        Task<ClozeViewModel> GetNextClozeAsync(Guid cardId, string userName);
+
+        Task<EditCardViewModel> FindEditCardAsync(Guid id);
     }
 }

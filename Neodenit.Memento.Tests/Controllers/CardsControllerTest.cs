@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -18,7 +17,6 @@ namespace Neodenit.Memento.Tests.Controllers
     public class CardsControllerTest
     {
         private CardsController sut;
-        private Mock<IMapper> mockMapper;
         private Mock<IDecksService> mockDecksService;
         private Mock<ICardsService> mockCardsService;
         private Mock<IStatisticsService> mockStatService;
@@ -34,7 +32,6 @@ namespace Neodenit.Memento.Tests.Controllers
         [TestInitialize]
         public void Setup()
         {
-            mockMapper = new Mock<IMapper>();
             mockDecksService = new Mock<IDecksService>();
             mockCardsService = new Mock<ICardsService>();
             mockStatService = new Mock<IStatisticsService>();
@@ -48,20 +45,23 @@ namespace Neodenit.Memento.Tests.Controllers
             var card = new Card { Clozes = new[] { cloze }, ID = cardId, DeckID = deckId, IsValid = true };
             var deck = new Deck { Cards = new[] { card }, ID = deckId };
 
+            var deckViewModel = new DeckViewModel();
+            var cardViewModel = new ViewCardViewModel();
+
             repetition.Cloze = cloze;
             cloze.Card = card;
             card.Deck = deck;
 
             var mockAnswerCardViewModel = new Mock<AnswerCardViewModel>();
 
-            mockDecksService.Setup(x => x.FindDeckAsync(It.IsAny<Guid>())).ReturnsAsync(deck);
-            mockCardsService.Setup(x => x.FindCardAsync(It.IsAny<Guid>())).ReturnsAsync(card);
-            mockCardsService.Setup(x => x.GetCardWithQuestion(It.IsAny<Cloze>())).Returns(mockAnswerCardViewModel.Object);
-            mockCardsService.Setup(x => x.GetCardWithAnswer(It.IsAny<Cloze>())).Returns(mockAnswerCardViewModel.Object);
-            mockCardsService.Setup(x => x.EvaluateCard(It.IsAny<Cloze>(), It.IsAny<string>())).Returns(mockAnswerCardViewModel.Object);
+            mockDecksService.Setup(x => x.FindDeckAsync(It.IsAny<Guid>())).ReturnsAsync(deckViewModel);
+            mockCardsService.Setup(x => x.FindCardAsync(It.IsAny<Guid>())).ReturnsAsync(cardViewModel);
+            mockCardsService.Setup(x => x.GetCardWithQuestionAsync(It.IsAny<Guid>(), It.IsAny<string>())).Returns(Task.FromResult(mockAnswerCardViewModel.Object));
+            mockCardsService.Setup(x => x.GetCardWithAnswerAsync(It.IsAny<Guid>(), It.IsAny<string>())).Returns(Task.FromResult(mockAnswerCardViewModel.Object));
+            mockCardsService.Setup(x => x.EvaluateCardAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(mockAnswerCardViewModel.Object));
             mockSchedulerService.Setup(x => x.GetDelayForWrongAnswer(It.IsAny<DelayModes>()));
 
-            sut = new CardsController(mockMapper.Object, mockDecksService.Object, mockCardsService.Object, mockStatService.Object, mockSchedulerService.Object)
+            sut = new CardsController(mockDecksService.Object, mockCardsService.Object, mockStatService.Object, mockSchedulerService.Object)
             {
                 ControllerContext = mockContext.Object
             };
@@ -157,7 +157,7 @@ namespace Neodenit.Memento.Tests.Controllers
 
             // Assert
             mockCardsService.Verify(x => x.FindCardAsync(id));
-            mockCardsService.Verify(x => x.GetCardWithQuestion(It.IsAny<Cloze>()));
+            mockCardsService.Verify(x => x.GetCardWithQuestionAsync(It.IsAny<Guid>(), It.IsAny<string>()));
             Assert.IsNotNull(result);
             Assert.IsNotNull(model);
         }
@@ -173,7 +173,7 @@ namespace Neodenit.Memento.Tests.Controllers
             var model = result.Model as AnswerCardViewModel;
 
             // Assert
-            mockCardsService.Verify(x => x.GetCardWithAnswer(It.IsAny<Cloze>()));
+            mockCardsService.Verify(x => x.GetCardWithAnswerAsync(It.IsAny<Guid>(), It.IsAny<string>()));
             Assert.IsNotNull(result);
             Assert.IsNotNull(model);
         }
@@ -189,7 +189,7 @@ namespace Neodenit.Memento.Tests.Controllers
 
             // Assert
             mockCardsService.Verify(x => x.FindCardAsync(card.ID));
-            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<Deck>(), Delays.Same, It.IsAny<string>()));
+            mockSchedulerService.Verify(x => x.PromoteClozeAsync(It.IsAny<Guid>(), Delays.Same, It.IsAny<string>()));
             Assert.IsNotNull(result);
         }
 
@@ -204,7 +204,7 @@ namespace Neodenit.Memento.Tests.Controllers
             var model = result.Model as AnswerCardViewModel;
 
             // Assert
-            mockCardsService.Verify(x => x.GetCardWithQuestion(It.IsAny<Cloze>()));
+            mockCardsService.Verify(x => x.GetCardWithQuestionAsync(It.IsAny<Guid>(), It.IsAny<string>()));
             Assert.IsNotNull(result);
             Assert.IsNotNull(model);
         }
@@ -220,7 +220,7 @@ namespace Neodenit.Memento.Tests.Controllers
             var model = result.Model as AnswerCardViewModel;
 
             // Assert
-            mockCardsService.Verify(x => x.GetCardWithAnswer(It.IsAny<Cloze>()));
+            mockCardsService.Verify(x => x.GetCardWithAnswerAsync(It.IsAny<Guid>(), It.IsAny<string>()));
             Assert.IsNotNull(result);
             Assert.IsNotNull(model);
         }
@@ -237,7 +237,7 @@ namespace Neodenit.Memento.Tests.Controllers
             // Assert
             mockStatService.Verify(x => x.AddAnswer(card.ID, It.IsAny<bool>(), It.IsAny<string>()));
             mockCardsService.Verify(x => x.FindCardAsync(card.ID));
-            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<Deck>(), Delays.Initial, It.IsAny<string>()));
+            mockSchedulerService.Verify(x => x.PromoteClozeAsync(It.IsAny<Guid>(), Delays.Initial, It.IsAny<string>()));
             Assert.IsNotNull(result);
         }
 
@@ -256,7 +256,7 @@ namespace Neodenit.Memento.Tests.Controllers
                 // Assert
                 mockStatService.Verify(x => x.AddAnswer(card.ID, It.IsAny<bool>(), It.IsAny<string>()));
                 mockCardsService.Verify(x => x.FindCardAsync(card.ID));
-                mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<Deck>(), Delays.Previous, It.IsAny<string>()));
+                mockSchedulerService.Verify(x => x.PromoteClozeAsync(It.IsAny<Guid>(), Delays.Previous, It.IsAny<string>()));
                 Assert.IsNotNull(result);
             }
         }
@@ -287,7 +287,7 @@ namespace Neodenit.Memento.Tests.Controllers
             // Assert
             mockStatService.Verify(x => x.AddAnswer(card.ID, It.IsAny<bool>(), It.IsAny<string>()));
             mockCardsService.Verify(x => x.FindCardAsync(card.ID));
-            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<Deck>(), Delays.Next, It.IsAny<string>()));
+            mockSchedulerService.Verify(x => x.PromoteClozeAsync(It.IsAny<Guid>(), Delays.Next, It.IsAny<string>()));
             Assert.IsNotNull(result);
         }
 
@@ -302,7 +302,7 @@ namespace Neodenit.Memento.Tests.Controllers
             var model = result.Model as AnswerCardViewModel;
 
             // Assert
-            mockCardsService.Verify(x => x.GetCardWithQuestion(It.IsAny<Cloze>()));
+            mockCardsService.Verify(x => x.GetCardWithQuestionAsync(It.IsAny<Guid>(), It.IsAny<string>()));
             Assert.IsNotNull(result);
             Assert.IsNotNull(model);
         }
@@ -318,7 +318,7 @@ namespace Neodenit.Memento.Tests.Controllers
             var model = result.Model as AnswerCardViewModel;
 
             // Assert
-            mockCardsService.Verify(x => x.EvaluateCard(It.IsAny<Cloze>(), It.IsAny<string>()));
+            mockCardsService.Verify(x => x.EvaluateCardAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()));
             Assert.IsNotNull(result);
             Assert.IsNotNull(model);
         }
@@ -329,8 +329,8 @@ namespace Neodenit.Memento.Tests.Controllers
             // Arrange
             var card = new AnswerCardViewModel();
             mockCardsService
-                .Setup(m => m.EvaluateCard(It.IsAny<Cloze>(), It.IsAny<string>()))
-                .Returns(new AnswerCardViewModel { Mark = Mark.Correct });
+                .Setup(m => m.EvaluateCardAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(new AnswerCardViewModel { Mark = Mark.Correct }));
 
             // Act
             var result = await sut.Question(card) as ViewResult;
@@ -353,7 +353,7 @@ namespace Neodenit.Memento.Tests.Controllers
             // Assert
             mockStatService.Verify(x => x.AddAnswer(card.ID, It.IsAny<bool>(), It.IsAny<string>()));
             mockCardsService.Verify(x => x.FindCardAsync(card.ID));
-            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<Deck>(), Delays.Next, It.IsAny<string>()));
+            mockSchedulerService.Verify(x => x.PromoteClozeAsync(It.IsAny<Guid>(), Delays.Next, It.IsAny<string>()));
             Assert.IsNotNull(result);
         }
 
@@ -370,7 +370,7 @@ namespace Neodenit.Memento.Tests.Controllers
             mockStatService.Verify(x => x.AddAnswer(card.ID, false, It.IsAny<string>()));
             mockSchedulerService.Verify(x => x.GetDelayForWrongAnswer(It.IsAny<DelayModes>()));
             mockCardsService.Verify(x => x.FindCardAsync(card.ID));
-            mockSchedulerService.Verify(x => x.PromoteCloze(It.IsAny<Deck>(), It.IsAny<Delays>(), It.IsAny<string>()));
+            mockSchedulerService.Verify(x => x.PromoteClozeAsync(It.IsAny<Guid>(), It.IsAny<Delays>(), It.IsAny<string>()));
             Assert.IsNotNull(result);
         }
 
@@ -384,7 +384,7 @@ namespace Neodenit.Memento.Tests.Controllers
             var result = await sut.Wrong(card, null, "AltButton") as RedirectToRouteResult;
 
             // Assert
-            mockCardsService.Verify(x => x.AddAltAnswer(It.IsAny<Cloze>(), card.UserAnswer));
+            mockCardsService.Verify(x => x.AddAltAnswerAsync(It.IsAny<Guid>(), It.IsAny<string>(), card.UserAnswer));
             Assert.IsNotNull(result);
         }
 

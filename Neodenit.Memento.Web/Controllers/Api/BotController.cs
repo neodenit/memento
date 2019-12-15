@@ -2,14 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Neodenit.Memento.Common;
-using Neodenit.Memento.Interfaces;
-using Neodenit.Memento.Models.Enums;
-using Neodenit.Memento.Models.DataModels;
-using Neodenit.Memento.Models.ViewModels;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Microsoft.EntityFrameworkCore;
+using Neodenit.Memento.Common;
+using Neodenit.Memento.Interfaces;
+using Neodenit.Memento.Models.Enums;
+using Neodenit.Memento.Models.ViewModels;
 using Neodenit.Memento.Web.Data;
 
 namespace Neodenit.Memento.Web.Controllers.Api
@@ -63,12 +62,12 @@ namespace Neodenit.Memento.Web.Controllers.Api
                         {
                             var state = message.Text == "/back" ? DialogStates.Start : message.GetBotPerUserInConversationData<DialogStates>("dialogState");
 
-                            var username = user.UserName;
+                            var userName = user.UserName;
 
                             switch (state)
                             {
                                 case DialogStates.Start:
-                                    var decks = await decksService.GetDecksAsync(username);
+                                    var decks = await decksService.GetDecksAsync(userName);
                                     var data = decks.Select((d, i) => Tuple.Create(i + 1, d.ID, d.Title)).ToArray();
                                     var menuItems = data.Select(d => $"{d.Item1}) {d.Item3}");
 
@@ -98,7 +97,7 @@ namespace Neodenit.Memento.Web.Controllers.Api
                                             var backMessage = "Type /back to return to menu.";
                                             var firstQuestionMessage = "**First question:**";
 
-                                            var question = await GetNextQuestion(message, username);
+                                            var question = await GetNextQuestion(message, userName);
 
                                             var pleseFillMessage = "Please fill in the blank.";
 
@@ -120,20 +119,20 @@ namespace Neodenit.Memento.Web.Controllers.Api
 
                                     break;
                                 case DialogStates.Question:
-                                    var deck = await GetCurrentDeck(message);
-                                    var card = deck.GetNextCard(username);
-                                    var cloze = card.GetNextCloze(username);
+                                    Guid id = GetDeckId(message);
+                                    var deck = await decksService.FindDeckAsync(id);
+                                    var card = await cardsService.GetNextCardAsync(id, userName);
 
-                                    var evaluatedCard = cardsService.EvaluateCard(cloze, message.Text);
+                                    var evaluatedCard = await cardsService.EvaluateCardAsync(card.ID, message.Text, userName);
 
                                     switch (evaluatedCard.Mark)
                                     {
                                         case Mark.Correct:
-                                            var rightResponse = await GetResponseForRightAnswer(message, deck, evaluatedCard, username);
+                                            var rightResponse = await GetResponseForRightAnswer(message, evaluatedCard, userName);
                                             message.SetBotPerUserInConversationData("response", rightResponse);
                                             break;
                                         case Mark.Incorrect:
-                                            var wrongResponse = await GetResponseForWrongAnswer(message, deck, evaluatedCard, username);
+                                            var wrongResponse = await GetResponseForWrongAnswer(message, evaluatedCard, userName);
                                             message.SetBotPerUserInConversationData("response", wrongResponse);
                                             break;
                                         case Mark.Typo:
@@ -166,7 +165,7 @@ namespace Neodenit.Memento.Web.Controllers.Api
             }
         }
 
-        private async Task<string> GetResponseForRightAnswer(Message message, Deck deck, AnswerCardViewModel card, string username)
+        private async Task<string> GetResponseForRightAnswer(Message message, AnswerCardViewModel card, string userName)
         {
             var rightMessage = "**You are right!**";
             var commentMessage = "Comment:";
@@ -178,17 +177,17 @@ namespace Neodenit.Memento.Web.Controllers.Api
             var correctAnswerMessage = "Correct answer: " + card.ShortAnswer;
             var userAnswerMessage = "Your answer: " + card.UserAnswer;
 
-            await schedulerService.PromoteCloze(deck, Delays.Next, username);
+            await schedulerService.PromoteClozeAsync(card.ID, Delays.Next, userName);
 
             var nextQuestionMessage = "**Next question:**";
-            var nextQuestion = await GetNextQuestion(message, username);
+            var nextQuestion = await GetNextQuestion(message, userName);
 
             var response = string.Join(delimiter, rightMessage, Ruler, fullAnswerMessage, answer, Ruler, correctAnswerMessage, userAnswerMessage, Ruler, nextQuestionMessage, nextQuestion);
 
             return response;
         }
 
-        private async Task<string> GetResponseForWrongAnswer(Message message, Deck deck, AnswerCardViewModel card, string username)
+        private async Task<string> GetResponseForWrongAnswer(Message message, AnswerCardViewModel card, string userName)
         {
             var wrongMessage = "**You are wrong!**";
             var fullAnswerMessage = "Full answer:";
@@ -201,49 +200,38 @@ namespace Neodenit.Memento.Web.Controllers.Api
             var correctAnswerMessage = "Correct answer: " + card.ShortAnswer;
             var userAnswerMessage = "Your answer: " + card.UserAnswer;
 
-            await schedulerService.PromoteCloze(deck, Delays.Previous, username);
+            await schedulerService.PromoteClozeAsync(card.ID, Delays.Previous, userName);
 
             var nextQuestionMessage = "**Next question:**";
-            var nextQuestion = await GetNextQuestion(message, username);
+            var nextQuestion = await GetNextQuestion(message, userName);
 
             var response = string.Join(delimiter, wrongMessage, Ruler, fullAnswerMessage, answer, Ruler, correctAnswerMessage, userAnswerMessage, Ruler, nextQuestionMessage, nextQuestion);
 
             return response;
         }
 
-        private async Task<Card> GetNextCard(Message message, string username)
+        private async Task<string> GetNextQuestion(Message message, string userName)
         {
-            var dbDeck = await GetCurrentDeck(message);
-            var card = dbDeck.GetNextCard(username);
+            Guid deckID = GetDeckId(message);
+            var card = await cardsService.GetNextCardAsync(deckID, userName);
 
-            return card;
-        }
-
-        private async Task<string> GetNextQuestion(Message message, string username)
-        {
-            var card = await GetNextCard(message, username);
-            var cloze = card.GetNextCloze(username);
-            var cardWithQuestion = cardsService.GetCardWithQuestion(cloze);
+            var cardWithQuestion = await cardsService.GetCardWithQuestionAsync(card.ID, userName);
 
             return cardWithQuestion.Question;
         }
 
-        private async Task<AnswerCardViewModel> GetAnswer(Message message, string username)
+        private async Task<AnswerCardViewModel> GetAnswer(Message message, string userName)
         {
-            var card = await GetNextCard(message, username);
-            var cloze = card.GetNextCloze(username);
-            var cardWithAnswer = cardsService.GetCardWithAnswer(cloze);
+            Guid deckID = GetDeckId(message);
+            var card = await cardsService.GetNextCardAsync(deckID, userName);
+
+            var cardWithAnswer = await cardsService.GetCardWithAnswerAsync(card.ID, userName);
 
             return cardWithAnswer;
         }
 
-        private async Task<Deck> GetCurrentDeck(Message message)
-        {
-            var deckID = message.GetBotPerUserInConversationData<Guid>("deckID");
-            var dbDeck = await decksService.FindDeckAsync(deckID);
-
-            return dbDeck;
-        }
+        private static Guid GetDeckId(Message message) =>
+            message.GetBotPerUserInConversationData<Guid>("deckID");
 
         private Message HandleSystemMessage(Message message)
         {

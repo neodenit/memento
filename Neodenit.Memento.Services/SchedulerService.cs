@@ -1,24 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Neodenit.Memento.Common;
 using Neodenit.Memento.Interfaces;
-using Neodenit.Memento.Models.DataModels;
 using Neodenit.Memento.Models.Enums;
+using Neodenit.Memento.Models.ViewModels;
 
 namespace Neodenit.Memento.Services
 {
     public class SchedulerService : ISchedulerService
     {
+        private readonly IMapper mapper;
         private readonly IMementoRepository repository;
         private readonly ISchedulerOperationService scheduler;
 
         private readonly Dictionary<DelayModes, Delays> delayMap;
 
-        public SchedulerService(IMementoRepository repository, ISchedulerOperationService scheduler)
+        public SchedulerService(IMapper mapper, IMementoRepository repository, ISchedulerOperationService scheduler)
         {
-            this.repository = repository;
-            this.scheduler = scheduler;
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            this.scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
 
             delayMap = new Dictionary<DelayModes, Delays>
             {
@@ -30,16 +33,23 @@ namespace Neodenit.Memento.Services
         public Delays GetDelayForWrongAnswer(DelayModes delayMode) =>
             delayMap[delayMode];
 
-        public async Task PromoteCloze(Deck deck, Delays delay, string username)
+        public async Task<ViewCardViewModel> PromoteClozeAsync(Guid cardId, Delays delay, string userName)
         {
-            repository.PromoteCloze(deck, delay, username);
+            var dbCard = await repository.FindCardAsync(cardId);
+            var deck = dbCard.Deck;
+
+            repository.PromoteCloze(deck, delay, userName);
 
             await repository.SaveChangesAsync();
+
+            var nextCard = deck.GetNextCard(userName);
+            var viewModel = mapper.Map<ViewCardViewModel>(nextCard);
+            return viewModel;
         }
 
-        public async Task ShuffleNewClozes(Guid deckID, string username)
+        public async Task ShuffleNewClozes(Guid deckId, string username)
         {
-            var deck = await repository.FindDeckAsync(deckID);
+            var deck = await repository.FindDeckAsync(deckId);
 
             var clozes = deck.GetRepetitions(username);
 

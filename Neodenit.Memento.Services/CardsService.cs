@@ -23,76 +23,22 @@ namespace Neodenit.Memento.Services
             this.evaluator = evaluator ?? throw new ArgumentNullException(nameof(evaluator));
         }
 
-        public async Task AddAltAnswer(Cloze cloze, string answer)
+        public async Task<ViewCardViewModel> FindCardAsync(Guid id)
         {
-            var card = cloze.Card;
-
-            card.Text = converter.AddAltAnswer(card.Text, cloze.Label, answer);
-
-            await repository.SaveChangesAsync();
-        }
-
-        public AnswerCardViewModel GetCardWithQuestion(Cloze cloze)
-        {
-            var card = cloze.Card;
-            var question = converter.GetQuestion(card.Text, cloze.Label);
-
-            var viewModel = mapper.Map<Card, AnswerCardViewModel>(card, opt =>
-                                opt.AfterMap((src, dest) =>
-                                {
-                                    dest.Question = question;
-                                }));
-
+            var card = await repository.FindCardAsync(id);
+            var viewModel = mapper.Map<ViewCardViewModel>(card);
             return viewModel;
         }
 
-        public AnswerCardViewModel GetCardWithAnswer(Cloze cloze)
+        public async Task<ViewCardViewModel> GetNextCardAsync(Guid deckId, string userName)
         {
-            var card = cloze.Card;
-            var fullAnswer = converter.GetFullAnswer(card.Text, cloze.Label);
+            var deck = await repository.FindDeckAsync(deckId);
 
-            var viewModel = mapper.Map<Card, AnswerCardViewModel>(card, opt =>
-                                opt.AfterMap((src, dest) =>
-                                {
-                                    dest.FullAnswer = fullAnswer;
-                                }));
-
-            return viewModel;
-        }
-
-        public AnswerCardViewModel EvaluateCard(Cloze cloze, string userAnswer)
-        {
-            var card = cloze.Card;
-
-            var question = converter.GetQuestion(card.Text, cloze.Label);
-            var fullAnswer = converter.GetFullAnswer(card.Text, cloze.Label);
-            var correctAnswer = converter.GetShortAnswer(card.Text, cloze.Label);
-
-            var mark = evaluator.Evaluate(correctAnswer, userAnswer);
-
-            var viewModel = mapper.Map<Card, AnswerCardViewModel>(card, opt =>
-                                opt.AfterMap((src, dest) =>
-                                {
-                                    dest.Mark = mark;
-                                    dest.Question = question;
-                                    dest.FullAnswer = fullAnswer;
-                                    dest.ShortAnswer = correctAnswer;
-                                    dest.UserAnswer = userAnswer;
-                                }));
-
-            return viewModel;
-        }
-
-        public Task<Card> FindCardAsync(Guid id) =>
-            repository.FindCardAsync(id);
-
-        public async Task<Card> GetNextCardAsync(Guid deckID, string username)
-        {
-            var dbDeck = await repository.FindDeckAsync(deckID);
-
-            if (dbDeck.GetValidCards().Any())
+            if (deck.GetValidCards().Any())
             {
-                return dbDeck.GetNextCard(username);
+                var card = deck.GetNextCard(userName);
+                var viewModel = mapper.Map<ViewCardViewModel>(card);
+                return viewModel;
             }
             else
             {
@@ -126,7 +72,7 @@ namespace Neodenit.Memento.Services
 
         public async Task UpdateCard(EditCardViewModel card)
         {
-            var dbCard = await FindCardAsync(card.ID);
+            var dbCard = await repository.FindCardAsync(card.ID);
             var clozes = converter.GetClozeNames(dbCard.Text);
 
             dbCard.Text = card.Text;
@@ -146,7 +92,7 @@ namespace Neodenit.Memento.Services
 
         public async Task DeleteCard(Guid id)
         {
-            var card = await FindCardAsync(id);
+            var card = await repository.FindCardAsync(id);
 
             if (card.IsDeleted)
             {
@@ -162,7 +108,7 @@ namespace Neodenit.Memento.Services
 
         public async Task RestoreCard(Guid id)
         {
-            var card = await FindCardAsync(id);
+            var card = await repository.FindCardAsync(id);
 
             card.IsDeleted = false;
 
@@ -174,6 +120,95 @@ namespace Neodenit.Memento.Services
             var card = await repository.FindCardAsync(repetitionCardId);
             var isValid = card?.ReadingCardId == readingCardId;
             return isValid;
+        }
+
+        public async Task<ClozeViewModel> GetNextClozeAsync(Guid cardId, string userName)
+        {
+            var card = await repository.FindCardAsync(cardId);
+            var cloze = card.GetNextCloze(userName);
+
+            var viewModel = mapper.Map<Cloze, ClozeViewModel>(cloze, opt =>
+                                opt.AfterMap((src, dest) =>
+                                {
+                                    var repetition = cloze.GetUserRepetition(userName);
+
+                                    dest.Position = repetition.Position;
+                                    dest.IsNew = repetition.IsNew;
+                                    dest.LastDelay = repetition.LastDelay;
+                                }));
+
+            return viewModel;
+        }
+
+        public async Task<AnswerCardViewModel> GetCardWithAnswerAsync(Guid cardId, string userName)
+        {
+            var card = await repository.FindCardAsync(cardId);
+            var cloze = card.GetNextCloze(userName);
+            var fullAnswer = converter.GetFullAnswer(card.Text, cloze.Label);
+
+            var viewModel = mapper.Map<Card, AnswerCardViewModel>(card, opt =>
+                                opt.AfterMap((src, dest) =>
+                                {
+                                    dest.FullAnswer = fullAnswer;
+                                }));
+
+            return viewModel;
+        }
+
+        public async Task<AnswerCardViewModel> GetCardWithQuestionAsync(Guid cardId, string userName)
+        {
+            var card = await repository.FindCardAsync(cardId);
+            var cloze = card.GetNextCloze(userName);
+            var question = converter.GetQuestion(card.Text, cloze.Label);
+
+            var viewModel = mapper.Map<Card, AnswerCardViewModel>(card, opt =>
+                                opt.AfterMap((src, dest) =>
+                                {
+                                    dest.Question = question;
+                                }));
+
+            return viewModel;
+        }
+
+        public async Task AddAltAnswerAsync(Guid cardId, string altAnswer, string userName)
+        {
+            var card = await repository.FindCardAsync(cardId);
+            var cloze = card.GetNextCloze(userName);
+
+            card.Text = converter.AddAltAnswer(card.Text, cloze.Label, altAnswer);
+
+            await repository.SaveChangesAsync();
+        }
+
+        public async Task<AnswerCardViewModel> EvaluateCardAsync(Guid cardId, string userAnswer, string userName)
+        {
+            var card = await repository.FindCardAsync(cardId);
+            var cloze = card.GetNextCloze(userName);
+
+            var question = converter.GetQuestion(card.Text, cloze.Label);
+            var fullAnswer = converter.GetFullAnswer(card.Text, cloze.Label);
+            var correctAnswer = converter.GetShortAnswer(card.Text, cloze.Label);
+
+            var mark = evaluator.Evaluate(correctAnswer, userAnswer);
+
+            var viewModel = mapper.Map<Card, AnswerCardViewModel>(card, opt =>
+                                opt.AfterMap((src, dest) =>
+                                {
+                                    dest.Mark = mark;
+                                    dest.Question = question;
+                                    dest.FullAnswer = fullAnswer;
+                                    dest.ShortAnswer = correctAnswer;
+                                    dest.UserAnswer = userAnswer;
+                                }));
+
+            return viewModel;
+        }
+
+        public async Task<EditCardViewModel> FindEditCardAsync(Guid id)
+        {
+            var card = await repository.FindCardAsync(id);
+            var viewModel = mapper.Map<EditCardViewModel>(card);
+            return viewModel;
         }
     }
 }

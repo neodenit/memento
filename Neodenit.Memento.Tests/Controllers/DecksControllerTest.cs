@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -18,9 +17,9 @@ namespace Neodenit.Memento.Tests.Controllers
     public class DecksControllerTest
     {
         private DecksController sut;
-        private Mock<IMapper> mockMapper;
         private Mock<IMementoRepository> mockRepository;
         private Mock<IDecksService> mockDecksService;
+        private Mock<ICardsService> mockCardsService;
         private Mock<IStatisticsService> mockStatisticsService;
         private Mock<IExportImportService> mockExportImportService;
         private Mock<ISchedulerService> mockSchedulerService;
@@ -31,10 +30,10 @@ namespace Neodenit.Memento.Tests.Controllers
         [TestInitialize]
         public void Setup()
         {
-            mockMapper = new Mock<IMapper>();
             mockRepository = new Mock<IMementoRepository>();
 
             mockDecksService = new Mock<IDecksService>();
+            mockCardsService = new Mock<ICardsService>();
             mockStatisticsService = new Mock<IStatisticsService>();
             mockExportImportService = new Mock<IExportImportService>();
             mockSchedulerService = new Mock<ISchedulerService>();
@@ -42,7 +41,7 @@ namespace Neodenit.Memento.Tests.Controllers
             var mockContext = new Mock<ControllerContext>();
             mockContext.Setup(item => item.HttpContext.User.Identity.Name).Returns("user@server.com");
 
-            sut = new DecksController(mockMapper.Object, mockDecksService.Object, mockStatisticsService.Object, mockExportImportService.Object, mockSchedulerService.Object)
+            sut = new DecksController(mockDecksService.Object, mockCardsService.Object, mockStatisticsService.Object, mockExportImportService.Object, mockSchedulerService.Object)
             {
                 ControllerContext = mockContext.Object
             };
@@ -52,12 +51,13 @@ namespace Neodenit.Memento.Tests.Controllers
 
             mockDecksService.Setup(x => x.GetDeckWithStatViewModel(It.IsAny<Guid>(), It.IsAny<StatisticsViewModel>(), It.IsAny<string>())).ReturnsAsync(new DeckWithStatViewModel());
 
-            mockDecksService.Setup(x => x.FindDeckAsync(It.IsAny<Guid>())).Returns<Guid>(async x => await Task.FromResult(
-                new Deck
-                {
-                    ID = x,
-                    Title = "title",
-                    Cards = new List<Card>
+            var deckViewModel = new DeckViewModel();
+
+            var deck = new Deck
+            {
+                ID = deckId,
+                Title = "title",
+                Cards = new List<Card>
                     {
                         new Card
                         {
@@ -77,7 +77,10 @@ namespace Neodenit.Memento.Tests.Controllers
                             }
                         }
                     }
-                }));
+            };
+
+            mockDecksService.Setup(x => x.FindDeckAsync(It.IsAny<Guid>())).Returns<Guid>(async x =>
+                await Task.FromResult(new DeckViewModel { ID = x }));
 
             mockExportImportService.Setup(x => x.Export(It.IsAny<Guid>())).ReturnsAsync(string.Empty);
         }

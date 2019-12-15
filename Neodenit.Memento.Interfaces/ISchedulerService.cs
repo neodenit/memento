@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Neodenit.Memento.Common;
-using Neodenit.Memento.Models.DataModels;
 using Neodenit.Memento.Models.Enums;
+using Neodenit.Memento.Models.ViewModels;
 
 namespace Neodenit.Memento.Interfaces
 {
@@ -10,8 +10,8 @@ namespace Neodenit.Memento.Interfaces
     {
         Delays GetDelayForWrongAnswer(DelayModes delayMode);
 
-        Task PromoteCloze(Deck deck, Delays delay, string username);
+        Task<ViewCardViewModel> PromoteClozeAsync(Guid cardId, Delays delay, string userName);
 
-        Task ShuffleNewClozes(Guid deckID, string username);
+        Task ShuffleNewClozes(Guid deckId, string username);
     }
 }

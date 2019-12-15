@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,16 +16,16 @@ namespace Neodenit.Memento.Web.Controllers
     [Authorize]
     public class DecksController : Controller
     {
-        private readonly IMapper mapper;
         private readonly IDecksService decksService;
+        private readonly ICardsService cardsService;
         private readonly IStatisticsService statService;
         private readonly IExportImportService exportImportService;
         private readonly ISchedulerService schedulerService;
 
-        public DecksController(IMapper mapper, IDecksService decksService, IStatisticsService statService, IExportImportService exportImportService, ISchedulerService schedulerService)
+        public DecksController(IDecksService decksService, ICardsService cardsService, IStatisticsService statService, IExportImportService exportImportService, ISchedulerService schedulerService)
         {
-            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             this.decksService = decksService;
+            this.cardsService = cardsService ?? throw new ArgumentNullException(nameof(cardsService));
             this.statService = statService;
             this.exportImportService = exportImportService;
             this.schedulerService = schedulerService;
@@ -41,8 +39,8 @@ namespace Neodenit.Memento.Web.Controllers
 
             var viewModel = new DecksViewModel
             {
-                UserDecks = mapper.Map<IEnumerable<DeckViewModel>>(decks),
-                SharedDecks = mapper.Map<IEnumerable<DeckViewModel>>(sharedDecks),
+                UserDecks = decks,
+                SharedDecks = sharedDecks,
             };
 
             return View(viewModel);
@@ -74,8 +72,7 @@ namespace Neodenit.Memento.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Details(DeckViewModel deck)
         {
-            var dbDeck = await decksService.FindDeckAsync(deck.ID);
-            var card = dbDeck.GetNextCard(User.Identity.Name);
+            var card = await cardsService.GetNextCardAsync(deck.ID, User.Identity.Name);
 
             if (card != null)
             {
@@ -83,7 +80,7 @@ namespace Neodenit.Memento.Web.Controllers
             }
             else
             {
-                return View("EmptyDeck", mapper.Map<DeckViewModel>(dbDeck));
+                return View("EmptyDeck", deck);
             }
         }
 
@@ -118,9 +115,8 @@ namespace Neodenit.Memento.Web.Controllers
         public async Task<ActionResult> Edit([CheckDeckExistence, CheckDeckOwner] Guid id)
         {
             var deck = await decksService.FindDeckAsync(id);
-            var viewModel = mapper.Map<DeckViewModel>(deck);
 
-            return View(viewModel);
+            return View(deck);
         }
 
         // POST: Decks/Edit/5
