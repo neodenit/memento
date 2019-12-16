@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
-namespace Neodenit.Memento.Models.DataModels
+namespace Neodenit.Memento.DataAccess.API.DataModels
 {
     public class UserRepetition
     {

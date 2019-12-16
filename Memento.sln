@@ -48,7 +48,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neodenit.Memento.Common", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neodenit.Memento.Services", "Neodenit.Memento.Services\Neodenit.Memento.Services.csproj", "{D9EF1378-44CD-46B1-ADFD-EDD5582E1E70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neodenit.Memento.Tests", "Neodenit.Memento.Tests\Neodenit.Memento.Tests.csproj", "{2DA99CF9-CA30-42A7-B7FD-3D8A06BBF411}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neodenit.Memento.Tests", "Neodenit.Memento.Tests\Neodenit.Memento.Tests.csproj", "{2DA99CF9-CA30-42A7-B7FD-3D8A06BBF411}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neodenit.Memento.DataAccess.API", "Neodenit.Memento.DataAccess.API\Neodenit.Memento.DataAccess.API.csproj", "{640F9C38-E0E0-400C-9AC9-F6E8650FD4FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -136,6 +138,10 @@ Global
 		{2DA99CF9-CA30-42A7-B7FD-3D8A06BBF411}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DA99CF9-CA30-42A7-B7FD-3D8A06BBF411}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DA99CF9-CA30-42A7-B7FD-3D8A06BBF411}.Release|Any CPU.Build.0 = Release|Any CPU
+		{640F9C38-E0E0-400C-9AC9-F6E8650FD4FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{640F9C38-E0E0-400C-9AC9-F6E8650FD4FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{640F9C38-E0E0-400C-9AC9-F6E8650FD4FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{640F9C38-E0E0-400C-9AC9-F6E8650FD4FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

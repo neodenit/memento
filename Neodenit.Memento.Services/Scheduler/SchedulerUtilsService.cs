@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Neodenit.Memento.Common;
 using Neodenit.Memento.Interfaces;
-using Neodenit.Memento.Models.DataModels;
+using Neodenit.Memento.DataAccess.API.DataModels;
+using Neodenit.Memento.Common.Enums;
 
 namespace Neodenit.Memento.Services.Scheduler
 {

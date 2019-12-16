@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Neodenit.Memento.Common;
+using Neodenit.Memento.Common.Enums;
+using Neodenit.Memento.DataAccess.API;
 using Neodenit.Memento.Interfaces;
-using Neodenit.Memento.Models.Enums;
 using Neodenit.Memento.Models.ViewModels;
 
 namespace Neodenit.Memento.Services

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using MinimumEditDistance;
 using Neodenit.Memento.Common;
+using Neodenit.Memento.Common.Enums;
 using Neodenit.Memento.Interfaces;
-using Neodenit.Memento.Models.Enums;
 
 namespace Neodenit.Memento.Services.Evaluators
 {

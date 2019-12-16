@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Neodenit.Memento.Models.DataModels;
+using Neodenit.Memento.DataAccess.API.DataModels;
 using Neodenit.Memento.Models.ViewModels;
 
 namespace Neodenit.Memento.Interfaces

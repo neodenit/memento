@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Neodenit.Memento.Models.DataModels;
+using Neodenit.Memento.DataAccess.API.DataModels;
 
-namespace Neodenit.Memento.Models.Helpers
+namespace Neodenit.Memento.Services
 {
     public class ModelHelpers
     {

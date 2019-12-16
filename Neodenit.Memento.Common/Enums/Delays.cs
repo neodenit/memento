@@ -1,4 +1,4 @@
-﻿namespace Neodenit.Memento.Common
+﻿namespace Neodenit.Memento.Common.Enums
 {
     public enum Delays
     {

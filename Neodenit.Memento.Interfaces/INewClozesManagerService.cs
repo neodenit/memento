@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Neodenit.Memento.Models.DataModels;
+using Neodenit.Memento.DataAccess.API.DataModels;
 
 namespace Neodenit.Memento.Interfaces
 {

@@ -6,7 +6,7 @@ using System.Linq;
 using Neodenit.Memento.Common;
 using Newtonsoft.Json;
 
-namespace Neodenit.Memento.Models.DataModels
+namespace Neodenit.Memento.DataAccess.API.DataModels
 {
     [Serializable]
     public class Card

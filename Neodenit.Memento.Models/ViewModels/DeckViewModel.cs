@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Neodenit.Memento.Models.Enums;
+using Neodenit.Memento.Common.Enums;
 
 namespace Neodenit.Memento.Models.ViewModels
 {

@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Neodenit.Memento.Interfaces;
-using Neodenit.Memento.Models.DataModels;
+using Neodenit.Memento.DataAccess.API;
+using Neodenit.Memento.DataAccess.API.DataModels;
 using Neodenit.Memento.Models.ViewModels;
 using Neodenit.Memento.Services;
 

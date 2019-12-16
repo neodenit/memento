@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Neodenit.Memento.Common;
-using Neodenit.Memento.Models.Enums;
+using Neodenit.Memento.Common.Enums;
 
-namespace Neodenit.Memento.Models.DataModels
+namespace Neodenit.Memento.DataAccess.API.DataModels
 {
     [Serializable]
     public class Deck

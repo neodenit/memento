@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Neodenit.Memento.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Neodenit.Memento.DataAccess.API;
 
 namespace Neodenit.Memento.Attributes
 {

@@ -2,8 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Neodenit.Memento.DataAccess.API;
+using Neodenit.Memento.DataAccess.API.DataModels;
 using Neodenit.Memento.Interfaces;
-using Neodenit.Memento.Models.DataModels;
 using Neodenit.Memento.Models.ViewModels;
 
 namespace Neodenit.Memento.Services

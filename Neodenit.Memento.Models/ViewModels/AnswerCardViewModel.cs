@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Neodenit.Memento.Common.App_GlobalResources;
-using Neodenit.Memento.Models.Enums;
+using Neodenit.Memento.Common.Enums;
 
 namespace Neodenit.Memento.Models.ViewModels
 {

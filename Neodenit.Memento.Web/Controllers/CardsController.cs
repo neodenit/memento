@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Neodenit.Memento.Attributes;
 using Neodenit.Memento.Common;
+using Neodenit.Memento.Common.Enums;
 using Neodenit.Memento.Interfaces;
-using Neodenit.Memento.Models.Enums;
 using Neodenit.Memento.Models.ViewModels;
 using Newtonsoft.Json;
 

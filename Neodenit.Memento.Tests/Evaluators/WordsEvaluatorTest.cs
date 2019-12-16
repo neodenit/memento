@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Neodenit.Memento.Models.Enums;
+using Neodenit.Memento.Common.Enums;
 using Neodenit.Memento.Services.Evaluators;
 
 namespace Neodenit.Memento.Tests.Evaluators

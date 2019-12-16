@@ -1,4 +1,4 @@
-﻿namespace Neodenit.Memento.Models.Enums
+﻿namespace Neodenit.Memento.Common.Enums
 {
     public enum Mark
     {

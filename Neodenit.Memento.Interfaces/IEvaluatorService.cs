@@ -1,4 +1,4 @@
-﻿using Neodenit.Memento.Models.Enums;
+﻿using Neodenit.Memento.Common.Enums;
 
 namespace Neodenit.Memento.Interfaces
 {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Neodenit.Memento.Common;
-using Neodenit.Memento.Models.Enums;
+using Neodenit.Memento.Common.Enums;
 using Neodenit.Memento.Models.ViewModels;
 
 namespace Neodenit.Memento.Interfaces

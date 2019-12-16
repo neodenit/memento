@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Neodenit.Memento.DataAccess.API;
+using Neodenit.Memento.DataAccess.API.DataModels;
 using Neodenit.Memento.Interfaces;
-using Neodenit.Memento.Models.DataModels;
 using Newtonsoft.Json;
 
 namespace Neodenit.Memento.Services

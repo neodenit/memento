@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Neodenit.Memento.Models.DataModels
+namespace Neodenit.Memento.DataAccess.API.DataModels
 {
     public class BackupModel
     {

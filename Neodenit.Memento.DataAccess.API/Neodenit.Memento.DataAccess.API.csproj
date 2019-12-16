@@ -5,9 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Neodenit.Memento.Common\Neodenit.Memento.Common.csproj" />
-    <ProjectReference Include="..\Neodenit.Memento.DataAccess.API\Neodenit.Memento.DataAccess.API.csproj" />
-    <ProjectReference Include="..\Neodenit.Memento.Models\Neodenit.Memento.Models.csproj" />
   </ItemGroup>
 
 </Project>

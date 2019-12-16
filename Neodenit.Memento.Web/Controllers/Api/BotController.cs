@@ -5,9 +5,8 @@ using System.Web.Http;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Microsoft.EntityFrameworkCore;
-using Neodenit.Memento.Common;
+using Neodenit.Memento.Common.Enums;
 using Neodenit.Memento.Interfaces;
-using Neodenit.Memento.Models.Enums;
 using Neodenit.Memento.Models.ViewModels;
 using Neodenit.Memento.Web.Data;
 

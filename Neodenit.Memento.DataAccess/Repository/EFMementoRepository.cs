@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Neodenit.Memento.Common;
+using Neodenit.Memento.Common.Enums;
 using Neodenit.Memento.DataAccess;
+using Neodenit.Memento.DataAccess.API;
+using Neodenit.Memento.DataAccess.API.DataModels;
 using Neodenit.Memento.Interfaces;
-using Neodenit.Memento.Models.DataModels;
 
 namespace Memento.DataAccess.Repository
 {

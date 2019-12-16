@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Neodenit.Memento.Models.DataModels
+namespace Neodenit.Memento.DataAccess.API.DataModels
 {
     public class Answer
     {
