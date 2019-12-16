@@ -66,6 +66,14 @@ namespace Neodenit.Memento.Services
             return viewModel;
         }
 
+        public DeckViewModel FindDeck(Guid id)
+        {
+            var deck = repository.FindDeck(id);
+
+            var viewModel = mapper.Map<DeckViewModel>(deck);
+            return viewModel;
+        }
+
         public async Task CreateDeck(DeckViewModel deck, string userName)
         {
             var newDeck = new Deck

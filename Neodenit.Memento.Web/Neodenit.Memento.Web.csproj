@@ -31,7 +31,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\Neodenit.Memento.Attributes\Neodenit.Memento.Attributes.csproj" />
+    <ProjectReference Include="..\Neodenit.Memento.Interfaces\Neodenit.Memento.Interfaces.csproj" />
   </ItemGroup>
 
 

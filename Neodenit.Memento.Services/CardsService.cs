@@ -31,6 +31,13 @@ namespace Neodenit.Memento.Services
             return viewModel;
         }
 
+        public ViewCardViewModel FindCard(Guid id)
+        {
+            var card = repository.FindCard(id);
+            var viewModel = mapper.Map<ViewCardViewModel>(card);
+            return viewModel;
+        }
+
         public async Task<ViewCardViewModel> GetNextCardAsync(Guid deckId, string userName)
         {
             var deck = await repository.FindDeckAsync(deckId);

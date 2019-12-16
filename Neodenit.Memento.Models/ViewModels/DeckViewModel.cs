@@ -34,5 +34,7 @@ namespace Neodenit.Memento.Models.ViewModels
         public int CardsCount { get; set; }
 
         public int ValidCardsCount { get; set; }
+
+        public string Owner { get; set; }
     }
 }

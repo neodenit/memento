@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Neodenit.Memento.Attributes;
+using Neodenit.Memento.Web.Attributes;
 using Neodenit.Memento.Common;
 using Neodenit.Memento.Interfaces;
 using Neodenit.Memento.Models.ViewModels;

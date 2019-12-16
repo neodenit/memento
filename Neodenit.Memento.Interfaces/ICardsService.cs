@@ -10,6 +10,8 @@ namespace Neodenit.Memento.Interfaces
 
         Task<ViewCardViewModel> FindCardAsync(Guid id);
 
+        ViewCardViewModel FindCard(Guid id);
+
         Task AddAltAnswerAsync(Guid cardId, string altAnswer, string userName);
 
         Task<AnswerCardViewModel> GetCardWithQuestionAsync(Guid cardId, string userName);

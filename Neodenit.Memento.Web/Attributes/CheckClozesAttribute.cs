@@ -3,7 +3,7 @@ using System.Linq;
 using Neodenit.Memento.Interfaces;
 using Neodenit.Memento.Models.ViewModels;
 
-namespace Neodenit.Memento.Attributes
+namespace Neodenit.Memento.Web.Attributes
 {
     public class CheckClozesAttribute : ValidationAttribute
     {

@@ -15,6 +15,8 @@ namespace Neodenit.Memento.Interfaces
 
         Task<DeckViewModel> FindDeckAsync(Guid id);
 
+        DeckViewModel FindDeck(Guid id);
+
         Task UpdateDeck(Guid id, string title, int startDelay, double coeff, bool previewAnswer);
 
         Task CreateDeck(DeckViewModel deck, string userName);

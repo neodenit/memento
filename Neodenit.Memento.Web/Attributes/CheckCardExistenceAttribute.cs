@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Neodenit.Memento.DataAccess.API;
+using Neodenit.Memento.Interfaces;
 
-namespace Neodenit.Memento.Attributes
+namespace Neodenit.Memento.Web.Attributes
 {
     public class CheckCardExistenceAttribute : ValidationAttribute
     {
@@ -10,11 +10,11 @@ namespace Neodenit.Memento.Attributes
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var repository = validationContext.GetService(typeof(IMementoRepository)) as IMementoRepository;
+            var service = validationContext.GetService(typeof(ICardsService)) as ICardsService;
 
             var cardID = (Guid)value;
 
-            var card = repository.FindCard(cardID);
+            var card = service.FindCard(cardID);
 
             return card != null ? ValidationResult.Success : FailedValidationResult;
         }

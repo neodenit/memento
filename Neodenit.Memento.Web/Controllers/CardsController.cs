@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Neodenit.Memento.Attributes;
+using Neodenit.Memento.Web.Attributes;
 using Neodenit.Memento.Common;
 using Neodenit.Memento.Common.Enums;
 using Neodenit.Memento.Interfaces;

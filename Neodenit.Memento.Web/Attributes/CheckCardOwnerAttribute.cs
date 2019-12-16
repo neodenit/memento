@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
-using Neodenit.Memento.DataAccess.API;
+using Neodenit.Memento.Interfaces;
 
-namespace Neodenit.Memento.Attributes
+namespace Neodenit.Memento.Web.Attributes
 {
     public class CheckCardOwnerAttribute : ValidationAttribute
     {
@@ -11,14 +11,22 @@ namespace Neodenit.Memento.Attributes
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var repository = validationContext.GetService(typeof(IMementoRepository)) as IMementoRepository;
+            var cardService = validationContext.GetService(typeof(ICardsService)) as ICardsService;
+            var deckService = validationContext.GetService(typeof(IDecksService)) as IDecksService;
             var httpContextAccessor = validationContext.GetService(typeof(IHttpContextAccessor)) as IHttpContextAccessor;
 
             var cardID = (Guid)value;
 
-            var card = repository.FindCard(cardID);
+            var card = cardService.FindCard(cardID);
 
-            return card == null || card.Deck.Owner == httpContextAccessor.HttpContext.User.Identity.Name
+            if (card == null)
+            {
+                return ValidationResult.Success;
+            }
+
+            var deck = deckService.FindDeck(card.DeckID);
+
+            return deck.Owner == httpContextAccessor.HttpContext.User.Identity.Name
                 ? ValidationResult.Success
                 : FailedValidationResult;
         }
