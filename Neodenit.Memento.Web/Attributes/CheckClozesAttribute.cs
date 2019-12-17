@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Neodenit.Memento.Interfaces;
-using Neodenit.Memento.Models.ViewModels;
+using Neodenit.Memento.Common.ViewModels;
+using Neodenit.Memento.Services.API;
 
 namespace Neodenit.Memento.Web.Attributes
 {

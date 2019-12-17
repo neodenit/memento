@@ -2,8 +2,8 @@
 using System.Diagnostics;
 using System.Linq;
 using Neodenit.Memento.Common;
-using Neodenit.Memento.DataAccess.API.DataModels;
-using Neodenit.Memento.Interfaces;
+using Neodenit.Memento.Common.DataModels;
+using Neodenit.Memento.Services.API;
 
 namespace Neodenit.Memento.Services
 {

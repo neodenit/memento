@@ -6,8 +6,8 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Microsoft.EntityFrameworkCore;
 using Neodenit.Memento.Common.Enums;
-using Neodenit.Memento.Interfaces;
-using Neodenit.Memento.Models.ViewModels;
+using Neodenit.Memento.Common.ViewModels;
+using Neodenit.Memento.Services.API;
 using Neodenit.Memento.Web.Data;
 
 namespace Neodenit.Memento.Web.Controllers.Api

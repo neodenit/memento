@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Neodenit.Memento.DataAccess.API.DataModels;
+using Neodenit.Memento.Common.DataModels;
 
 namespace Neodenit.Memento.DataAccess
 {

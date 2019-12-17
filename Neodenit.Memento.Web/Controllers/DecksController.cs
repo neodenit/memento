@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Neodenit.Memento.Web.Attributes;
 using Neodenit.Memento.Common;
-using Neodenit.Memento.Interfaces;
-using Neodenit.Memento.Models.ViewModels;
+using Neodenit.Memento.Common.ViewModels;
+using Neodenit.Memento.Services.API;
+using Neodenit.Memento.Web.Attributes;
 
 namespace Neodenit.Memento.Web.Controllers
 {

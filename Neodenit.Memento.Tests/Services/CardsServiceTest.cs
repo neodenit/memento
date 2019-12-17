@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Neodenit.Memento.Common.DataModels;
 using Neodenit.Memento.DataAccess.API;
-using Neodenit.Memento.DataAccess.API.DataModels;
-using Neodenit.Memento.Interfaces;
 using Neodenit.Memento.Services;
+using Neodenit.Memento.Services.API;
 
 namespace Neodenit.Memento.Tests.Services
 {

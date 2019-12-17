@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Neodenit.Memento.DataAccess.API.DataModels;
+using Neodenit.Memento.Common.DataModels;
 
 namespace Neodenit.Memento.Services
 {

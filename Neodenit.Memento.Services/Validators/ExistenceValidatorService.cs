@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Text.RegularExpressions;
-using Neodenit.Memento.Interfaces;
+using Neodenit.Memento.Services.API;
 
 namespace Neodenit.Memento.Services.Validators
 {

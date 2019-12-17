@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Neodenit.Memento.Web.Attributes;
 using Neodenit.Memento.Common;
 using Neodenit.Memento.Common.Enums;
-using Neodenit.Memento.Interfaces;
-using Neodenit.Memento.Models.ViewModels;
+using Neodenit.Memento.Common.ViewModels;
+using Neodenit.Memento.Services.API;
+using Neodenit.Memento.Web.Attributes;
 using Newtonsoft.Json;
 
 namespace Neodenit.Memento.Web.Controllers

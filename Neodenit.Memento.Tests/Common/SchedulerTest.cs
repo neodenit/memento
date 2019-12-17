@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Neodenit.Memento.DataAccess.API.DataModels;
-using Neodenit.Memento.Interfaces;
+using Neodenit.Memento.Common.DataModels;
 using Neodenit.Memento.Services;
+using Neodenit.Memento.Services.API;
 using Neodenit.Memento.Services.Scheduler;
 
 namespace Neodenit.Memento.Tests

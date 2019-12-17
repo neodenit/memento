@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Neodenit.Memento.Common.DataModels;
+using Neodenit.Memento.Common.ViewModels;
 using Neodenit.Memento.DataAccess.API;
-using Neodenit.Memento.DataAccess.API.DataModels;
-using Neodenit.Memento.Interfaces;
-using Neodenit.Memento.Models.ViewModels;
+using Neodenit.Memento.Services.API;
 
 namespace Neodenit.Memento.Services
 {

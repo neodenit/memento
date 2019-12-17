@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using Neodenit.Memento.Interfaces;
+using Neodenit.Memento.Services.API;
 using static Neodenit.Memento.Common.ConverterPatterns;
 
 namespace Neodenit.Memento.Services.Converter

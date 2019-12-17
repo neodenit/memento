@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Neodenit.Memento.Common.Enums;
-using Neodenit.Memento.DataAccess.API.DataModels;
+using Neodenit.Memento.Common.DataModels;
 
 namespace Neodenit.Memento.DataAccess.API
 {

@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Neodenit.Memento.Models.ViewModels;
+using Neodenit.Memento.Common.ViewModels;
 
 namespace Neodenit.Memento.Web.Controllers
 {

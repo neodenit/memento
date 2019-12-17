@@ -7,8 +7,8 @@ using Neodenit.Memento.Common;
 using Neodenit.Memento.Common.Enums;
 using Neodenit.Memento.DataAccess;
 using Neodenit.Memento.DataAccess.API;
-using Neodenit.Memento.DataAccess.API.DataModels;
-using Neodenit.Memento.Interfaces;
+using Neodenit.Memento.Common.DataModels;
+using Neodenit.Memento.Services.API;
 
 namespace Memento.DataAccess.Repository
 {

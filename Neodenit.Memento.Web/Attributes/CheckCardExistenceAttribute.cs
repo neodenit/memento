@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Neodenit.Memento.Interfaces;
+using Neodenit.Memento.Services.API;
 
 namespace Neodenit.Memento.Web.Attributes
 {

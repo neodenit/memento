@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Neodenit.Memento.Common.DataModels;
 using Neodenit.Memento.DataAccess.API;
-using Neodenit.Memento.DataAccess.API.DataModels;
 using Neodenit.Memento.Services;
 
 namespace Neodenit.Memento.Tests.Services

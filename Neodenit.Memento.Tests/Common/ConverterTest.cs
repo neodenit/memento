@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Neodenit.Memento.Interfaces;
+using Neodenit.Memento.Services.API;
 using Neodenit.Memento.Services.Converter;
 
 namespace Neodenit.Memento.Tests

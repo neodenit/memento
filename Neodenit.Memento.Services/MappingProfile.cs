@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using AutoMapper;
-using Neodenit.Memento.DataAccess.API.DataModels;
-using Neodenit.Memento.Models.ViewModels;
+using Neodenit.Memento.Common.DataModels;
+using Neodenit.Memento.Common.ViewModels;
 
 namespace Neodenit.Memento.Services
 {
