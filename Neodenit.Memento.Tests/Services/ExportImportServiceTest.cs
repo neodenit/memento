@@ -20,6 +20,7 @@ namespace Neodenit.Memento.Tests.Services
         private Mock<IMementoRepository> mockRepository;
         private Mock<IConverterService> mockConverter;
         private Mock<IValidatorService> mockValidator;
+        private Mock<IClozesService> mockClozesService;
 
         [TestInitialize]
         public void Setup()
@@ -27,8 +28,9 @@ namespace Neodenit.Memento.Tests.Services
             mockRepository = new Mock<IMementoRepository>();
             mockConverter = new Mock<IConverterService>();
             mockValidator = new Mock<IValidatorService>();
+            mockClozesService = new Mock<IClozesService>();
 
-            sut = new ExportImportService(mockRepository.Object, mockConverter.Object, mockValidator.Object);
+            sut = new ExportImportService(mockRepository.Object, mockConverter.Object, mockValidator.Object, mockClozesService.Object);
 
             mockRepository
                 .Setup(x => x.FindDeckAsync(It.IsAny<Guid>()))

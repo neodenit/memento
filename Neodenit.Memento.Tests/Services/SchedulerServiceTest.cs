@@ -19,6 +19,7 @@ namespace Neodenit.Memento.Tests.Services
         private Mock<IMapper> mockMapper;
         private Mock<IMementoRepository> mockRepository;
         private Mock<ISchedulerOperationService> mockScheduler;
+        private Mock<IClozesService> mockClozesService;
 
         private Guid deckId = new Guid("00000000-0000-0000-0000-000000000001");
 
@@ -28,8 +29,9 @@ namespace Neodenit.Memento.Tests.Services
             mockMapper = new Mock<IMapper>();
             mockRepository = new Mock<IMementoRepository>();
             mockScheduler = new Mock<ISchedulerOperationService>();
+            mockClozesService = new Mock<IClozesService>();
 
-            sut = new SchedulerService(mockMapper.Object, mockRepository.Object, mockScheduler.Object);
+            sut = new SchedulerService(mockMapper.Object, mockRepository.Object, mockScheduler.Object, mockClozesService.Object);
 
             mockRepository.Setup(x => x.FindDeckAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(
@@ -61,7 +63,7 @@ namespace Neodenit.Memento.Tests.Services
             await sut.PromoteClozeAsync(deckId, delay, username);
 
             // Assert
-            mockRepository.Verify(x => x.PromoteCloze(deck, delay, username), Times.Once);
+            mockClozesService.Verify(x => x.PromoteCloze(deck, delay, username), Times.Once);
             mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
         }
 

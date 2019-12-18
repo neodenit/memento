@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Neodenit.Memento.Common;
-using Neodenit.Memento.Common.Enums;
+using Neodenit.Memento.Common.DataModels;
 using Neodenit.Memento.DataAccess;
 using Neodenit.Memento.DataAccess.API;
-using Neodenit.Memento.Common.DataModels;
-using Neodenit.Memento.Services.API;
 
 namespace Memento.DataAccess.Repository
 {
@@ -16,16 +13,9 @@ namespace Memento.DataAccess.Repository
     {
         private readonly MementoContext db;
 
-        private readonly ISchedulerOperationService scheduler;
-        private readonly ISiblingsManagerService siblingsManager;
-        private readonly INewClozesManagerService newCardsManager;
-
-        public EFMementoRepository(MementoContext mementoContext, ISchedulerOperationService scheduler, ISiblingsManagerService siblingsManager, INewClozesManagerService newCardsManager)
+        public EFMementoRepository(MementoContext mementoContext)
         {
             this.db = mementoContext ?? throw new ArgumentNullException(nameof(mementoContext));
-            this.scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
-            this.siblingsManager = siblingsManager ?? throw new ArgumentNullException(nameof(siblingsManager));
-            this.newCardsManager = newCardsManager ?? throw new ArgumentNullException(nameof(newCardsManager));
         }
 
         public async Task<IEnumerable<Deck>> GetAllDecksAsync() =>
@@ -103,40 +93,6 @@ namespace Memento.DataAccess.Repository
         public void RemoveAnswers() =>
             db.Answers.RemoveRange(db.Answers);
 
-        public async Task AddClozesAsync(Card card, IEnumerable<string> clozeNames)
-        {
-            var deck = card.Deck;
-            var users = card.GetUsers().Concat(deck.Owner).Distinct();
-
-            foreach (var clozeName in clozeNames)
-            {
-                var newCloze = new Cloze
-                {
-                    CardID = card.ID,
-                    Label = clozeName,
-                    ID = Guid.NewGuid()
-                };
-
-                card.Clozes.Add(newCloze);
-
-                foreach (var user in users)
-                {
-                    var repetition = new UserRepetition
-                    {
-                        ID = Guid.NewGuid(),
-                        UserName = user,
-                        ClozeID = newCloze.ID
-                    };
-
-                    var repetitions = deck.GetRepetitions(user);
-
-                    scheduler.PrepareForAdding(deck, repetitions, repetition);
-
-                    newCloze.UserRepetitions.Add(repetition);
-                }
-            }
-        }
-
         public void RemoveClozes(Card card, IEnumerable<string> clozeNames)
         {
             foreach (var clozeName in clozeNames)
@@ -164,23 +120,6 @@ namespace Memento.DataAccess.Repository
             };
 
             db.Answers.Add(answer);
-        }
-
-        public void PromoteCloze(Deck deck, Delays delay, string username)
-        {
-            var repetitions = deck.GetRepetitions(username);
-
-            if (Settings.Default.EnableSiblingsHandling)
-            {
-                siblingsManager.RearrangeSiblings(deck, repetitions);
-            }
-
-            if (Settings.Default.EnableNewCardsHandling)
-            {
-                newCardsManager.RearrangeNewRepetitions(deck, repetitions);
-            }
-
-            scheduler.PromoteRepetition(deck, repetitions, delay);
         }
 
         public Task SaveChangesAsync() =>

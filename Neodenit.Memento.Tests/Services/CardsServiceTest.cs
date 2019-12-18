@@ -20,6 +20,7 @@ namespace Neodenit.Memento.Tests.Services
         private Mock<IMementoRepository> mockRepository;
         private Mock<IConverterService> mockConverter;
         private Mock<IEvaluatorService> mockEvaluator;
+        private Mock<IClozesService> mockClozesService;
 
         private string userName = "user@server.com";
 
@@ -30,8 +31,9 @@ namespace Neodenit.Memento.Tests.Services
             mockRepository = new Mock<IMementoRepository>();
             mockConverter = new Mock<IConverterService>();
             mockEvaluator = new Mock<IEvaluatorService>();
+            mockClozesService = new Mock<IClozesService>();
 
-            sut = new CardsService(mockMapper.Object, mockRepository.Object, mockConverter.Object, mockEvaluator.Object);
+            sut = new CardsService(mockMapper.Object, mockRepository.Object, mockConverter.Object, mockEvaluator.Object, mockClozesService.Object);
 
             mockRepository.Setup(x => x.FindDeckAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(

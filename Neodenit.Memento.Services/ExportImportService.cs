@@ -13,21 +13,23 @@ namespace Neodenit.Memento.Services
     public class ExportImportService : IExportImportService
     {
         private readonly IMementoRepository repository;
-        private readonly IConverterService converter;
-        private readonly IValidatorService validator;
+        private readonly IConverterService converterService;
+        private readonly IValidatorService validatorService;
+        private readonly IClozesService clozesService;
 
-        public ExportImportService(IMementoRepository repository, IConverterService converter, IValidatorService validator)
+        public ExportImportService(IMementoRepository repository, IConverterService converterService, IValidatorService validatorService, IClozesService clozesService)
         {
-            this.repository = repository;
-            this.converter = converter;
-            this.validator = validator;
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            this.converterService = converterService ?? throw new ArgumentNullException(nameof(converterService));
+            this.validatorService = validatorService ?? throw new ArgumentNullException(nameof(validatorService));
+            this.clozesService = clozesService ?? throw new ArgumentNullException(nameof(clozesService));
         }
 
         public async Task<string> Export(Guid deckID)
         {
             var deck = await repository.FindDeckAsync(deckID);
             var cards = deck.GetValidCards();
-            var cardsForExport = from card in cards select converter.FormatForExport(card.Text, card.Comment);
+            var cardsForExport = from card in cards select converterService.FormatForExport(card.Text, card.Comment);
             var result = string.Join(Environment.NewLine, cardsForExport);
 
             return result;
@@ -36,12 +38,12 @@ namespace Neodenit.Memento.Services
         public async Task Import(string deckText, Guid deckID)
         {
             var deck = await repository.FindDeckAsync(deckID);
-            var cardTextComments = converter.GetCardsFromDeck(deckText).ToList();
+            var cardTextComments = converterService.GetCardsFromDeck(deckText).ToList();
 
             foreach (var cardTextComment in cardTextComments)
             {
-                var clozeNames = converter.GetClozeNames(cardTextComment.Item1);
-                var isValid = clozeNames.Any() && clozeNames.All(clozeName => validator.Validate(cardTextComment.Item1, clozeName));
+                var clozeNames = converterService.GetClozeNames(cardTextComment.Item1);
+                var isValid = clozeNames.Any() && clozeNames.All(clozeName => validatorService.Validate(cardTextComment.Item1, clozeName));
                 var newCard = new Card
                 {
                     Deck = deck,
@@ -57,7 +59,7 @@ namespace Neodenit.Memento.Services
 
                     if (isValid)
                     {
-                        await repository.AddClozesAsync(newCard, clozeNames);
+                        clozesService.AddClozes(newCard, clozeNames);
                     }
                 }
             }

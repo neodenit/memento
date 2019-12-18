@@ -46,15 +46,11 @@ namespace Neodenit.Memento.DataAccess.API
 
         void RemoveAnswers();
 
-        Task AddClozesAsync(Card card, IEnumerable<string> clozeNames);
-
         void RemoveClozes(Card card, IEnumerable<string> clozeNames);
 
         void AddAnswer(Answer answer);
 
         void AddAnswer(Cloze cloze, bool isCorrect);
-
-        void PromoteCloze(Deck deck, Delays delay, string username);
 
         Task SaveChangesAsync();
     }

@@ -13,16 +13,16 @@ namespace Neodenit.Memento.Services
     {
         private readonly IMapper mapper;
         private readonly IMementoRepository repository;
-        private readonly ISchedulerOperationService scheduler;
-
+        private readonly ISchedulerOperationService schedulerOperationService;
+        private readonly IClozesService clozesService;
         private readonly Dictionary<DelayModes, Delays> delayMap;
 
-        public SchedulerService(IMapper mapper, IMementoRepository repository, ISchedulerOperationService scheduler)
+        public SchedulerService(IMapper mapper, IMementoRepository repository, ISchedulerOperationService schedulerOperationService, IClozesService clozesService)
         {
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
-            this.scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
-
+            this.schedulerOperationService = schedulerOperationService ?? throw new ArgumentNullException(nameof(schedulerOperationService));
+            this.clozesService = clozesService ?? throw new ArgumentNullException(nameof(clozesService));
             delayMap = new Dictionary<DelayModes, Delays>
             {
                 { DelayModes.Sharp, Delays.Initial },
@@ -38,7 +38,7 @@ namespace Neodenit.Memento.Services
             var dbCard = await repository.FindCardAsync(cardId);
             var deck = dbCard.Deck;
 
-            repository.PromoteCloze(deck, delay, userName);
+            clozesService.PromoteCloze(deck, delay, userName);
 
             await repository.SaveChangesAsync();
 
@@ -53,7 +53,7 @@ namespace Neodenit.Memento.Services
 
             var clozes = deck.GetRepetitions(username);
 
-            scheduler.ShuffleNewRepetitions(clozes);
+            schedulerOperationService.ShuffleNewRepetitions(clozes);
 
             await repository.SaveChangesAsync();
         }

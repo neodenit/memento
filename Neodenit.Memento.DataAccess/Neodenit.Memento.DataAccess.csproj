@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Neodenit.Memento.DataAccess.API\Neodenit.Memento.DataAccess.API.csproj" />
-    <ProjectReference Include="..\Neodenit.Memento.Services.API\Neodenit.Memento.Services.API.csproj" />
   </ItemGroup>
 
 </Project>
