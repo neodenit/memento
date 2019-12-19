@@ -64,6 +64,8 @@ namespace Neodenit.Memento.DependecyInjection
             services.AddTransient<IRawCardOperationService, RawCardOperationService>();
             services.AddTransient<IConverterService, ConverterService>();
 
+            services.AddTransient<IClozesService, ClozesService>();
+
             services.AddTransient<ISchedulerService, SchedulerService>();
             services.AddTransient<ISchedulerOperationService, SchedulerOperationService>();
             services.AddTransient<ISchedulerUtilsService, SchedulerUtilsService>();
