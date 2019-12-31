@@ -3,33 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DA5D5C92-2525-4DCA-9B77-6235D2E288D1}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.Tests", "Memento.Tests\Memento.Tests.csproj", "{80D7D3BB-D189-46FF-9E80-F53B5D15704C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.DataAccess", "Memento.DomainModel\Memento.DataAccess.csproj", "{4CCB3552-1782-4CA3-806E-FE846CA2F6CF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.Web", "Memento.Web\Memento.Web.csproj", "{1C82468E-77F8-44FA-BE30-DC56BE50B3CF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.Interfaces", "Memento.Interfaces\Memento.Interfaces.csproj", "{57E544CD-A620-4820-BBF4-DC8C27B4968E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.DependecyInjection", "Memento.DependecyInjection\Memento.DependecyInjection.csproj", "{4714B8E5-0492-4ADA-8680-668DCCA7A79B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.Common", "Memento.Common\Memento.Common.csproj", "{AF08785A-2A1B-47F8-8100-460B69DF26BE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.Models", "Memento.Models\Memento.Models.csproj", "{9A7EBCFB-2F3A-4ED3-8DFF-C356AD46F230}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.Attributes", "Memento.Attributes\Memento.Attributes.csproj", "{FA6F41E3-A64F-408C-B831-DE622DD25C7B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.Services", "Memento.Services\Memento.Services.csproj", "{9D964827-0F48-40B3-B1AD-591D9E4168D2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memento.Bot", "Memento.Bot\Memento.Bot.csproj", "{23A8A58C-430F-4884-B113-F0FC8BD8359E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neodenit.Memento.DependecyInjection", "Neodenit.Memento.DependecyInjection\Neodenit.Memento.DependecyInjection.csproj", "{416B70AB-2538-4472-AD7C-1FD803A6E515}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neodenit.Memento.Web", "Neodenit.Memento.Web\Neodenit.Memento.Web.csproj", "{D50FB65A-AE06-4969-8E11-95146E816AA9}"
@@ -54,46 +27,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{80D7D3BB-D189-46FF-9E80-F53B5D15704C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{80D7D3BB-D189-46FF-9E80-F53B5D15704C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{80D7D3BB-D189-46FF-9E80-F53B5D15704C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{80D7D3BB-D189-46FF-9E80-F53B5D15704C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4CCB3552-1782-4CA3-806E-FE846CA2F6CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4CCB3552-1782-4CA3-806E-FE846CA2F6CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4CCB3552-1782-4CA3-806E-FE846CA2F6CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4CCB3552-1782-4CA3-806E-FE846CA2F6CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C82468E-77F8-44FA-BE30-DC56BE50B3CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C82468E-77F8-44FA-BE30-DC56BE50B3CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C82468E-77F8-44FA-BE30-DC56BE50B3CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C82468E-77F8-44FA-BE30-DC56BE50B3CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{57E544CD-A620-4820-BBF4-DC8C27B4968E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{57E544CD-A620-4820-BBF4-DC8C27B4968E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{57E544CD-A620-4820-BBF4-DC8C27B4968E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{57E544CD-A620-4820-BBF4-DC8C27B4968E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4714B8E5-0492-4ADA-8680-668DCCA7A79B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4714B8E5-0492-4ADA-8680-668DCCA7A79B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4714B8E5-0492-4ADA-8680-668DCCA7A79B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4714B8E5-0492-4ADA-8680-668DCCA7A79B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AF08785A-2A1B-47F8-8100-460B69DF26BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AF08785A-2A1B-47F8-8100-460B69DF26BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AF08785A-2A1B-47F8-8100-460B69DF26BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AF08785A-2A1B-47F8-8100-460B69DF26BE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9A7EBCFB-2F3A-4ED3-8DFF-C356AD46F230}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A7EBCFB-2F3A-4ED3-8DFF-C356AD46F230}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9A7EBCFB-2F3A-4ED3-8DFF-C356AD46F230}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9A7EBCFB-2F3A-4ED3-8DFF-C356AD46F230}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FA6F41E3-A64F-408C-B831-DE622DD25C7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA6F41E3-A64F-408C-B831-DE622DD25C7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA6F41E3-A64F-408C-B831-DE622DD25C7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA6F41E3-A64F-408C-B831-DE622DD25C7B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9D964827-0F48-40B3-B1AD-591D9E4168D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9D964827-0F48-40B3-B1AD-591D9E4168D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9D964827-0F48-40B3-B1AD-591D9E4168D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9D964827-0F48-40B3-B1AD-591D9E4168D2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{23A8A58C-430F-4884-B113-F0FC8BD8359E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{23A8A58C-430F-4884-B113-F0FC8BD8359E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{23A8A58C-430F-4884-B113-F0FC8BD8359E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{23A8A58C-430F-4884-B113-F0FC8BD8359E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{416B70AB-2538-4472-AD7C-1FD803A6E515}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{416B70AB-2538-4472-AD7C-1FD803A6E515}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{416B70AB-2538-4472-AD7C-1FD803A6E515}.Release|Any CPU.ActiveCfg = Release|Any CPU
