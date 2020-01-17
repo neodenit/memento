@@ -20,19 +20,25 @@
 
     Html.RenderPartial("_Answer");
 
-    <div class="row">
+    <div class="form-group row">
         <div class="col-md-2"></div>
 
         @if (Model.DelayMode == DelayModes.Sharp || Model.DelayMode == DelayModes.Combined)
         {
-            <input type="submit" name="AgainButton" value="Again" class="btn btn-outline-secondary" />
+            <div class="col-md-2">
+                <input type="submit" name="AgainButton" value="Again" class="btn btn-outline-secondary btn-block" />
+            </div>
         }
 
         @if (Model.DelayMode == DelayModes.Smooth || Model.DelayMode == DelayModes.Combined)
         {
-            <input type="submit" name="BadButton" value="Bad" class="btn btn-outline-secondary" />
+            <div class="col-md-2">
+                <input type="submit" name="BadButton" value="Bad" class="btn btn-outline-secondary btn-block" />
+            </div>
         }
 
-        <input type="submit" name="GoodButton" value="Good" class="btn btn-outline-secondary" />
+        <div class="col-md-2">
+            <input type="submit" name="GoodButton" value="Good" class="btn btn-outline-secondary btn-block" />
+        </div>
     </div>
 }

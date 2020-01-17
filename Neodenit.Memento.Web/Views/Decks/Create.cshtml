@@ -18,7 +18,7 @@
         <h4>Deck</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
+        <div class="form-group row">
             @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", autofocus = "autofocus" } })
@@ -28,7 +28,7 @@
 
         <hr />
 
-        <div class="form-group">
+        <div class="form-group row">
             <label class="control-label col-md-2" for="ControlMode">
                 Evaluation mode
             </label>
@@ -52,7 +52,7 @@
 
         @if (Settings.Default.AllowSmoothDelayModes)
         {
-            <div class="form-group">
+            <div class="form-group row">
                 <label class="control-label col-md-2" for="ControlMode">
                     Penalty mode
                 </label>
@@ -81,7 +81,7 @@
         @if (Settings.Default.EnableTwoStepsConfig)
         {
             <div id="SRSDeckParams">
-                <div class="form-group">
+                <div class="form-group row">
                     @Html.LabelFor(model => model.FirstDelay, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-1">
                         @Html.EditorFor(model => model.FirstDelay, new { htmlAttributes = new { @class = "form-control", data_toggle = "tooltip", data_placement = "right", title = @Resources.FirstDelayHint } })
@@ -89,7 +89,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group row">
                     @Html.LabelFor(model => model.SecondDelay, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-1">
                         @Html.EditorFor(model => model.SecondDelay, new { htmlAttributes = new { @class = "form-control", data_toggle = "tooltip", data_placement = "right", title = @Resources.SecondDelayHint } })
@@ -101,7 +101,7 @@
         else
         {
             <div id="SRSDeckParams">
-                <div class="form-group">
+                <div class="form-group row">
                     @Html.LabelFor(model => model.StartDelay, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-1">
                         @Html.EditorFor(model => model.StartDelay, new { htmlAttributes = new { @class = "form-control", data_toggle = "tooltip", data_placement = "right", title = @Resources.StartDelayHint } })
@@ -109,7 +109,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group row">
                     @Html.LabelFor(model => model.Coeff, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-1">
                         @Html.EditorFor(model => model.Coeff, new { htmlAttributes = new { @class = "form-control", data_toggle = "tooltip", data_placement = "right", title = @Resources.CoefficientHint } })
@@ -119,7 +119,7 @@
             </div>
         }
 
-        <div class="form-group">
+        <div class="form-group row">
             <div class="offset-md-2 col-md-10">
                 <div class="checkbox">
                     <label>
@@ -129,9 +129,9 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="offset-md-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-outline-secondary" />
+        <div class="form-group row">
+            <div class="offset-md-2 col-md-2">
+                <input type="submit" value="Create" class="btn btn-outline-secondary btn-block" />
             </div>
         </div>
     </div>

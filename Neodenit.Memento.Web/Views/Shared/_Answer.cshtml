@@ -1,7 +1,7 @@
 ﻿@model Neodenit.Memento.Common.ViewModels.AnswerCardViewModel
 
 
-<div class="form-group">
+<div class="form-group row">
     <div class="offset-md-2 col-md-8">
         <div class="card-text">@Model.FullAnswer</div>
     </div>
@@ -10,7 +10,7 @@
 @if (!string.IsNullOrWhiteSpace(Model.Comment))
 {
     <hr />
-    <div class="form-group">
+    <div class="form-group row">
         <div class="offset-md-2 col-md-8">
             <div class="card-text">@Model.Comment</div>
         </div>

@@ -19,13 +19,13 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.ID)
 
-        <div class="form-group">
-            <div class="offset-md-2 col-md-10">
-                <button class="btn btn-outline-secondary" id="AddCloze">Add Cloze</button>
+        <div class="form-group row">
+            <div class="offset-md-2 col-md-2">
+                <button class="btn btn-outline-secondary btn-block" id="AddCloze">Add Cloze</button>
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group row">
             @Html.LabelFor(model => model.Text, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Text, new { htmlAttributes = new { @class = "form-control", rows = 10 } })
@@ -33,7 +33,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group row">
             @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control", rows = 5 } })
@@ -41,9 +41,9 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="offset-md-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-outline-secondary" />
+        <div class="form-group row">
+            <div class="offset-md-2 col-md-2">
+                <input type="submit" value="Save" class="btn btn-outline-secondary btn-block" />
             </div>
         </div>
     </div>
