@@ -77,13 +77,13 @@
         <th>
             @Html.DisplayNameFor(model => model.UserDecks.First().Title)
         </th>
-        <th>
+        <th class="d-none d-md-table-cell">
             Cards
         </th>
-        <th>
+        <th class="d-none d-md-table-cell">
             Valid Cards
         </th>
-        <th>
+        <th class="d-none d-md-table-cell">
             @Html.DisplayNameFor(model => model.UserDecks.First().ControlMode)
         </th>
 
@@ -103,13 +103,13 @@
             <td>
                 @Html.ActionLink(item.Title, "Details", new { id = item.ID })
             </td>
-            <td>
+            <td class="d-none d-md-table-cell">
                 @(item.CardsCount)
             </td>
-            <td>
+            <td class="d-none d-md-table-cell">
                 @(item.ValidCardsCount)
             </td>
-            <td>
+            <td class="d-none d-md-table-cell">
                 @Html.DisplayFor(modelItem => item.ControlMode)
             </td>
 
