@@ -108,7 +108,7 @@ namespace Neodenit.Memento.Web.Controllers
 
         public async Task<ActionResult> RepeatClosed([CheckCardExistence, CheckCardOwner] Guid id)
         {
-            var viewModel = await cardsService.GetCardWithAnswerAsync(id, UserName);
+            var viewModel = await cardsService.GetCardWithQuestionAsync(id, UserName);
 
             return View(viewModel);
         }
