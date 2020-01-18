@@ -30,6 +30,7 @@ namespace Neodenit.Memento.Web.Controllers
             this.schedulerService = schedulerService;
         }
 
+        [ValidateModel]
         public async Task<ActionResult> ClozesIndex([CheckDeckExistence, CheckDeckOwner] Guid deckID)
         {
             var clozes = await decksService.GetClozesAsync(deckID, UserName);
@@ -37,6 +38,7 @@ namespace Neodenit.Memento.Web.Controllers
             return View(clozes);
         }
 
+        [ValidateModel]
         public async Task<ActionResult> CardsIndex([CheckDeckExistence, CheckDeckOwner] Guid deckID)
         {
             var cards = await decksService.GetCardsAsync(deckID);
@@ -44,6 +46,7 @@ namespace Neodenit.Memento.Web.Controllers
             return View(cards);
         }
 
+        [ValidateModel]
         public async Task<ActionResult> DeletedIndex([CheckDeckExistence, CheckDeckOwner] Guid deckID)
         {
             var deletedCards = await decksService.GetDeletedCardsAsync(deckID);
@@ -51,6 +54,7 @@ namespace Neodenit.Memento.Web.Controllers
             return View(deletedCards);
         }
 
+        [ValidateModel]
         public async Task<ActionResult> DraftIndex([CheckDeckExistence, CheckDeckOwner] Guid deckID)
         {
             var draftCards = await decksService.GetDraftCardsAsync(deckID);
@@ -58,6 +62,7 @@ namespace Neodenit.Memento.Web.Controllers
             return View(draftCards);
         }
 
+        [ValidateModel]
         public async Task<ActionResult> Details([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var card = await cardsService.FindCardAsync(id);
@@ -82,6 +87,7 @@ namespace Neodenit.Memento.Web.Controllers
             }
         }
 
+        [ValidateModel]
         public async Task<ActionResult> PreviewClosed([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var viewModel = await cardsService.GetCardWithQuestionAsync(id, UserName);
@@ -89,6 +95,7 @@ namespace Neodenit.Memento.Web.Controllers
             return View(viewModel);
         }
 
+        [ValidateModel]
         public async Task<ActionResult> PreviewOpened([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var viewModel = await cardsService.GetCardWithAnswerAsync(id, UserName);
@@ -106,6 +113,7 @@ namespace Neodenit.Memento.Web.Controllers
             return RedirectToCard(nextCard.ID);
         }
 
+        [ValidateModel]
         public async Task<ActionResult> RepeatClosed([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var viewModel = await cardsService.GetCardWithQuestionAsync(id, UserName);
@@ -113,6 +121,7 @@ namespace Neodenit.Memento.Web.Controllers
             return View(viewModel);
         }
 
+        [ValidateModel]
         public async Task<ActionResult> RepeatOpened([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var viewModel = await cardsService.GetCardWithAnswerAsync(id, UserName);
@@ -146,6 +155,7 @@ namespace Neodenit.Memento.Web.Controllers
             return RedirectToCard(nextCard.ID);
         }
 
+        [ValidateModel]
         public async Task<ActionResult> Question([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var viewModel = await cardsService.GetCardWithQuestionAsync(id, UserName);
@@ -280,6 +290,8 @@ namespace Neodenit.Memento.Web.Controllers
                 return View(card);
             }
         }
+
+        [ValidateModel]
         public async Task<ActionResult> Edit([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var card = await cardsService.FindEditCardAsync(id);
@@ -312,6 +324,7 @@ namespace Neodenit.Memento.Web.Controllers
             return await ShuffleNew(card.DeckID);
         }
 
+        [ValidateModel]
         public async Task<ActionResult> ShuffleNew([CheckDeckExistence, CheckDeckOwner] Guid deckID)
         {
             await schedulerService.ShuffleNewClozes(deckID, UserName);
@@ -319,6 +332,7 @@ namespace Neodenit.Memento.Web.Controllers
             return RedirectToAction("ClozesIndex", new { deckID });
         }
 
+        [ValidateModel]
         public async Task<ActionResult> Restore([CheckCardExistence, CheckCardOwner] Guid id)
         {
             var card = await cardsService.FindCardAsync(id);
@@ -328,6 +342,7 @@ namespace Neodenit.Memento.Web.Controllers
 
         [HttpPost, ActionName("Restore")]
         [ValidateAntiForgeryToken]
+        [ValidateModel]
         public async Task<ActionResult> RestoreConfirmed([CheckCardExistence, CheckCardOwner] Guid id)
         {
             await cardsService.RestoreCard(id);
@@ -346,6 +361,7 @@ namespace Neodenit.Memento.Web.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [ValidateModel]
         public async Task<ActionResult> DeleteConfirmed([CheckCardExistence, CheckCardOwner] Guid id)
         {
             await cardsService.DeleteCard(id);

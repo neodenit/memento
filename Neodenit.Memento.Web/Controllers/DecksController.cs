@@ -46,6 +46,7 @@ namespace Neodenit.Memento.Web.Controllers
             return View(viewModel);
         }
 
+        [ValidateModel]
         public async Task<ActionResult> Share([CheckDeckExistence, CheckDeckOwner] Guid id)
         {
             await decksService.ShareDeckAsync(id);
@@ -54,6 +55,7 @@ namespace Neodenit.Memento.Web.Controllers
         }
 
         // GET: Decks/Details/5
+        [ValidateModel]
         public async Task<ActionResult> Details([CheckDeckExistence, CheckDeckOwner] Guid id)
         {
             var startTime = DateTime.Now.AddDays(-10);
@@ -112,6 +114,7 @@ namespace Neodenit.Memento.Web.Controllers
         }
 
         // GET: Decks/Edit/5
+        [ValidateModel]
         public async Task<ActionResult> Edit([CheckDeckExistence, CheckDeckOwner] Guid id)
         {
             var deck = await decksService.FindDeckAsync(id);
@@ -143,6 +146,7 @@ namespace Neodenit.Memento.Web.Controllers
             }
         }
 
+        [ValidateModel]
         public async Task<ActionResult> Delete([CheckDeckExistence, CheckDeckOwner] Guid id)
         {
             var deck = await decksService.FindDeckAsync(id);
@@ -153,6 +157,7 @@ namespace Neodenit.Memento.Web.Controllers
         // POST: Decks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [ValidateModel]
         public async Task<ActionResult> DeleteConfirmed([CheckDeckExistence, CheckDeckOwner] Guid id)
         {
             await decksService.DeleteDeck(id);
@@ -160,6 +165,7 @@ namespace Neodenit.Memento.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [ValidateModel]
         public ActionResult Import([CheckDeckExistence, CheckDeckOwner] Guid deckID)
         {
             var viewModel = new ImportViewModel { DeckID = deckID, IsShuffled = true };
@@ -186,6 +192,7 @@ namespace Neodenit.Memento.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [ValidateModel]
         public async Task<ActionResult> Export([CheckDeckExistence, CheckDeckOwner] Guid deckID)
         {
             var fileContentText = await exportImportService.Export(deckID);
