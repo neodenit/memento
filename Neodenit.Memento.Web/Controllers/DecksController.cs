@@ -31,7 +31,6 @@ namespace Neodenit.Memento.Web.Controllers
             this.schedulerService = schedulerService;
         }
 
-        // GET: Decks
         public async Task<ActionResult> Index()
         {
             var decks = await decksService.GetDecksAsync(User.Identity.Name);
@@ -54,7 +53,6 @@ namespace Neodenit.Memento.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Decks/Details/5
         [ValidateModel]
         public async Task<ActionResult> Details([CheckDeckExistence, CheckDeckOwner] Guid id)
         {
@@ -69,7 +67,6 @@ namespace Neodenit.Memento.Web.Controllers
             return View(viewModel);
         }
 
-        // POST: Decks/Details
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Details(DeckViewModel deck)
@@ -86,7 +83,6 @@ namespace Neodenit.Memento.Web.Controllers
             }
         }
 
-        // GET: Decks/Create
         public ActionResult Create()
         {
             var viewModel = Settings.Default.EnableTwoStepsConfig ?
@@ -96,7 +92,6 @@ namespace Neodenit.Memento.Web.Controllers
             return View(viewModel);
         }
 
-        // POST: Decks/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(DeckViewModel deck)
@@ -113,7 +108,6 @@ namespace Neodenit.Memento.Web.Controllers
             }
         }
 
-        // GET: Decks/Edit/5
         [ValidateModel]
         public async Task<ActionResult> Edit([CheckDeckExistence, CheckDeckOwner] Guid id)
         {
@@ -122,7 +116,6 @@ namespace Neodenit.Memento.Web.Controllers
             return View(deck);
         }
 
-        // POST: Decks/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(DeckViewModel deck)
@@ -154,7 +147,6 @@ namespace Neodenit.Memento.Web.Controllers
             return View(deck);
         }
 
-        // POST: Decks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [ValidateModel]
