@@ -249,7 +249,9 @@ namespace Neodenit.Memento.Web.Controllers
             }
             else
             {
-                var card = new EditCardViewModel { DeckID = DeckID.Value };
+                DeckViewModel deck = await decksService.FindDeckAsync(DeckID.Value);
+
+                var card = new EditCardViewModel { DeckID = deck.ID, DeckTitle = deck.Title };
 
                 return View(card);
             }
@@ -294,7 +296,10 @@ namespace Neodenit.Memento.Web.Controllers
         [ValidateModel]
         public async Task<ActionResult> Edit([CheckCardExistence, CheckCardOwner] Guid id)
         {
-            var card = await cardsService.FindEditCardAsync(id);
+            EditCardViewModel card = await cardsService.FindEditCardAsync(id);
+            DeckViewModel deck = await decksService.FindDeckAsync(card.DeckID);
+
+            card.DeckTitle = deck.Title;
 
             return View(card);
         }

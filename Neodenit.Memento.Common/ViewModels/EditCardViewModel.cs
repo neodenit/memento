@@ -10,6 +10,8 @@ namespace Neodenit.Memento.Common.ViewModels
         [Display(Name = "Deck")]
         public Guid DeckID { get; set; }
 
+        public string DeckTitle { get; set; }
+
         public Guid ReadingCardId { get; set; }
 
         [Required]
