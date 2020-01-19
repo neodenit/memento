@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Neodenit.Memento.Common;
-using Neodenit.Memento.Common.DataModels;
 using Neodenit.Memento.Common.ViewModels;
 using Neodenit.Memento.Services.API;
 using Neodenit.Memento.Web.Attributes;
@@ -60,9 +59,7 @@ namespace Neodenit.Memento.Web.Controllers
         {
             var startTime = DateTime.Now.AddDays(-10);
 
-            IEnumerable<Answer> answers = await statService.GetAnswersAsync(id, startTime);
-
-            StatisticsViewModel statistics = statService.GetStatistics(answers);
+            StatisticsViewModel statistics = await statService.GetStatisticsAsync(id, startTime);
 
             DeckWithStatViewModel viewModel = await decksService.GetDeckWithStatViewModel(id, statistics, User.Identity.Name);
 

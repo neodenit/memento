@@ -47,9 +47,6 @@ namespace Neodenit.Memento.Tests.Controllers
                 ControllerContext = mockContext.Object
             };
 
-            mockStatisticsService.Setup(x => x.GetAnswersAsync(It.IsAny<Guid>(), It.IsAny<DateTime>()))
-                .ReturnsAsync(Enumerable.Empty<Answer>());
-
             mockDecksService.Setup(x => x.GetDeckWithStatViewModel(It.IsAny<Guid>(), It.IsAny<StatisticsViewModel>(), It.IsAny<string>())).ReturnsAsync(new DeckWithStatViewModel());
 
             var deckViewModel = new DeckViewModel();
@@ -131,8 +128,7 @@ namespace Neodenit.Memento.Tests.Controllers
             var model = result.Model as DeckWithStatViewModel;
 
             // Assert
-            mockStatisticsService.Verify(x => x.GetAnswersAsync(id, It.IsAny<DateTime>()), Times.Once);
-            mockStatisticsService.Verify(x => x.GetStatistics(It.IsAny<IEnumerable<Answer>>()), Times.Once);
+            mockStatisticsService.Verify(x => x.GetStatisticsAsync(id, It.IsAny<DateTime>()), Times.Once);
             mockDecksService.Verify(x => x.GetDeckWithStatViewModel(id, It.IsAny<StatisticsViewModel>(), It.IsAny<string>()));
 
             Assert.IsNotNull(result);

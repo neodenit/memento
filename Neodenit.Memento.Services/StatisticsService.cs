@@ -20,21 +20,23 @@ namespace Neodenit.Memento.Services
 
         public async Task AddAnswer(Guid cardID, bool isCorrect, string username)
         {
-            var dbCard = await repository.FindCardAsync(cardID);
-            var cloze = dbCard.GetNextCloze(username);
+            Card dbCard = await repository.FindCardAsync(cardID);
+            Cloze cloze = dbCard.GetNextCloze(username);
 
             repository.AddAnswer(cloze, isCorrect);
             await repository.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Answer>> GetAnswersAsync(Guid deckID, DateTime startTime)
+        public async Task<StatisticsViewModel> GetStatisticsAsync(Guid deckID, DateTime startTime)
         {
-            var answers = await repository.GetAnswersForDeckAsync(deckID);
-            return answers.Where(answer => answer.Time >= startTime);
-        }
+            async Task<IEnumerable<Answer>> GetAnswersAsync(Guid deckID, DateTime startTime)
+            {
+                IEnumerable<Answer> answers = await repository.GetAnswersForDeckAsync(deckID);
+                return answers.Where(answer => answer.Time >= startTime);
+            }
 
-        public StatisticsViewModel GetStatistics(IEnumerable<Answer> answers)
-        {
+            IEnumerable<Answer> answers = await GetAnswersAsync(deckID, startTime);
+
             var groupedAnswers = from answer in answers group answer by answer.Time.Date;
             var orderedGroupedAnswers = from answer in groupedAnswers orderby answer.Key select answer;
 

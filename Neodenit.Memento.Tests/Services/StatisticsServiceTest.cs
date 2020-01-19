@@ -25,28 +25,14 @@ namespace Neodenit.Memento.Tests.Services
         }
 
         [TestMethod()]
-        public async Task StatServiceGetAnswersTest()
+        public async Task StatServiceGetStatisticsTest()
         {
             // Arrange
             var id = new Guid("00000000-0000-0000-0000-000000000001");
             var startTime = DateTime.UtcNow;
 
             // Act
-            var result = await sut.GetAnswersAsync(id, startTime);
-
-            // Assert
-            mockRepository.Verify(x => x.GetAnswersForDeckAsync(id), Times.Once);
-            Assert.IsNotNull(result);
-        }
-
-        [TestMethod()]
-        public void StatServiceGetStatisticsTest()
-        {
-            // Arrange
-            var answers = Enumerable.Empty<Answer>();
-
-            // Act
-            var result = sut.GetStatistics(answers);
+            var result = await sut.GetStatisticsAsync(id, startTime);
 
             // Assert
             Assert.IsNotNull(result);
