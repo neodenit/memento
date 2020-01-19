@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Mime;
 using System.Text;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Neodenit.Memento.Common;
+using Neodenit.Memento.Common.DataModels;
 using Neodenit.Memento.Common.ViewModels;
 using Neodenit.Memento.Services.API;
 using Neodenit.Memento.Web.Attributes;
@@ -33,8 +35,8 @@ namespace Neodenit.Memento.Web.Controllers
 
         public async Task<ActionResult> Index()
         {
-            var decks = await decksService.GetDecksAsync(User.Identity.Name);
-            var sharedDecks = await decksService.GetSharedDecksAsync();
+            IEnumerable<DeckViewModel> decks = await decksService.GetDecksAsync(User.Identity.Name);
+            IEnumerable<DeckViewModel> sharedDecks = await decksService.GetSharedDecksAsync();
 
             var viewModel = new DecksViewModel
             {
@@ -58,11 +60,11 @@ namespace Neodenit.Memento.Web.Controllers
         {
             var startTime = DateTime.Now.AddDays(-10);
 
-            var answers = await statService.GetAnswersAsync(id, startTime);
+            IEnumerable<Answer> answers = await statService.GetAnswersAsync(id, startTime);
 
-            var statistics = statService.GetStatistics(answers);
+            StatisticsViewModel statistics = statService.GetStatistics(answers);
 
-            var viewModel = await decksService.GetDeckWithStatViewModel(id, statistics, User.Identity.Name);
+            DeckWithStatViewModel viewModel = await decksService.GetDeckWithStatViewModel(id, statistics, User.Identity.Name);
 
             return View(viewModel);
         }
@@ -71,7 +73,7 @@ namespace Neodenit.Memento.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Details(DeckViewModel deck)
         {
-            var card = await cardsService.GetNextCardAsync(deck.ID, User.Identity.Name);
+            ViewCardViewModel card = await cardsService.GetNextCardAsync(deck.ID, User.Identity.Name);
 
             if (card != null)
             {
@@ -85,9 +87,9 @@ namespace Neodenit.Memento.Web.Controllers
 
         public ActionResult Create()
         {
-            var viewModel = Settings.Default.EnableTwoStepsConfig ?
-                new DeckViewModel { FirstDelay = Settings.Default.FirstDelay, SecondDelay = Settings.Default.SecondDelay } :
-                new DeckViewModel { StartDelay = Settings.Default.StartDelay, Coeff = Settings.Default.Coeff };
+            var viewModel = Settings.Default.EnableTwoStepsConfig
+                ? new DeckViewModel { FirstDelay = Settings.Default.FirstDelay, SecondDelay = Settings.Default.SecondDelay }
+                : new DeckViewModel { StartDelay = Settings.Default.StartDelay, Coeff = Settings.Default.Coeff };
 
             return View(viewModel);
         }
@@ -111,7 +113,7 @@ namespace Neodenit.Memento.Web.Controllers
         [ValidateModel]
         public async Task<ActionResult> Edit([CheckDeckExistence, CheckDeckOwner] Guid id)
         {
-            var deck = await decksService.FindDeckAsync(id);
+            DeckViewModel deck = await decksService.FindDeckAsync(id);
 
             return View(deck);
         }
@@ -122,12 +124,13 @@ namespace Neodenit.Memento.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var delay = Settings.Default.EnableTwoStepsConfig ?
-                    deck.FirstDelay :
-                    deck.StartDelay;
-                var coeff = Settings.Default.EnableTwoStepsConfig ?
-                    (double)deck.SecondDelay / (double)deck.FirstDelay :
-                    deck.Coeff;
+                var delay = Settings.Default.EnableTwoStepsConfig
+                    ? deck.FirstDelay
+                    : deck.StartDelay;
+
+                var coeff = Settings.Default.EnableTwoStepsConfig
+                    ? (double)deck.SecondDelay / (double)deck.FirstDelay
+                    : deck.Coeff;
 
                 await decksService.UpdateDeck(deck.ID, deck.Title, delay, coeff, deck.PreviewAnswer);
 
@@ -142,7 +145,7 @@ namespace Neodenit.Memento.Web.Controllers
         [ValidateModel]
         public async Task<ActionResult> Delete([CheckDeckExistence, CheckDeckOwner] Guid id)
         {
-            var deck = await decksService.FindDeckAsync(id);
+            DeckViewModel deck = await decksService.FindDeckAsync(id);
 
             return View(deck);
         }
@@ -187,8 +190,8 @@ namespace Neodenit.Memento.Web.Controllers
         [ValidateModel]
         public async Task<ActionResult> Export([CheckDeckExistence, CheckDeckOwner] Guid deckID)
         {
-            var fileContentText = await exportImportService.Export(deckID);
-            var deck = await decksService.FindDeckAsync(deckID);
+            string fileContentText = await exportImportService.Export(deckID);
+            DeckViewModel deck = await decksService.FindDeckAsync(deckID);
             var deckTitle = deck.Title;
             var fileName = string.Join(string.Empty, deckTitle.Split(Path.GetInvalidFileNameChars()));
 
