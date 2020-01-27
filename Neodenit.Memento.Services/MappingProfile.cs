@@ -14,7 +14,7 @@ namespace Neodenit.Memento.Services
                 .ForMember(dest => dest.FirstDelay, opt => opt.MapFrom(src => src.StartDelay))
                 .ForMember(dest => dest.SecondDelay, opt => opt.MapFrom(src => (int)Math.Round(src.StartDelay * src.Coeff)))
                 .ForMember(dest => dest.CardsCount, opt => opt.MapFrom(src => src.Cards.Count()))
-                .ForMember(dest => dest.CardsCount, opt => opt.MapFrom(src => src.ValidCards.Count()));
+                .ForMember(dest => dest.ValidCardsCount, opt => opt.MapFrom(src => src.ValidCards.Count()));
 
             CreateMap<Card, ViewCardViewModel>()
                 .ForMember(dest => dest.DeckTitle, opt => opt.MapFrom(src => src.Deck.Title));
