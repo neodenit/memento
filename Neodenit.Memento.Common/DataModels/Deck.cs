@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using Neodenit.Memento.Common;
 using Neodenit.Memento.Common.Enums;
 
 namespace Neodenit.Memento.Common.DataModels
@@ -41,46 +40,17 @@ namespace Neodenit.Memento.Common.DataModels
 
         public bool PreviewAnswer { get; set; }
 
-        public IEnumerable<Cloze> GetClozes()
-        {
-            var validCards = GetValidCards();
-            return validCards.SelectMany(card => card.Clozes ?? Enumerable.Empty<Cloze>());
-        }
+        [NotMapped]
+        public IEnumerable<Card> ValidCards =>
+            Cards.Where(card => card.IsValid && !card.IsDeleted);
 
-        public IEnumerable<UserRepetition> GetRepetitions(string username)
-        {
-            var clozes = GetClozes();
-            var userRepetitions = from c in clozes select c.GetUserRepetition(username);
-            var result = from ur in userRepetitions where ur != null select ur;
+        [NotMapped]
+        public IEnumerable<Card> DraftCards =>
+            Cards.Where(card => !card.IsValid && !card.IsDeleted);
 
-            return result;
-        }
+        [NotMapped]
+        public IEnumerable<Card> DeletedCards =>
+            Cards.Where(card => card.IsDeleted);
 
-        public Card GetNextCard(string username)
-        {
-            var validCards = GetValidCards();
-
-            var nextCard = validCards.GetMinElement(item => item.GetNextCloze(username).GetUserRepetition(username).Position);
-
-            return nextCard;
-        }
-
-        public IEnumerable<Card> GetValidCards()
-        {
-            return Cards.Where(card => card.IsValid && !card.IsDeleted);
-        }
-
-        public IEnumerable<Card> GetDraftCards()
-        {
-            return Cards.Where(card => !card.IsValid && !card.IsDeleted);
-        }
-
-        public IEnumerable<Card> GetDeletedCards()
-        {
-            return Cards.Where(card => card.IsDeleted);
-        }
-
-        public IEnumerable<string> GetUsers() =>
-            Cards.SelectMany(x => x.GetUsers()).Distinct();
     }
 }

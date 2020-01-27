@@ -42,7 +42,7 @@ namespace Neodenit.Memento.Services
 
             await repository.SaveChangesAsync();
 
-            var nextCard = deck.GetNextCard(userName);
+            var nextCard = repository.GetNextCard(deck, userName);
             var viewModel = mapper.Map<ViewCardViewModel>(nextCard);
             return viewModel;
         }
@@ -51,7 +51,7 @@ namespace Neodenit.Memento.Services
         {
             var deck = await repository.FindDeckAsync(deckId);
 
-            var clozes = deck.GetRepetitions(username);
+            var clozes = repository.GetRepetitions(deck, username);
 
             schedulerOperationService.ShuffleNewRepetitions(clozes);
 

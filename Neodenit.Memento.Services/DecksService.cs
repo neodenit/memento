@@ -45,9 +45,9 @@ namespace Neodenit.Memento.Services
         {
             var deck = await repository.FindDeckAsync(deckId);
 
-            var clozes = deck.GetClozes();
-            statistics.NewQuestionCount = clozes.Count(c => c.GetUserRepetition(username).IsNew);
-            statistics.OldQuestionCount = clozes.Count(c => !c.GetUserRepetition(username).IsNew);
+            var clozes = repository.GetClozes(deck);
+            statistics.NewQuestionCount = clozes.Count(c => repository.GetUserRepetition(c, username).IsNew);
+            statistics.OldQuestionCount = clozes.Count(c => !repository.GetUserRepetition(c, username).IsNew);
 
             var viewModel = new DeckWithStatViewModel
             {
@@ -133,14 +133,14 @@ namespace Neodenit.Memento.Services
         public async Task<IEnumerable<ClozeViewModel>> GetClozesAsync(Guid deckId, string userName)
         {
             var deck = await repository.FindDeckAsync(deckId);
-            var clozes = deck.GetClozes();
-            var orderedClozes = clozes.OrderBy(cloze => cloze.GetUserRepetition(userName).Position);
+            var clozes = repository.GetClozes(deck);
+            var orderedClozes = clozes.OrderBy(cloze => repository.GetUserRepetition(cloze, userName).Position);
 
             var viewModel = from cloze in orderedClozes
                             select mapper.Map<Cloze, ClozeViewModel>(cloze, opt =>
                                 opt.AfterMap((src, dest) =>
                                 {
-                                    var repetition = cloze.GetUserRepetition(userName);
+                                    var repetition = repository.GetUserRepetition(cloze, userName);
 
                                     dest.Position = repetition.Position;
                                     dest.IsNew = repetition.IsNew;
@@ -153,7 +153,7 @@ namespace Neodenit.Memento.Services
         public async Task<IEnumerable<ViewCardViewModel>> GetCardsAsync(Guid deckId)
         {
             var deck = await repository.FindDeckAsync(deckId);
-            var cards = deck.GetValidCards();
+            var cards = deck.ValidCards;
 
             var viewModel = mapper.Map<IEnumerable<ViewCardViewModel>>(cards);
             return viewModel;
@@ -162,7 +162,7 @@ namespace Neodenit.Memento.Services
         public async Task<IEnumerable<ViewCardViewModel>> GetDeletedCardsAsync(Guid deckId)
         {
             var deck = await repository.FindDeckAsync(deckId);
-            var cards = deck.GetDeletedCards();
+            var cards = deck.DeletedCards;
 
             var viewModel = mapper.Map<IEnumerable<ViewCardViewModel>>(cards);
             return viewModel;
@@ -171,7 +171,7 @@ namespace Neodenit.Memento.Services
         public async Task<IEnumerable<ViewCardViewModel>> GetDraftCardsAsync(Guid deckId)
         {
             var deck = await repository.FindDeckAsync(deckId);
-            var cards = deck.GetDraftCards();
+            var cards = deck.DraftCards;
 
             var viewModel = mapper.Map<IEnumerable<ViewCardViewModel>>(cards);
             return viewModel;

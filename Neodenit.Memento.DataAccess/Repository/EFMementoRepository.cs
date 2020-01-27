@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Neodenit.Memento.Common;
 using Neodenit.Memento.Common.DataModels;
 using Neodenit.Memento.DataAccess;
 using Neodenit.Memento.DataAccess.API;
@@ -22,10 +23,10 @@ namespace Memento.DataAccess.Repository
             await db.Decks.ToListAsync();
 
         public async Task<IEnumerable<Deck>> GetSharedDecksAsync() =>
-            await db.Decks.Where(item => item.IsShared).ToListAsync();
+            await db.Decks.Where(d => d.IsShared).ToListAsync();
 
         public async Task<IEnumerable<Deck>> GetUserDecksAsync(string userName) =>
-            await db.Decks.Include(d => d.Cards).Where(item => item.Owner == userName && !item.IsShared).ToListAsync();
+            await db.Decks.Include(d => d.Cards).Where(d => d.Owner == userName && !d.IsShared).ToListAsync();
 
         public Deck FindDeck(Guid id) =>
             db.Decks.Find(id);
@@ -97,7 +98,7 @@ namespace Memento.DataAccess.Repository
         {
             foreach (var clozeName in clozeNames)
             {
-                var cloze = card.Clozes.Single(item => item.Label == clozeName);
+                var cloze = card.Clozes.Single(c => c.Label == clozeName);
 
                 db.Clozes.Remove(cloze as Cloze);
             }
@@ -124,5 +125,32 @@ namespace Memento.DataAccess.Repository
 
         public Task SaveChangesAsync() =>
             db.SaveChangesAsync();
+
+        public IEnumerable<Cloze> GetClozes(Deck deck) =>
+            deck.ValidCards.SelectMany(card => card.Clozes ?? Enumerable.Empty<Cloze>());
+
+        public IEnumerable<UserRepetition> GetRepetitions(Deck deck, string username)
+        {
+            var clozes = GetClozes(deck);
+            var userRepetitions = from c in clozes select GetUserRepetition(c, username);
+            var result = from ur in userRepetitions where ur != null select ur;
+
+            return result;
+        }
+
+        public Card GetNextCard(Deck deck, string username) =>
+            deck.ValidCards.GetMinElement(vc => GetUserRepetition(GetNextCloze(vc, username), username).Position);
+
+        public Cloze GetNextCloze(Card card, string username) =>
+            card.Clozes.GetMinElement(c => GetUserRepetition(c, username).Position);
+
+        public IEnumerable<string> GetUsers(Card card) =>
+            card.Clozes.SelectMany(c => GetUsers(c)).Distinct();
+
+        public UserRepetition GetUserRepetition(Cloze cloze, string username) =>
+            cloze.UserRepetitions.SingleOrDefault(ur => ur.UserName == username);
+
+        public IEnumerable<string> GetUsers(Cloze cloze) =>
+            cloze.UserRepetitions.Select(ur => ur.UserName).Distinct();
     }
 }

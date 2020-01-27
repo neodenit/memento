@@ -53,5 +53,19 @@ namespace Neodenit.Memento.DataAccess.API
         void AddAnswer(Cloze cloze, bool isCorrect);
 
         Task SaveChangesAsync();
+
+        IEnumerable<Cloze> GetClozes(Deck deck);
+
+        IEnumerable<UserRepetition> GetRepetitions(Deck deck, string username);
+
+        Card GetNextCard(Deck deck, string username);
+
+        Cloze GetNextCloze(Card card, string username);
+
+        IEnumerable<string> GetUsers(Card card);
+
+        UserRepetition GetUserRepetition(Cloze cloze, string username);
+
+        IEnumerable<string> GetUsers(Cloze cloze);
     }
 }

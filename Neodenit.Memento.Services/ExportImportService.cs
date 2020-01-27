@@ -28,7 +28,7 @@ namespace Neodenit.Memento.Services
         public async Task<string> Export(Guid deckID)
         {
             var deck = await repository.FindDeckAsync(deckID);
-            var cards = deck.GetValidCards();
+            var cards = deck.ValidCards;
             var cardsForExport = from card in cards select converterService.FormatForExport(card.Text, card.Comment);
             var result = string.Join(Environment.NewLine, cardsForExport);
 

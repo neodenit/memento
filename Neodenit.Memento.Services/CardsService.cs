@@ -44,9 +44,9 @@ namespace Neodenit.Memento.Services
         {
             var deck = await repository.FindDeckAsync(deckId);
 
-            if (deck.GetValidCards().Any())
+            if (deck.ValidCards.Any())
             {
-                var card = deck.GetNextCard(userName);
+                var card = repository.GetNextCard(deck, userName);
                 var viewModel = mapper.Map<ViewCardViewModel>(card);
                 return viewModel;
             }
@@ -135,12 +135,12 @@ namespace Neodenit.Memento.Services
         public async Task<ClozeViewModel> GetNextClozeAsync(Guid cardId, string userName)
         {
             var card = await repository.FindCardAsync(cardId);
-            var cloze = card.GetNextCloze(userName);
+            var cloze = repository.GetNextCloze(card, userName);
 
             var viewModel = mapper.Map<Cloze, ClozeViewModel>(cloze, opt =>
                                 opt.AfterMap((src, dest) =>
                                 {
-                                    var repetition = cloze.GetUserRepetition(userName);
+                                    var repetition = repository.GetUserRepetition(cloze, userName);
 
                                     dest.Position = repetition.Position;
                                     dest.IsNew = repetition.IsNew;
@@ -153,7 +153,7 @@ namespace Neodenit.Memento.Services
         public async Task<AnswerCardViewModel> GetCardWithAnswerAsync(Guid cardId, string userName)
         {
             var card = await repository.FindCardAsync(cardId);
-            var cloze = card.GetNextCloze(userName);
+            var cloze = repository.GetNextCloze(card, userName);
             var fullAnswer = converterService.GetFullAnswer(card.Text, cloze.Label);
 
             var viewModel = mapper.Map<Card, AnswerCardViewModel>(card, opt =>
@@ -168,7 +168,7 @@ namespace Neodenit.Memento.Services
         public async Task<AnswerCardViewModel> GetCardWithQuestionAsync(Guid cardId, string userName)
         {
             var card = await repository.FindCardAsync(cardId);
-            var cloze = card.GetNextCloze(userName);
+            var cloze = repository.GetNextCloze(card, userName);
             var question = converterService.GetQuestion(card.Text, cloze.Label);
 
             var viewModel = mapper.Map<Card, AnswerCardViewModel>(card, opt =>
@@ -183,7 +183,7 @@ namespace Neodenit.Memento.Services
         public async Task AddAltAnswerAsync(Guid cardId, string altAnswer, string userName)
         {
             var card = await repository.FindCardAsync(cardId);
-            var cloze = card.GetNextCloze(userName);
+            var cloze = repository.GetNextCloze(card, userName);
 
             card.Text = converterService.AddAltAnswer(card.Text, cloze.Label, altAnswer);
 
@@ -193,7 +193,7 @@ namespace Neodenit.Memento.Services
         public async Task<AnswerCardViewModel> EvaluateCardAsync(Guid cardId, string userAnswer, string userName)
         {
             var card = await repository.FindCardAsync(cardId);
-            var cloze = card.GetNextCloze(userName);
+            var cloze = repository.GetNextCloze(card, userName);
 
             var question = converterService.GetQuestion(card.Text, cloze.Label);
             var fullAnswer = converterService.GetFullAnswer(card.Text, cloze.Label);

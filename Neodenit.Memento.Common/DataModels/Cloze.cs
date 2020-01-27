@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Newtonsoft.Json;
 
 namespace Neodenit.Memento.Common.DataModels
@@ -19,12 +18,6 @@ namespace Neodenit.Memento.Common.DataModels
         public virtual Card Card { get; set; }
 
         public virtual ICollection<UserRepetition> UserRepetitions { get; set; } = new List<UserRepetition>();
-
-        public UserRepetition GetUserRepetition(string username) =>
-            UserRepetitions.SingleOrDefault(x => x.UserName == username);
-
-        public IEnumerable<string> GetUsers() =>
-            UserRepetitions.Select(x => x.UserName).Distinct();
 
         public string Label { get; set; }
     }

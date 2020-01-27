@@ -20,8 +20,8 @@ namespace Neodenit.Memento.Services
 
         public async Task AddAnswer(Guid cardID, bool isCorrect, string username)
         {
-            Card dbCard = await repository.FindCardAsync(cardID);
-            Cloze cloze = dbCard.GetNextCloze(username);
+            Card card = await repository.FindCardAsync(cardID);
+            Cloze cloze = repository.GetNextCloze(card, username);
 
             repository.AddAnswer(cloze, isCorrect);
             await repository.SaveChangesAsync();
