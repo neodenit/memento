@@ -26,13 +26,9 @@ namespace Neodenit.Memento.Services.Scheduler
 
             var maxRandomPart = (int)Math.Round(step * Settings.Default.RandomizationCoeff);
             var randomPart = schedulerUtilsService.GetRandomPart(0, maxRandomPart);
-            var correctedStep = step + randomPart;
+            var newPosition = step + randomPart;
 
-            var maxNewPosition = schedulerUtilsService.GetMaxPosition(repetitions);
-            var newPosition = Math.Min(correctedStep, maxNewPosition);
-            var newDelay = newPosition > deck.StartDelay || deck.AllowSmallDelays ? newPosition : deck.StartDelay;
-
-            MoveRepetition(repetitions, repetition.Position, newPosition, newDelay, false, true);
+            MoveRepetition(repetitions, repetition.Position, newPosition, newPosition, false, true);
 
             repetition.IsNew = false;
 
@@ -69,17 +65,24 @@ namespace Neodenit.Memento.Services.Scheduler
         {
             Debug.Assert(newPosition >= oldPosition);
 
+            var newLimitedPosition = Math.Min(newPosition, schedulerUtilsService.GetMaxPosition(repetitions));
+
             var movedRepetition = repetitions.Single(repetition => repetition.Position == oldPosition);
             movedRepetition.Position = -1;
 
             var deck = movedRepetition.Cloze.Card.Deck;
 
-            var newLimitedPosition = Math.Min(newPosition, schedulerUtilsService.GetMaxPosition(repetitions));
-
             var minDelay = deck.AllowSmallDelays ? 1 : deck.StartDelay;
             var maxDelay = newLimitedPosition - oldPosition;
-            var limitedDelay = Math.Min(newDelay, maxDelay);
-            var minLimitedDelay = Math.Max(limitedDelay, minDelay);
+
+            var newLimitedDelay =
+                minDelay > maxDelay
+                    ? minDelay
+                    : newDelay < minDelay
+                        ? minDelay
+                        : newDelay > maxDelay
+                            ? maxDelay
+                            : newDelay;
 
             var movedRepetitions = schedulerUtilsService.GetRange(repetitions, oldPosition + 1, newLimitedPosition);
 
@@ -97,7 +100,7 @@ namespace Neodenit.Memento.Services.Scheduler
             }
 
             movedRepetition.Position = newLimitedPosition;
-            movedRepetition.LastDelay = minLimitedDelay;
+            movedRepetition.LastDelay = newLimitedDelay;
 
             Debug.Assert(ModelHelpers.ArePositionsValid(repetitions));
         }
