@@ -49,7 +49,7 @@ namespace Neodenit.Memento.Services
                     Deck = deck,
                     Text = cardTextComment.Item1,
                     Comment = cardTextComment.Item2,
-                    IsValid = true,
+                    IsValid = isValid,
                     ID = Guid.NewGuid()
                 };
 
